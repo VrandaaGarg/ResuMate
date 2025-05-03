@@ -1,1 +1,22 @@
 @import "tailwindcss";
+
+/* h1 [font-family:'Lilita_One',cursive] */
+
+/* src/components/Companies.css */
+
+.marquee-track {
+    display: flex;
+    animation: scrollLeft 30s linear infinite;
+    width: max-content;
+  }
+  
+  @keyframes scrollLeft {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+  
+  
