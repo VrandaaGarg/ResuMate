@@ -23,7 +23,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed top-0 z-50 w-full bg-[#f8f9fa] border-b border-gray-200 shadow-sm">
+    <nav className="fixed z-50 w-full backdrop-blur-2xl border-b border-gray-200 shadow-sm">
       <div className="px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <button
@@ -59,47 +59,51 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <button
-                className="flex items-center border border-gray-300 p-1.5 rounded-full bg-white"
-                onClick={() => setDropdownOpen((prev) => !prev)}
-              >
-                <img
-                  src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-                  alt="user"
-                  className="w-8 h-8 rounded-full"
-                />
-              </button>
 
-              {dropdownOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded shadow-md z-50"
+              <div className="relative">
+                <button
+                  className="flex items-center bg-gray-800 p-1.5 rounded-full focus:ring"
+                  onClick={() => setDropdownOpen((prev) => !prev)}
                 >
-                  <div className="px-4 py-2">
-                    <p className="text-sm font-semibold text-[#0f172a]">{user.name}</p>
-                    <p className="text-xs text-gray-600">{user.email}</p>
-                  </div>
-                  <ul className="text-sm divide-y divide-gray-100">
-                    <li>
-                      <Link
-                        to="/dashboard"
-                        className="block px-4 py-2 hover:bg-gray-100"
-                      >
-                        Dashboard
-                      </Link>
-                    </li>
-                    <li>
-                      <button
-                        onClick={handleLogout}
-                        className="w-full text-left px-4 py-2 hover:bg-gray-100"
-                      >
-                        Logout
-                      </button>
-                    </li>
-                  </ul>
-                </motion.div>
-              )}
+                  <img
+                    src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                    alt="user"
+                    className="w-8 h-8 rounded-full"
+                  />
+                </button>
+
+                {dropdownOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="absolute right-0 top-12 w-56 bg-white border border-gray-100 rounded-md shadow-lg z-50"
+                  >
+                    <div className="px-4 py-2">
+                      <p className="text-sm font-semibold text-[#0f172a]">{user.name}</p>
+                      <p className="text-xs text-gray-600 truncate">{user.email}</p>
+                    </div>
+                    <ul className="text-sm divide-y divide-gray-100">
+                      <li>
+                        <Link
+                          to="/dashboard"
+                          className="block px-4 py-2 hover:bg-gray-100 transition"
+                        >
+                          Dashboard
+                        </Link>
+                      </li>
+                      <li>
+                        <button
+                          onClick={handleLogout}
+                          className="w-full text-left px-4 py-2 hover:bg-gray-100 transition"
+                        >
+                          Logout
+                        </button>
+                      </li>
+                    </ul>
+                  </motion.div>
+                )}
+              </div>
+
             </>
           )}
         </div>

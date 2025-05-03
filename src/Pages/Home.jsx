@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { FiCheckCircle, FiZap, FiShield, FiEdit, FiBarChart2, FiUpload, FiFileText, FiLayers } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
 
 const features = [
   {
@@ -51,53 +52,83 @@ const icons = [
 
 const steps = [
   {
-    id:1,
+    id: 1,
     text: "Create an account or log in to your existing account."
-  },{
-    id:2,
+  }, {
+    id: 2,
     text: "Choose a template and start filling in your details."
   },
   {
-    id:3,
+    id: 3,
     text: "Use the AI-powered features to enhance your resume."
   },
   {
-    id:4,
+    id: 4,
     text: "Preview your resume and make any final adjustments."
   },
   {
-    id:5,
+    id: 5,
     text: "Download your resume in PDF format or share it online."
   }]
 
 const Home = () => {
 
+  const navigate = useNavigate();
+
+  const handleCreateClick = () => {
+    const user = JSON.parse(localStorage.getItem('loggedInUser'));
+    if (user) {
+      navigate('/dashboard');
+    } else {
+      navigate('/signup');
+    }
+  };
+
 
   return (
-    <div className="bg-gray-100 text-primary">
+    <div className="bg-gray-100 text-primary overflow-x-hidden">
 
       {/* Hero Section */}
-      <section className="px-6 md:px-20 py-12 flex flex-col-reverse md:flex-row items-center gap-10">
-        <div className="flex-1">
+      <section className="relative px-6 md:px-20 py-10 flex flex-col-reverse md:flex-row items-center gap-10 bg-background overflow-hidden">
+
+        {/* Gradient Background Blobs */}
+        <div className="absolute -top-20 -left-20 w-72 h-72 bg-sky-300 opacity-20 rounded-full blur-3xl z-0"></div>
+        <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-greenAccent opacity-10 rounded-full blur-3xl z-0"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-sky-700 opacity-10 blur-2xl rounded-full z-0"></div>
+
+        {/* Content */}
+        <div className="flex-1 relative z-10">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Craft a Winning Resume with <br />
             <span className="text-6xl text-black font-extrabold">Resu<span className="text-sky-700">Mate</span></span>
           </h1>
           <p className="text-lg mb-6">Build ATS-friendly, professional resumes in minutes — powered by AI.</p>
           <div className="flex gap-4">
-            <Link to="/signup" className="bg-sky-700 text-white px-6 py-2 rounded hover:bg-opacity-90">Create Resume</Link>
-            <Link to="/login" className="bg-black text-white px-6 py-2 rounded hover:bg-opacity-90">Upload Resume</Link>
+            <button
+              onClick={handleCreateClick}
+              className="bg-sky-700 text-white px-6 py-2 rounded hover:bg-opacity-90"
+            >
+              Create Resume
+            </button>
+            <button
+              onClick={handleCreateClick}
+              className="bg-neutral-900 text-white px-6 py-2 rounded hover:bg-opacity-90"
+            >
+              Upload Resume
+            </button>
           </div>
         </div>
-        <div className="flex-1">
+
+        <div className="flex-1 relative z-10">
           <img
             src="/resume.png"
             alt="Resume preview"
-            className="w-full h-auto max-w-[500px] mx-auto"
+            className="w-full h-auto max-w-[400px] mx-auto"
             loading="lazy"
           />
         </div>
       </section>
+
 
       <section className="py-16 px-6 md:px-20 bg-gray-100">
         <h2 className="text-3xl font-semibold mb-10 text-center">Why Use ResuMate?</h2>
@@ -153,35 +184,64 @@ const Home = () => {
 
 
       {/* Popular Templates */}
-      <section className="py-16 px-6 md:px-20">
+      <section className="py-16 px-6 md:px-20 bg-background">
         <h2 className="text-3xl font-semibold mb-10 text-center">Popular Templates</h2>
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8 place-content-center">
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
           {[1, 2, 3].map((temp) => (
-            <div key={temp} className="border w-fit p-4 flex justify-center flex-col rounded shadow bg-white">
-              <img
-                src="/resume.png"
-                alt={`Template ${temp}`}
-                className="h-[300px] w-fit mb-3"
-                loading="lazy"
-              />
-              <p className="text-center font-medium">Modern Template {temp}</p>
+            <div
+              key={temp}
+              className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden transition hover:shadow-lg"
+            >
+              <div className="w-full h-[300px] bg-gray-50 flex items-center justify-center">
+                <img
+                  src="/resume.png"
+                  alt={`Template ${temp}`}
+                  className="object-contain w-full h-full p-4"
+                  loading="lazy"
+                />
+              </div>
+              <div className="p-4">
+                <p className="text-center text-primary font-medium">Modern Template {temp}</p>
+              </div>
             </div>
           ))}
         </div>
       </section>
 
+
       {/* Demo Video */}
-      <section className="py-16 bg-white text-center px-6">
-        <h2 className="text-3xl font-semibold mb-6">Watch How It Works</h2>
-        <div className="max-w-3xl mx-auto">
-          <iframe
-            className="w-full h-64 md:h-96 rounded shadow"
-            src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-            title="Demo Video"
-            allowFullScreen
-          />
-        </div>
-      </section>
+      <div className="relative ">
+        {/* Gradient Background Blobs */}
+        <div className="absolute -top-10 -left-10 w-72 h-72 bg-sky-300 opacity-20 rounded-full blur-3xl z-0"></div>
+        <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-green-300 opacity-10 rounded-full blur-3xl z-0"></div>
+        <div className="absolute -bottom-32 -left-32 w-[300px] h-[300px] bg-green-700/20 blur-2xl rounded-full z-0"></div>
+
+        {/* Main Section */}
+        <section className="relative z-10 bg-sky-700 mx-4 md:mx-32 rounded-3xl my-12 py-16 px-6 md:px-20">
+          <div className="flex flex-col md:flex-row items-center gap-12">
+
+            {/* Left: Video */}
+            <div className="w-full md:w-1/2">
+              <iframe
+                className="w-full h-64 md:h-72 rounded-lg shadow-lg"
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                title="Demo Video"
+                allowFullScreen
+              />
+            </div>
+
+            {/* Right: Text */}
+            <div className="w-full md:w-1/2 text-white">
+              <h2 className="text-3xl font-semibold mb-4">Watch How It Works</h2>
+              <p className="text-white/80 leading-relaxed text-lg">
+                See how ResuMate helps you create, edit, and optimize your resume step-by-step with our intuitive editor and AI-powered enhancements. In under 2 minutes, you’ll understand how to build a standout resume that gets noticed.
+              </p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+
 
       {/* Companies */}
       <section className="py-16 px-6 md:px-20 text-center">
