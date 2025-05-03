@@ -4,17 +4,27 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import { SiGoogleforms } from "react-icons/si";
+import { RxCross2 } from "react-icons/rx"; // Close icon
 import { useAuth } from "../Contexts/AuthContext";
 
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
     toast.success("Logged out successfully!");
     navigate("/");
+  };
+
+  const toggleSidebar = () => {
+    const sidebar = document.getElementById("sidebar");
+    if (sidebar) {
+      sidebar.classList.toggle("-translate-x-full");
+      setSidebarOpen(!isSidebarOpen);
+    }
   };
 
   return (
@@ -24,12 +34,9 @@ const Navbar = () => {
         <div className="flex items-center gap-3">
           <button
             className="sm:hidden text-gray-600 hover:text-sky-700 transition"
-            onClick={() => {
-              const sidebar = document.getElementById("sidebar");
-              sidebar?.classList.toggle("-translate-x-full");
-            }}
+            onClick={toggleSidebar}
           >
-            <FaBars size={20} />
+            {isSidebarOpen ? <RxCross2 size={22} /> : <FaBars size={20} />}
           </button>
 
           <Link to="/" className="flex items-center gap-2 group">

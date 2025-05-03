@@ -20,9 +20,9 @@ export default function Resumes() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-10">
-      <h2 className="text-3xl font-bold mb-6 text-center">
-        Your Saved Resumes
+    <div className=" bg-gray-100 rounded-2xl min-h-[67lvh] mx-auto px-28 py-10">
+      <h2 className="text-4xl  mb-6 text-center [font-family:'Lilita_One',cursive]">
+        Your Resumes
       </h2>
 
       {Object.keys(resumes).length === 0 ? (
