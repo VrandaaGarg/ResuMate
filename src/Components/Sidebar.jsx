@@ -1,4 +1,3 @@
-// src/Components/Sidebar.jsx
 import { FaUser, FaFileAlt, FaHome, FaCogs } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import classNames from "classnames";
@@ -21,9 +20,9 @@ const Sidebar = () => {
   return (
     <aside
       id="sidebar"
-      className="fixed top-16 left-0 z-40 w-64 h-screen pt-8 px-4 bg-white border-r border-gray-200 shadow-md transition-transform duration-300 ease-in-out sm:translate-x-0 -translate-x-full"
+      className="fixed top-16 left-0 z-40 w-64 h-screen pt-8 px-4 bg-[#f8fafc] border-r border-gray-200 shadow-sm transition-transform duration-300 ease-in-out sm:translate-x-0 -translate-x-full"
     >
-      <ul className="space-y-2 text-sm font-medium text-gray-700">
+      <ul className="space-y-1 text-sm font-medium text-gray-700">
         {menuItems.map((item) => {
           const isActive = location.pathname === item.path;
           return (
@@ -31,16 +30,18 @@ const Sidebar = () => {
               <Link
                 to={item.path}
                 className={classNames(
-                  "flex items-center gap-3 px-3 py-2 rounded-md transition-all duration-200",
+                  "flex items-center gap-3 px-3 py-2 rounded-lg group transition-all duration-200",
                   isActive
-                    ? "bg-blue-100 text-blue-800 font-semibold"
+                    ? "bg-sky-100 text-sky-800 font-semibold"
                     : "hover:bg-sky-50 text-gray-700"
                 )}
               >
                 <div
                   className={classNames(
-                    "p-2 rounded-md transition-colors",
-                    isActive ? "bg-blue-200 text-blue-800" : "text-gray-500"
+                    "p-2 rounded-md flex items-center justify-center transition-colors",
+                    isActive
+                      ? "bg-sky-200 text-sky-800"
+                      : "bg-white group-hover:bg-sky-100 text-gray-500 group-hover:text-sky-700"
                   )}
                 >
                   {item.icon}

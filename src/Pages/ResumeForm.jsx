@@ -1,9 +1,38 @@
 // src/Pages/ResumeForm.jsx
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { RxCrossCircled, RxCross1, RxCross2 } from "react-icons/rx";
+import {
+  FiUser,
+  FiAlignLeft,
+  FiBookOpen,
+  FiBarChart2,
+  FiBriefcase,
+  FiCalendar,
+  FiFileText,
+  FiAward,
+} from "react-icons/fi";
+import {
+  FaCheckCircle,
+  FaProjectDiagram,
+  FaLink,
+  FaGithub,
+  FaPlus,
+  FaArrowRight,
+  FaArrowLeft,
+  FaTrash,
+} from "react-icons/fa";
+import { TbWorld } from "react-icons/tb";
+import { MdOutlineDescription } from "react-icons/md";
+import {
+  FiPhone,
+  FiMail,
+  FiGithub,
+  FiLinkedin,
+  FiMapPin,
+} from "react-icons/fi";
 
 const steps = [
   "Personal Info",
@@ -110,9 +139,28 @@ const ResumeForm = () => {
   };
 
   const removeItem = (section, index) => {
-    const updated = [...formData[section]];
-    updated.splice(index, 1);
-    setFormData({ ...formData, [section]: updated });
+    // Ensure the section exists and is an array
+    if (!Array.isArray(formData[section])) return;
+
+    const updatedSection = [...formData[section]];
+    updatedSection.splice(index, 1);
+
+    setFormData((prev) => ({
+      ...prev,
+      [section]: updatedSection,
+    }));
+  };
+
+  const removeSkill = (domainIndex, langIndex) => {
+    const updatedSkills = [...formData.skills];
+    updatedSkills[domainIndex].languages.splice(langIndex, 1);
+
+    // Optional: remove the domain if no skills left
+    if (updatedSkills[domainIndex].languages.length === 0) {
+      updatedSkills.splice(domainIndex, 1);
+    }
+
+    setFormData({ ...formData, skills: updatedSkills });
   };
 
   const nextStep = () => {
@@ -135,212 +183,406 @@ const ResumeForm = () => {
     switch (step) {
       case 0:
         return (
-          <div className="space-y-4">
-            <input
-              type="text"
-              placeholder="Full Name *"
-              value={formData.name}
-              onChange={(e) => handleChange(e, "name")}
-              className="input"
-            />
-            <textarea
-              placeholder="Short Description"
-              value={formData.description}
-              onChange={(e) => handleChange(e, "description")}
-              className="input"
-            />
-          </div>
-        );
-      case 1:
-        return (
-          <div className="space-y-4">
-            <input
-              type="text"
-              placeholder="College Name"
-              value={formData.education.college}
-              onChange={(e) => handleChange(e, "education.college")}
-              className="input"
-            />
-
-            <div className="flex gap-2">
+          <div className="space-y-10">
+            {/* Full Name */}
+            <div className="relative">
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Full Name *
+              </label>
+              <FiUser className="absolute top-9 left-3 text-gray-500" />
               <input
+                id="name"
                 type="text"
-                placeholder="Start Year"
-                value={formData.education.startYear}
-                onChange={(e) => handleChange(e, "education.startYear")}
-                className="input"
-              />
-              <input
-                type="text"
-                placeholder="End Year"
-                value={formData.education.endYear}
-                onChange={(e) => handleChange(e, "education.endYear")}
-                className="input"
+                placeholder="Enter your full name"
+                value={formData.name}
+                onChange={(e) => handleChange(e, "name")}
+                className="w-full px-4 py-2 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-sky-600 bg-white text-sm text-gray-800"
               />
             </div>
 
-            <input
-              type="text"
-              placeholder="College CGPA"
-              value={formData.education.cgpa}
-              onChange={(e) => handleChange(e, "education.cgpa")}
-              className="input"
-            />
+            {/* Description */}
+            <div className="relative">
+              <label
+                htmlFor="description"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Short Description
+              </label>
+              <FiAlignLeft className="absolute top-9 left-3 text-gray-500" />
+              <textarea
+                id="description"
+                placeholder="A brief personal summary or tagline"
+                value={formData.description}
+                onChange={(e) => handleChange(e, "description")}
+                className="w-full px-4 py-2 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-sky-600 bg-white text-sm text-gray-800"
+                rows={3}
+              />
+            </div>
+          </div>
+        );
 
-            <input
-              type="text"
-              placeholder="School Name"
-              value={formData.education.school}
-              onChange={(e) => handleChange(e, "education.school")}
-              className="input"
-            />
+      case 1:
+        return (
+          <div className="space-y-5">
+            {/* College Name */}
+            <div className="relative">
+              <label
+                htmlFor="college"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                College Name
+              </label>
+              <FiBookOpen className="absolute top-9 left-3 text-gray-500 text-sm" />
+              <input
+                id="college"
+                type="text"
+                placeholder="e.g., MIT"
+                value={formData.education.college}
+                onChange={(e) => handleChange(e, "education.college")}
+                className="w-full px-4 py-2 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-sky-600 bg-white text-sm text-gray-800"
+              />
+            </div>
 
-            <input
-              type="text"
-              placeholder="School End Year"
-              value={formData.education.schoolEndYear}
-              onChange={(e) => handleChange(e, "education.schoolEndYear")}
-              className="input"
-            />
+            {/* Start & End Year */}
+            <div className="flex gap-4">
+              <div className="flex-1 relative">
+                <label
+                  htmlFor="startYear"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Start Year
+                </label>
+                <FiCalendar className="absolute top-9 left-3 text-gray-500 text-sm" />
+                <input
+                  id="startYear"
+                  type="text"
+                  placeholder="e.g., 2021"
+                  value={formData.education.startYear}
+                  onChange={(e) => handleChange(e, "education.startYear")}
+                  className="w-full px-4 py-2 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-sky-600 bg-white text-sm text-gray-800"
+                />
+              </div>
+              <div className="flex-1 relative">
+                <label
+                  htmlFor="endYear"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  End Year
+                </label>
+                <FiCalendar className="absolute top-9 left-3 text-gray-500 text-sm" />
+                <input
+                  id="endYear"
+                  type="text"
+                  placeholder="e.g., 2025"
+                  value={formData.education.endYear}
+                  onChange={(e) => handleChange(e, "education.endYear")}
+                  className="w-full px-4 py-2 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-sky-600 bg-white text-sm text-gray-800"
+                />
+              </div>
+            </div>
 
-            <input
-              type="text"
-              placeholder="10th %"
-              value={formData.education.tenth}
-              onChange={(e) => handleChange(e, "education.tenth")}
-              className="input"
-            />
+            {/* CGPA */}
+            <div className="relative">
+              <label
+                htmlFor="cgpa "
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                College CGPA
+              </label>
+              <FiBarChart2 className="absolute top-9 left-3 text-gray-500 text-sm" />
+              <input
+                id="cgpa"
+                type="text"
+                placeholder="e.g., 9.0"
+                value={formData.education.cgpa}
+                onChange={(e) => handleChange(e, "education.cgpa")}
+                className="w-full px-4 py-2 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-sky-600 bg-white text-sm text-gray-800"
+              />
+            </div>
 
-            <input
-              type="text"
-              placeholder="12th %"
-              value={formData.education.twelfth}
-              onChange={(e) => handleChange(e, "education.twelfth")}
-              className="input"
-            />
+            {/* School Name */}
+            <div className="relative">
+              <label
+                htmlFor="school"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                School Name
+              </label>
+              <FiBookOpen className="absolute top-9 left-3 text-gray-500 text-sm" />
+              <input
+                id="school"
+                type="text"
+                placeholder="e.g., DPS Delhi"
+                value={formData.education.school}
+                onChange={(e) => handleChange(e, "education.school")}
+                className="w-full px-4 py-2 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-sky-600 bg-white text-sm text-gray-800"
+              />
+            </div>
+
+            {/* School End Year */}
+            <div className="relative">
+              <label
+                htmlFor="schoolEndYear"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                School End Year
+              </label>
+              <FiCalendar className="absolute top-9 left-3 text-gray-500 text-sm" />
+              <input
+                id="schoolEndYear"
+                type="text"
+                placeholder="e.g., 2020"
+                value={formData.education.schoolEndYear}
+                onChange={(e) => handleChange(e, "education.schoolEndYear")}
+                className="w-full px-4 py-2 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-sky-600 bg-white text-sm text-gray-800"
+              />
+            </div>
+
+            <div className="flex flex-row gap-4">
+              {/* 10th Percentage */}
+              <div className="relative flex-1">
+                <label
+                  htmlFor="tenth"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  10th Percentage
+                </label>
+                <FiBarChart2 className="absolute top-9 left-3 text-gray-500 text-sm" />
+                <input
+                  id="tenth"
+                  type="text"
+                  placeholder="e.g., 92%"
+                  value={formData.education.tenth}
+                  onChange={(e) => handleChange(e, "education.tenth")}
+                  className="w-full px-4 py-2 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-sky-600 bg-white text-sm text-gray-800"
+                />
+              </div>
+
+              {/* 12th Percentage */}
+              <div className="relative flex-1">
+                <label
+                  htmlFor="twelfth"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  12th Percentage
+                </label>
+                <FiBarChart2 className="absolute top-9 left-3 text-gray-500 text-sm" />
+                <input
+                  id="twelfth"
+                  type="text"
+                  placeholder="e.g., 89%"
+                  value={formData.education.twelfth}
+                  onChange={(e) => handleChange(e, "education.twelfth")}
+                  className="w-full px-4 py-2 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-sky-600 bg-white text-sm text-gray-800"
+                />
+              </div>
+            </div>
           </div>
         );
 
       case 2:
         return (
-          <div className="space-y-4">
-            {/* Skills Section */}
+          <div className="space-y-6">
             {formData.skills.map((skill, domainIndex) => (
               <div
                 key={domainIndex}
-                className="mb-6 border p-4 rounded bg-gray-50"
+                className="border border-gray-200 bg-white p-5 rounded-xl shadow-sm"
               >
+                {/* Domain Header */}
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="text-sm font-semibold text-gray-800">
+                    Domain {domainIndex + 1}
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={() => removeItem("skills", domainIndex)}
+                    className="text-red-600 hover:text-red-700 hover:scale-110 transition"
+                  >
+                    <RxCross1 size={18} />
+                  </button>
+                </div>
+
+                {/* Domain Input */}
                 <input
                   type="text"
-                  placeholder="Domain (e.g., Frontend)"
+                  placeholder="e.g., Frontend, Backend, DevOps"
                   value={skill.domain}
                   onChange={(e) =>
                     handleDomainChange(domainIndex, e.target.value)
                   }
-                  className="w-full mb-2 px-3 py-2 border rounded"
+                  className="w-full mb-4 px-4 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-sky-600"
                 />
 
+                {/* Skills List */}
                 {skill.languages.map((lang, langIndex) => (
-                  <input
-                    key={langIndex}
-                    type="text"
-                    placeholder={`Skill #${langIndex + 1}`}
-                    value={lang}
-                    onChange={(e) =>
-                      handleSkillChange(domainIndex, langIndex, e.target.value)
-                    }
-                    className="w-full mb-2 px-3 py-2 border rounded"
-                  />
+                  <div key={langIndex} className="mb-2 flex items-center gap-2">
+                    <input
+                      type="text"
+                      placeholder={`Skill ${langIndex + 1}`}
+                      value={lang}
+                      onChange={(e) =>
+                        handleSkillChange(
+                          domainIndex,
+                          langIndex,
+                          e.target.value
+                        )
+                      }
+                      className="w-full px-4 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-sky-600"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeSkill(domainIndex, langIndex)}
+                      className="text-red-600 hover:text-red-700 hover:scale-110 transition"
+                    >
+                      <RxCrossCircled size={18} />
+                    </button>
+                  </div>
                 ))}
 
+                {/* Add Skill Button */}
                 <button
                   type="button"
                   onClick={() => addItem("skills", domainIndex)}
-                  className="px-4 py-1 bg-sky-700 text-white rounded hover:bg-sky-800 text-sm"
+                  className="mt-4 text-sm px-4 py-1.5 border border-sky-700 text-sky-700 rounded-md hover:bg-sky-700 hover:text-white transition"
                 >
                   + Add Skill
                 </button>
               </div>
             ))}
 
+            {/* Add New Domain Button */}
             <button
               type="button"
               onClick={() => addItem("skills")}
-              className="mt-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+              className="w-full py-2 border border-black text-black font-semibold rounded-md hover:bg-black hover:text-white transition"
             >
-              + Add Domain
+              + Add New Domain
             </button>
-
-            {/* <button onClick={() => addItem('skills')} className="btn"><FaPlus className="mr-2" /> Add Domain</button> */}
           </div>
         );
 
       case 3:
         return (
           <div>
-            <h2 className="text-xl font-semibold mb-4 text-sky-700">
-              Step 3: Projects
-            </h2>
-
             {formData.projects.map((project, index) => (
               <div
                 key={index}
-                className="mb-6 border border-gray-200 p-4 rounded bg-gray-50"
+                className="mb-6 border border-gray-200 bg-white p-5 rounded-xl shadow-sm relative"
               >
-                <input
-                  type="text"
-                  placeholder="Project Name"
-                  value={project.name}
-                  onChange={(e) =>
-                    handleArrayChange("projects", index, "name", e.target.value)
-                  }
-                  className="w-full mb-2 px-3 py-2 border rounded"
-                />
-                <textarea
-                  placeholder="Description"
-                  value={project.description}
-                  onChange={(e) =>
-                    handleArrayChange(
-                      "projects",
-                      index,
-                      "description",
-                      e.target.value
-                    )
-                  }
-                  className="w-full mb-2 px-3 py-2 border rounded"
-                />
-                <input
-                  type="text"
-                  placeholder="GitHub URL"
-                  value={project.github}
-                  onChange={(e) =>
-                    handleArrayChange(
-                      "projects",
-                      index,
-                      "github",
-                      e.target.value
-                    )
-                  }
-                  className="w-full mb-2 px-3 py-2 border rounded"
-                />
-                <input
-                  type="text"
-                  placeholder="Live Demo Link"
-                  value={project.demo}
-                  onChange={(e) =>
-                    handleArrayChange("projects", index, "demo", e.target.value)
-                  }
-                  className="w-full px-3 py-2 border rounded"
-                />
+                {/* Remove Button */}
+                {formData.projects.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeItem("projects", index)}
+                    className="absolute top-3 right-3 text-red-600 hover:text-red-700 transition text-sm flex items-center gap-1"
+                  >
+                    <RxCross1 size={18} />
+                  </button>
+                )}
+
+                <div className="mb-3 relative">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Project Name
+                  </label>
+                  <div className="relative">
+                    <FaLink className="absolute top-3 left-3 text-gray-500" />
+                    <input
+                      type="text"
+                      placeholder="e.g. Portfolio Website"
+                      value={project.name}
+                      onChange={(e) =>
+                        handleArrayChange(
+                          "projects",
+                          index,
+                          "name",
+                          e.target.value
+                        )
+                      }
+                      className="pl-10 w-full px-4 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-sky-600"
+                    />
+                  </div>
+                </div>
+
+                <div className="mb-3 relative">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Description
+                  </label>
+                  <div className="relative">
+                    <MdOutlineDescription className="absolute top-3 left-3 text-gray-500" />
+                    <textarea
+                      placeholder="Briefly describe your project"
+                      value={project.description}
+                      onChange={(e) =>
+                        handleArrayChange(
+                          "projects",
+                          index,
+                          "description",
+                          e.target.value
+                        )
+                      }
+                      className="pl-10 w-full px-4 py-2 border rounded-md text-sm resize-none focus:outline-none focus:ring-2 focus:ring-sky-600"
+                      rows={3}
+                    />
+                  </div>
+                </div>
+
+                <div className="mb-3 relative">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    GitHub Link
+                  </label>
+                  <div className="relative">
+                    <FaGithub className="absolute top-3 left-3 text-gray-500" />
+                    <input
+                      type="text"
+                      placeholder="https://github.com/username/repo"
+                      value={project.github}
+                      onChange={(e) =>
+                        handleArrayChange(
+                          "projects",
+                          index,
+                          "github",
+                          e.target.value
+                        )
+                      }
+                      className="pl-10 w-full px-4 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-sky-600"
+                    />
+                  </div>
+                </div>
+
+                <div className="relative">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Live Demo Link
+                  </label>
+                  <div className="relative">
+                    <TbWorld className="absolute top-3 left-3 text-gray-500" />
+                    <input
+                      type="text"
+                      placeholder="https://project-demo.com"
+                      value={project.demo}
+                      onChange={(e) =>
+                        handleArrayChange(
+                          "projects",
+                          index,
+                          "demo",
+                          e.target.value
+                        )
+                      }
+                      className="pl-10 w-full px-4 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-sky-600"
+                    />
+                  </div>
+                </div>
               </div>
             ))}
 
             <button
               type="button"
               onClick={() => addItem("projects")}
-              className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
+              className="w-full mt-2 flex items-center justify-center gap-2 px-4 py-2 border border-black text-black font-semibold rounded-md hover:bg-black hover:text-white transition"
             >
-              + Add Project
+              <FaPlus /> Add Project
             </button>
           </div>
         );
@@ -348,207 +590,327 @@ const ResumeForm = () => {
       case 4:
         return (
           <div>
-            <h2 className="text-xl font-semibold mb-4 text-sky-700">
-              Step 4: Experience
-            </h2>
+            <div className="space-y-6">
+              {formData.experience.map((exp, index) => (
+                <div
+                  key={index}
+                  className="border border-gray-200 bg-white p-5 rounded-xl shadow-sm relative"
+                >
+                  {/* Remove Button */}
+                  <button
+                    type="button"
+                    onClick={() => removeItem("experience", index)}
+                    className="absolute top-2 right-2 text-red-600 hover:scale-110 transition"
+                  >
+                    <RxCross1 />
+                  </button>
 
-            {formData.experience.map((exp, index) => (
-              <div
-                key={index}
-                className="mb-6 border border-gray-200 p-4 rounded bg-gray-50"
+                  {/* Company Name */}
+                  <div className="relative mb-3">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Company Name
+                    </label>
+                    <FiBriefcase className="absolute top-9 left-3 text-gray-500" />
+                    <input
+                      type="text"
+                      placeholder="e.g., Google"
+                      value={exp.company}
+                      onChange={(e) =>
+                        handleArrayChange(
+                          "experience",
+                          index,
+                          "company",
+                          e.target.value
+                        )
+                      }
+                      className="pl-10 w-full px-4 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-sky-600"
+                    />
+                  </div>
+
+                  {/* Duration */}
+                  <div className="relative mb-3">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Duration (Years)
+                    </label>
+                    <FiCalendar className="absolute top-9 left-3 text-gray-500" />
+                    <input
+                      type="text"
+                      placeholder="e.g., 2021 - 2023"
+                      value={exp.years}
+                      onChange={(e) =>
+                        handleArrayChange(
+                          "experience",
+                          index,
+                          "years",
+                          e.target.value
+                        )
+                      }
+                      className="pl-10 w-full px-4 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-sky-600"
+                    />
+                  </div>
+
+                  {/* Description */}
+                  <div className="relative">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Description
+                    </label>
+                    <FiFileText className="absolute top-9 left-3 text-gray-500" />
+                    <textarea
+                      placeholder="e.g., Worked on scalable frontend apps..."
+                      value={exp.description}
+                      onChange={(e) =>
+                        handleArrayChange(
+                          "experience",
+                          index,
+                          "description",
+                          e.target.value
+                        )
+                      }
+                      className="pl-10 w-full px-4 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-sky-600"
+                    />
+                  </div>
+                </div>
+              ))}
+
+              {/* Add Button */}
+              <button
+                type="button"
+                onClick={() => addItem("experience")}
+                className="w-full py-2 border border-black text-black font-semibold rounded-md hover:bg-black hover:text-white transition"
               >
-                <input
-                  type="text"
-                  placeholder="Company Name"
-                  value={exp.company}
-                  onChange={(e) =>
-                    handleArrayChange(
-                      "experience",
-                      index,
-                      "company",
-                      e.target.value
-                    )
-                  }
-                  className="w-full mb-2 px-3 py-2 border rounded"
-                />
-                <input
-                  type="text"
-                  placeholder="Years (e.g., 2020 - 2023)"
-                  value={exp.years}
-                  onChange={(e) =>
-                    handleArrayChange(
-                      "experience",
-                      index,
-                      "years",
-                      e.target.value
-                    )
-                  }
-                  className="w-full mb-2 px-3 py-2 border rounded"
-                />
-                <textarea
-                  placeholder="Description"
-                  value={exp.description}
-                  onChange={(e) =>
-                    handleArrayChange(
-                      "experience",
-                      index,
-                      "description",
-                      e.target.value
-                    )
-                  }
-                  className="w-full px-3 py-2 border rounded"
-                />
-              </div>
-            ))}
-
-            <button
-              type="button"
-              onClick={() => addItem("experience")}
-              className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
-            >
-              + Add Experience
-            </button>
+                + Add Experience
+              </button>
+            </div>
           </div>
         );
 
       case 5:
         return (
           <div>
-            <h2 className="text-xl font-semibold mb-4 text-sky-700">
-              Step 5: Achievements
-            </h2>
+            <div className="space-y-6">
+              {formData.achievements.map((achieve, index) => (
+                <div
+                  key={index}
+                  className="relative border border-gray-200 bg-white p-5 rounded-xl shadow-sm"
+                >
+                  {/* Remove Achievement */}
+                  <button
+                    type="button"
+                    onClick={() => removeItem("achievements", index)}
+                    className="absolute top-2 right-2 text-red-600 hover:scale-110 transition"
+                  >
+                    <RxCross1 />
+                  </button>
 
-            {formData.achievements.map((achieve, index) => (
-              <div
-                key={index}
-                className="mb-6 border border-gray-200 p-4 rounded bg-gray-50"
-              >
-                <input
-                  type="text"
-                  placeholder="Achievement Title"
-                  value={achieve.title}
-                  onChange={(e) =>
-                    handleArrayChange(
-                      "achievements",
-                      index,
-                      "title",
-                      e.target.value
-                    )
-                  }
-                  className="w-full mb-2 px-3 py-2 border rounded"
-                />
-                <textarea
-                  placeholder="Description"
-                  value={achieve.description}
-                  onChange={(e) =>
-                    handleArrayChange(
-                      "achievements",
-                      index,
-                      "description",
-                      e.target.value
-                    )
-                  }
-                  className="w-full mb-2 px-3 py-2 border rounded"
-                />
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    placeholder="Month (e.g., March)"
-                    value={achieve.month}
-                    onChange={(e) =>
-                      handleArrayChange(
-                        "achievements",
-                        index,
-                        "month",
-                        e.target.value
-                      )
-                    }
-                    className="w-1/2 px-3 py-2 border rounded"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Year (e.g., 2024)"
-                    value={achieve.year}
-                    onChange={(e) =>
-                      handleArrayChange(
-                        "achievements",
-                        index,
-                        "year",
-                        e.target.value
-                      )
-                    }
-                    className="w-1/2 px-3 py-2 border rounded"
-                  />
+                  {/* Title */}
+                  <div className="relative mb-3">
+                    <label className="block mb-1 text-sm font-medium text-gray-700">
+                      Achievement Title
+                    </label>
+                    <FiAward className="absolute top-9 left-3 text-gray-500" />
+                    <input
+                      type="text"
+                      placeholder="e.g., Hackathon Winner"
+                      value={achieve.title}
+                      onChange={(e) =>
+                        handleArrayChange(
+                          "achievements",
+                          index,
+                          "title",
+                          e.target.value
+                        )
+                      }
+                      className="pl-10 w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-black/50"
+                    />
+                  </div>
+
+                  {/* Description */}
+                  <div className="relative mb-3">
+                    <label className="block mb-1 text-sm font-medium text-gray-700">
+                      Description
+                    </label>
+                    <FiFileText className="absolute top-9 left-3 text-gray-500" />
+                    <textarea
+                      placeholder="e.g., Secured 1st place among 100+ teams"
+                      value={achieve.description}
+                      onChange={(e) =>
+                        handleArrayChange(
+                          "achievements",
+                          index,
+                          "description",
+                          e.target.value
+                        )
+                      }
+                      className="pl-10 w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-black/50"
+                    />
+                  </div>
+
+                  {/* Month & Year */}
+                  <div className="flex gap-2">
+                    <div className="relative w-1/2">
+                      <label className="block mb-1 text-sm font-medium text-gray-700">
+                        Month
+                      </label>
+                      <FiCalendar className="absolute top-9 left-3 text-gray-500" />
+                      <input
+                        type="text"
+                        placeholder="e.g., March"
+                        value={achieve.month}
+                        onChange={(e) =>
+                          handleArrayChange(
+                            "achievements",
+                            index,
+                            "month",
+                            e.target.value
+                          )
+                        }
+                        className="pl-10 w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-black/50"
+                      />
+                    </div>
+
+                    <div className="relative w-1/2">
+                      <label className="block mb-1 text-sm font-medium text-gray-700">
+                        Year
+                      </label>
+                      <FiCalendar className="absolute top-9 left-3 text-gray-500" />
+                      <input
+                        type="text"
+                        placeholder="e.g., 2024"
+                        value={achieve.year}
+                        onChange={(e) =>
+                          handleArrayChange(
+                            "achievements",
+                            index,
+                            "year",
+                            e.target.value
+                          )
+                        }
+                        className="pl-10 w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-black/50"
+                      />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
 
-            <button
-              type="button"
-              onClick={() => addItem("achievements")}
-              className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
-            >
-              + Add Achievement
-            </button>
+              {/* Add Button */}
+              <button
+                type="button"
+                onClick={() => addItem("achievements")}
+                className="w-full mt-4 py-2 border border-black text-black font-semibold rounded-md hover:bg-black hover:text-white transition"
+              >
+                + Add Achievement
+              </button>
+            </div>
           </div>
         );
 
       case 6:
         return (
           <div>
-            <h2 className="text-xl font-semibold mb-4 text-sky-700">
-              Step 6: Contact Information
-            </h2>
+            {/* Phone */}
+            <div className="relative mb-4">
+              <label
+                htmlFor="phone"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Phone Number
+              </label>
+              <FiPhone className="absolute top-9 left-3 text-gray-500" />
+              <input
+                id="phone"
+                type="text"
+                placeholder="e.g., +91 98765 43210"
+                value={formData.contact.phone}
+                onChange={(e) =>
+                  handleSingleChange("contact", "phone", e.target.value)
+                }
+                className="w-full px-4 py-2 pl-10 border rounded focus:ring-2 focus:ring-sky-600 text-sm"
+              />
+            </div>
 
-            <input
-              type="text"
-              placeholder="Phone Number"
-              value={formData.contact.phone}
-              onChange={(e) =>
-                handleSingleChange("contact", "phone", e.target.value)
-              }
-              className="w-full mb-4 px-3 py-2 border rounded"
-            />
+            {/* Email */}
+            <div className="relative mb-4">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Email Address
+              </label>
+              <FiMail className="absolute top-9 left-3 text-gray-500" />
+              <input
+                id="email"
+                type="email"
+                placeholder="e.g., you@example.com"
+                value={formData.contact.email}
+                onChange={(e) =>
+                  handleSingleChange("contact", "email", e.target.value)
+                }
+                className="w-full px-4 py-2 pl-10 border rounded focus:ring-2 focus:ring-sky-600 text-sm"
+              />
+            </div>
 
-            <input
-              type="email"
-              placeholder="Email Address"
-              value={formData.contact.email}
-              onChange={(e) =>
-                handleSingleChange("contact", "email", e.target.value)
-              }
-              className="w-full mb-4 px-3 py-2 border rounded"
-            />
+            {/* GitHub */}
+            <div className="relative mb-4">
+              <label
+                htmlFor="github"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                GitHub Profile
+              </label>
+              <FiGithub className="absolute top-9 left-3 text-gray-500" />
+              <input
+                id="github"
+                type="text"
+                placeholder="e.g., https://github.com/yourhandle"
+                value={formData.contact.github}
+                onChange={(e) =>
+                  handleSingleChange("contact", "github", e.target.value)
+                }
+                className="w-full px-4 py-2 pl-10 border rounded focus:ring-2 focus:ring-sky-600 text-sm"
+              />
+            </div>
 
-            <input
-              type="text"
-              placeholder="GitHub Profile Link"
-              value={formData.contact.github}
-              onChange={(e) =>
-                handleSingleChange("contact", "github", e.target.value)
-              }
-              className="w-full mb-4 px-3 py-2 border rounded"
-            />
+            {/* LinkedIn */}
+            <div className="relative mb-4">
+              <label
+                htmlFor="linkedin"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                LinkedIn Profile
+              </label>
+              <FiLinkedin className="absolute top-9 left-3 text-gray-500" />
+              <input
+                id="linkedin"
+                type="text"
+                placeholder="e.g., https://linkedin.com/in/yourname"
+                value={formData.contact.linkedin}
+                onChange={(e) =>
+                  handleSingleChange("contact", "linkedin", e.target.value)
+                }
+                className="w-full px-4 py-2 pl-10 border rounded focus:ring-2 focus:ring-sky-600 text-sm"
+              />
+            </div>
 
-            <input
-              type="text"
-              placeholder="LinkedIn Profile Link"
-              value={formData.contact.linkedin}
-              onChange={(e) =>
-                handleSingleChange("contact", "linkedin", e.target.value)
-              }
-              className="w-full mb-4 px-3 py-2 border rounded"
-            />
-
-            <input
-              type="text"
-              placeholder="Location (City, Country)"
-              value={formData.contact.location}
-              onChange={(e) =>
-                handleSingleChange("contact", "location", e.target.value)
-              }
-              className="w-full mb-4 px-3 py-2 border rounded"
-            />
+            {/* Location */}
+            <div className="relative mb-4">
+              <label
+                htmlFor="location"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Location
+              </label>
+              <FiMapPin className="absolute top-9 left-3 text-gray-500" />
+              <input
+                id="location"
+                type="text"
+                placeholder="e.g., Jaipur, India"
+                value={formData.contact.location}
+                onChange={(e) =>
+                  handleSingleChange("contact", "location", e.target.value)
+                }
+                className="w-full px-4 py-2 pl-10 border rounded focus:ring-2 focus:ring-sky-600 text-sm"
+              />
+            </div>
           </div>
         );
       // You can add similar UI for Projects, Experience, Achievements, and Contact here...
@@ -560,8 +922,10 @@ const ResumeForm = () => {
   };
 
   return (
-    <motion.div className="max-w-3xl mx-auto px-6 py-10">
-      <h2 className="text-3xl font-bold text-center mb-6">{steps[step]}</h2>
+    <motion.div className="max-w-xl mx-auto px-6 py-10 bg-gray-100/55 rounded-2xl border-1 shadow-2x border-gray-300">
+      <h2 className="text-3xl text-sky-700 [font-family:'Lilita_One',cursive] text-center mb-6">
+        {steps[step]}
+      </h2>
 
       <motion.div
         key={step}
@@ -574,22 +938,37 @@ const ResumeForm = () => {
         {renderStep()}
       </motion.div>
 
-      <div className="flex justify-between items-center mt-6">
+      <div className="flex justify-between items-center mt-8">
+        {/* Back Button */}
         <button
           onClick={prevStep}
           disabled={step === 0}
-          className="btn-secondary"
+          className={`inline-flex items-center gap-2 px-5 py-2 rounded-md font-semibold shadow transition ${
+            step === 0
+              ? "bg-gray-300 text-white cursor-not-allowed"
+              : "bg-neutral-900 hover:bg-neutral-700 text-white"
+          }`}
         >
-          <FaArrowLeft /> Back
+          <FaArrowLeft />
+          Back
         </button>
 
+        {/* Next / Finish Button */}
         {step === steps.length - 1 ? (
-          <button onClick={saveResumeToLocal} className="btn-primary">
-            Finish & Save
+          <button
+            onClick={saveResumeToLocal}
+            className="inline-flex items-center gap-2 px-5 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-md shadow transition"
+          >
+            <FaCheckCircle className="text-white" />
+            Build Resume
           </button>
         ) : (
-          <button onClick={nextStep} className="btn-primary">
-            Next <FaArrowRight />
+          <button
+            onClick={nextStep}
+            className="inline-flex items-center gap-2 px-5 py-2 bg-sky-700 hover:bg-sky-800 text-white font-semibold rounded-md shadow transition"
+          >
+            Next
+            <FaArrowRight />
           </button>
         )}
       </div>

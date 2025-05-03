@@ -180,7 +180,7 @@ const Home = () => {
   return (
     <div className="bg-gray-100 overflow-x-hidden">
       {/* Hero Section */}
-      <section className="relative h-[90lvh] px-6 md:px-20 py-9 flex flex-col items-center justify-center text-center gap-8 bg-background overflow-hidden">
+      <section className="relative h-[90lvh] px-6 md:px-20 py-9 flex flex-col items-center justify-center text-center gap-8 bg-gray-100 ">
         {/* Gradient Background Blobs */}
         <div className="absolute -top-24 -left-20 w-80 h-80 bg-blue-300 opacity-40 rounded-full blur-3xl z-0" />
         <div className="absolute -bottom-28 -right-32 w-96 h-96 bg-green-200 opacity-20 rounded-full blur-3xl z-0" />
@@ -227,7 +227,7 @@ const Home = () => {
         </motion.div>
       </section>
 
-      <section className="py-20 px-6 md:px-20 bg-[#f8f9fa] relative overflow-hidden">
+      <section className="py-20 px-6 md:px-20 bg-gray-100 relative ">
         {/* Background Gradient Accents */}
         <div className="absolute -top-24 -left-24 w-72 h-72 bg-blue-300 opacity-20 blur-3xl rounded-full z-0" />
         <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-green-200 opacity-10 blur-3xl rounded-full z-0" />

@@ -25,7 +25,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="h-[90lvh] flex items-center justify-center bg-background px-4">
+    <div className="min-h-[67lvh] flex items-center justify-center bg-background px-4">
       <div className="w-full max-w-md bg-white p-8 rounded-xl shadow">
         <div className="flex items-center justify-center mb-6">
           <div className="w-16 h-16 rounded-full bg-sky-700/90 text-white flex items-center justify-center text-2xl font-semibold uppercase">
