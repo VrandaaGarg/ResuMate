@@ -8,9 +8,10 @@ const Sidebar = () => {
 
   const menuItems = [
     { path: '/dashboard', icon: <FaHome size={18} />, label: 'Dashboard' },
-    { path: '/dashboard/profile', icon: <FaUser size={18} />, label: 'Profile' },
-    { path: '/dashboard/resumes', icon: <FaFileAlt size={18} />, label: 'My Resumes' },
-    { path: '/dashboard/templates', icon: <FaCogs size={18} />, label: 'Templates' },
+    { path: '/resume-form', icon: <FaFileAlt size={18} />, label: 'Resume Form' },
+    { path: '/resumes', icon: <FaFileAlt size={18} />, label: 'My Resumes' },
+    { path: '/templates', icon: <FaCogs size={18} />, label: 'Templates' },
+    { path: '/profile', icon: <FaUser size={18} />, label: 'Profile' },
   ];
 
   return (

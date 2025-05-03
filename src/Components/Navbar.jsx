@@ -63,15 +63,14 @@ const Navbar = () => {
           ) : (
             <div className="relative">
               <button
-                className="flex items-center border border-gray-200 bg-white hover:shadow px-1.5 py-1 rounded-full transition"
+                className="flex items-center border border-gray-200 bg-sky-700/10 hover:shadow px-1.5 py-1 rounded-full transition"
                 onClick={() => setDropdownOpen((prev) => !prev)}
               >
-                <img
-                  src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-                  alt="user"
-                  className="w-9 h-9 rounded-full"
-                />
+                <div className="w-9 h-9 rounded-full bg-sky-700/85 text-white flex items-center justify-center font-semibold text-lg uppercase">
+                  {user?.name?.charAt(0) || 'U'}
+                </div>
               </button>
+
 
               <AnimatePresence>
                 {dropdownOpen && (

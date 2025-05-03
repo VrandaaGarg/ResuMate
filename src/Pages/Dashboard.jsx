@@ -1,7 +1,52 @@
-import React from 'react'
+// src/pages/Dashboard.jsx
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { FaPlus, FaUpload } from 'react-icons/fa';
+import { motion } from 'framer-motion';
 
 export default function Dashboard() {
+  const [resumes, setResumes] = useState([]);
+
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem('resumes')) || [];
+    setResumes(stored);
+  }, []);
+
   return (
-    <div>Dashboard</div>
-  )
+    <div className="min-h-[calc(100vh-64px)] px-6 md:px-20 py-16 bg-gray-100">
+      {resumes.length === 0 ? (
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="max-w-xl mx-auto bg-white shadow-lg p-10 rounded-xl text-center"
+        >
+          <h2 className="text-3xl font-bold text-sky-700 mb-2">Welcome to ResuMate 👋</h2>
+          <p className="text-gray-600 mb-6 text-sm">
+            You haven't created or uploaded any resumes yet. Let's get started!
+          </p>
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <Link
+              to="/resume-form"
+              className="flex items-center justify-center gap-2 px-6 py-2 bg-sky-700 text-white rounded-md hover:bg-sky-800 transition"
+            >
+              <FaPlus /> Create Resume
+            </Link>
+            <Link
+              to="/upload"
+              className="flex items-center justify-center gap-2 px-6 py-2 bg-black text-white rounded-md hover:bg-gray-900 transition"
+            >
+              <FaUpload /> Upload Resume
+            </Link>
+          </div>
+        </motion.div>
+      ) : (
+        <div className="text-center">
+          <h2 className="text-2xl font-semibold text-sky-700">Your Resumes</h2>
+          <p className="text-gray-500 mt-2">{resumes.length} resume(s) found.</p>
+          {/* Add resume cards or list here */}
+        </div>
+      )}
+    </div>
+  );
 }

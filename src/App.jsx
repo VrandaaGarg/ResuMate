@@ -1,4 +1,3 @@
-// src/App.jsx
 import { Routes, Route } from 'react-router-dom';
 import HomeLayout from './Layouts/HomeLayout';
 import DashboardLayout from './Layouts/DashboardLayout';
@@ -9,32 +8,35 @@ import Signup from './Pages/Signup';
 import Dashboard from './Pages/Dashboard';
 import ProfileForm from './Pages/ProfileForm';
 import ResumeList from './Pages/ResumeList';
-// import TemplateGallery from './Pages/TemplateGallery';
 import ProtectedRoute from './Contexts/ProtectedRoute';
-
+import ResumeEditor from './Pages/ResumeEditor';
+import Resumes from './Pages/Resumes';
+import Templates from './Pages/Templates';
 const App = () => {
   return (
     <Routes>
-      {/* Public */}
+      {/* Public Routes */}
       <Route path="/" element={<HomeLayout />}>
         <Route index element={<Home />} />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
       </Route>
 
-      {/* Protected */}
+      {/* Protected Routes - no /dashboard prefix */}
       <Route
-        path="/dashboard"
         element={
           <ProtectedRoute>
             <DashboardLayout />
           </ProtectedRoute>
         }
       >
-        <Route index element={<Dashboard />} />
-        <Route path="profile" element={<ProfileForm />} />
-        <Route path="resumes" element={<ResumeList />} />
-        {/* <Route path="templates" element={<TemplateGallery />} /> */}
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/profile" element={<ProfileForm />} />
+        <Route path="/resume-form" element={<ResumeList />} />
+        <Route path="/resumes" element={<Resumes />} />
+        <Route path="/templates" element={<Templates />} />
+        <Route path="resume/:resumeId" element={<ResumeEditor />} />
+
       </Route>
     </Routes>
   );
