@@ -1,17 +1,17 @@
-import { Routes, Route } from 'react-router-dom';
-import HomeLayout from './Layouts/HomeLayout';
-import DashboardLayout from './Layouts/DashboardLayout';
+import { Routes, Route } from "react-router-dom";
+import HomeLayout from "./Layouts/HomeLayout";
+import DashboardLayout from "./Layouts/DashboardLayout";
 
-import Home from './Pages/Home';
-import Login from './Pages/Login';
-import Signup from './Pages/Signup';
-import Dashboard from './Pages/Dashboard';
-import ProfileForm from './Pages/ProfileForm';
-import ResumeList from './Pages/ResumeList';
-import ProtectedRoute from './Contexts/ProtectedRoute';
-import ResumeEditor from './Pages/ResumeEditor';
-import Resumes from './Pages/Resumes';
-import Templates from './Pages/Templates';
+import Home from "./Pages/Home";
+import Login from "./Pages/Login";
+import Signup from "./Pages/Signup";
+import Dashboard from "./Pages/Dashboard";
+import Profile from "./Pages/Profile";
+import ResumeForm from "./Pages/ResumeForm";
+import ProtectedRoute from "./Contexts/ProtectedRoute";
+import ResumeEditor from "./Pages/ResumeEditor";
+import Resumes from "./Pages/Resumes";
+import Templates from "./Pages/Templates";
 const App = () => {
   return (
     <Routes>
@@ -31,12 +31,11 @@ const App = () => {
         }
       >
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/profile" element={<ProfileForm />} />
-        <Route path="/resume-form" element={<ResumeList />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/resume-form" element={<ResumeForm />} />
         <Route path="/resumes" element={<Resumes />} />
         <Route path="/templates" element={<Templates />} />
         <Route path="resume/:resumeId" element={<ResumeEditor />} />
-
       </Route>
     </Routes>
   );

@@ -38,9 +38,25 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("currentUser");
   };
 
+  const updateUser = (updatedData) => {
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const updatedUsers = users.map((u) =>
+      u.email === user.email ? { ...u, ...updatedData } : u
+    );
+    localStorage.setItem("users", JSON.stringify(updatedUsers));
+    setUser((prev) => ({ ...prev, ...updatedData }));
+  };
+
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated: !!user, signup, login, logout }}
+      value={{
+        user,
+        isAuthenticated: !!user,
+        signup,
+        login,
+        logout,
+        updateUser,
+      }}
     >
       {children}
     </AuthContext.Provider>

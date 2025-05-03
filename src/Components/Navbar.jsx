@@ -96,6 +96,14 @@ const Navbar = () => {
                         </Link>
                       </li>
                       <li>
+                        <Link
+                          to="/profile"
+                          className="block px-4 py-2 hover:bg-sky-50 transition text-gray-700"
+                        >
+                          Profile
+                        </Link>
+                      </li>
+                      <li>
                         <button
                           onClick={handleLogout}
                           className="w-full text-left px-4 py-2 hover:bg-red-50 text-red-600 transition"

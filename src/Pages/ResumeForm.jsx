@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const steps = [
   "Personal Info",
@@ -15,6 +16,7 @@ const steps = [
 ];
 
 const ResumeForm = () => {
+  const navigate = useNavigate();
   const allResumes = JSON.parse(localStorage.getItem("resumes")) || {};
 
   const [step, setStep] = useState(0);

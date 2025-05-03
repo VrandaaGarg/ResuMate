@@ -1,6 +1,5 @@
 // src/pages/Home.jsx
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import {
   FiCheckCircle,
   FiZap,
@@ -12,10 +11,6 @@ import {
   FiLayers,
 } from "react-icons/fi";
 import {
-  FaRegFileAlt,
-  FaEdit,
-  FaEye,
-  FaStar,
   FaChevronDown,
   FaPaintBrush,
   FaUserAlt,
