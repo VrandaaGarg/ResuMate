@@ -2,12 +2,13 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { FiCheckCircle, FiZap, FiShield, FiEdit, FiBarChart2, FiUpload, FiFileText, FiLayers } from 'react-icons/fi';
-import { FaRegFileAlt, FaEdit, FaEye, FaStar, FaMagic, FaPaintBrush } from 'react-icons/fa';
+import { FaRegFileAlt, FaEdit, FaEye, FaStar, FaChevronDown, FaPaintBrush, FaUserAlt, FaEnvelope, FaCommentDots, FaPaperPlane } from 'react-icons/fa';
 import { FaQuoteLeft, FaQuoteRight } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import Marquee from '../Components/Marquee';
 import { FaRocket, FaUpload } from 'react-icons/fa';
 import StatsSection from '../Components/StatsSection';
+import { useState } from 'react';
 
 const features = [
   {
@@ -133,6 +134,18 @@ const Home = () => {
     } else {
       navigate('/signup');
     }
+  };
+
+  const faqs = [
+    { q: "Is ResuMate free to use?", a: "Yes! Our core features including resume creation and AI enhancements are completely free." },
+    { q: "Can I download my resume?", a: "Absolutely. You can export your resume in PDF format with all styling and links preserved." },
+    { q: "Is my data secure?", a: "Yes, ResuMate uses secure storage and never shares your information with third parties." },
+    { q: "Can I customize fonts and colors?", a: "Yes! Our live editor lets you tweak fonts, sizes, colors, and templates in real-time." },
+  ];
+  const [openIndex, setOpenIndex] = useState(null);
+
+  const toggleFAQ = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
   };
 
 
@@ -393,29 +406,93 @@ const Home = () => {
       </section>
 
       {/* FAQs */}
-      <section className="py-16 px-6 md:px-20">
-        <h2 className="text-3xl font-semibold mb-8 text-center">FAQs</h2>
+      <section className="py-20 px-6 md:px-20 bg-background">
+        <h2 className="text-4xl  mb-10 text-center [font-family:'Lilita_One',cursive]">FAQs</h2>
         <div className="max-w-2xl mx-auto space-y-4">
-          {[
-            { q: "Is ResuMate free to use?", a: "Yes! Our core features are completely free." },
-            { q: "Can I download my resume?", a: "Absolutely. You can export as PDF with styling intact." },
-          ].map((faq, i) => (
-            <details key={i} className="border p-4 rounded bg-white">
-              <summary className="font-medium cursor-pointer">{faq.q}</summary>
-              <p className="mt-2 text-sm text-gray-600">{faq.a}</p>
-            </details>
+          {faqs.map((faq, i) => (
+            <div
+              key={i}
+              className="bg-white border border-gray-200 overflow-hidden rounded-lg transition-all duration-200 ease-in-out"
+            >
+              <button
+                onClick={() => toggleFAQ(i)}
+                className={`w-full px-5 py-4 flex justify-between items-center text-left  transition ${openIndex === i ? "bg-sky-700/10" : ""}`}
+              >
+                <span className="font-medium text-[#0f172a]">{faq.q}</span>
+                <FaChevronDown
+                  className={`ml-4 text-gray-500 transform transition-transform duration-300 ${openIndex === i ? "rotate-180" : ""}`}
+                />
+              </button>
+
+              <div
+                className={`px-5 overflow-hidden transition-all duration-300 ease-in-out ${openIndex === i ? "max-h-40 opacity-100 py-2" : "max-h-0 opacity-0 py-0"
+                  }`}
+              >
+                <p className="text-sm text-gray-600 py-2">{faq.a}</p>
+              </div>
+            </div>
           ))}
         </div>
       </section>
 
       {/* Contact */}
-      <section className="py-16 px-6 md:px-20 bg-white">
-        <h2 className="text-3xl font-semibold mb-6 text-center">Get in Touch</h2>
-        <form className="max-w-xl mx-auto space-y-4">
-          <input type="text" placeholder="Name" className="w-full px-4 py-2 border rounded" required />
-          <input type="email" placeholder="Email" className="w-full px-4 py-2 border rounded" required />
-          <textarea placeholder="Your message..." rows="4" className="w-full px-4 py-2 border rounded" required></textarea>
-          <button type="submit" className="bg-bluePrimary text-white px-6 py-2 rounded hover:bg-opacity-90">Send</button>
+      <section className="py-20 px-6 md:px-20 bg-gray-100 font-spree">
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
+          className="text-4xl text-center text-[#0f172a] mb-10 [font-family:'Lilita_One',cursive]"
+        >
+          Get in Touch
+        </motion.h2>
+
+        <form
+          action="https://formspree.io/f/YOUR_FORM_ID" // 🔁 Replace with your actual Formspree endpoint
+          method="POST"
+          className="max-w-xl mx-auto bg-gray-50 p-8 rounded-xl shadow-md space-y-6"
+        >
+          <div className="relative">
+            <FaUserAlt className="absolute left-4 top-3 text-gray-400" />
+            <input
+              type="text"
+              name="name"
+              placeholder="Your Name"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-700 transition"
+              required
+            />
+          </div>
+
+          <div className="relative">
+            <FaEnvelope className="absolute left-4 top-3 text-gray-400" />
+            <input
+              type="email"
+              name="email"
+              placeholder="Your Email"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-700 transition"
+              required
+            />
+          </div>
+
+          <div className="relative">
+            <FaCommentDots className="absolute left-4 top-3 text-gray-400" />
+            <textarea
+              name="message"
+              placeholder="Your Message"
+              rows="4"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-700 transition"
+              required
+            ></textarea>
+          </div>
+
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.97 }}
+            type="submit"
+            className="w-full bg-sky-700 text-white py-2 flex items-center justify-center gap-2 rounded-md shadow hover:bg-sky-800 transition"
+          >
+            <FaPaperPlane /> Send
+          </motion.button>
         </form>
       </section>
     </div>

@@ -1,36 +1,49 @@
-import React from 'react'
+// src/components/Footer.jsx
+import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
+import { SiGoogleforms } from "react-icons/si";
+import { Link } from 'react-router-dom';
 
 export default function Footer() {
   return (
-    
+    <footer className="bg-gray-100 text-[#0f172a] border-t border-gray-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6 md:gap-0">
+          {/* Logo & Name */}
+          <Link to="/" className="flex items-center gap-2 text-xl font-bold text-black">
+            <SiGoogleforms className="text-2xl" />
+            ResuMate
+          </Link>
 
-<footer class="bg-white rounded-lg shadow-sm dark:bg-gray-900 m-4">
-    <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8">
-        <div class="sm:flex sm:items-center sm:justify-between">
-            <a href="https://flowbite.com/" class="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse">
-                <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo" />
-                <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Flowbite</span>
+          {/* Footer Links */}
+          <ul className="flex flex-wrap justify-center gap-6 text-sm font-medium text-gray-600">
+            <li><Link to="/about" className="hover:text-sky-700 transition">About</Link></li>
+            <li><Link to="/privacy" className="hover:text-sky-700 transition">Privacy Policy</Link></li>
+            <li><Link to="/terms" className="hover:text-sky-700 transition">Terms</Link></li>
+            <li><Link to="/contact" className="hover:text-sky-700 transition">Contact</Link></li>
+          </ul>
+
+          {/* Social Icons */}
+          <div className="flex gap-4 text-gray-500">
+            <a href="https://github.com" target="_blank" rel="noreferrer" className="hover:text-sky-700 transition">
+              <FaGithub size={22} />
             </a>
-            <ul class="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400">
-                <li>
-                    <a href="#" class="hover:underline me-4 md:me-6">About</a>
-                </li>
-                <li>
-                    <a href="#" class="hover:underline me-4 md:me-6">Privacy Policy</a>
-                </li>
-                <li>
-                    <a href="#" class="hover:underline me-4 md:me-6">Licensing</a>
-                </li>
-                <li>
-                    <a href="#" class="hover:underline">Contact</a>
-                </li>
-            </ul>
+            <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="hover:text-sky-700 transition">
+              <FaLinkedin size={22} />
+            </a>
+            <a href="https://twitter.com" target="_blank" rel="noreferrer" className="hover:text-sky-700 transition">
+              <FaTwitter size={22} />
+            </a>
+          </div>
         </div>
-        <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
-        <span class="block text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 <a href="https://flowbite.com/" class="hover:underline">Flowbite™</a>. All Rights Reserved.</span>
-    </div>
-</footer>
 
+        {/* Divider */}
+        <hr className="my-2 border-transparent" />
 
-  )
+        {/* Copyright */}
+        <p className="text-sm text-center text-gray-500">
+          © {new Date().getFullYear()} <span className="font-semibold">ResuMate</span>. All rights reserved.
+        </p>
+      </div>
+    </footer>
+  );
 }
