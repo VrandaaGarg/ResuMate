@@ -1,1 +1,1 @@
-# RESUMATE
+# RESUMATE- AI-Powered Resume Builder and Optimizer
