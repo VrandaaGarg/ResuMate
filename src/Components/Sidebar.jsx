@@ -1,17 +1,21 @@
 // src/Components/Sidebar.jsx
-import { FaUser, FaFileAlt, FaHome, FaCogs } from 'react-icons/fa';
-import { Link, useLocation } from 'react-router-dom';
-import classNames from 'classnames';
+import { FaUser, FaFileAlt, FaHome, FaCogs } from "react-icons/fa";
+import { Link, useLocation } from "react-router-dom";
+import classNames from "classnames";
 
 const Sidebar = () => {
   const location = useLocation();
 
   const menuItems = [
-    { path: '/dashboard', icon: <FaHome size={18} />, label: 'Dashboard' },
-    { path: '/resume-form', icon: <FaFileAlt size={18} />, label: 'Resume Form' },
-    { path: '/resumes', icon: <FaFileAlt size={18} />, label: 'My Resumes' },
-    { path: '/templates', icon: <FaCogs size={18} />, label: 'Templates' },
-    { path: '/profile', icon: <FaUser size={18} />, label: 'Profile' },
+    { path: "/dashboard", icon: <FaHome size={18} />, label: "Dashboard" },
+    {
+      path: "/resume-form",
+      icon: <FaFileAlt size={18} />,
+      label: "Resume Form",
+    },
+    { path: "/resumes", icon: <FaFileAlt size={18} />, label: "My Resumes" },
+    { path: "/templates", icon: <FaCogs size={18} />, label: "Templates" },
+    { path: "/profile", icon: <FaUser size={18} />, label: "Profile" },
   ];
 
   return (
@@ -27,16 +31,18 @@ const Sidebar = () => {
               <Link
                 to={item.path}
                 className={classNames(
-                  'flex items-center gap-3 px-3 py-2 rounded-md transition-all duration-200',
+                  "flex items-center gap-3 px-3 py-2 rounded-md transition-all duration-200",
                   isActive
-                    ? 'bg-blue-100 text-blue-800 font-semibold'
-                    : 'hover:bg-sky-50 text-gray-700'
+                    ? "bg-blue-100 text-blue-800 font-semibold"
+                    : "hover:bg-sky-50 text-gray-700"
                 )}
               >
-                <div className={classNames(
-                  'p-2 rounded-md transition-colors',
-                  isActive ? 'bg-blue-200 text-blue-800' : 'text-gray-500'
-                )}>
+                <div
+                  className={classNames(
+                    "p-2 rounded-md transition-colors",
+                    isActive ? "bg-blue-200 text-blue-800" : "text-gray-500"
+                  )}
+                >
                   {item.icon}
                 </div>
                 <span>{item.label}</span>

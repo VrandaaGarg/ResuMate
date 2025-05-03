@@ -1,14 +1,14 @@
 // src/pages/Dashboard.jsx
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { FaPlus, FaUpload } from 'react-icons/fa';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { FaPlus, FaUpload } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 export default function Dashboard() {
   const [resumes, setResumes] = useState([]);
 
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem('resumes')) || [];
+    const stored = JSON.parse(localStorage.getItem("resumes")) || [];
     setResumes(stored);
   }, []);
 
@@ -21,7 +21,9 @@ export default function Dashboard() {
           transition={{ duration: 0.5 }}
           className="max-w-xl mx-auto bg-white shadow-lg p-10 rounded-xl text-center"
         >
-          <h2 className="text-3xl font-bold text-sky-700 mb-2">Welcome to ResuMate 👋</h2>
+          <h2 className="text-3xl font-bold text-sky-700 mb-2">
+            Welcome to ResuMate 👋
+          </h2>
           <p className="text-gray-600 mb-6 text-sm">
             You haven't created or uploaded any resumes yet. Let's get started!
           </p>
@@ -43,7 +45,9 @@ export default function Dashboard() {
       ) : (
         <div className="text-center">
           <h2 className="text-2xl font-semibold text-sky-700">Your Resumes</h2>
-          <p className="text-gray-500 mt-2">{resumes.length} resume(s) found.</p>
+          <p className="text-gray-500 mt-2">
+            {resumes.length} resume(s) found.
+          </p>
           {/* Add resume cards or list here */}
         </div>
       )}
