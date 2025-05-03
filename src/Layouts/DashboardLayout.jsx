@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { Outlet } from 'react-router-dom';
-import Navbar from '../Components/Navbar';
-import Sidebar from '../Components/Sidebar';
-import Footer from '../Components/Footer';
-import { motion } from 'framer-motion';
+import { useState } from "react";
+import { Outlet } from "react-router-dom";
+import Navbar from "../Components/Navbar";
+import Sidebar from "../Components/Sidebar";
+import Footer from "../Components/Footer";
+import { motion } from "framer-motion";
 
 const DashboardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -15,10 +15,15 @@ const DashboardLayout = () => {
 
       <div className="flex flex-1 pt-16">
         {/* Sidebar */}
-        <Sidebar isOpen={isSidebarOpen} closeSidebar={() => setIsSidebarOpen(false)} />
+        <Sidebar
+          isOpen={isSidebarOpen}
+          closeSidebar={() => setIsSidebarOpen(false)}
+        />
 
         {/* Page Content */}
-        <div className="flex-1 sm:ml-64"> {/* only shift on desktop */}
+        <div className="flex-1 sm:ml-64">
+          {" "}
+          {/* only shift on desktop */}
           <motion.main
             className="px-4 md:px-6 py-6"
             initial={{ opacity: 0, y: 10 }}

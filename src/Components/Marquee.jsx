@@ -1,17 +1,17 @@
-import React from 'react';
+import React from "react";
 
 const companies = [
-  { name: 'Google', color: '#4285F4', logo: '/logos/Google.png' },
-  { name: 'Amazon', color: '#FF9900', logo: '/logos/amazon.png' },
-  { name: 'Microsoft', color: '#737373', logo: '/logos/microsoft.png' },
-//   { name: 'TCS', color: '#f47721', logo: '/logos/tcs.png' },
-  { name: 'Wipro', color: '#7f3f98', logo: '/logos/wipro.webp' },
-//   { name: 'Adobe', color: '#FF0000', logo: '/logos/adobe.png' },
-  { name: 'Netflix', color: '#E50914', logo: '/logos/netflix.png' },
-  { name: 'Meta', color: '#1877F2', logo: '/logos/meta.png' },
-  { name: 'IBM', color: '#006699', logo: '/logos/Ibm.png' },
-//   { name: 'Infosys', color: '#007CC3', logo: '/logos/infosys.png' },
-  { name: 'Salesforce', color: '#00A1E0', logo: '/logos/SalesForce.png' },
+  { name: "Google", color: "#4285F4", logo: "/logos/Google.png" },
+  { name: "Amazon", color: "#FF9900", logo: "/logos/amazon.png" },
+  { name: "Microsoft", color: "#737373", logo: "/logos/microsoft.png" },
+  //   { name: 'TCS', color: '#f47721', logo: '/logos/tcs.png' },
+  { name: "Wipro", color: "#7f3f98", logo: "/logos/wipro.webp" },
+  //   { name: 'Adobe', color: '#FF0000', logo: '/logos/adobe.png' },
+  { name: "Netflix", color: "#E50914", logo: "/logos/netflix.png" },
+  { name: "Meta", color: "#1877F2", logo: "/logos/meta.png" },
+  { name: "IBM", color: "#006699", logo: "/logos/Ibm.png" },
+  //   { name: 'Infosys', color: '#007CC3', logo: '/logos/infosys.png' },
+  { name: "Salesforce", color: "#00A1E0", logo: "/logos/SalesForce.png" },
 ];
 
 const Companies = () => {

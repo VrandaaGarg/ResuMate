@@ -1,8 +1,8 @@
 // src/Layouts/HomeLayout.jsx
-import { Outlet } from 'react-router-dom';
-import Navbar from '../Components/Navbar';
-import Footer from '../Components/Footer';
-import { motion } from 'framer-motion';
+import { Outlet } from "react-router-dom";
+import Navbar from "../Components/Navbar";
+import Footer from "../Components/Footer";
+import { motion } from "framer-motion";
 
 const HomeLayout = () => {
   return (

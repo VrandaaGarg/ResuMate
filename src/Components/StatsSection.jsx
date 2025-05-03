@@ -1,5 +1,5 @@
-import { motion, useAnimation, useInView } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { motion, useAnimation, useInView } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 
 const StatsSection = () => {
   const ref = useRef(null);
@@ -37,21 +37,21 @@ const StatsSection = () => {
         ref={ref}
         initial={{ opacity: 0, y: 20 }}
         animate={controls}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
         className="relative z-10"
       >
         <h2 className="text-2xl mb-6 text-[#0f172a] [font-family:'Lilita_One',cursive]">
           Helping Careers Take Off 🚀
         </h2>
         <p className="text-xl font-medium text-gray-800">
-          More than{' '}
+          More than{" "}
           <span className="text-[#1271ba] font-bold text-3xl tabular-nums">
             {counts.resumes.toLocaleString()}+
-          </span>{' '}
-          resumes built,{' '}
+          </span>{" "}
+          resumes built,{" "}
           <span className="text-green-600 font-bold text-3xl tabular-nums">
             {counts.hired.toLocaleString()}+
-          </span>{' '}
+          </span>{" "}
           users hired!
         </p>
       </motion.div>
