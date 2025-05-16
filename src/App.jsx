@@ -9,7 +9,7 @@ import Dashboard from "./Pages/Dashboard";
 import Profile from "./Pages/Profile";
 import ResumeForm from "./Pages/ResumeForm";
 import ProtectedRoute from "./Contexts/ProtectedRoute";
-import ResumeEditor from "./Pages/ResumeEditor";
+import Resume from "./Pages/Resume";
 import Resumes from "./Pages/Resumes";
 import Templates from "./Pages/Templates";
 const App = () => {
@@ -33,9 +33,9 @@ const App = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/resume-form" element={<ResumeForm />} />
-        <Route path="/resumes" element={<Resumes />} />
+        <Route path="/resume" element={<Resume />} />
+
         <Route path="/templates" element={<Templates />} />
-        <Route path="resume/:resumeId" element={<ResumeEditor />} />
       </Route>
     </Routes>
   );

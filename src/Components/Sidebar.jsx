@@ -10,9 +10,9 @@ const Sidebar = () => {
     {
       path: "/resume-form",
       icon: <FaFileAlt size={18} />,
-      label: "Resume Form",
+      label: "Edit Resume",
     },
-    { path: "/resumes", icon: <FaFileAlt size={18} />, label: "My Resumes" },
+    { path: "/resume", icon: <FaFileAlt size={18} />, label: "My Resume" },
     { path: "/templates", icon: <FaCogs size={18} />, label: "Templates" },
     { path: "/profile", icon: <FaUser size={18} />, label: "Profile" },
   ];

@@ -1,4 +1,3 @@
-// src/Pages/ResumeForm.jsx
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
@@ -46,29 +45,37 @@ const steps = [
 
 const ResumeForm = () => {
   const navigate = useNavigate();
-  const allResumes = JSON.parse(localStorage.getItem("resumes")) || {};
-
   const [step, setStep] = useState(0);
-  const [resumeId] = useState(() => `resume-${Date.now()}`);
 
-  const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    education: {
-      college: "",
-      startYear: "",
-      endYear: "",
-      cgpa: "",
-      school: "",
-      schoolEndYear: "",
-      tenth: "",
-      twelfth: "",
-    },
-    skills: [{ domain: "", languages: [""] }],
-    projects: [{ name: "", description: "", github: "", demo: "" }],
-    experience: [{ company: "", years: "", description: "" }],
-    achievements: [{ title: "", description: "", year: "", month: "" }],
-    contact: { phone: "", email: "", github: "", linkedin: "", location: "" },
+  const [formData, setFormData] = useState(() => {
+    const saved = localStorage.getItem("resumeData");
+    return saved
+      ? JSON.parse(saved)
+      : {
+          name: "",
+          description: "",
+          education: {
+            college: "",
+            startYear: "",
+            endYear: "",
+            cgpa: "",
+            school: "",
+            schoolEndYear: "",
+            tenth: "",
+            twelfth: "",
+          },
+          skills: [{ domain: "", languages: [""] }],
+          projects: [{ name: "", description: "", github: "", demo: "" }],
+          experience: [{ company: "", years: "", description: "" }],
+          achievements: [{ title: "", description: "", year: "", month: "" }],
+          contact: {
+            phone: "",
+            email: "",
+            github: "",
+            linkedin: "",
+            location: "",
+          },
+        };
   });
 
   useEffect(() => {
@@ -89,12 +96,10 @@ const ResumeForm = () => {
   const addItem = (section, domainIndex = null) => {
     if (section === "skills") {
       if (domainIndex !== null) {
-        // Add a skill to an existing domain
         const updatedSkills = [...formData.skills];
         updatedSkills[domainIndex].languages.push("");
         setFormData({ ...formData, skills: updatedSkills });
       } else {
-        // Add a new domain
         const newDomain = { domain: "", languages: [""] };
         setFormData({ ...formData, skills: [...formData.skills, newDomain] });
       }
@@ -139,27 +144,18 @@ const ResumeForm = () => {
   };
 
   const removeItem = (section, index) => {
-    // Ensure the section exists and is an array
     if (!Array.isArray(formData[section])) return;
-
     const updatedSection = [...formData[section]];
     updatedSection.splice(index, 1);
-
-    setFormData((prev) => ({
-      ...prev,
-      [section]: updatedSection,
-    }));
+    setFormData((prev) => ({ ...prev, [section]: updatedSection }));
   };
 
   const removeSkill = (domainIndex, langIndex) => {
     const updatedSkills = [...formData.skills];
     updatedSkills[domainIndex].languages.splice(langIndex, 1);
-
-    // Optional: remove the domain if no skills left
     if (updatedSkills[domainIndex].languages.length === 0) {
       updatedSkills.splice(domainIndex, 1);
     }
-
     setFormData({ ...formData, skills: updatedSkills });
   };
 
@@ -172,11 +168,9 @@ const ResumeForm = () => {
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 0));
 
   const saveResumeToLocal = () => {
-    const allResumes = JSON.parse(localStorage.getItem("resumes")) || {};
-    allResumes[resumeId] = formData;
-    localStorage.setItem("resumes", JSON.stringify(allResumes));
+    localStorage.setItem("resumeData", JSON.stringify(formData));
     toast.success("Resume saved successfully!");
-    navigate("/resumes");
+    navigate("/resume");
   };
 
   const renderStep = () => {

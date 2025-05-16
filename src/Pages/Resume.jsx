@@ -1,12 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
 import ClassicTemplate from "../Components/Templates/ClassicTemplate";
 import SidebarTemplate from "../Components/Templates/SidebarTemplate";
 import { useEditResume } from "../Contexts/EditResumeContext";
-import generatePDF from "react-to-pdf"; // modern version
+import generatePDF from "react-to-pdf";
 
-export default function ResumeEditor() {
-  const { resumeId } = useParams();
+export default function Resume() {
   const [resume, setResume] = useState(null);
   const [selectedTemplate, setSelectedTemplate] = useState("classic");
   const { isEditable, toggleEditing } = useEditResume();
@@ -14,19 +12,17 @@ export default function ResumeEditor() {
 
   // Load from localStorage
   useEffect(() => {
-    const allResumes = JSON.parse(localStorage.getItem("resumes")) || {};
-    const selectedResume = allResumes[resumeId];
-    if (selectedResume) setResume(selectedResume);
-  }, [resumeId]);
+    const saved = JSON.parse(localStorage.getItem("resumeData"));
+    if (saved) setResume(saved);
+  }, []);
 
-  // Save to localStorage on resume change
+  // Save changes to localStorage
   useEffect(() => {
     if (resume) {
-      const allResumes = JSON.parse(localStorage.getItem("resumes")) || {};
-      allResumes[resumeId] = resume;
-      localStorage.setItem("resumes", JSON.stringify(allResumes));
+      localStorage.setItem("resumeData", JSON.stringify(resume));
+      localStorage.setItem("resumeDataSavedAt", Date.now());
     }
-  }, [resume, resumeId]);
+  }, [resume]);
 
   const handlePDFDownload = () => {
     generatePDF(resumeRef, {
@@ -47,7 +43,7 @@ export default function ResumeEditor() {
         {/* Header */}
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-sky-800">Resume Editor</h1>
+            <h1 className="text-2xl font-bold text-sky-800">Your Resume</h1>
             <p className="text-sm text-gray-500">
               Mode: {isEditable ? "Edit" : "View"}
             </p>
@@ -76,7 +72,10 @@ export default function ResumeEditor() {
         </div>
 
         {/* Resume Preview */}
-        <div ref={resumeRef} className="bg-white shadow p-6 rounded-lg">
+        <div
+          ref={resumeRef}
+          className="bg-white shadow p-6 rounded-lg relative"
+        >
           {selectedTemplate === "classic" && (
             <ClassicTemplate resume={resume} onChange={setResume} />
           )}
