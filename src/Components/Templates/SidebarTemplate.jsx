@@ -165,27 +165,42 @@ const SidebarTemplate = ({ resume, onChange }) => {
           {resume.contact.email && (
             <div className="flex items-center text-sm">
               <MdOutlineMailOutline className="mr-2 text-lg" />
-              <p className="bg-transparent outline-none w-full break-words">
+              <a
+                href={`mailto:${resume.contact.email}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-transparent outline-none w-full break-words"
+              >
                 {resume.contact.email}
-              </p>
+              </a>
             </div>
           )}
 
           {resume.contact.linkedin && (
             <div className="flex items-start text-sm gap-2">
               <FaLinkedinIn className="flex-shrink-0 text-lg mt-1" />
-              <p className="bg-transparent outline-none w-full break-words">
+              <a
+                href={`${resume.contact.linkedin}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-transparent outline-none w-full break-words"
+              >
                 {resume.contact.linkedin}
-              </p>
+              </a>
             </div>
           )}
 
           {resume.contact.github && (
             <div className="flex items-start text-sm gap-2">
               <FaGithub className="flex-shrink-0 text-lg mt-1" />
-              <p className="bg-transparent outline-none w-full break-words">
+              <a
+                href={`${resume.contact.github}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-transparent outline-none w-full break-words"
+              >
                 {resume.contact.github}
-              </p>
+              </a>
             </div>
           )}
         </div>
@@ -303,7 +318,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
           className="text-xl font-bold  mb-2"
           style={{ color: resume.sidebarColor || "#1e3a8a" }}
         >
-          Experience
+          EXPERIENCE
         </h2>
         {resume.experience.map((exp, i) => (
           <div key={i} className="mb-4 text-sm">
@@ -328,7 +343,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
           className="text-xl font-bold  mb-2"
           style={{ color: resume.sidebarColor || "#1e3a8a" }}
         >
-          Projects
+          PROJECTS
         </h2>
 
         {resume.projects.map((proj, i) => (
@@ -393,7 +408,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
           className="text-xl font-bold mb-2"
           style={{ color: resume.sidebarColor || "#1e3a8a" }}
         >
-          Education
+          EDUCATION
         </h2>
 
         <div className="flex col-lapse gap-6 mb-4">
@@ -414,7 +429,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
           className="text-xl font-bold  mb-2"
           style={{ color: resume.sidebarColor || "#1e3a8a" }}
         >
-          Achievements
+          ACHIEVEMENTS
         </h2>
         <ul className="list-disc text-sm pl-5 space-y-2 text-gray-800">
           {resume.achievements.map((ach, i) => (
@@ -803,6 +818,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
         </div>
       )}
 
+      {/* reorder and toggle visibility */}
       {isEditable && (
         <>
           {/* Toggle Button */}
