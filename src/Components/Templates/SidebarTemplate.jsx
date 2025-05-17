@@ -40,8 +40,9 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { FaPalette } from "react-icons/fa";
 import { RiFontColor } from "react-icons/ri";
+import { BiShowAlt } from "react-icons/bi";
+import { IoReorderThreeSharp } from "react-icons/io5";
 
 const SidebarTemplate = ({ resume, onChange }) => {
   const [showBgColorPicker, setShowBgColorPicker] = useState(false);
@@ -50,6 +51,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
   const [showLinkColorPicker, setShowLinkColorPicker] = useState(false);
   const [showToggleReorder, setShowToggleReorder] = useState(true);
   const [showColorPicker, setShowColorPicker] = useState(false);
+  const [showReorder, setShowReorder] = useState(false);
   const { isEditable } = useEditResume();
   const pointerSensor = useSensor(PointerSensor);
   const sensors = useSensors(pointerSensor);
@@ -71,6 +73,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
   };
 
   const [showTextColorPicker, setShowTextColorPicker] = useState(false);
+  const [showToggleSection, setshowToggleSection] = useState(false);
 
   useEffect(() => {
     if (!resume.sectionOrder) {
@@ -140,10 +143,13 @@ const SidebarTemplate = ({ resume, onChange }) => {
         style={style}
         {...attributes}
         {...listeners}
-        className="flex items-center justify-between px-4 py-2 bg-gray-50 border border-gray-200 rounded-md text-sm cursor-grab"
+        className="flex items-center justify-between px-2 py-2 bg-gray-50 border border-gray-200 rounded-md text-xs cursor-grab max-w-full"
+        title={id}
       >
-        <span className="capitalize text-gray-700">{id}</span>
-        <MdDragHandle className="text-gray-500" />
+        <span className="capitalize text-gray-700 truncate max-w-[80%]">
+          {id}
+        </span>
+        <IoReorderThreeSharp className="text-gray-500 flex-shrink-0" />
       </div>
     );
   };
@@ -512,7 +518,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
     <div className="">
       {/* Toolbar */}
       {isEditable && (
-        <div className="w-full bg-white  border border-gray-200 shadow-sm rounded-md px-6 py-3 mb-6 flex flex-wrap items-center gap-6">
+        <div className="w-full bg-white  justify-center border border-gray-200 shadow-sm rounded-md px-6 py-3 mb-6 flex flex-wrap items-center gap-6">
           <div className="relative">
             {/* Color Icon Button */}
             <button
@@ -931,176 +937,158 @@ const SidebarTemplate = ({ resume, onChange }) => {
               </div>
             )}
           </div>
-        </div>
-      )}
 
-      {/* reorder and toggle visibility */}
-      {isEditable && (
-        <>
-          {/* Toggle Button */}
-          <div className="flex justify-end mb-2">
+          {/* Show/Hide Sections Button */}
+          <div className="relative">
             <button
-              onClick={() => setShowToggleReorder((prev) => !prev)}
-              className="flex items-center gap-1 text-sm text-gray-600 hover:text-sky-600 transition"
-              title={
-                showToggleReorder
-                  ? "Hide Toggle & Reorder"
-                  : "Show Toggle & Reorder"
-              }
+              className="p-2 rounded-md hover:bg-gray-100 transition"
+              title="Show/Hide Sections"
+              onClick={() => setshowToggleSection((prev) => !prev)}
             >
-              {showToggleReorder ? (
-                <>
-                  <span>Hide</span>
-                  <FaChevronUp className="text-sm" />
-                </>
-              ) : (
-                <>
-                  <span>Show</span>
-                  <FaChevronDown className="text-sm" />
-                </>
-              )}
+              <BiShowAlt className="text-lg text-gray-700" />
             </button>
-          </div>
 
-          {/* Toggle & Reorder Section */}
-          <AnimatePresence>
-            {showToggleReorder && (
-              <motion.div
-                key="toggle-reorder"
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3 }}
-                className="mb-6 bg-white border border-gray-200 p-4 rounded-xl shadow-md"
-              >
-                <div className="grid grid-cols-2 gap-6">
-                  {/* Toggle Visibility Column */}
-                  <div>
-                    <h3 className="font-semibold text-gray-800 text-base mb-3 flex items-center gap-2">
-                      <FaEye className="text-blue-600" />
-                      Show/Hide Sections
-                    </h3>
+            {showToggleSection && (
+              <div className="absolute right-0 mt-2 z-50 w-72 max-h-72 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg">
+                <div className="p-4">
+                  <h3 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                    <FaEye className="text-blue-600" />
+                    Show/Hide Sections
+                  </h3>
 
-                    <div className="grid grid-cols-2 gap-2">
-                      {Object.keys(resume.visibleSections).map((key) => {
-                        const isVisible = resume.visibleSections[key];
-                        return (
-                          <button
-                            key={key}
-                            onClick={() =>
-                              onChange((prev) => ({
-                                ...prev,
-                                visibleSections: {
-                                  ...prev.visibleSections,
-                                  [key]: !isVisible,
-                                },
-                              }))
-                            }
-                            className={`flex items-center justify-between px-3 py-1.5 rounded-md border text-xs capitalize transition-all ${
-                              isVisible
-                                ? "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100"
-                                : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
-                            }`}
-                          >
-                            {key}
-                            {isVisible ? (
-                              <FaEye className="text-blue-500 text-sm" />
-                            ) : (
-                              <FaEyeSlash className="text-gray-400 text-sm" />
-                            )}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Reorder Column */}
-                  <div>
-                    <h3 className="font-semibold text-gray-800 text-base mb-3 flex items-center gap-2">
-                      <MdDragHandle className="text-blue-600" />
-                      Reorder Sections
-                    </h3>
-
-                    <DndContext
-                      sensors={sensors}
-                      collisionDetection={closestCenter}
-                      onDragEnd={({ active, over }) => {
-                        if (!over || active.id === over.id) return;
-
-                        const oldIndex = resume.sectionOrder.indexOf(active.id);
-                        const newIndex = resume.sectionOrder.indexOf(over.id);
-
-                        const isSidebar = sidebarSections.includes(active.id);
-                        const overIsSidebar = sidebarSections.includes(over.id);
-                        const isMain = mainSections.includes(active.id);
-                        const overIsMain = mainSections.includes(over.id);
-
-                        if (
-                          (isSidebar && overIsSidebar) ||
-                          (isMain && overIsMain)
-                        ) {
-                          const newOrder = arrayMove(
-                            resume.sectionOrder,
-                            oldIndex,
-                            newIndex
-                          );
-                          onChange((prev) => ({
-                            ...prev,
-                            sectionOrder: newOrder,
-                          }));
-                        }
-                      }}
-                    >
-                      <div className="grid grid-cols-2 gap-4">
-                        {/* Sidebar Sections */}
-                        <div>
-                          <p className="text-xs text-gray-500 mb-1 font-medium">
-                            Sidebar
-                          </p>
-                          <SortableContext
-                            items={resume.sectionOrder.filter((id) =>
-                              sidebarSections.includes(id)
-                            )}
-                            strategy={verticalListSortingStrategy}
-                          >
-                            <div className="space-y-1.5">
-                              {resume.sectionOrder
-                                .filter((id) => sidebarSections.includes(id))
-                                .map((id) => (
-                                  <SortableItem key={id} id={id} />
-                                ))}
-                            </div>
-                          </SortableContext>
-                        </div>
-
-                        {/* Main Sections */}
-                        <div>
-                          <p className="text-xs text-gray-500 mb-1 font-medium">
-                            Main
-                          </p>
-                          <SortableContext
-                            items={resume.sectionOrder.filter((id) =>
-                              mainSections.includes(id)
-                            )}
-                            strategy={verticalListSortingStrategy}
-                          >
-                            <div className="space-y-1.5">
-                              {resume.sectionOrder
-                                .filter((id) => mainSections.includes(id))
-                                .map((id) => (
-                                  <SortableItem key={id} id={id} />
-                                ))}
-                            </div>
-                          </SortableContext>
-                        </div>
-                      </div>
-                    </DndContext>
+                  <div className="grid grid-cols-2 gap-2">
+                    {Object.keys(resume.visibleSections).map((key) => {
+                      const isVisible = resume.visibleSections[key];
+                      return (
+                        <button
+                          key={key}
+                          onClick={() =>
+                            onChange((prev) => ({
+                              ...prev,
+                              visibleSections: {
+                                ...prev.visibleSections,
+                                [key]: !isVisible,
+                              },
+                            }))
+                          }
+                          className={`flex items-center justify-between px-3 py-1.5 rounded-md border text-xs capitalize transition-all ${
+                            isVisible
+                              ? "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100"
+                              : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
+                          }`}
+                        >
+                          <span className="truncate w-24">{key}</span>
+                          {isVisible ? (
+                            <FaEye className="text-blue-500 text-sm shrink-0" />
+                          ) : (
+                            <FaEyeSlash className="text-gray-400 text-sm shrink-0" />
+                          )}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
-              </motion.div>
+              </div>
             )}
-          </AnimatePresence>
-        </>
+          </div>
+
+          {/* Reorder Sections Button */}
+          <div className="relative">
+            <button
+              className="p-2 rounded-md hover:bg-gray-100 transition"
+              title="Reorder Sections"
+              onClick={() => setShowReorder((prev) => !prev)}
+            >
+              <IoReorderThreeSharp className="text-lg text-gray-700" />
+            </button>
+
+            {showReorder && (
+              <div className="absolute right-0 mt-2 z-50 w-64 max-h-80 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg">
+                <div className="p-4">
+                  <h3 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                    <IoReorderThreeSharp className="text-blue-600" />
+                    Reorder Sections
+                  </h3>
+
+                  <DndContext
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragEnd={({ active, over }) => {
+                      if (!over || active.id === over.id) return;
+
+                      const oldIndex = resume.sectionOrder.indexOf(active.id);
+                      const newIndex = resume.sectionOrder.indexOf(over.id);
+
+                      const isSidebar = sidebarSections.includes(active.id);
+                      const overIsSidebar = sidebarSections.includes(over.id);
+                      const isMain = mainSections.includes(active.id);
+                      const overIsMain = mainSections.includes(over.id);
+
+                      if (
+                        (isSidebar && overIsSidebar) ||
+                        (isMain && overIsMain)
+                      ) {
+                        const newOrder = arrayMove(
+                          resume.sectionOrder,
+                          oldIndex,
+                          newIndex
+                        );
+                        onChange((prev) => ({
+                          ...prev,
+                          sectionOrder: newOrder,
+                        }));
+                      }
+                    }}
+                  >
+                    <div className="grid grid-cols-2 gap-4 text-xs">
+                      {/* Sidebar Sections */}
+                      <div>
+                        <p className="text-xs text-gray-500 mb-1 font-medium">
+                          Sidebar
+                        </p>
+                        <SortableContext
+                          items={resume.sectionOrder.filter((id) =>
+                            sidebarSections.includes(id)
+                          )}
+                          strategy={verticalListSortingStrategy}
+                        >
+                          <div className="space-y-1.5 ">
+                            {resume.sectionOrder
+                              .filter((id) => sidebarSections.includes(id))
+                              .map((id) => (
+                                <SortableItem key={id} id={id} />
+                              ))}
+                          </div>
+                        </SortableContext>
+                      </div>
+
+                      {/* Main Sections */}
+                      <div>
+                        <p className="text-xs text-gray-500 mb-1 font-medium">
+                          Main
+                        </p>
+                        <SortableContext
+                          items={resume.sectionOrder.filter((id) =>
+                            mainSections.includes(id)
+                          )}
+                          strategy={verticalListSortingStrategy}
+                        >
+                          <div className="space-y-1.5">
+                            {resume.sectionOrder
+                              .filter((id) => mainSections.includes(id))
+                              .map((id) => (
+                                <SortableItem key={id} id={id} />
+                              ))}
+                          </div>
+                        </SortableContext>
+                      </div>
+                    </div>
+                  </DndContext>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       )}
 
       {/* Resume Preview */}
