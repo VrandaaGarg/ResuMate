@@ -18,32 +18,48 @@ import {
   MdFormatAlignRight,
   MdFormatAlignJustify,
 } from "react-icons/md";
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  arrayMove,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { MdDragHandle } from "react-icons/md";
 
-const SidebarTemplate = ({
-  resume,
-  onChange,
-  sectionOrder,
-  visibleSections,
-}) => {
+const SidebarTemplate = ({ resume, onChange }) => {
   const [showBgColorPicker, setShowBgColorPicker] = useState(false);
   const [showColorPicker, setShowColorPicker] = useState(false);
-  // fallback to bg-blue-900
-
   const { isEditable } = useEditResume();
-
+  const pointerSensor = useSensor(PointerSensor);
+  const sensors = useSensors(pointerSensor);
   const sidebarSections = ["name", "details", "description", "skills"];
   const mainSections = ["experience", "projects", "education", "achievements"];
 
-  resume.sectionOrder = [
-    "name",
-    "details",
-    "description",
-    "skills",
-    "experience",
-    "projects",
-    "education",
-    "achievements",
-  ];
+  useEffect(() => {
+    if (!resume.sectionOrder) {
+      onChange((prev) => ({
+        ...prev,
+        sectionOrder: [
+          "name",
+          "details",
+          "description",
+          "skills",
+          "experience",
+          "projects",
+          "education",
+          "achievements",
+        ],
+      }));
+    }
+  }, [resume.sectionOrder, onChange]);
 
   useEffect(() => {
     if (!resume.visibleSections) {
@@ -61,6 +77,36 @@ const SidebarTemplate = ({
       }));
     }
   }, []);
+
+  const SortableItem = ({ id }) => {
+    const {
+      attributes,
+      listeners,
+      setNodeRef,
+      transform,
+      transition,
+      isDragging,
+    } = useSortable({ id });
+
+    const style = {
+      transform: CSS.Transform.toString(transform),
+      transition,
+      opacity: isDragging ? 0.5 : 1,
+    };
+
+    return (
+      <div
+        ref={setNodeRef}
+        style={style}
+        {...attributes}
+        {...listeners}
+        className="flex items-center justify-between px-4 py-2 bg-gray-50 border border-gray-200 rounded-md text-sm cursor-grab"
+      >
+        <span className="capitalize text-gray-700">{id}</span>
+        <MdDragHandle className="text-gray-500" />
+      </div>
+    );
+  };
 
   const sectionMap = {
     name: (
@@ -547,7 +593,6 @@ const SidebarTemplate = ({
         </div>
       )}
 
-      {/* Show/Hide Sections */}
       {isEditable && (
         <motion.div
           className="mb-6 bg-white border border-gray-200 p-4 rounded-xl shadow-md"
@@ -555,45 +600,128 @@ const SidebarTemplate = ({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <h3 className="font-semibold text-gray-800 text-base mb-4 flex items-center gap-2">
-            <FaEye className="text-blue-600" />
-            Show/Hide Sections
-          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Toggle Visibility Column */}
+            <div>
+              <h3 className="font-semibold text-gray-800 text-base mb-3 flex items-center gap-2">
+                <FaEye className="text-blue-600" />
+                Show/Hide Sections
+              </h3>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {Object.keys(resume.visibleSections).map((key) => {
-              const isVisible = resume.visibleSections[key];
-              return (
-                <button
-                  key={key}
-                  onClick={() =>
-                    onChange((prev) => ({
-                      ...prev,
-                      visibleSections: {
-                        ...prev.visibleSections,
-                        [key]: !isVisible,
-                      },
-                    }))
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {Object.keys(resume.visibleSections).map((key) => {
+                  const isVisible = resume.visibleSections[key];
+                  return (
+                    <button
+                      key={key}
+                      onClick={() =>
+                        onChange((prev) => ({
+                          ...prev,
+                          visibleSections: {
+                            ...prev.visibleSections,
+                            [key]: !isVisible,
+                          },
+                        }))
+                      }
+                      className={`flex items-center justify-between px-3 py-1.5 rounded-md border text-xs capitalize transition-all ${
+                        isVisible
+                          ? "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100"
+                          : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
+                      }`}
+                    >
+                      {key}
+                      {isVisible ? (
+                        <FaEye className="text-blue-500 text-sm" />
+                      ) : (
+                        <FaEyeSlash className="text-gray-400 text-sm" />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Reorder Column */}
+            <div>
+              <h3 className="font-semibold text-gray-800 text-base mb-3 flex items-center gap-2">
+                <MdDragHandle className="text-blue-600" />
+                Reorder Sections
+              </h3>
+
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={({ active, over }) => {
+                  if (!over || active.id === over.id) return;
+
+                  const oldIndex = resume.sectionOrder.indexOf(active.id);
+                  const newIndex = resume.sectionOrder.indexOf(over.id);
+
+                  const isSidebar = sidebarSections.includes(active.id);
+                  const overIsSidebar = sidebarSections.includes(over.id);
+                  const isMain = mainSections.includes(active.id);
+                  const overIsMain = mainSections.includes(over.id);
+
+                  if ((isSidebar && overIsSidebar) || (isMain && overIsMain)) {
+                    const newOrder = arrayMove(
+                      resume.sectionOrder,
+                      oldIndex,
+                      newIndex
+                    );
+                    onChange((prev) => ({ ...prev, sectionOrder: newOrder }));
                   }
-                  className={`flex items-center justify-between w-full px-4 py-2 rounded-lg border text-sm capitalize transition-all ${
-                    isVisible
-                      ? "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100"
-                      : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
-                  }`}
-                >
-                  {key}
-                  {isVisible ? (
-                    <FaEye className="text-blue-500" />
-                  ) : (
-                    <FaEyeSlash className="text-gray-400" />
-                  )}
-                </button>
-              );
-            })}
+                }}
+              >
+                <div className="grid grid-cols-2 gap-4">
+                  {/* Sidebar Sections */}
+                  <div>
+                    <p className="text-xs text-gray-500 mb-1 font-medium">
+                      Sidebar
+                    </p>
+                    <SortableContext
+                      items={resume.sectionOrder.filter((id) =>
+                        sidebarSections.includes(id)
+                      )}
+                      strategy={verticalListSortingStrategy}
+                    >
+                      <div className="space-y-1.5">
+                        {resume.sectionOrder
+                          .filter((id) => sidebarSections.includes(id))
+                          .map((id) => (
+                            <SortableItem key={id} id={id} />
+                          ))}
+                      </div>
+                    </SortableContext>
+                  </div>
+
+                  {/* Main Sections */}
+                  <div>
+                    <p className="text-xs text-gray-500 mb-1 font-medium">
+                      Main
+                    </p>
+                    <SortableContext
+                      items={resume.sectionOrder.filter((id) =>
+                        mainSections.includes(id)
+                      )}
+                      strategy={verticalListSortingStrategy}
+                    >
+                      <div className="space-y-1.5">
+                        {resume.sectionOrder
+                          .filter((id) => mainSections.includes(id))
+                          .map((id) => (
+                            <SortableItem key={id} id={id} />
+                          ))}
+                      </div>
+                    </SortableContext>
+                  </div>
+                </div>
+              </DndContext>
+            </div>
           </div>
         </motion.div>
       )}
 
+      {/* Resume Preview */}
       <div
         className="min-h-screen border border-gray-400 p-4 flex font-sans"
         style={{ backgroundColor: resume.bgColor || "#ffffff" }}
@@ -603,24 +731,25 @@ const SidebarTemplate = ({
           className="w-1/3 text-white p-6 space-y-6"
           style={{ backgroundColor: resume.sidebarColor || "#1e3a8a" }}
         >
-          {resume.sectionOrder.map(
-            (key) =>
-              resume.visibleSections[key] &&
-              sidebarSections.includes(key) && (
-                <React.Fragment key={key}>{sectionMap[key]}</React.Fragment>
-              )
-          )}
+          {resume.sectionOrder
+            .filter(
+              (key) =>
+                resume.visibleSections[key] && sidebarSections.includes(key)
+            )
+            .map((key) => (
+              <React.Fragment key={key}>{sectionMap[key]}</React.Fragment>
+            ))}
         </aside>
 
-        {/* Main */}
+        {/* Mainbar */}
         <main className="w-2/3 p-8 space-y-6">
-          {resume.sectionOrder.map(
-            (key) =>
-              resume.visibleSections[key] &&
-              mainSections.includes(key) && (
-                <React.Fragment key={key}>{sectionMap[key]}</React.Fragment>
-              )
-          )}
+          {resume.sectionOrder
+            .filter(
+              (key) => resume.visibleSections[key] && mainSections.includes(key)
+            )
+            .map((key) => (
+              <React.Fragment key={key}>{sectionMap[key]}</React.Fragment>
+            ))}
         </main>
       </div>
     </div>

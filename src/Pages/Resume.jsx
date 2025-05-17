@@ -6,8 +6,14 @@ import { useEditResume } from "../Contexts/EditResumeContext";
 
 export default function Resume() {
   const [resume, setResume] = useState(null);
-  const [selectedTemplate, setSelectedTemplate] = useState("classic");
+  const [selectedTemplate, setSelectedTemplate] = useState(
+    () => localStorage.getItem("selectedTemplate") || "classic"
+  );
   const { isEditable, toggleEditing } = useEditResume();
+
+  useEffect(() => {
+    localStorage.setItem("selectedTemplate", selectedTemplate);
+  }, [selectedTemplate]);
 
   // Load from localStorage
   useEffect(() => {
