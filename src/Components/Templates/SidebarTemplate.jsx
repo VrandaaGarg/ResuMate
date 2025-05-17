@@ -12,12 +12,15 @@ import { FaLinkedinIn } from "react-icons/fa6";
 import { FaGithub } from "react-icons/fa";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { FaFont, FaLink } from "react-icons/fa6";
 import {
   MdFormatAlignLeft,
   MdFormatAlignCenter,
   MdFormatAlignRight,
   MdFormatAlignJustify,
+  MdOutlineFormatColorFill,
 } from "react-icons/md";
+
 import {
   DndContext,
   closestCenter,
@@ -36,6 +39,10 @@ import { MdDragHandle } from "react-icons/md";
 
 const SidebarTemplate = ({ resume, onChange }) => {
   const [showBgColorPicker, setShowBgColorPicker] = useState(false);
+  const [showSkillColorPicker, setShowSkillColorPicker] = useState(false);
+  const [showFontMenu, setShowFontMenu] = useState(false);
+  const [showLinkColorPicker, setShowLinkColorPicker] = useState(false);
+
   const [showColorPicker, setShowColorPicker] = useState(false);
   const { isEditable } = useEditResume();
   const pointerSensor = useSensor(PointerSensor);
@@ -77,6 +84,17 @@ const SidebarTemplate = ({ resume, onChange }) => {
       }));
     }
   }, []);
+
+  if (!resume.skillColors) {
+    onChange((prev) => ({
+      ...prev,
+      skillColors: {},
+    }));
+  }
+
+  const hasAnyProjectLink = resume.projects?.some(
+    (proj) => proj.demo || proj.github
+  );
 
   const SortableItem = ({ id }) => {
     const {
@@ -178,7 +196,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
               Description
             </h2>
             <p
-              className="bg-transparent outline-none w-full whitespace-pre-line"
+              className="bg-transparent text-sm outline-none w-full whitespace-pre-line"
               style={{ textAlign: resume.descriptionAlign || "left" }}
             >
               {resume.description}
@@ -224,6 +242,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
         </p>
 
         {/* Segmented Bar */}
+        {/* Segmented Bar */}
         <div className="flex w-full h-2 rounded-4xl overflow-hidden bg-white/10 mb-2">
           {resume.skills.map((skill, i) => {
             const totalSkills = resume.skills.reduce(
@@ -232,21 +251,13 @@ const SidebarTemplate = ({ resume, onChange }) => {
             );
             const width = (skill.languages.length / totalSkills) * 100;
 
-            const colors = [
-              "bg-blue-400",
-              "bg-green-400",
-              "bg-yellow-400",
-              "bg-pink-400",
-              "bg-purple-400",
-              "bg-red-400",
-            ];
-            const color = colors[i % colors.length];
+            const color = resume.skillColors?.[skill.domain] || "#60a5fa";
 
             return (
               <div
                 key={i}
-                className={`${color} h-full`}
-                style={{ width: `${width}%` }}
+                className={`h-full`}
+                style={{ width: `${width}%`, backgroundColor: color }}
                 title={`${skill.domain} (${skill.languages.length} skills)`}
               ></div>
             );
@@ -265,19 +276,14 @@ const SidebarTemplate = ({ resume, onChange }) => {
               100
             ).toFixed(1);
 
-            const colors = [
-              "bg-blue-400",
-              "bg-green-400",
-              "bg-yellow-400",
-              "bg-pink-400",
-              "bg-purple-400",
-              "bg-red-400",
-            ];
-            const color = colors[i % colors.length];
+            const color = resume.skillColors?.[skill.domain] || "#60a5fa";
 
             return (
               <div key={i} className="flex items-center gap-2">
-                <span className={`w-3 h-3 rounded-sm ${color}`}></span>
+                <span
+                  className="w-3 h-3 rounded-sm"
+                  style={{ backgroundColor: color }}
+                ></span>
                 <span className="text-white">{skill.domain}</span>
                 <span className="ml-auto text-gray-400">{percent}%</span>
               </div>
@@ -289,8 +295,11 @@ const SidebarTemplate = ({ resume, onChange }) => {
 
     experience: (
       <section>
-        <h2 className="text-xl font-bold text-blue-900 mb-2">
-          Professional Experience
+        <h2
+          className="text-xl font-bold  mb-2"
+          style={{ color: resume.sidebarColor || "#1e3a8a" }}
+        >
+          Experience
         </h2>
         {resume.experience.map((exp, i) => (
           <div key={i} className="mb-4">
@@ -308,38 +317,60 @@ const SidebarTemplate = ({ resume, onChange }) => {
 
     projects: (
       <section>
-        <h2 className="text-xl font-bold text-blue-900 mb-2">Projects</h2>
+        <h2
+          className="text-xl font-bold  mb-2"
+          style={{ color: resume.sidebarColor || "#1e3a8a" }}
+        >
+          Projects
+        </h2>
 
         {resume.projects.map((proj, i) => (
           <div key={i} className="mb-4">
-            <p className="font-semibold">{proj.name}</p>
+            <div className="flex col-lapse gap-6">
+              <p className="font-semibold">{proj.name}</p>
 
-            <div className="text-blue-600 text-sm space-x-3">
-              {proj.demo && (
-                <a
-                  href={proj.demo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline"
-                >
-                  Demo
-                </a>
-              )}
-              {proj.github && (
-                <a
-                  href={proj.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline"
-                >
-                  GitHub
-                </a>
-              )}
+              <div className="text-sm">
+                {(proj.demo || proj.github) && (
+                  <span>
+                    (
+                    {proj.demo && (
+                      <a
+                        href={proj.demo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline"
+                        style={{ color: resume.linkColor || "#2563eb" }}
+                      >
+                        Live Demo
+                      </a>
+                    )}
+                    {proj.demo && proj.github && (
+                      <span className="mx-1">|</span>
+                    )}
+                    {proj.github && (
+                      <a
+                        href={proj.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline"
+                        style={{ color: resume.linkColor || "#2563eb" }}
+                      >
+                        GitHub
+                      </a>
+                    )}
+                    )
+                  </span>
+                )}
+              </div>
             </div>
 
             <div className="mt-1 text-sm text-gray-700 whitespace-pre-line">
               {proj.description?.split("\n").map((line, idx) => (
-                <p key={idx} className="mb-1">
+                <p
+                  key={idx}
+                  className="mb-1"
+                  style={{ textAlign: resume.descriptionAlign || "left" }}
+                >
                   {line}
                 </p>
               ))}
@@ -351,25 +382,40 @@ const SidebarTemplate = ({ resume, onChange }) => {
 
     education: (
       <section>
-        <h2 className="text-xl font-bold text-blue-900 mb-2">Education</h2>
+        <h2
+          className="text-xl font-bold mb-2"
+          style={{ color: resume.sidebarColor || "#1e3a8a" }}
+        >
+          Education
+        </h2>
 
-        <p className="font-semibold">{resume.education.college}</p>
+        <div className="flex col-lapse gap-6 mb-4">
+          <p className="font-semibold text-sm">{resume.education.college}</p>
 
-        <p className="italic">
-          {resume.education.startYear} - {resume.education.endYear}
-        </p>
+          <p className="italic text-sm">
+            {resume.education.startYear} - {resume.education.endYear}
+          </p>
+        </div>
 
-        <p>CGPA: {resume.education.cgpa}</p>
+        <p className="text-sm">CGPA: {resume.education.cgpa}</p>
       </section>
     ),
 
     achievements: (
       <section>
-        <h2 className="text-xl font-bold text-blue-900 mb-2">Achievements</h2>
-        <ul className="list-disc pl-5 space-y-2 text-gray-800">
+        <h2
+          className="text-xl font-bold  mb-2"
+          style={{ color: resume.sidebarColor || "#1e3a8a" }}
+        >
+          Achievements
+        </h2>
+        <ul className="list-disc text-sm pl-5 space-y-2 text-gray-800">
           {resume.achievements.map((ach, i) => (
             <li key={i}>
-              <strong>{ach.title}</strong> – {ach.description}
+              <strong style={{ textAlign: resume.descriptionAlign || "left" }}>
+                {ach.title}
+              </strong>{" "}
+              – {ach.description}
             </li>
           ))}
         </ul>
@@ -464,7 +510,6 @@ const SidebarTemplate = ({ resume, onChange }) => {
           </div>
 
           {/* Description Alignment */}
-
           <div className="flex items-center gap-3">
             <div className="flex gap-2 bg-gray-100 p-1 rounded-md">
               {[
@@ -586,13 +631,172 @@ const SidebarTemplate = ({ resume, onChange }) => {
             )}
           </div>
 
-          {/* Placeholder for future features */}
-          <div className="ml-auto text-xs text-gray-400 hidden sm:block">
-            More customizations coming soon...
+          {/* Skill Color Picker */}
+
+          {resume.skills && resume.skills.length > 0 && (
+            <div className="relative">
+              <button
+                onClick={() => setShowSkillColorPicker((prev) => !prev)}
+                className="p-2 rounded-md hover:bg-gray-200 transition group relative"
+                title="Customize Skill Colors"
+              >
+                <MdOutlineFormatColorFill className="text-xl text-gray-700" />
+              </button>
+
+              {/* Popover Panel */}
+              {showSkillColorPicker && (
+                <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-xl shadow-xl p-4 w-max right-0">
+                  <p className="text-sm font-semibold text-gray-700 mb-3">
+                    Skill Bar Colors
+                  </p>
+
+                  <div className="flex flex-wrap gap-2 max-w-xs">
+                    {resume.skills.map((skill, i) => (
+                      <div
+                        key={i}
+                        className="flex items-center gap-1 text-xs bg-white border border-gray-200 rounded-xs px-3 py-1 shadow-sm"
+                      >
+                        <span className="text-gray-700 font-medium">
+                          {skill.domain}
+                        </span>
+                        <label className="relative w-5 h-5 cursor-pointer">
+                          <input
+                            type="color"
+                            value={
+                              resume.skillColors?.[skill.domain] || "#60a5fa"
+                            }
+                            onChange={(e) =>
+                              onChange((prev) => ({
+                                ...prev,
+                                skillColors: {
+                                  ...prev.skillColors,
+                                  [skill.domain]: e.target.value,
+                                },
+                              }))
+                            }
+                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                            title={`Set color for ${skill.domain}`}
+                          />
+                          <div
+                            className="w-full h-full rounded-full border"
+                            style={{
+                              backgroundColor:
+                                resume.skillColors?.[skill.domain] || "#60a5fa",
+                            }}
+                          ></div>
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Font Selector */}
+          <div className="relative">
+            {/* Trigger Button */}
+            <button
+              onClick={() => setShowFontMenu((prev) => !prev)}
+              title="Change Font"
+              className="p-2 rounded-md hover:bg-gray-100  transition"
+            >
+              <FaFont className="text-gray-700 text-lg" />
+            </button>
+
+            {/* Dropdown Menu */}
+            {showFontMenu && (
+              <div className="absolute z-50 mt-2 bg-white border border-gray-200 shadow-lg rounded-lg p-3 w-52 right-0">
+                <p className="text-sm font-semibold text-gray-700 mb-2">
+                  Select Font
+                </p>
+
+                <div className="flex flex-col gap-1 max-h-48 overflow-y-auto">
+                  {[
+                    "Inter",
+                    "Roboto",
+                    "Poppins",
+                    "Lato",
+                    "Merriweather",
+                    "Georgia",
+                    "Courier New",
+                  ].map((font) => (
+                    <button
+                      key={font}
+                      onClick={() => {
+                        onChange((prev) => ({ ...prev, fontFamily: font }));
+                        setShowFontMenu(false);
+                      }}
+                      className={`text-sm text-left px-3 py-1 rounded hover:bg-gray-100 transition ${
+                        resume.fontFamily === font
+                          ? "bg-sky-50 text-sky-700 font-medium"
+                          : "text-gray-700"
+                      }`}
+                      style={{ fontFamily: font }}
+                    >
+                      {font}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
+
+          {/* Link Color Button */}
+          {hasAnyProjectLink && (
+            <div className="relative">
+              {/* Trigger Button */}
+              <button
+                onClick={() => setShowLinkColorPicker((prev) => !prev)}
+                className="p-2 rounded-md hover:bg-gray-100 transition"
+                title="Change Project Link Color"
+              >
+                <FaLink className="text-lg text-gray-700" />
+              </button>
+
+              {/* Picker Panel */}
+              {showLinkColorPicker && (
+                <div className="absolute right-0 mt-2 bg-white border border-gray-200 rounded-md shadow-md px-4 py-3 z-50 w-52">
+                  <p className="text-xs font-semibold text-gray-700 mb-2">
+                    Project Link Color
+                  </p>
+
+                  <div className="flex items-center gap-3">
+                    {/* Fully-filled circular color picker */}
+                    <div className="relative w-6 h-6 rounded-full overflow-hidden border cursor-pointer group">
+                      <div
+                        className="absolute inset-0 z-0 flex items-center justify-center rounded-full"
+                        style={{
+                          backgroundColor: resume.linkColor || "#2563eb",
+                        }}
+                      ></div>
+                      <input
+                        type="color"
+                        value={resume.linkColor || "#2563eb"}
+                        onChange={(e) =>
+                          onChange((prev) => ({
+                            ...prev,
+                            linkColor: e.target.value,
+                          }))
+                        }
+                        className="absolute inset-0 z-10 opacity-0 cursor-pointer"
+                        title="Pick link color"
+                      />
+                    </div>
+
+                    {/* Hex color display */}
+                    <span className="text-xs text-gray-600 font-mono">
+                      {resume.linkColor?.toUpperCase() || "#2563EB"}
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
 
+      {/* Toggle and Reorder Sections */}
       {isEditable && (
         <motion.div
           className="mb-6 bg-white border border-gray-200 p-4 rounded-xl shadow-md"
@@ -723,8 +927,11 @@ const SidebarTemplate = ({ resume, onChange }) => {
 
       {/* Resume Preview */}
       <div
-        className="min-h-screen border border-gray-400 p-4 flex font-sans"
-        style={{ backgroundColor: resume.bgColor || "#ffffff" }}
+        className="min-h-screen border border-gray-400 p-4 flex"
+        style={{
+          backgroundColor: resume.bgColor || "#ffffff",
+          fontFamily: resume.fontFamily || "Inter",
+        }}
       >
         {/* Sidebar */}
         <aside
