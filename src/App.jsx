@@ -10,7 +10,7 @@ import Profile from "./Pages/Profile";
 import ResumeForm from "./Pages/ResumeForm";
 import ProtectedRoute from "./Contexts/ProtectedRoute";
 import Resume from "./Pages/Resume";
-import Resumes from "./Pages/Resumes";
+
 import Templates from "./Pages/Templates";
 const App = () => {
   return (

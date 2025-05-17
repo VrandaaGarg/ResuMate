@@ -1,14 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+// src/Pages/Resume.jsx
+import React, { useEffect, useState } from "react";
 import ClassicTemplate from "../Components/Templates/ClassicTemplate";
 import SidebarTemplate from "../Components/Templates/SidebarTemplate";
 import { useEditResume } from "../Contexts/EditResumeContext";
-import generatePDF from "react-to-pdf";
 
 export default function Resume() {
   const [resume, setResume] = useState(null);
   const [selectedTemplate, setSelectedTemplate] = useState("classic");
   const { isEditable, toggleEditing } = useEditResume();
-  const resumeRef = useRef();
 
   // Load from localStorage
   useEffect(() => {
@@ -24,12 +23,25 @@ export default function Resume() {
     }
   }, [resume]);
 
-  const handlePDFDownload = () => {
-    generatePDF(resumeRef, {
-      filename: `${resume?.name || "resume"}.pdf`,
-      scale: 0.8,
-    });
-  };
+  const [sectionOrder, setSectionOrder] = useState([
+    "details",
+    "description",
+    "skills",
+    "experience",
+    "projects",
+    "education",
+    "achievements",
+  ]);
+
+  const [visibleSections, setVisibleSections] = useState({
+    details: true,
+    description: true,
+    skills: true,
+    experience: true,
+    projects: true,
+    education: true,
+    achievements: true,
+  });
 
   if (!resume) {
     return (
@@ -72,25 +84,25 @@ export default function Resume() {
         </div>
 
         {/* Resume Preview */}
-        <div
-          ref={resumeRef}
-          className="bg-white shadow p-6 rounded-lg relative"
-        >
-          {selectedTemplate === "classic" && (
-            <ClassicTemplate resume={resume} onChange={setResume} />
-          )}
+        <div className="bg-white shadow p-6 rounded-lg relative">
           {selectedTemplate === "sidebar" && (
-            <SidebarTemplate resume={resume} onChange={setResume} />
+            <SidebarTemplate
+              resume={resume}
+              onChange={setResume}
+              sectionOrder={sectionOrder}
+              visibleSections={visibleSections}
+            />
+          )}
+
+          {selectedTemplate === "classic" && (
+            <ClassicTemplate
+              resume={resume}
+              onChange={setResume}
+              sectionOrder={sectionOrder}
+              visibleSections={visibleSections}
+            />
           )}
         </div>
-
-        {/* Download Button */}
-        <button
-          onClick={handlePDFDownload}
-          className="px-4 py-1.5 text-sm rounded bg-green-600 hover:bg-green-700 text-white font-medium transition"
-        >
-          Download PDF
-        </button>
       </div>
     </div>
   );

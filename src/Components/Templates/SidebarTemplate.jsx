@@ -1,69 +1,335 @@
 // src/Components/Templates/SidebarTemplate.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useEditResume } from "../../Contexts/EditResumeContext";
-import { FaPhone } from "react-icons/fa6";
-import { MdEmail, MdOutlineMailOutline } from "react-icons/md";
+import {
+  MdOutlineColorize,
+  MdOutlineMailOutline,
+  MdOutlineColorLens,
+} from "react-icons/md";
 import { CiLocationOn } from "react-icons/ci";
 import { CiPhone } from "react-icons/ci";
 import { FaLinkedinIn } from "react-icons/fa6";
 import { FaGithub } from "react-icons/fa";
-import { MdOutlineColorize } from "react-icons/md";
-import { MdOutlineColorLens } from "react-icons/md";
-
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { motion } from "framer-motion";
 import {
   MdFormatAlignLeft,
   MdFormatAlignCenter,
   MdFormatAlignRight,
   MdFormatAlignJustify,
 } from "react-icons/md";
-import { title } from "framer-motion/m";
 
-const SidebarTemplate = ({ resume, onChange }) => {
-  const defaultColor = resume.sidebarColor || "#1e3a8a";
+const SidebarTemplate = ({
+  resume,
+  onChange,
+  sectionOrder,
+  visibleSections,
+}) => {
   const [showBgColorPicker, setShowBgColorPicker] = useState(false);
   const [showColorPicker, setShowColorPicker] = useState(false);
   // fallback to bg-blue-900
 
   const { isEditable } = useEditResume();
 
-  const handleChange = (section, key, value) => {
-    onChange((prev) => ({
-      ...prev,
-      [section]: { ...prev[section], [key]: value },
-    }));
-  };
+  const sidebarSections = ["name", "details", "description", "skills"];
+  const mainSections = ["experience", "projects", "education", "achievements"];
 
-  const handleRootChange = (key, value) => {
-    onChange((prev) => ({ ...prev, [key]: value }));
-  };
+  resume.sectionOrder = [
+    "name",
+    "details",
+    "description",
+    "skills",
+    "experience",
+    "projects",
+    "education",
+    "achievements",
+  ];
 
-  const handleArrayChange = (section, index, key, value) => {
-    const updated = [...resume[section]];
-    updated[index][key] = value;
-    onChange((prev) => ({ ...prev, [section]: updated }));
-  };
+  useEffect(() => {
+    if (!resume.visibleSections) {
+      onChange((prev) => ({
+        ...prev,
+        visibleSections: {
+          details: true,
+          description: true,
+          skills: true,
+          experience: true,
+          projects: true,
+          education: true,
+          achievements: true,
+        },
+      }));
+    }
+  }, []);
 
-  const renderInput = (type, value, onChange, className = "", props = {}) =>
-    isEditable ? (
-      type === "textarea" ? (
-        <textarea
-          value={value}
-          onChange={onChange}
-          className={className}
-          {...props}
-        />
-      ) : (
-        <input
-          type={type}
-          value={value}
-          onChange={onChange}
-          className={className}
-          {...props}
-        />
-      )
-    ) : (
-      <span>{value}</span>
-    );
+  const sectionMap = {
+    name: (
+      <div className="text-center">
+        <h1 className="text-3xl font-bold bg-transparent w-full text-center outline-none">
+          {resume.name}
+        </h1>
+      </div>
+    ),
+    details: (
+      <div className="mr-3.5">
+        <h2 className="font-semibold uppercase tracking-wide text-blue-200 mb-2">
+          Details
+        </h2>
+        <div className="flex flex-col space-y-1">
+          {resume.contact.location && (
+            <div className="flex items-start text-sm gap-2">
+              <CiLocationOn className="flex-shrink-0 text-lg mt-1" />
+              <p className="bg-transparent outline-none w-full break-words">
+                {resume.contact.location}
+              </p>
+            </div>
+          )}
+
+          {resume.contact.phone && (
+            <div className="flex items-center text-sm">
+              <CiPhone className="mr-2 text-lg" />
+              <p className="bg-transparent outline-none w-full">
+                {resume.contact.phone}
+              </p>
+            </div>
+          )}
+
+          {resume.contact.email && (
+            <div className="flex items-center text-sm">
+              <MdOutlineMailOutline className="mr-2 text-lg" />
+              <p className="bg-transparent outline-none w-full break-words">
+                {resume.contact.email}
+              </p>
+            </div>
+          )}
+
+          {resume.contact.linkedin && (
+            <div className="flex items-start text-sm gap-2">
+              <FaLinkedinIn className="flex-shrink-0 text-lg mt-1" />
+              <p className="bg-transparent outline-none w-full break-words">
+                {resume.contact.linkedin}
+              </p>
+            </div>
+          )}
+
+          {resume.contact.github && (
+            <div className="flex items-start text-sm gap-2">
+              <FaGithub className="flex-shrink-0 text-lg mt-1" />
+              <p className="bg-transparent outline-none w-full break-words">
+                {resume.contact.github}
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    ),
+
+    description: (
+      <div>
+        {resume.description && (
+          <div>
+            <h2 className="font-semibold uppercase tracking-wide text-blue-200 mb-2">
+              Description
+            </h2>
+            <p
+              className="bg-transparent outline-none w-full whitespace-pre-line"
+              style={{ textAlign: resume.descriptionAlign || "left" }}
+            >
+              {resume.description}
+            </p>
+          </div>
+        )}
+      </div>
+    ),
+
+    skills: (
+      <div>
+        <h2 className="font-semibold uppercase tracking-wide text-blue-300 mb-3">
+          Skills Overview
+        </h2>
+
+        <div className="space-y-4">
+          {resume.skills.map((skill, i) => {
+            const totalSkills = resume.skills.reduce(
+              (acc, s) => acc + s.languages.length,
+              0
+            );
+            const domainCount = skill.languages.length;
+            const percentage = Math.round((domainCount / totalSkills) * 100);
+
+            return (
+              <div key={i}>
+                <div className="flex justify-between items-center mb-1">
+                  <span className="text-sm text-blue-100 font-medium">
+                    {skill.domain}
+                  </span>
+                </div>
+
+                <p className="text-xs text-gray-300 mt-1">
+                  {skill.languages.join(", ")}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+
+        <p className="font-semibold text-sm uppercase tracking-wide text-blue-300 my-3">
+          Skills Distribution
+        </p>
+
+        {/* Segmented Bar */}
+        <div className="flex w-full h-2 rounded-4xl overflow-hidden bg-white/10 mb-2">
+          {resume.skills.map((skill, i) => {
+            const totalSkills = resume.skills.reduce(
+              (acc, s) => acc + s.languages.length,
+              0
+            );
+            const width = (skill.languages.length / totalSkills) * 100;
+
+            const colors = [
+              "bg-blue-400",
+              "bg-green-400",
+              "bg-yellow-400",
+              "bg-pink-400",
+              "bg-purple-400",
+              "bg-red-400",
+            ];
+            const color = colors[i % colors.length];
+
+            return (
+              <div
+                key={i}
+                className={`${color} h-full`}
+                style={{ width: `${width}%` }}
+                title={`${skill.domain} (${skill.languages.length} skills)`}
+              ></div>
+            );
+          })}
+        </div>
+
+        {/* Legend */}
+        <div className="text-xs text-gray-300 space-y-1">
+          {resume.skills.map((skill, i) => {
+            const totalSkills = resume.skills.reduce(
+              (acc, s) => acc + s.languages.length,
+              0
+            );
+            const percent = (
+              (skill.languages.length / totalSkills) *
+              100
+            ).toFixed(1);
+
+            const colors = [
+              "bg-blue-400",
+              "bg-green-400",
+              "bg-yellow-400",
+              "bg-pink-400",
+              "bg-purple-400",
+              "bg-red-400",
+            ];
+            const color = colors[i % colors.length];
+
+            return (
+              <div key={i} className="flex items-center gap-2">
+                <span className={`w-3 h-3 rounded-sm ${color}`}></span>
+                <span className="text-white">{skill.domain}</span>
+                <span className="ml-auto text-gray-400">{percent}%</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    ),
+
+    experience: (
+      <section>
+        <h2 className="text-xl font-bold text-blue-900 mb-2">
+          Professional Experience
+        </h2>
+        {resume.experience.map((exp, i) => (
+          <div key={i} className="mb-4">
+            <div className="flex justify-between">
+              <p className="font-semibold">{exp.company}</p>
+              <p className="italic">{exp.years}</p>
+            </div>
+            <p className="mt-1 text-sm text-gray-800 whitespace-pre-line">
+              {exp.description}
+            </p>
+          </div>
+        ))}
+      </section>
+    ),
+
+    projects: (
+      <section>
+        <h2 className="text-xl font-bold text-blue-900 mb-2">Projects</h2>
+
+        {resume.projects.map((proj, i) => (
+          <div key={i} className="mb-4">
+            <p className="font-semibold">{proj.name}</p>
+
+            <div className="text-blue-600 text-sm space-x-3">
+              {proj.demo && (
+                <a
+                  href={proj.demo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline"
+                >
+                  Demo
+                </a>
+              )}
+              {proj.github && (
+                <a
+                  href={proj.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline"
+                >
+                  GitHub
+                </a>
+              )}
+            </div>
+
+            <div className="mt-1 text-sm text-gray-700 whitespace-pre-line">
+              {proj.description?.split("\n").map((line, idx) => (
+                <p key={idx} className="mb-1">
+                  {line}
+                </p>
+              ))}
+            </div>
+          </div>
+        ))}
+      </section>
+    ),
+
+    education: (
+      <section>
+        <h2 className="text-xl font-bold text-blue-900 mb-2">Education</h2>
+
+        <p className="font-semibold">{resume.education.college}</p>
+
+        <p className="italic">
+          {resume.education.startYear} - {resume.education.endYear}
+        </p>
+
+        <p>CGPA: {resume.education.cgpa}</p>
+      </section>
+    ),
+
+    achievements: (
+      <section>
+        <h2 className="text-xl font-bold text-blue-900 mb-2">Achievements</h2>
+        <ul className="list-disc pl-5 space-y-2 text-gray-800">
+          {resume.achievements.map((ach, i) => (
+            <li key={i}>
+              <strong>{ach.title}</strong> – {ach.description}
+            </li>
+          ))}
+        </ul>
+      </section>
+    ),
+  };
 
   return (
     <div className="">
@@ -281,293 +547,80 @@ const SidebarTemplate = ({ resume, onChange }) => {
         </div>
       )}
 
+      {/* Show/Hide Sections */}
+      {isEditable && (
+        <motion.div
+          className="mb-6 bg-white border border-gray-200 p-4 rounded-xl shadow-md"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <h3 className="font-semibold text-gray-800 text-base mb-4 flex items-center gap-2">
+            <FaEye className="text-blue-600" />
+            Show/Hide Sections
+          </h3>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            {Object.keys(resume.visibleSections).map((key) => {
+              const isVisible = resume.visibleSections[key];
+              return (
+                <button
+                  key={key}
+                  onClick={() =>
+                    onChange((prev) => ({
+                      ...prev,
+                      visibleSections: {
+                        ...prev.visibleSections,
+                        [key]: !isVisible,
+                      },
+                    }))
+                  }
+                  className={`flex items-center justify-between w-full px-4 py-2 rounded-lg border text-sm capitalize transition-all ${
+                    isVisible
+                      ? "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100"
+                      : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
+                  }`}
+                >
+                  {key}
+                  {isVisible ? (
+                    <FaEye className="text-blue-500" />
+                  ) : (
+                    <FaEyeSlash className="text-gray-400" />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </motion.div>
+      )}
+
       <div
         className="min-h-screen border border-gray-400 p-4 flex font-sans"
         style={{ backgroundColor: resume.bgColor || "#ffffff" }}
       >
         {/* Sidebar */}
         <aside
-          className="w-1/3 text-white p-6 space-y-6 "
+          className="w-1/3 text-white p-6 space-y-6"
           style={{ backgroundColor: resume.sidebarColor || "#1e3a8a" }}
         >
-          <div className="text-center">
-            <h1 className="text-3xl font-bold bg-transparent w-full text-center outline-none">
-              {resume.name}
-            </h1>
-          </div>
-
-          <div className="mr-3.5">
-            <h2 className="font-semibold uppercase tracking-wide text-blue-200 mb-2">
-              Details
-            </h2>
-            <div className="flex flex-col space-y-1">
-              {resume.contact.location && (
-                <div className="flex items-start text-sm gap-2">
-                  <CiLocationOn className="flex-shrink-0 text-lg mt-1" />
-                  <p className="bg-transparent outline-none w-full break-words">
-                    {resume.contact.location}
-                  </p>
-                </div>
-              )}
-
-              {resume.contact.phone && (
-                <div className="flex items-center text-sm">
-                  <CiPhone className="mr-2 text-lg" />
-                  <p className="bg-transparent outline-none w-full">
-                    {resume.contact.phone}
-                  </p>
-                </div>
-              )}
-
-              {resume.contact.email && (
-                <div className="flex items-center text-sm">
-                  <MdOutlineMailOutline className="mr-2 text-lg" />
-                  <p className="bg-transparent outline-none w-full break-words">
-                    {resume.contact.email}
-                  </p>
-                </div>
-              )}
-
-              {resume.contact.linkedin && (
-                <div className="flex items-start text-sm gap-2">
-                  <FaLinkedinIn className="flex-shrink-0 text-lg mt-1" />
-                  <p className="bg-transparent outline-none w-full break-words">
-                    {resume.contact.linkedin}
-                  </p>
-                </div>
-              )}
-
-              {resume.contact.github && (
-                <div className="flex items-start text-sm gap-2">
-                  <FaGithub className="flex-shrink-0 text-lg mt-1" />
-                  <p className="bg-transparent outline-none w-full break-words">
-                    {resume.contact.github}
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {resume.description && (
-            <div>
-              <h2 className="font-semibold uppercase tracking-wide text-blue-200 mb-2">
-                Description
-              </h2>
-              <p
-                className="bg-transparent outline-none w-full whitespace-pre-line"
-                style={{ textAlign: resume.descriptionAlign || "left" }}
-              >
-                {resume.description}
-              </p>
-            </div>
+          {resume.sectionOrder.map(
+            (key) =>
+              resume.visibleSections[key] &&
+              sidebarSections.includes(key) && (
+                <React.Fragment key={key}>{sectionMap[key]}</React.Fragment>
+              )
           )}
-
-          <div>
-            <h2 className="font-semibold uppercase tracking-wide text-blue-300 mb-3">
-              Skills Overview
-            </h2>
-
-            <div className="space-y-4">
-              {resume.skills.map((skill, i) => {
-                const totalSkills = resume.skills.reduce(
-                  (acc, s) => acc + s.languages.length,
-                  0
-                );
-                const domainCount = skill.languages.length;
-                const percentage = Math.round(
-                  (domainCount / totalSkills) * 100
-                );
-
-                return (
-                  <div key={i}>
-                    <div className="flex justify-between items-center mb-1">
-                      <span className="text-sm text-blue-100 font-medium">
-                        {skill.domain}
-                      </span>
-                    </div>
-
-                    <p className="text-xs text-gray-300 mt-1">
-                      {skill.languages.join(", ")}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-
-            <p className="font-semibold text-sm uppercase tracking-wide text-blue-300 my-3">
-              Skills Distribution
-            </p>
-
-            {/* Segmented Bar */}
-            <div className="flex w-full h-2 rounded-4xl overflow-hidden bg-white/10 mb-2">
-              {resume.skills.map((skill, i) => {
-                const totalSkills = resume.skills.reduce(
-                  (acc, s) => acc + s.languages.length,
-                  0
-                );
-                const width = (skill.languages.length / totalSkills) * 100;
-
-                const colors = [
-                  "bg-blue-400",
-                  "bg-green-400",
-                  "bg-yellow-400",
-                  "bg-pink-400",
-                  "bg-purple-400",
-                  "bg-red-400",
-                ];
-                const color = colors[i % colors.length];
-
-                return (
-                  <div
-                    key={i}
-                    className={`${color} h-full`}
-                    style={{ width: `${width}%` }}
-                    title={`${skill.domain} (${skill.languages.length} skills)`}
-                  ></div>
-                );
-              })}
-            </div>
-
-            {/* Legend */}
-            <div className="text-xs text-gray-300 space-y-1">
-              {resume.skills.map((skill, i) => {
-                const totalSkills = resume.skills.reduce(
-                  (acc, s) => acc + s.languages.length,
-                  0
-                );
-                const percent = (
-                  (skill.languages.length / totalSkills) *
-                  100
-                ).toFixed(1);
-
-                const colors = [
-                  "bg-blue-400",
-                  "bg-green-400",
-                  "bg-yellow-400",
-                  "bg-pink-400",
-                  "bg-purple-400",
-                  "bg-red-400",
-                ];
-                const color = colors[i % colors.length];
-
-                return (
-                  <div key={i} className="flex items-center gap-2">
-                    <span className={`w-3 h-3 rounded-sm ${color}`}></span>
-                    <span className="text-white">{skill.domain}</span>
-                    <span className="ml-auto text-gray-400">{percent}%</span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* <div>
-          <h2 className="font-semibold uppercase tracking-wide text-blue-200 mb-2">
-            Informations
-          </h2>
-          <p>Languages: English, Hindi</p>
-          <p>License: Valid</p>
-        </div> */}
-
-          {/* <div>
-          <h2 className="font-semibold uppercase tracking-wide text-blue-200 mb-2">
-            Hobbies
-          </h2>
-          <p>Reading, Music, Travel</p>
-        </div> */}
         </aside>
 
-        {/* Main Section */}
+        {/* Main */}
         <main className="w-2/3 p-8 space-y-6">
-          {/* Experience */}
-          <section>
-            <h2 className="text-xl font-bold text-blue-900 mb-2">
-              Professional Experience
-            </h2>
-            {resume.experience.map((exp, i) => (
-              <div key={i} className="mb-4">
-                <div className="flex justify-between">
-                  <p className="font-semibold">{exp.company}</p>
-                  <p className="italic">{exp.years}</p>
-                </div>
-                <p className="mt-1 text-sm text-gray-800 whitespace-pre-line">
-                  {exp.description}
-                </p>
-              </div>
-            ))}
-          </section>
-
-          {/* Projects */}
-          <section>
-            <h2 className="text-xl font-bold text-blue-900 mb-2">Projects</h2>
-
-            {resume.projects.map((proj, i) => (
-              <div key={i} className="mb-4">
-                {/* Project Name */}
-                <p className="font-semibold">{proj.name}</p>
-
-                {/* Links */}
-                <div className="text-blue-600 text-sm space-x-3">
-                  {proj.demo && (
-                    <a
-                      href={proj.demo}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="underline"
-                    >
-                      Demo
-                    </a>
-                  )}
-                  {proj.github && (
-                    <a
-                      href={proj.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="underline"
-                    >
-                      GitHub
-                    </a>
-                  )}
-                </div>
-
-                {/* Description */}
-                <div className="mt-1 text-sm text-gray-700 whitespace-pre-line">
-                  {proj.description?.split("\n").map((line, idx) => (
-                    <p key={idx} className="mb-1">
-                      {line}
-                    </p>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </section>
-
-          {/* Education */}
-          <section>
-            <h2 className="text-xl font-bold text-blue-900 mb-2">Education</h2>
-
-            <p className="font-semibold">{resume.education.college}</p>
-
-            <p className="italic">
-              {resume.education.startYear} - {resume.education.endYear}
-            </p>
-
-            <p>CGPA: {resume.education.cgpa}</p>
-          </section>
-
-          {/* Achievements */}
-          <section>
-            <h2 className="text-xl font-bold text-blue-900 mb-2">
-              Achievements
-            </h2>
-            <ul className="list-disc pl-5 space-y-2 text-gray-800">
-              {resume.achievements.map((ach, i) => (
-                <li key={i}>
-                  <strong>{ach.title}</strong> – {ach.description}
-                </li>
-              ))}
-            </ul>
-          </section>
+          {resume.sectionOrder.map(
+            (key) =>
+              resume.visibleSections[key] &&
+              mainSections.includes(key) && (
+                <React.Fragment key={key}>{sectionMap[key]}</React.Fragment>
+              )
+          )}
         </main>
       </div>
     </div>
