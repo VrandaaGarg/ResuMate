@@ -6,21 +6,26 @@ import {
   MdOutlineMailOutline,
   MdOutlineColorLens,
 } from "react-icons/md";
-import { CiLocationOn } from "react-icons/ci";
-import { CiPhone } from "react-icons/ci";
-import { FaLinkedinIn } from "react-icons/fa6";
-import { FaGithub } from "react-icons/fa";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { motion } from "framer-motion";
-import { FaFont, FaLink } from "react-icons/fa6";
+import { CiLocationOn, CiPhone } from "react-icons/ci";
+import {
+  FaGithub,
+  FaLinkedinIn,
+  FaChevronDown,
+  FaChevronUp,
+  FaEye,
+  FaEyeSlash,
+  FaFont,
+  FaLink,
+} from "react-icons/fa6";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   MdFormatAlignLeft,
   MdFormatAlignCenter,
   MdFormatAlignRight,
   MdFormatAlignJustify,
   MdOutlineFormatColorFill,
+  MdDragHandle,
 } from "react-icons/md";
-
 import {
   DndContext,
   closestCenter,
@@ -35,14 +40,13 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { MdDragHandle } from "react-icons/md";
 
 const SidebarTemplate = ({ resume, onChange }) => {
   const [showBgColorPicker, setShowBgColorPicker] = useState(false);
   const [showSkillColorPicker, setShowSkillColorPicker] = useState(false);
   const [showFontMenu, setShowFontMenu] = useState(false);
   const [showLinkColorPicker, setShowLinkColorPicker] = useState(false);
-
+  const [showToggleReorder, setShowToggleReorder] = useState(true);
   const [showColorPicker, setShowColorPicker] = useState(false);
   const { isEditable } = useEditResume();
   const pointerSensor = useSensor(PointerSensor);
@@ -302,12 +306,15 @@ const SidebarTemplate = ({ resume, onChange }) => {
           Experience
         </h2>
         {resume.experience.map((exp, i) => (
-          <div key={i} className="mb-4">
+          <div key={i} className="mb-4 text-sm">
             <div className="flex justify-between">
               <p className="font-semibold">{exp.company}</p>
               <p className="italic">{exp.years}</p>
             </div>
-            <p className="mt-1 text-sm text-gray-800 whitespace-pre-line">
+            <p
+              className="mt-1 text-gray-800 whitespace-pre-line"
+              style={{ textAlign: resume.descriptionAlign || "left" }}
+            >
               {exp.description}
             </p>
           </div>
@@ -411,11 +418,11 @@ const SidebarTemplate = ({ resume, onChange }) => {
         </h2>
         <ul className="list-disc text-sm pl-5 space-y-2 text-gray-800">
           {resume.achievements.map((ach, i) => (
-            <li key={i}>
-              <strong style={{ textAlign: resume.descriptionAlign || "left" }}>
-                {ach.title}
-              </strong>{" "}
-              – {ach.description}
+            <li
+              key={i}
+              style={{ textAlign: resume.descriptionAlign || "left" }}
+            >
+              <strong>{ach.title}</strong> – {ach.description}
             </li>
           ))}
         </ul>
@@ -796,133 +803,172 @@ const SidebarTemplate = ({ resume, onChange }) => {
         </div>
       )}
 
-      {/* Toggle and Reorder Sections */}
       {isEditable && (
-        <motion.div
-          className="mb-6 bg-white border border-gray-200 p-4 rounded-xl shadow-md"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Toggle Visibility Column */}
-            <div>
-              <h3 className="font-semibold text-gray-800 text-base mb-3 flex items-center gap-2">
-                <FaEye className="text-blue-600" />
-                Show/Hide Sections
-              </h3>
+        <>
+          {/* Toggle Button */}
+          <div className="flex justify-end mb-2">
+            <button
+              onClick={() => setShowToggleReorder((prev) => !prev)}
+              className="flex items-center gap-1 text-sm text-gray-600 hover:text-sky-600 transition"
+              title={
+                showToggleReorder
+                  ? "Hide Toggle & Reorder"
+                  : "Show Toggle & Reorder"
+              }
+            >
+              {showToggleReorder ? (
+                <>
+                  <span>Hide</span>
+                  <FaChevronUp className="text-sm" />
+                </>
+              ) : (
+                <>
+                  <span>Show</span>
+                  <FaChevronDown className="text-sm" />
+                </>
+              )}
+            </button>
+          </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {Object.keys(resume.visibleSections).map((key) => {
-                  const isVisible = resume.visibleSections[key];
-                  return (
-                    <button
-                      key={key}
-                      onClick={() =>
-                        onChange((prev) => ({
-                          ...prev,
-                          visibleSections: {
-                            ...prev.visibleSections,
-                            [key]: !isVisible,
-                          },
-                        }))
-                      }
-                      className={`flex items-center justify-between px-3 py-1.5 rounded-md border text-xs capitalize transition-all ${
-                        isVisible
-                          ? "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100"
-                          : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
-                      }`}
-                    >
-                      {key}
-                      {isVisible ? (
-                        <FaEye className="text-blue-500 text-sm" />
-                      ) : (
-                        <FaEyeSlash className="text-gray-400 text-sm" />
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Reorder Column */}
-            <div>
-              <h3 className="font-semibold text-gray-800 text-base mb-3 flex items-center gap-2">
-                <MdDragHandle className="text-blue-600" />
-                Reorder Sections
-              </h3>
-
-              <DndContext
-                sensors={sensors}
-                collisionDetection={closestCenter}
-                onDragEnd={({ active, over }) => {
-                  if (!over || active.id === over.id) return;
-
-                  const oldIndex = resume.sectionOrder.indexOf(active.id);
-                  const newIndex = resume.sectionOrder.indexOf(over.id);
-
-                  const isSidebar = sidebarSections.includes(active.id);
-                  const overIsSidebar = sidebarSections.includes(over.id);
-                  const isMain = mainSections.includes(active.id);
-                  const overIsMain = mainSections.includes(over.id);
-
-                  if ((isSidebar && overIsSidebar) || (isMain && overIsMain)) {
-                    const newOrder = arrayMove(
-                      resume.sectionOrder,
-                      oldIndex,
-                      newIndex
-                    );
-                    onChange((prev) => ({ ...prev, sectionOrder: newOrder }));
-                  }
-                }}
+          {/* Toggle & Reorder Section */}
+          <AnimatePresence>
+            {showToggleReorder && (
+              <motion.div
+                key="toggle-reorder"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+                className="mb-6 bg-white border border-gray-200 p-4 rounded-xl shadow-md"
               >
-                <div className="grid grid-cols-2 gap-4">
-                  {/* Sidebar Sections */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Toggle Visibility Column */}
                   <div>
-                    <p className="text-xs text-gray-500 mb-1 font-medium">
-                      Sidebar
-                    </p>
-                    <SortableContext
-                      items={resume.sectionOrder.filter((id) =>
-                        sidebarSections.includes(id)
-                      )}
-                      strategy={verticalListSortingStrategy}
-                    >
-                      <div className="space-y-1.5">
-                        {resume.sectionOrder
-                          .filter((id) => sidebarSections.includes(id))
-                          .map((id) => (
-                            <SortableItem key={id} id={id} />
-                          ))}
-                      </div>
-                    </SortableContext>
+                    <h3 className="font-semibold text-gray-800 text-base mb-3 flex items-center gap-2">
+                      <FaEye className="text-blue-600" />
+                      Show/Hide Sections
+                    </h3>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {Object.keys(resume.visibleSections).map((key) => {
+                        const isVisible = resume.visibleSections[key];
+                        return (
+                          <button
+                            key={key}
+                            onClick={() =>
+                              onChange((prev) => ({
+                                ...prev,
+                                visibleSections: {
+                                  ...prev.visibleSections,
+                                  [key]: !isVisible,
+                                },
+                              }))
+                            }
+                            className={`flex items-center justify-between px-3 py-1.5 rounded-md border text-xs capitalize transition-all ${
+                              isVisible
+                                ? "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100"
+                                : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
+                            }`}
+                          >
+                            {key}
+                            {isVisible ? (
+                              <FaEye className="text-blue-500 text-sm" />
+                            ) : (
+                              <FaEyeSlash className="text-gray-400 text-sm" />
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
 
-                  {/* Main Sections */}
+                  {/* Reorder Column */}
                   <div>
-                    <p className="text-xs text-gray-500 mb-1 font-medium">
-                      Main
-                    </p>
-                    <SortableContext
-                      items={resume.sectionOrder.filter((id) =>
-                        mainSections.includes(id)
-                      )}
-                      strategy={verticalListSortingStrategy}
+                    <h3 className="font-semibold text-gray-800 text-base mb-3 flex items-center gap-2">
+                      <MdDragHandle className="text-blue-600" />
+                      Reorder Sections
+                    </h3>
+
+                    <DndContext
+                      sensors={sensors}
+                      collisionDetection={closestCenter}
+                      onDragEnd={({ active, over }) => {
+                        if (!over || active.id === over.id) return;
+
+                        const oldIndex = resume.sectionOrder.indexOf(active.id);
+                        const newIndex = resume.sectionOrder.indexOf(over.id);
+
+                        const isSidebar = sidebarSections.includes(active.id);
+                        const overIsSidebar = sidebarSections.includes(over.id);
+                        const isMain = mainSections.includes(active.id);
+                        const overIsMain = mainSections.includes(over.id);
+
+                        if (
+                          (isSidebar && overIsSidebar) ||
+                          (isMain && overIsMain)
+                        ) {
+                          const newOrder = arrayMove(
+                            resume.sectionOrder,
+                            oldIndex,
+                            newIndex
+                          );
+                          onChange((prev) => ({
+                            ...prev,
+                            sectionOrder: newOrder,
+                          }));
+                        }
+                      }}
                     >
-                      <div className="space-y-1.5">
-                        {resume.sectionOrder
-                          .filter((id) => mainSections.includes(id))
-                          .map((id) => (
-                            <SortableItem key={id} id={id} />
-                          ))}
+                      <div className="grid grid-cols-2 gap-4">
+                        {/* Sidebar Sections */}
+                        <div>
+                          <p className="text-xs text-gray-500 mb-1 font-medium">
+                            Sidebar
+                          </p>
+                          <SortableContext
+                            items={resume.sectionOrder.filter((id) =>
+                              sidebarSections.includes(id)
+                            )}
+                            strategy={verticalListSortingStrategy}
+                          >
+                            <div className="space-y-1.5">
+                              {resume.sectionOrder
+                                .filter((id) => sidebarSections.includes(id))
+                                .map((id) => (
+                                  <SortableItem key={id} id={id} />
+                                ))}
+                            </div>
+                          </SortableContext>
+                        </div>
+
+                        {/* Main Sections */}
+                        <div>
+                          <p className="text-xs text-gray-500 mb-1 font-medium">
+                            Main
+                          </p>
+                          <SortableContext
+                            items={resume.sectionOrder.filter((id) =>
+                              mainSections.includes(id)
+                            )}
+                            strategy={verticalListSortingStrategy}
+                          >
+                            <div className="space-y-1.5">
+                              {resume.sectionOrder
+                                .filter((id) => mainSections.includes(id))
+                                .map((id) => (
+                                  <SortableItem key={id} id={id} />
+                                ))}
+                            </div>
+                          </SortableContext>
+                        </div>
                       </div>
-                    </SortableContext>
+                    </DndContext>
                   </div>
                 </div>
-              </DndContext>
-            </div>
-          </div>
-        </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </>
       )}
 
       {/* Resume Preview */}
