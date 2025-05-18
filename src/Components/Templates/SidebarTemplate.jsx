@@ -43,6 +43,7 @@ import { RiFontColor } from "react-icons/ri";
 import { BiShowAlt } from "react-icons/bi";
 import { IoReorderThreeSharp } from "react-icons/io5";
 import { MdFormatColorText } from "react-icons/md";
+import { MdOutlineTextIncrease, MdOutlineTextDecrease } from "react-icons/md";
 
 const SidebarTemplate = ({ resume, onChange }) => {
   const [showBgColorPicker, setShowBgColorPicker] = useState(false);
@@ -57,6 +58,26 @@ const SidebarTemplate = ({ resume, onChange }) => {
   const sensors = useSensors(pointerSensor);
   const sidebarSections = ["name", "details", "description", "skills"];
   const mainSections = ["experience", "projects", "education", "achievements"];
+  fontScaleLevel: 0; // default level (0), can be -1, 0, +1, +2
+
+  const getScaledFontClass = (base, level) => {
+    const sizes = [
+      "text-xs",
+      "text-sm",
+      "text-base",
+      "text-lg",
+      "text-xl",
+      "text-2xl",
+      "text-3xl",
+      "text-4xl",
+    ];
+
+    const baseIndex = sizes.indexOf(base);
+    const newIndex = Math.min(sizes.length - 1, Math.max(0, baseIndex + level));
+
+    return sizes[newIndex];
+  };
+
   const defaultTextColor = (tag) => {
     switch (tag) {
       case "h1":
@@ -174,7 +195,10 @@ const SidebarTemplate = ({ resume, onChange }) => {
     name: (
       <div className="text-center">
         <h1
-          className="text-3xl font-bold bg-transparent w-full text-center outline-none"
+          className={`${getScaledFontClass(
+            "text-3xl",
+            resume.fontScaleLevel || 0
+          )} font-bold bg-transparent w-full text-center outline-none`}
           style={{ color: resume.textColors?.["h1"] || "white" }}
         >
           {resume.name || "Your Name"}
@@ -184,18 +208,24 @@ const SidebarTemplate = ({ resume, onChange }) => {
     details: (
       <div className="mr-3.5">
         <h2
-          className="font-semibold uppercase tracking-wide  mb-2"
+          className={`font-semibold uppercase tracking-wide  mb-2 ${getScaledFontClass(
+            "text-base",
+            resume.fontScaleLevel || 0
+          )}`}
           style={{ color: resume.textColors?.["h2"] || "text-blue-300" }}
         >
           Details
         </h2>
         <div
-          className="flex flex-col space-y-2"
+          className={`flex flex-col space-y-2 ${getScaledFontClass(
+            "text-sm",
+            resume.fontScaleLevel || 0
+          )}`}
           style={{ color: resume.textColors?.["h3"] || "text-blue-200" }}
         >
           {resume.contact.location && (
-            <div className="flex items-start text-sm gap-2">
-              <CiLocationOn className="flex-shrink-0 text-lg mt-1" />
+            <div className="flex items-start  gap-2">
+              <CiLocationOn className="flex-shrink-0  mt-1" />
               <p className="bg-transparent outline-none w-full break-words">
                 {resume.contact.location}
               </p>
@@ -203,8 +233,8 @@ const SidebarTemplate = ({ resume, onChange }) => {
           )}
 
           {resume.contact.phone && (
-            <div className="flex items-center text-sm">
-              <CiPhone className="mr-2 text-lg" />
+            <div className="flex items-center ">
+              <CiPhone className="mr-2" />
               <p className="bg-transparent outline-none w-full">
                 {resume.contact.phone}
               </p>
@@ -212,8 +242,8 @@ const SidebarTemplate = ({ resume, onChange }) => {
           )}
 
           {resume.contact.email && (
-            <div className="flex items-start text-sm gap-2">
-              <MdOutlineMailOutline className="flex-shrink-0 text-lg mt-1" />
+            <div className="flex items-start  gap-2">
+              <MdOutlineMailOutline className="flex-shrink-0 mt-1" />
               <a
                 href={`mailto:${resume.contact.email}`}
                 target="_blank"
@@ -226,7 +256,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
           )}
 
           {resume.contact.linkedin && (
-            <div className="flex items-start text-sm gap-2">
+            <div className="flex items-start gap-2">
               <FaLinkedinIn className="flex-shrink-0 text-lg mt-1" />
               <a
                 href={`${resume.contact.linkedin}`}
@@ -240,8 +270,8 @@ const SidebarTemplate = ({ resume, onChange }) => {
           )}
 
           {resume.contact.github && (
-            <div className="flex items-start text-sm gap-2">
-              <FaGithub className="flex-shrink-0 text-lg mt-1" />
+            <div className="flex items-start  gap-2">
+              <FaGithub className="flex-shrink-0 mt-1" />
               <a
                 href={`${resume.contact.github}`}
                 target="_blank"
@@ -261,14 +291,20 @@ const SidebarTemplate = ({ resume, onChange }) => {
         {resume.description && (
           <div>
             <h2
-              className="font-semibold uppercase tracking-wide  mb-2"
+              className={`font-semibold uppercase tracking-wide  mb-2 ${getScaledFontClass(
+                "text-base",
+                resume.fontScaleLevel || 0
+              )}`}
               style={{ color: resume.textColors?.["h2"] || "text-blue-300" }}
             >
               Description
             </h2>
 
             <p
-              className="bg-transparent text-sm outline-none w-full whitespace-pre-line"
+              className={`bg-transparent ${getScaledFontClass(
+                "text-sm",
+                resume.fontScaleLevel || 0
+              )} outline-none w-full whitespace-pre-line`}
               style={{
                 textAlign: resume.descriptionAlign || "left",
                 color: resume.textColors?.["h3"] || "text-blue-200",
@@ -284,7 +320,10 @@ const SidebarTemplate = ({ resume, onChange }) => {
     skills: (
       <div>
         <h2
-          className="font-semibold uppercase tracking-wide mb-3"
+          className={`font-semibold uppercase tracking-wide mb-3 ${getScaledFontClass(
+            "text-base",
+            resume.fontScaleLevel || 0
+          )}`}
           style={{ color: resume.textColors?.["h2"] || "text-blue-300" }}
         >
           Skills Overview
@@ -303,7 +342,10 @@ const SidebarTemplate = ({ resume, onChange }) => {
               <div key={i}>
                 <div className="flex justify-between items-center mb-1">
                   <span
-                    className="text-sm font-medium"
+                    className={`${getScaledFontClass(
+                      "text-sm",
+                      resume.fontScaleLevel || 0
+                    )} font-medium`}
                     style={{
                       color: resume.textColors?.["h3"] || "text-blue-200",
                     }}
@@ -313,7 +355,10 @@ const SidebarTemplate = ({ resume, onChange }) => {
                 </div>
 
                 <p
-                  className="text-xs mt-1"
+                  className={`${getScaledFontClass(
+                    "text-xs",
+                    resume.fontScaleLevel || 0
+                  )} mt-1`}
                   style={{
                     color: resume.textColors?.["h4"] || "text-blue-200",
                   }}
@@ -326,7 +371,10 @@ const SidebarTemplate = ({ resume, onChange }) => {
         </div>
 
         <p
-          className="font-semibold text-sm uppercase tracking-wide  my-3"
+          className={`font-semibold ${getScaledFontClass(
+            "text-sm",
+            resume.fontScaleLevel || 0
+          )} uppercase tracking-wide  my-3`}
           style={{ color: resume.textColors?.["h2"] || "text-blue-300" }}
         >
           Skills Distribution
@@ -356,7 +404,12 @@ const SidebarTemplate = ({ resume, onChange }) => {
         </div>
 
         {/* Legend */}
-        <div className="text-xs space-y-1">
+        <div
+          className={`${getScaledFontClass(
+            "text-xs",
+            resume.fontScaleLevel || 0
+          )} space-y-1`}
+        >
           {resume.skills.map((skill, i) => {
             const totalSkills = resume.skills.reduce(
               (acc, s) => acc + s.languages.length,
@@ -400,7 +453,10 @@ const SidebarTemplate = ({ resume, onChange }) => {
     experience: (
       <section>
         <h2
-          className="text-xl font-bold  mb-2"
+          className={`${getScaledFontClass(
+            "text-xl",
+            resume.fontScaleLevel || 0
+          )} font-bold  mb-2`}
           style={{
             color: resume.mainTextColors?.["h1"] || defaultMainTextColor("h1"),
           }}
@@ -408,7 +464,13 @@ const SidebarTemplate = ({ resume, onChange }) => {
           EXPERIENCE
         </h2>
         {resume.experience.map((exp, i) => (
-          <div key={i} className="mb-4 text-sm">
+          <div
+            key={i}
+            className={`mb-4 ${getScaledFontClass(
+              "text-sm",
+              resume.fontScaleLevel || 0
+            )}`}
+          >
             <div className="flex justify-between">
               <p
                 className="font-semibold"
@@ -447,7 +509,10 @@ const SidebarTemplate = ({ resume, onChange }) => {
     projects: (
       <section>
         <h2
-          className="text-xl font-bold  mb-2"
+          className={`${getScaledFontClass(
+            "text-xl",
+            resume.fontScaleLevel || 0
+          )} font-bold  mb-2`}
           style={{
             color: resume.mainTextColors?.["h1"] || defaultMainTextColor("h1"),
           }}
@@ -456,7 +521,13 @@ const SidebarTemplate = ({ resume, onChange }) => {
         </h2>
 
         {resume.projects.map((proj, i) => (
-          <div key={i} className="mb-4">
+          <div
+            key={i}
+            className={`mb-4 ${getScaledFontClass(
+              "text-sm",
+              resume.fontScaleLevel || 0
+            )}`}
+          >
             <div className="flex col-lapse gap-6">
               <p
                 className="font-semibold"
@@ -468,7 +539,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
                 {proj.name}
               </p>
 
-              <div className="text-sm">
+              <div className="">
                 {(proj.demo || proj.github) && (
                   <span>
                     (
@@ -503,7 +574,12 @@ const SidebarTemplate = ({ resume, onChange }) => {
               </div>
             </div>
 
-            <div className="mt-1 text-sm text-gray-700 whitespace-pre-line">
+            <div
+              className={`mt-1 ${getScaledFontClass(
+                "text-xs",
+                resume.fontScaleLevel || 0
+              )} text-gray-700 whitespace-pre-line`}
+            >
               {proj.description?.split("\n").map((line, idx) => (
                 <p
                   key={idx}
@@ -527,7 +603,10 @@ const SidebarTemplate = ({ resume, onChange }) => {
     education: (
       <section>
         <h2
-          className="text-xl font-bold mb-2"
+          className={`${getScaledFontClass(
+            "text-xl",
+            resume.fontScaleLevel || 0
+          )} font-bold mb-2`}
           style={{
             color: resume.mainTextColors?.["h1"] || defaultMainTextColor("h1"),
           }}
@@ -535,9 +614,14 @@ const SidebarTemplate = ({ resume, onChange }) => {
           EDUCATION
         </h2>
 
-        <div className="flex col-lapse gap-6 mb-4">
+        <div
+          className={`flex col-lapse gap-6 mb-4 ${getScaledFontClass(
+            "text-sm",
+            resume.fontScaleLevel || 0
+          )}`}
+        >
           <p
-            className="font-semibold text-sm"
+            className="font-semibold"
             style={{
               color:
                 resume.mainTextColors?.["h2"] || defaultMainTextColor("h2"),
@@ -547,7 +631,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
           </p>
 
           <p
-            className="italic text-sm"
+            className="italic"
             style={{
               color:
                 resume.mainTextColors?.["h2"] || defaultMainTextColor("h2"),
@@ -558,7 +642,10 @@ const SidebarTemplate = ({ resume, onChange }) => {
         </div>
 
         <p
-          className="text-sm"
+          className={`${getScaledFontClass(
+            "text-sm",
+            resume.fontScaleLevel || 0
+          )}`}
           style={{
             color: resume.mainTextColors?.["h3"] || defaultMainTextColor("h3"),
           }}
@@ -571,14 +658,22 @@ const SidebarTemplate = ({ resume, onChange }) => {
     achievements: (
       <section>
         <h2
-          className="text-xl font-bold  mb-2"
+          className={`${getScaledFontClass(
+            "text-lg",
+            resume.fontScaleLevel || 0
+          )} font-bold  mb-2`}
           style={{
             color: resume.mainTextColors?.["h1"] || defaultMainTextColor("h1"),
           }}
         >
           ACHIEVEMENTS
         </h2>
-        <ul className="list-disc text-sm pl-5 space-y-2 text-gray-800">
+        <ul
+          className={`list-disc ${getScaledFontClass(
+            "text-sm",
+            resume.fontScaleLevel || 0
+          )} pl-5 space-y-2 text-gray-800`}
+        >
           {resume.achievements.map((ach, i) => (
             <li
               key={i}
@@ -600,7 +695,8 @@ const SidebarTemplate = ({ resume, onChange }) => {
     <div className="">
       {/* Toolbar */}
       {isEditable && (
-        <div className="w-full bg-white  justify-center border border-gray-200 shadow-sm rounded-md px-6 py-3 mb-6 flex flex-wrap items-center gap-6">
+        <div className="w-full bg-white  justify-center border border-gray-200 shadow-sm rounded-md px-6 py-3 mb-6 flex flex-wrap items-center gap-3">
+          {/* Sidebar section color */}
           <div className="relative">
             {/* Color Icon Button */}
             <button
@@ -725,8 +821,40 @@ const SidebarTemplate = ({ resume, onChange }) => {
             </div>
           </div>
 
-          {/* Background Color Picker */}
+          {/* Font Size Adjuster */}
+          <div className="flex items-center gap-1">
+            <button
+              title="Decrease Font Size"
+              onClick={() =>
+                onChange((prev) => ({
+                  ...prev,
+                  fontScaleLevel: Math.max(-2, (prev.fontScaleLevel || 0) - 1),
+                }))
+              }
+              className="p-2 rounded hover:bg-gray-200"
+            >
+              <span className="text-xl">
+                <MdOutlineTextDecrease />
+              </span>
+            </button>
 
+            <button
+              title="Increase Font Size"
+              onClick={() =>
+                onChange((prev) => ({
+                  ...prev,
+                  fontScaleLevel: Math.min(3, (prev.fontScaleLevel || 0) + 1),
+                }))
+              }
+              className="p-2 rounded hover:bg-gray-200"
+            >
+              <span className="text-xl">
+                <MdOutlineTextIncrease />
+              </span>
+            </button>
+          </div>
+
+          {/* Background Color Picker */}
           <div className="relative">
             {/* Icon trigger */}
             <button
@@ -805,7 +933,6 @@ const SidebarTemplate = ({ resume, onChange }) => {
           </div>
 
           {/* Skill Color Picker */}
-
           {resume.skills && resume.skills.length > 0 && (
             <div className="relative">
               <button
@@ -1081,7 +1208,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
               title="Show/Hide Sections"
               onClick={() => setshowToggleSection((prev) => !prev)}
             >
-              <BiShowAlt className="text-lg text-gray-700" />
+              <BiShowAlt className="text-xl text-gray-700" />
             </button>
 
             {showToggleSection && (
@@ -1135,7 +1262,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
               title="Reorder Sections"
               onClick={() => setShowReorder((prev) => !prev)}
             >
-              <IoReorderThreeSharp className="text-lg text-gray-700" />
+              <IoReorderThreeSharp className="text-xl text-gray-700" />
             </button>
 
             {showReorder && (
