@@ -70,6 +70,8 @@ const SidebarTemplate = ({ resume, onChange }) => {
       "text-2xl",
       "text-3xl",
       "text-4xl",
+      "text-5xl",
+      "text-6xl",
     ];
 
     const baseIndex = sizes.indexOf(base);
@@ -212,7 +214,10 @@ const SidebarTemplate = ({ resume, onChange }) => {
             "text-base",
             resume.fontScaleLevel || 0
           )}`}
-          style={{ color: resume.textColors?.["h2"] || "text-blue-300" }}
+          style={{
+            color: resume.textColors?.["h2"] || "text-blue-300",
+            textAlign: resume.descriptionAlign || "left",
+          }}
         >
           Details
         </h2>
@@ -221,7 +226,10 @@ const SidebarTemplate = ({ resume, onChange }) => {
             "text-sm",
             resume.fontScaleLevel || 0
           )}`}
-          style={{ color: resume.textColors?.["h3"] || "text-blue-200" }}
+          style={{
+            color: resume.textColors?.["h3"] || "text-blue-200",
+            textAlign: resume.descriptionAlign || "left",
+          }}
         >
           {resume.contact.location && (
             <div className="flex items-start  gap-2">
@@ -295,7 +303,10 @@ const SidebarTemplate = ({ resume, onChange }) => {
                 "text-base",
                 resume.fontScaleLevel || 0
               )}`}
-              style={{ color: resume.textColors?.["h2"] || "text-blue-300" }}
+              style={{
+                color: resume.textColors?.["h2"] || "text-blue-300",
+                textAlign: resume.descriptionAlign || "left",
+              }}
             >
               Description
             </h2>
@@ -318,13 +329,16 @@ const SidebarTemplate = ({ resume, onChange }) => {
     ),
 
     skills: (
-      <div>
+      <div style={{ textAlign: resume.descriptionAlign || "left" }}>
         <h2
           className={`font-semibold uppercase tracking-wide mb-3 ${getScaledFontClass(
             "text-base",
             resume.fontScaleLevel || 0
           )}`}
-          style={{ color: resume.textColors?.["h2"] || "text-blue-300" }}
+          style={{
+            color: resume.textColors?.["h2"] || "text-blue-300",
+            textAlign: resume.descriptionAlign || "left",
+          }}
         >
           Skills Overview
         </h2>
@@ -340,7 +354,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
 
             return (
               <div key={i}>
-                <div className="flex justify-between items-center mb-1">
+                <div className="mb-1">
                   <span
                     className={`${getScaledFontClass(
                       "text-sm",
@@ -348,6 +362,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
                     )} font-medium`}
                     style={{
                       color: resume.textColors?.["h3"] || "text-blue-200",
+                      textAlign: resume.descriptionAlign || "left",
                     }}
                   >
                     {skill.domain}
@@ -451,7 +466,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
     ),
 
     experience: (
-      <section>
+      <section style={{ textAlign: resume.descriptionAlign || "left" }}>
         <h2
           className={`${getScaledFontClass(
             "text-xl",
@@ -471,7 +486,17 @@ const SidebarTemplate = ({ resume, onChange }) => {
               resume.fontScaleLevel || 0
             )}`}
           >
-            <div className="flex justify-between">
+            <div
+              className={`flex gap-6 w-full ${
+                resume.descriptionAlign === "center"
+                  ? "justify-center"
+                  : resume.descriptionAlign === "right"
+                  ? "justify-end"
+                  : resume.descriptionAlign === "justify"
+                  ? "justify-between"
+                  : "justify-start"
+              }`}
+            >
               <p
                 className="font-semibold"
                 style={{
@@ -491,6 +516,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
                 {exp.years}
               </p>
             </div>
+
             <p
               className="mt-1 text-gray-800 whitespace-pre-line"
               style={{
@@ -507,7 +533,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
     ),
 
     projects: (
-      <section>
+      <section style={{ textAlign: resume.descriptionAlign || "left" }}>
         <h2
           className={`${getScaledFontClass(
             "text-xl",
@@ -528,7 +554,17 @@ const SidebarTemplate = ({ resume, onChange }) => {
               resume.fontScaleLevel || 0
             )}`}
           >
-            <div className="flex col-lapse gap-6">
+            <div
+              className={`flex gap-6 w-full ${
+                resume.descriptionAlign === "center"
+                  ? "justify-center"
+                  : resume.descriptionAlign === "right"
+                  ? "justify-end"
+                  : resume.descriptionAlign === "justify"
+                  ? "justify-between"
+                  : "justify-start"
+              }`}
+            >
               <p
                 className="font-semibold"
                 style={{
@@ -539,7 +575,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
                 {proj.name}
               </p>
 
-              <div className="">
+              <div className="text-sm">
                 {(proj.demo || proj.github) && (
                   <span>
                     (
@@ -601,7 +637,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
     ),
 
     education: (
-      <section>
+      <section style={{ textAlign: resume.descriptionAlign || "left" }}>
         <h2
           className={`${getScaledFontClass(
             "text-xl",
@@ -615,10 +651,15 @@ const SidebarTemplate = ({ resume, onChange }) => {
         </h2>
 
         <div
-          className={`flex col-lapse gap-6 mb-4 ${getScaledFontClass(
-            "text-sm",
-            resume.fontScaleLevel || 0
-          )}`}
+          className={`flex gap-6 w-full mb-4 ${
+            resume.descriptionAlign === "center"
+              ? "justify-center"
+              : resume.descriptionAlign === "right"
+              ? "justify-end"
+              : resume.descriptionAlign === "justify"
+              ? "justify-between"
+              : "justify-start"
+          } ${getScaledFontClass("text-sm", resume.fontScaleLevel || 0)}`}
         >
           <p
             className="font-semibold"
@@ -656,7 +697,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
     ),
 
     achievements: (
-      <section>
+      <section style={{ textAlign: resume.descriptionAlign || "left" }}>
         <h2
           className={`${getScaledFontClass(
             "text-lg",
