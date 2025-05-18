@@ -1,49 +1,29 @@
 // src/Components/Templates/ClassicTemplate.jsx
 import React from "react";
 import { useEditResume } from "../../Contexts/EditResumeContext";
-import { details } from "framer-motion/client";
+import { useState } from "react";
+import { FaFillDrip } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
+import { FaFont } from "react-icons/fa6"; // Add at top
+import { BsBoundingBoxCircles } from "react-icons/bs"; // At the top
+import { BsBorderWidth } from "react-icons/bs";
+import { TbBorderCornerPill } from "react-icons/tb";
 
 const ClassicTemplate = ({ resume, onChange }) => {
   const { isEditable } = useEditResume();
   if (!resume) return null;
+  const [showBgPicker, setShowBgPicker] = useState(false);
+  const [showFontMenu, setShowFontMenu] = useState(false); // Inside component
+  const [showBorderMenu, setShowBorderMenu] = useState(false);
+  const [showBorderWidthMenu, setShowBorderWidthMenu] = useState(false);
+  const [showBorderRadiusMenu, setShowBorderRadiusMenu] = useState(false);
 
-  // Helpers
-  const updateField = (section, key, value) =>
+  const handleBgChange = (e) => {
     onChange((prev) => ({
       ...prev,
-      [section]: { ...prev[section], [key]: value },
+      backgroundColor: e.target.value,
     }));
-
-  const updateRoot = (key, value) =>
-    onChange((prev) => ({ ...prev, [key]: value }));
-
-  const updateArray = (section, index, key, value) => {
-    const updated = [...resume[section]];
-    updated[index][key] = value;
-    onChange((prev) => ({ ...prev, [section]: updated }));
   };
-
-  const renderInput = (type, value, onChange, className, extra = {}) =>
-    isEditable ? (
-      type === "textarea" ? (
-        <textarea
-          value={value}
-          onChange={onChange}
-          className={className}
-          {...extra}
-        />
-      ) : (
-        <input
-          type={type}
-          value={value}
-          onChange={onChange}
-          className={className}
-          {...extra}
-        />
-      )
-    ) : (
-      <span>{value}</span>
-    );
 
   resume.sectionOrder = [
     "name",
@@ -239,12 +219,356 @@ const ClassicTemplate = ({ resume, onChange }) => {
   };
 
   return (
-    <div className="bg-white text-black p-8 max-w-4xl mx-auto font-sans text-sm leading-relaxed space-y-5">
-      {/* Dynamically rendered sections */}
-      {resume.sectionOrder.map(
-        (sectionKey) =>
-          resume.visibleSections[sectionKey] && sectionMap[sectionKey]
+    <div className="">
+      {isEditable && (
+        <div className="w-full bg-white justify-center border border-gray-200 shadow-sm rounded-md px-6 py-3 mb-6 flex flex-wrap items-center gap-3">
+          {/* Resume Background Color */}
+          <div className="relative">
+            {/* Color Icon Button */}
+            <button
+              className="p-2 rounded-md hover:bg-gray-200 transition relative group"
+              title={`Background Color`}
+              onClick={() => setShowBgPicker((prev) => !prev)}
+            >
+              <FaFillDrip className="text-xl text-gray-700" />
+              <span
+                className="absolute w-4 h-4 rounded-full border border-gray-300 right-1 top-1"
+                style={{ backgroundColor: resume.backgroundColor || "#ffffff" }}
+              ></span>
+            </button>
+
+            {/* Color Picker Panel */}
+            {showBgPicker && (
+              <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl p-4 w-fit right-1/2">
+                <p className="text-sm font-semibold text-gray-700 mb-3">
+                  Background Color
+                </p>
+
+                <div className="flex items-center gap-4">
+                  {/* Fixed Swatches (Left) */}
+                  <div className="flex gap-2">
+                    {[
+                      "#ffffff",
+                      "#f1f5f9",
+                      "#fef3c7",
+                      "#e0f2fe",
+                      "#fce7f3",
+                    ].map((clr) => (
+                      <button
+                        key={clr}
+                        className={`w-6 h-6 rounded-full border transition-all hover:scale-105 ${
+                          clr === resume.backgroundColor
+                            ? "ring-2 ring-offset-1 ring-sky-500"
+                            : ""
+                        }`}
+                        style={{ backgroundColor: clr }}
+                        onClick={() =>
+                          onChange((prev) => ({
+                            ...prev,
+                            backgroundColor: clr,
+                          }))
+                        }
+                        title={clr}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Divider */}
+                  <div className="w-px h-6 bg-gray-300" />
+
+                  {/* Custom Color Picker (Right) */}
+                  <div className="relative w-6 h-6 rounded-full overflow-hidden border cursor-pointer group">
+                    <div
+                      className="absolute inset-0 z-0 flex items-center justify-center rounded-full"
+                      style={{
+                        backgroundColor: resume.backgroundColor || "#ffffff",
+                      }}
+                    >
+                      <FaFillDrip className="text-gray-600/50 text-sm drop-shadow group-hover:scale-110 transition" />
+                    </div>
+
+                    <input
+                      type="color"
+                      value={resume.backgroundColor || "#ffffff"}
+                      onChange={(e) =>
+                        onChange((prev) => ({
+                          ...prev,
+                          backgroundColor: e.target.value,
+                        }))
+                      }
+                      className="absolute inset-0 z-10 opacity-0 cursor-pointer"
+                      title="Pick custom color"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Font Selector */}
+          <div className="relative">
+            {/* Trigger Button */}
+            <button
+              onClick={() => setShowFontMenu((prev) => !prev)}
+              title="Change Font"
+              className="p-2 rounded-md hover:bg-gray-100 transition"
+            >
+              <FaFont className="text-gray-700 text-lg" />
+            </button>
+
+            {/* Dropdown Menu */}
+            {showFontMenu && (
+              <div className="absolute z-50 mt-2 bg-white border border-gray-200 shadow-lg rounded-lg p-3 w-52 right-0">
+                <p className="text-sm font-semibold text-gray-700 mb-2">
+                  Select Font
+                </p>
+
+                <div className="flex flex-col gap-1 max-h-48 overflow-y-auto">
+                  {[
+                    "Inter",
+                    "Roboto",
+                    "Poppins",
+                    "Lato",
+                    "Merriweather",
+                    "Georgia",
+                    "Courier New",
+                  ].map((font) => (
+                    <button
+                      key={font}
+                      onClick={() => {
+                        onChange((prev) => ({ ...prev, fontFamily: font }));
+                        setShowFontMenu(false);
+                      }}
+                      className={`text-sm text-left px-3 py-1 rounded hover:bg-gray-100 transition ${
+                        resume.fontFamily === font
+                          ? "bg-sky-50 text-sky-700 font-medium"
+                          : "text-gray-700"
+                      }`}
+                      style={{ fontFamily: font }}
+                    >
+                      {font}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Border Width Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => setShowBorderWidthMenu((prev) => !prev)}
+              title="Border Width"
+              className="p-2 rounded-md hover:bg-gray-100 transition"
+            >
+              <BsBorderWidth className="text-gray-700 text-lg" />
+            </button>
+
+            {showBorderWidthMenu && (
+              <div className="absolute z-50 mt-2 right-0 sm:left-1/2 sm:-translate-x-1/2 bg-white border border-gray-200 shadow-xl rounded-lg p-3 w-56 max-w-[90vw]">
+                <p className="text-sm font-semibold text-gray-700 mb-3 text-center">
+                  Select Width
+                </p>
+
+                <ul className="flex flex-col gap-1 max-h-60 overflow-y-auto pr-1">
+                  {[
+                    { label: "None", value: "0px" },
+                    { label: "1px", value: "1px" },
+                    { label: "2px", value: "2px" },
+                    { label: "4px", value: "4px" },
+                    { label: "6px", value: "6px" },
+                    { label: "8px", value: "8px" },
+                  ].map((w) => (
+                    <li key={w.value}>
+                      <button
+                        onClick={() => {
+                          onChange((prev) => ({
+                            ...prev,
+                            borderWidth: w.value,
+                          }));
+                          setShowBorderWidthMenu(false);
+                        }}
+                        className={`w-full justify-center h-5 px-1 py-1.5 rounded-xs flex items-center gap-5 hover:bg-sky-50 transition ${
+                          resume.borderWidth === w.value
+                            ? "bg-sky-100"
+                            : "text-gray-800"
+                        }`}
+                      >
+                        {w.value === "0px" ? (
+                          <span className="text-sm text-center text-gray-500">
+                            No Border
+                          </span>
+                        ) : (
+                          <div
+                            style={{
+                              borderBottom: `${w.value} solid #334155`,
+                              width: "100%",
+                            }}
+                          ></div>
+                        )}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+
+          {/*border style and color*/}
+          <div className="relative">
+            <button
+              onClick={() => setShowBorderMenu((prev) => !prev)}
+              title="Border style and color"
+              className="p-2 rounded-md hover:bg-gray-100 transition"
+            >
+              <BsBoundingBoxCircles className="text-gray-700 text-lg" />
+            </button>
+
+            {showBorderMenu && (
+              <div className="absolute z-50 mt-2 bg-white border border-gray-200 shadow-lg rounded-lg p-3 w-64 right-0">
+                <p className="text-sm font-semibold text-gray-700 mb-2">
+                  Border Settings
+                </p>
+
+                {/* Border Style */}
+                <div className="mb-4">
+                  <label className="block text-xs text-gray-500 mb-1">
+                    Style
+                  </label>
+                  <select
+                    value={resume.borderStyle || "solid"}
+                    onChange={(e) =>
+                      onChange((prev) => ({
+                        ...prev,
+                        borderStyle: e.target.value,
+                      }))
+                    }
+                    className="w-full border text-sm rounded px-2 py-1 focus:outline-none"
+                  >
+                    <option value="solid">Solid</option>
+                    <option value="dotted">Dotted</option>
+                    <option value="dashed">Dashed</option>
+                    <option value="double">Double</option>
+                    <option value="groove">Groove</option>
+                    <option value="ridge">Ridge</option>
+                    <option value="inset">Inset</option>
+                    <option value="outset">Outset</option>
+                  </select>
+                </div>
+
+                {/* Border Color */}
+                <div>
+                  <label className="block text-xs text-gray-500 mb-1">
+                    Color
+                  </label>
+                  <input
+                    type="color"
+                    value={resume.borderColor || "#cbd5e1"}
+                    onChange={(e) =>
+                      onChange((prev) => ({
+                        ...prev,
+                        borderColor: e.target.value,
+                      }))
+                    }
+                    className="w-full h-8 rounded border cursor-pointer"
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Border Radius Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => setShowBorderRadiusMenu((prev) => !prev)}
+              title="Border Radius"
+              className="p-2 rounded-md hover:bg-gray-100 transition"
+            >
+              <TbBorderCornerPill className="text-gray-700 text-lg" />
+            </button>
+
+            {showBorderRadiusMenu && (
+              <div className="absolute z-50 mt-2 right-0 sm:left-1/2 sm:-translate-x-1/2 bg-white border border-gray-200 shadow-xl rounded-lg p-3 w-56 max-w-[90vw]">
+                <p className="text-sm font-semibold text-gray-700 mb-3 text-center">
+                  Border Radius
+                </p>
+
+                <ul className="flex flex-col gap-1 max-h-60 overflow-y-auto pr-1">
+                  {[
+                    { label: "None", value: "0px" },
+                    { label: "2px", value: "2px" },
+                    { label: "4px", value: "4px" },
+                    { label: "6px", value: "6px" },
+                    { label: "8px", value: "8px" },
+                    { label: "12px", value: "12px" },
+                    { label: "16px", value: "16px" },
+                    { label: "24px", value: "24px" },
+                    { label: "32px", value: "32px" },
+                  ].map((r) => (
+                    <li key={r.value}>
+                      <button
+                        onClick={() => {
+                          onChange((prev) => ({
+                            ...prev,
+                            borderRadius: r.value,
+                          }));
+                          setShowBorderRadiusMenu(false);
+                        }}
+                        className={`w-full px-3 py-1.5 rounded-sm flex items-center gap-3 hover:bg-gray-50 transition ${
+                          resume.borderRadius === r.value
+                            ? "bg-sky-50 "
+                            : "text-gray-800"
+                        }`}
+                      >
+                        {/* Text label */}
+                        <span className="text-xs w-12 text-left text-gray-600">
+                          {r.value}
+                        </span>
+
+                        {/* Preview Box */}
+                        <div
+                          className="h-6 flex-1 border border-gray-300 bg-white"
+                          style={{
+                            borderRadius: r.value,
+                          }}
+                        ></div>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
       )}
+
+      {/* Resume Preview */}
+      <div
+        className="max-w-4xl mx-auto p-5 text-sm leading-relaxed space-y-5 border border-gray-200 shadow-md "
+        style={{
+          fontFamily: resume.fontFamily || "Inter",
+          backgroundColor: resume.backgroundColor || "#ffffff",
+        }}
+      >
+        {/* Dynamically rendered sections */}
+        <div
+          className="p-7 flex flex-col gap-5"
+          style={{
+            border:
+              resume.borderWidth && resume.borderWidth !== "0px"
+                ? `${resume.borderWidth} ${resume.borderStyle || "solid"} ${
+                    resume.borderColor || "#cbd5e1"
+                  }`
+                : "none",
+            borderRadius: resume.borderRadius || "0px",
+          }}
+        >
+          {resume.sectionOrder.map(
+            (sectionKey) =>
+              resume.visibleSections[sectionKey] && sectionMap[sectionKey]
+          )}
+        </div>
+      </div>
     </div>
   );
 };
