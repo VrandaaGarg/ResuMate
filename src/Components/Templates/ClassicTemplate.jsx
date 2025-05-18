@@ -37,6 +37,7 @@ const ClassicTemplate = ({ resume, onChange }) => {
   const [showToggleSection, setshowToggleSection] = useState(false);
   const [showReorder, setShowReorder] = useState(false);
   const sensors = useSensors(useSensor(PointerSensor));
+  const [openDropdown, setOpenDropdown] = useState(null); // values: "toggle", "font", "reorder", etc.
 
   const handleBgChange = (e) => {
     onChange((prev) => ({
@@ -295,7 +296,11 @@ const ClassicTemplate = ({ resume, onChange }) => {
             <button
               className="p-2 rounded-md hover:bg-gray-200 transition relative group"
               title={`Background Color`}
-              onClick={() => setShowBgPicker((prev) => !prev)}
+              onClick={() =>
+                setOpenDropdown((prev) =>
+                  prev === "bgColor" ? null : "bgColor"
+                )
+              }
             >
               <FaFillDrip className="text-xl text-gray-700" />
               <span
@@ -305,7 +310,7 @@ const ClassicTemplate = ({ resume, onChange }) => {
             </button>
 
             {/* Color Picker Panel */}
-            {showBgPicker && (
+            {openDropdown === "bgColor" && (
               <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl p-4 w-fit right-1/2">
                 <p className="text-sm font-semibold text-gray-700 mb-3">
                   Background Color
@@ -376,7 +381,9 @@ const ClassicTemplate = ({ resume, onChange }) => {
           <div className="relative">
             {/* Trigger Button */}
             <button
-              onClick={() => setShowFontMenu((prev) => !prev)}
+              onClick={() =>
+                setOpenDropdown((prev) => (prev === "font" ? null : "font"))
+              }
               title="Change Font"
               className="p-2 rounded-md hover:bg-gray-100 transition"
             >
@@ -384,7 +391,7 @@ const ClassicTemplate = ({ resume, onChange }) => {
             </button>
 
             {/* Dropdown Menu */}
-            {showFontMenu && (
+            {openDropdown === "font" && (
               <div className="absolute z-50 mt-2 bg-white border border-gray-200 shadow-lg rounded-lg p-3 w-52 right-0">
                 <p className="text-sm font-semibold text-gray-700 mb-2">
                   Select Font
@@ -424,14 +431,18 @@ const ClassicTemplate = ({ resume, onChange }) => {
           {/* Border Width Dropdown */}
           <div className="relative">
             <button
-              onClick={() => setShowBorderWidthMenu((prev) => !prev)}
+              onClick={() =>
+                setOpenDropdown((prev) =>
+                  prev === "borderWidth" ? null : "borderWidth"
+                )
+              }
               title="Border Width"
               className="p-2 rounded-md hover:bg-gray-100 transition"
             >
               <BsBorderWidth className="text-gray-700 text-lg" />
             </button>
 
-            {showBorderWidthMenu && (
+            {openDropdown === "borderWidth" && (
               <div className="absolute z-50 mt-2 right-0 sm:left-1/2 sm:-translate-x-1/2 bg-white border border-gray-200 shadow-xl rounded-lg p-3 w-56 max-w-[90vw]">
                 <p className="text-sm font-semibold text-gray-700 mb-3 text-center">
                   Select Width
@@ -484,14 +495,18 @@ const ClassicTemplate = ({ resume, onChange }) => {
           {/*border style and color*/}
           <div className="relative">
             <button
-              onClick={() => setShowBorderMenu((prev) => !prev)}
+              onClick={() =>
+                setOpenDropdown((prev) =>
+                  prev === "borderStyles" ? null : "borderStyles"
+                )
+              }
               title="Border style and color"
               className="p-2 rounded-md hover:bg-gray-100 transition"
             >
               <BsBoundingBoxCircles className="text-gray-700 text-lg" />
             </button>
 
-            {showBorderMenu && (
+            {openDropdown === "borderStyles" && (
               <div className="absolute z-50 mt-2 bg-white border border-gray-200 shadow-lg rounded-lg p-3 w-64 right-0">
                 <p className="text-sm font-semibold text-gray-700 mb-2">
                   Border Settings
@@ -547,14 +562,18 @@ const ClassicTemplate = ({ resume, onChange }) => {
           {/* Border Radius Dropdown */}
           <div className="relative">
             <button
-              onClick={() => setShowBorderRadiusMenu((prev) => !prev)}
+              onClick={() =>
+                setOpenDropdown((prev) =>
+                  prev === "borderRadius" ? null : "borderRadius"
+                )
+              }
               title="Border Radius"
               className="p-2 rounded-md hover:bg-gray-100 transition"
             >
               <TbBorderCornerPill className="text-gray-700 text-lg" />
             </button>
 
-            {showBorderRadiusMenu && (
+            {openDropdown === "borderRadius" && (
               <div className="absolute z-50 mt-2 right-0 sm:left-1/2 sm:-translate-x-1/2 bg-white border border-gray-200 shadow-xl rounded-lg p-3 w-56 max-w-[90vw]">
                 <p className="text-sm font-semibold text-gray-700 mb-3 text-center">
                   Border Radius
@@ -612,12 +631,14 @@ const ClassicTemplate = ({ resume, onChange }) => {
             <button
               className="p-2 rounded-md hover:bg-gray-100 transition"
               title="Show/Hide Sections"
-              onClick={() => setshowToggleSection((prev) => !prev)}
+              onClick={() =>
+                setOpenDropdown((prev) => (prev === "toggle" ? null : "toggle"))
+              }
             >
               <BiShowAlt className="text-xl text-gray-700" />
             </button>
 
-            {showToggleSection && (
+            {openDropdown === "toggle" && (
               <div className="absolute right-0 mt-2 z-50 w-72 max-h-72 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg">
                 <div className="p-4">
                   <h3 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
@@ -667,16 +688,21 @@ const ClassicTemplate = ({ resume, onChange }) => {
             )}
           </div>
 
+          {/* Reorder Sections Dropdown */}
           <div className="relative">
             <button
               className="p-2 rounded-md hover:bg-gray-100 transition"
               title="Reorder Sections"
-              onClick={() => setShowReorder((prev) => !prev)}
+              onClick={() =>
+                setOpenDropdown((prev) =>
+                  prev === "reorder" ? null : "reorder"
+                )
+              }
             >
               <IoReorderThreeSharp className="text-xl text-gray-700" />
             </button>
 
-            {showReorder && (
+            {openDropdown === "reorder" && (
               <div className="absolute right-0 mt-2 z-50 w-64 max-h-80 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg">
                 <div className="p-4">
                   <h3 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
