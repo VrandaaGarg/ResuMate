@@ -76,7 +76,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
   const [showToggleSection, setshowToggleSection] = useState(false);
 
   useEffect(() => {
-    if (!resume.sectionOrder) {
+    if (!resume.sectionOrder || !Array.isArray(resume.sectionOrder)) {
       onChange((prev) => ({
         ...prev,
         sectionOrder: [
@@ -98,6 +98,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
       onChange((prev) => ({
         ...prev,
         visibleSections: {
+          name: true,
           details: true,
           description: true,
           skills: true,
@@ -110,12 +111,14 @@ const SidebarTemplate = ({ resume, onChange }) => {
     }
   }, []);
 
-  if (!resume.skillColors) {
-    onChange((prev) => ({
-      ...prev,
-      skillColors: {},
-    }));
-  }
+  useEffect(() => {
+    if (!resume.skillColors) {
+      onChange((prev) => ({
+        ...prev,
+        skillColors: {},
+      }));
+    }
+  }, [resume.skillColors, onChange]);
 
   const hasAnyProjectLink = resume.projects?.some(
     (proj) => proj.demo || proj.github
@@ -161,7 +164,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
           className="text-3xl font-bold bg-transparent w-full text-center outline-none"
           style={{ color: resume.textColors?.["h1"] || "white" }}
         >
-          {resume.name}
+          {resume.name || "Your Name"}
         </h1>
       </div>
     ),
@@ -1047,7 +1050,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
                           Sidebar
                         </p>
                         <SortableContext
-                          items={resume.sectionOrder.filter((id) =>
+                          items={(resume.sectionOrder || []).filter((id) =>
                             sidebarSections.includes(id)
                           )}
                           strategy={verticalListSortingStrategy}
@@ -1068,7 +1071,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
                           Main
                         </p>
                         <SortableContext
-                          items={resume.sectionOrder.filter((id) =>
+                          items={(resume.sectionOrder || []).filter((id) =>
                             mainSections.includes(id)
                           )}
                           strategy={verticalListSortingStrategy}
@@ -1104,10 +1107,10 @@ const SidebarTemplate = ({ resume, onChange }) => {
           className="w-1/3 text-white p-6 space-y-6"
           style={{ backgroundColor: resume.sidebarColor || "#1e3a8a" }}
         >
-          {resume.sectionOrder
+          {(resume.sectionOrder || [])
             .filter(
               (key) =>
-                resume.visibleSections[key] && sidebarSections.includes(key)
+                resume.visibleSections?.[key] && sidebarSections.includes(key)
             )
             .map((key) => (
               <React.Fragment key={key}>{sectionMap[key]}</React.Fragment>
@@ -1116,9 +1119,10 @@ const SidebarTemplate = ({ resume, onChange }) => {
 
         {/* Mainbar */}
         <main className="w-2/3 p-8 space-y-6">
-          {resume.sectionOrder
+          {(resume.sectionOrder || [])
             .filter(
-              (key) => resume.visibleSections[key] && mainSections.includes(key)
+              (key) =>
+                resume.visibleSections?.[key] && mainSections.includes(key)
             )
             .map((key) => (
               <React.Fragment key={key}>{sectionMap[key]}</React.Fragment>
