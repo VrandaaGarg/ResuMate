@@ -10,6 +10,21 @@ import { BsBorderWidth } from "react-icons/bs";
 import { TbBorderCornerPill } from "react-icons/tb";
 import { BiShowAlt } from "react-icons/bi";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { IoReorderThreeSharp } from "react-icons/io5";
 
 const ClassicTemplate = ({ resume, onChange }) => {
   const { isEditable } = useEditResume();
@@ -20,12 +35,47 @@ const ClassicTemplate = ({ resume, onChange }) => {
   const [showBorderWidthMenu, setShowBorderWidthMenu] = useState(false);
   const [showBorderRadiusMenu, setShowBorderRadiusMenu] = useState(false);
   const [showToggleSection, setshowToggleSection] = useState(false);
+  const [showReorder, setShowReorder] = useState(false);
+  const sensors = useSensors(useSensor(PointerSensor));
 
   const handleBgChange = (e) => {
     onChange((prev) => ({
       ...prev,
       backgroundColor: e.target.value,
     }));
+  };
+
+  const SortableItem = ({ id }) => {
+    const {
+      attributes,
+      listeners,
+      setNodeRef,
+      transform,
+      transition,
+      isDragging,
+    } = useSortable({ id });
+
+    const style = {
+      transform: CSS.Transform.toString(transform),
+      transition,
+      opacity: isDragging ? 0.5 : 1,
+    };
+
+    return (
+      <div
+        ref={setNodeRef}
+        style={style}
+        {...attributes}
+        {...listeners}
+        className="flex items-center justify-between px-2 py-2 bg-gray-50 border border-gray-200 rounded-md text-xs cursor-grab max-w-full hover:bg-gray-100 transition"
+        title={id}
+      >
+        <span className="capitalize text-gray-700 truncate max-w-[80%]">
+          {id.replace(/([A-Z])/g, " $1").replace(/^./, (s) => s.toUpperCase())}
+        </span>
+        <IoReorderThreeSharp className="text-gray-500 flex-shrink-0" />
+      </div>
+    );
   };
 
   // useEffect(() => {
@@ -612,6 +662,59 @@ const ClassicTemplate = ({ resume, onChange }) => {
                       );
                     })}
                   </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="relative">
+            <button
+              className="p-2 rounded-md hover:bg-gray-100 transition"
+              title="Reorder Sections"
+              onClick={() => setShowReorder((prev) => !prev)}
+            >
+              <IoReorderThreeSharp className="text-xl text-gray-700" />
+            </button>
+
+            {showReorder && (
+              <div className="absolute right-0 mt-2 z-50 w-64 max-h-80 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg">
+                <div className="p-4">
+                  <h3 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                    <IoReorderThreeSharp className="text-blue-600" />
+                    Reorder Sections
+                  </h3>
+
+                  <DndContext
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragEnd={({ active, over }) => {
+                      if (!over || active.id === over.id) return;
+
+                      const oldIndex = resume.sectionOrder.indexOf(active.id);
+                      const newIndex = resume.sectionOrder.indexOf(over.id);
+                      const newOrder = arrayMove(
+                        resume.sectionOrder,
+                        oldIndex,
+                        newIndex
+                      );
+
+                      onChange((prev) => ({
+                        ...prev,
+                        sectionOrder: newOrder,
+                      }));
+                    }}
+                  >
+                    <SortableContext
+                      items={resume.sectionOrder}
+                      strategy={verticalListSortingStrategy}
+                    >
+                      <div className="space-y-1.5">
+                        {resume.sectionOrder.map((id) => (
+                          <SortableItem key={id} id={id} />
+                        ))}
+                      </div>
+                    </SortableContext>
+                  </DndContext>
                 </div>
               </div>
             )}
