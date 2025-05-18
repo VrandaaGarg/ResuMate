@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import { useEditResume } from "../../Contexts/EditResumeContext";
 import { useState } from "react";
 import { FaFillDrip } from "react-icons/fa";
-import { motion, AnimatePresence } from "framer-motion";
 import { FaFont } from "react-icons/fa6"; // Add at top
 import { BsBoundingBoxCircles } from "react-icons/bs"; // At the top
 import { BsBorderWidth } from "react-icons/bs";
@@ -29,22 +28,8 @@ import { IoReorderThreeSharp } from "react-icons/io5";
 const ClassicTemplate = ({ resume, onChange }) => {
   const { isEditable } = useEditResume();
   if (!resume) return null;
-  const [showBgPicker, setShowBgPicker] = useState(false);
-  const [showFontMenu, setShowFontMenu] = useState(false); // Inside component
-  const [showBorderMenu, setShowBorderMenu] = useState(false);
-  const [showBorderWidthMenu, setShowBorderWidthMenu] = useState(false);
-  const [showBorderRadiusMenu, setShowBorderRadiusMenu] = useState(false);
-  const [showToggleSection, setshowToggleSection] = useState(false);
-  const [showReorder, setShowReorder] = useState(false);
   const sensors = useSensors(useSensor(PointerSensor));
   const [openDropdown, setOpenDropdown] = useState(null); // values: "toggle", "font", "reorder", etc.
-
-  const handleBgChange = (e) => {
-    onChange((prev) => ({
-      ...prev,
-      backgroundColor: e.target.value,
-    }));
-  };
 
   const SortableItem = ({ id }) => {
     const {
@@ -78,24 +63,6 @@ const ClassicTemplate = ({ resume, onChange }) => {
       </div>
     );
   };
-
-  // useEffect(() => {
-  //   if (!resume.sectionOrder || resume.sectionOrder.length === 0) {
-  //     onChange((prev) => ({
-  //       ...prev,
-  //       sectionOrder: [
-  //         "name",
-  //         "details",
-  //         "description",
-  //         "education",
-  //         "skills",
-  //         "projects",
-  //         "experience",
-  //         "achievements",
-  //       ],
-  //     }));
-  //   }
-  // }, []);
 
   useEffect(() => {
     if (!resume.visibleSections) {
@@ -411,7 +378,7 @@ const ClassicTemplate = ({ resume, onChange }) => {
                       key={font}
                       onClick={() => {
                         onChange((prev) => ({ ...prev, fontFamily: font }));
-                        setShowFontMenu(false);
+                        setOpenDropdown(false);
                       }}
                       className={`text-sm text-left px-3 py-1 rounded hover:bg-gray-100 transition ${
                         resume.fontFamily === font
@@ -464,7 +431,7 @@ const ClassicTemplate = ({ resume, onChange }) => {
                             ...prev,
                             borderWidth: w.value,
                           }));
-                          setShowBorderWidthMenu(false);
+                          setOpenDropdown(false);
                         }}
                         className={`w-full justify-center h-5 px-1 py-1.5 rounded-xs flex items-center gap-5 hover:bg-sky-50 transition ${
                           resume.borderWidth === w.value
@@ -598,7 +565,7 @@ const ClassicTemplate = ({ resume, onChange }) => {
                             ...prev,
                             borderRadius: r.value,
                           }));
-                          setShowBorderRadiusMenu(false);
+                          setOpenDropdown(false);
                         }}
                         className={`w-full px-3 py-1.5 rounded-sm flex items-center gap-3 hover:bg-gray-50 transition ${
                           resume.borderRadius === r.value
