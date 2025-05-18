@@ -1,5 +1,5 @@
 // src/Components/Templates/ClassicTemplate.jsx
-import React from "react";
+import React, { useEffect } from "react";
 import { useEditResume } from "../../Contexts/EditResumeContext";
 import { useState } from "react";
 import { FaFillDrip } from "react-icons/fa";
@@ -8,6 +8,8 @@ import { FaFont } from "react-icons/fa6"; // Add at top
 import { BsBoundingBoxCircles } from "react-icons/bs"; // At the top
 import { BsBorderWidth } from "react-icons/bs";
 import { TbBorderCornerPill } from "react-icons/tb";
+import { BiShowAlt } from "react-icons/bi";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const ClassicTemplate = ({ resume, onChange }) => {
   const { isEditable } = useEditResume();
@@ -17,6 +19,7 @@ const ClassicTemplate = ({ resume, onChange }) => {
   const [showBorderMenu, setShowBorderMenu] = useState(false);
   const [showBorderWidthMenu, setShowBorderWidthMenu] = useState(false);
   const [showBorderRadiusMenu, setShowBorderRadiusMenu] = useState(false);
+  const [showToggleSection, setshowToggleSection] = useState(false);
 
   const handleBgChange = (e) => {
     onChange((prev) => ({
@@ -25,27 +28,41 @@ const ClassicTemplate = ({ resume, onChange }) => {
     }));
   };
 
-  resume.sectionOrder = [
-    "name",
-    "details",
-    "description",
-    "education",
-    "skills",
-    "projects",
-    "experience",
-    "achievements",
-  ];
+  // useEffect(() => {
+  //   if (!resume.sectionOrder || resume.sectionOrder.length === 0) {
+  //     onChange((prev) => ({
+  //       ...prev,
+  //       sectionOrder: [
+  //         "name",
+  //         "details",
+  //         "description",
+  //         "education",
+  //         "skills",
+  //         "projects",
+  //         "experience",
+  //         "achievements",
+  //       ],
+  //     }));
+  //   }
+  // }, []);
 
-  resume.visibleSections = {
-    name: true,
-    details: true,
-    description: true,
-    education: true,
-    skills: true,
-    projects: true,
-    experience: true,
-    achievements: true,
-  };
+  useEffect(() => {
+    if (!resume.visibleSections) {
+      onChange((prev) => ({
+        ...prev,
+        visibleSections: {
+          name: true,
+          details: true,
+          description: true,
+          education: true,
+          skills: true,
+          projects: true,
+          experience: true,
+          achievements: true,
+        },
+      }));
+    }
+  }, []);
 
   const sectionMap = {
     name: (
@@ -539,18 +556,78 @@ const ClassicTemplate = ({ resume, onChange }) => {
               </div>
             )}
           </div>
+
+          {/* Toggle Visibility Dropdown */}
+          <div className="relative">
+            <button
+              className="p-2 rounded-md hover:bg-gray-100 transition"
+              title="Show/Hide Sections"
+              onClick={() => setshowToggleSection((prev) => !prev)}
+            >
+              <BiShowAlt className="text-xl text-gray-700" />
+            </button>
+
+            {showToggleSection && (
+              <div className="absolute right-0 mt-2 z-50 w-72 max-h-72 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg">
+                <div className="p-4">
+                  <h3 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                    <FaEye className="text-blue-600" />
+                    Show/Hide Sections
+                  </h3>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    {Object.keys(resume.visibleSections).map((key) => {
+                      const isVisible = resume.visibleSections[key];
+                      const label = key
+                        .replace(/([A-Z])/g, " $1")
+                        .replace(/^./, (str) => str.toUpperCase());
+
+                      return (
+                        <button
+                          key={key}
+                          onClick={() =>
+                            onChange((prev) => ({
+                              ...prev,
+                              visibleSections: {
+                                ...prev.visibleSections,
+                                [key]: !isVisible,
+                              },
+                            }))
+                          }
+                          className={`flex items-center justify-between px-3 py-1.5 rounded-md border text-xs transition-all ${
+                            isVisible
+                              ? "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100"
+                              : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
+                          }`}
+                        >
+                          <span className="truncate w-24 text-left">
+                            {label}
+                          </span>
+                          {isVisible ? (
+                            <FaEye className="text-blue-500 text-sm shrink-0" />
+                          ) : (
+                            <FaEyeSlash className="text-gray-400 text-sm shrink-0" />
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       )}
 
       {/* Resume Preview */}
       <div
-        className="max-w-4xl mx-auto p-5 text-sm leading-relaxed space-y-5 border border-gray-200 shadow-md "
+        className="max-w-4xl mx-auto p-5 text-sm leading-relaxed space-y-5 border border-gray-200 shadow-md"
         style={{
           fontFamily: resume.fontFamily || "Inter",
           backgroundColor: resume.backgroundColor || "#ffffff",
         }}
       >
-        {/* Dynamically rendered sections */}
+        {/* Inner Resume Container */}
         <div
           className="p-7 flex flex-col gap-5"
           style={{
@@ -563,9 +640,12 @@ const ClassicTemplate = ({ resume, onChange }) => {
             borderRadius: resume.borderRadius || "0px",
           }}
         >
+          {/* Dynamically Render Sections */}
           {resume.sectionOrder.map(
             (sectionKey) =>
-              resume.visibleSections[sectionKey] && sectionMap[sectionKey]
+              resume.visibleSections[sectionKey] && (
+                <div key={sectionKey}>{sectionMap[sectionKey]}</div>
+              )
           )}
         </div>
       </div>
