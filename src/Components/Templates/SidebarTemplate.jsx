@@ -17,7 +17,6 @@ import {
   FaFont,
   FaLink,
 } from "react-icons/fa6";
-import { motion, AnimatePresence } from "framer-motion";
 import {
   MdFormatAlignLeft,
   MdFormatAlignCenter,
@@ -43,30 +42,44 @@ import { CSS } from "@dnd-kit/utilities";
 import { RiFontColor } from "react-icons/ri";
 import { BiShowAlt } from "react-icons/bi";
 import { IoReorderThreeSharp } from "react-icons/io5";
+import { MdFormatColorText } from "react-icons/md";
 
 const SidebarTemplate = ({ resume, onChange }) => {
   const [showBgColorPicker, setShowBgColorPicker] = useState(false);
   const [showSkillColorPicker, setShowSkillColorPicker] = useState(false);
   const [showFontMenu, setShowFontMenu] = useState(false);
   const [showLinkColorPicker, setShowLinkColorPicker] = useState(false);
-  const [showToggleReorder, setShowToggleReorder] = useState(true);
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [showReorder, setShowReorder] = useState(false);
   const { isEditable } = useEditResume();
   const pointerSensor = useSensor(PointerSensor);
+  const [showMainTextColorPicker, setShowMainTextColorPicker] = useState(false);
   const sensors = useSensors(pointerSensor);
   const sidebarSections = ["name", "details", "description", "skills"];
   const mainSections = ["experience", "projects", "education", "achievements"];
   const defaultTextColor = (tag) => {
     switch (tag) {
       case "h1":
-        return "#white";
+        return "white";
       case "h2":
         return "text-blue-300";
       case "h3":
         return "text-blue-200";
       case "h4":
         return "text-gray-300";
+      default:
+        return "#000000";
+    }
+  };
+
+  const defaultMainTextColor = (tag) => {
+    switch (tag) {
+      case "h1":
+        return "#1e293b"; // dark slate
+      case "h2":
+        return "#334155"; // slightly lighter
+      case "h3":
+        return "#475569"; // even lighter
       default:
         return "#000000";
     }
@@ -177,7 +190,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
           Details
         </h2>
         <div
-          className="flex flex-col space-y-1"
+          className="flex flex-col space-y-2"
           style={{ color: resume.textColors?.["h3"] || "text-blue-200" }}
         >
           {resume.contact.location && (
@@ -199,8 +212,8 @@ const SidebarTemplate = ({ resume, onChange }) => {
           )}
 
           {resume.contact.email && (
-            <div className="flex items-center text-sm">
-              <MdOutlineMailOutline className="mr-2 text-lg" />
+            <div className="flex items-start text-sm gap-2">
+              <MdOutlineMailOutline className="flex-shrink-0 text-lg mt-1" />
               <a
                 href={`mailto:${resume.contact.email}`}
                 target="_blank"
@@ -300,7 +313,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
                 </div>
 
                 <p
-                  className="text-xs text-gray-300 mt-1"
+                  className="text-xs mt-1"
                   style={{
                     color: resume.textColors?.["h4"] || "text-blue-200",
                   }}
@@ -343,7 +356,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
         </div>
 
         {/* Legend */}
-        <div className="text-xs text-gray-300 space-y-1">
+        <div className="text-xs space-y-1">
           {resume.skills.map((skill, i) => {
             const totalSkills = resume.skills.reduce(
               (acc, s) => acc + s.languages.length,
@@ -388,19 +401,41 @@ const SidebarTemplate = ({ resume, onChange }) => {
       <section>
         <h2
           className="text-xl font-bold  mb-2"
-          style={{ color: resume.sidebarColor || "#1e3a8a" }}
+          style={{
+            color: resume.mainTextColors?.["h1"] || defaultMainTextColor("h1"),
+          }}
         >
           EXPERIENCE
         </h2>
         {resume.experience.map((exp, i) => (
           <div key={i} className="mb-4 text-sm">
             <div className="flex justify-between">
-              <p className="font-semibold">{exp.company}</p>
-              <p className="italic">{exp.years}</p>
+              <p
+                className="font-semibold"
+                style={{
+                  color:
+                    resume.mainTextColors?.["h2"] || defaultMainTextColor("h2"),
+                }}
+              >
+                {exp.company}
+              </p>
+              <p
+                className="italic"
+                style={{
+                  color:
+                    resume.mainTextColors?.["h2"] || defaultMainTextColor("h2"),
+                }}
+              >
+                {exp.years}
+              </p>
             </div>
             <p
               className="mt-1 text-gray-800 whitespace-pre-line"
-              style={{ textAlign: resume.descriptionAlign || "left" }}
+              style={{
+                textAlign: resume.descriptionAlign || "left",
+                color:
+                  resume.mainTextColors?.["h3"] || defaultMainTextColor("h3"),
+              }}
             >
               {exp.description}
             </p>
@@ -413,7 +448,9 @@ const SidebarTemplate = ({ resume, onChange }) => {
       <section>
         <h2
           className="text-xl font-bold  mb-2"
-          style={{ color: resume.sidebarColor || "#1e3a8a" }}
+          style={{
+            color: resume.mainTextColors?.["h1"] || defaultMainTextColor("h1"),
+          }}
         >
           PROJECTS
         </h2>
@@ -421,7 +458,15 @@ const SidebarTemplate = ({ resume, onChange }) => {
         {resume.projects.map((proj, i) => (
           <div key={i} className="mb-4">
             <div className="flex col-lapse gap-6">
-              <p className="font-semibold">{proj.name}</p>
+              <p
+                className="font-semibold"
+                style={{
+                  color:
+                    resume.mainTextColors?.["h2"] || defaultMainTextColor("h2"),
+                }}
+              >
+                {proj.name}
+              </p>
 
               <div className="text-sm">
                 {(proj.demo || proj.github) && (
@@ -463,7 +508,12 @@ const SidebarTemplate = ({ resume, onChange }) => {
                 <p
                   key={idx}
                   className="mb-1"
-                  style={{ textAlign: resume.descriptionAlign || "left" }}
+                  style={{
+                    textAlign: resume.descriptionAlign || "left",
+                    color:
+                      resume.mainTextColors?.["h3"] ||
+                      defaultMainTextColor("h3"),
+                  }}
                 >
                   {line}
                 </p>
@@ -478,20 +528,43 @@ const SidebarTemplate = ({ resume, onChange }) => {
       <section>
         <h2
           className="text-xl font-bold mb-2"
-          style={{ color: resume.sidebarColor || "#1e3a8a" }}
+          style={{
+            color: resume.mainTextColors?.["h1"] || defaultMainTextColor("h1"),
+          }}
         >
           EDUCATION
         </h2>
 
         <div className="flex col-lapse gap-6 mb-4">
-          <p className="font-semibold text-sm">{resume.education.college}</p>
+          <p
+            className="font-semibold text-sm"
+            style={{
+              color:
+                resume.mainTextColors?.["h2"] || defaultMainTextColor("h2"),
+            }}
+          >
+            {resume.education.college}
+          </p>
 
-          <p className="italic text-sm">
+          <p
+            className="italic text-sm"
+            style={{
+              color:
+                resume.mainTextColors?.["h2"] || defaultMainTextColor("h2"),
+            }}
+          >
             {resume.education.startYear} - {resume.education.endYear}
           </p>
         </div>
 
-        <p className="text-sm">CGPA: {resume.education.cgpa}</p>
+        <p
+          className="text-sm"
+          style={{
+            color: resume.mainTextColors?.["h3"] || defaultMainTextColor("h3"),
+          }}
+        >
+          CGPA: {resume.education.cgpa}
+        </p>
       </section>
     ),
 
@@ -499,7 +572,9 @@ const SidebarTemplate = ({ resume, onChange }) => {
       <section>
         <h2
           className="text-xl font-bold  mb-2"
-          style={{ color: resume.sidebarColor || "#1e3a8a" }}
+          style={{
+            color: resume.mainTextColors?.["h1"] || defaultMainTextColor("h1"),
+          }}
         >
           ACHIEVEMENTS
         </h2>
@@ -507,7 +582,11 @@ const SidebarTemplate = ({ resume, onChange }) => {
           {resume.achievements.map((ach, i) => (
             <li
               key={i}
-              style={{ textAlign: resume.descriptionAlign || "left" }}
+              style={{
+                textAlign: resume.descriptionAlign || "left",
+                color:
+                  resume.mainTextColors?.["h2"] || defaultMainTextColor("h2"),
+              }}
             >
               <strong>{ach.title}</strong> – {ach.description}
             </li>
@@ -901,9 +980,9 @@ const SidebarTemplate = ({ resume, onChange }) => {
             {/* Color Panel */}
             {showTextColorPicker && (
               <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl p-4 w-fit right-0">
-                <p className="text-xs font-medium text-gray-600 mb-2">
+                {/* <p className="text-xs font-medium text-gray-600 mb-2">
                   Heading & Text Colors
-                </p>
+                </p> */}
 
                 {["h1", "h2", "h3", "h4"].map((tag) => (
                   <div key={tag} className="flex items-center gap-3 mb-2">
@@ -927,6 +1006,60 @@ const SidebarTemplate = ({ resume, onChange }) => {
                             ...prev,
                             textColors: {
                               ...prev.textColors,
+                              [tag]: e.target.value,
+                            },
+                          }))
+                        }
+                        className="absolute inset-0 z-10 opacity-0 cursor-pointer"
+                        title={`Change ${tag.toUpperCase()} color`}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Mainbar Text Color Picker */}
+          <div className="relative group">
+            <button
+              className="p-2 rounded-md hover:bg-gray-100 transition"
+              title="Mainbar Text Color"
+              onClick={() => setShowMainTextColorPicker((prev) => !prev)}
+            >
+              <MdFormatColorText className="text-lg text-gray-700" />
+            </button>
+
+            {showMainTextColorPicker && (
+              <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl p-4 w-fit right-0">
+                {/* <p className="text-xs font-medium text-gray-600 mb-2">
+                  Mainbar Text Colors
+                </p> */}
+
+                {["h1", "h2", "h3"].map((tag) => (
+                  <div key={tag} className="flex items-center gap-3 mb-2">
+                    <span className="uppercase text-xs w-5">{tag}</span>
+
+                    <div className="relative w-5 h-5 rounded-full overflow-hidden border cursor-pointer group">
+                      <div
+                        className="absolute inset-0 z-0 rounded-full"
+                        style={{
+                          backgroundColor:
+                            resume.mainTextColors?.[tag] ||
+                            defaultMainTextColor(tag),
+                        }}
+                      />
+                      <input
+                        type="color"
+                        value={
+                          resume.mainTextColors?.[tag] ||
+                          defaultMainTextColor(tag)
+                        }
+                        onChange={(e) =>
+                          onChange((prev) => ({
+                            ...prev,
+                            mainTextColors: {
+                              ...prev.mainTextColors,
                               [tag]: e.target.value,
                             },
                           }))
