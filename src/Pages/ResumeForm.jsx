@@ -4,6 +4,8 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { RxCrossCircled, RxCross1, RxCross2 } from "react-icons/rx";
 import { useResumeData } from "../Contexts/ResumeDataContext";
+import RichTextInput from "../Components/RichTextInput";
+
 import {
   FiUser,
   FiAlignLeft,
@@ -178,6 +180,7 @@ const ResumeForm = () => {
 
   const renderStep = () => {
     switch (step) {
+      // Personal Info
       case 0:
         return (
           <div className="space-y-10">
@@ -208,19 +211,19 @@ const ResumeForm = () => {
               >
                 Short Description
               </label>
-              <FiAlignLeft className="absolute top-9 left-3 text-gray-500" />
-              <textarea
-                id="description"
-                placeholder="A brief personal summary or tagline"
+
+              <RichTextInput
                 value={formData.description}
-                onChange={(e) => handleChange(e, "description")}
-                className="w-full px-4 py-2 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-sky-600 bg-white text-sm text-gray-800"
-                rows={3}
+                onChange={(html) =>
+                  handleChange({ target: { value: html } }, "description")
+                }
+                placeholder="A brief personal summary or tagline"
               />
             </div>
           </div>
         );
 
+      // Education
       case 1:
         return (
           <div className="space-y-5">
@@ -380,6 +383,7 @@ const ResumeForm = () => {
           </div>
         );
 
+      // Skills
       case 2:
         return (
           <div className="space-y-6">
@@ -461,6 +465,7 @@ const ResumeForm = () => {
           </div>
         );
 
+      // Projects
       case 3:
         return (
           <div>
@@ -508,20 +513,17 @@ const ResumeForm = () => {
                     Description
                   </label>
                   <div className="relative">
-                    <MdOutlineDescription className="absolute top-3 left-3 text-gray-500" />
-                    <textarea
-                      placeholder="Briefly describe your project"
+                    <RichTextInput
                       value={project.description}
-                      onChange={(e) =>
+                      onChange={(html) =>
                         handleArrayChange(
                           "projects",
                           index,
                           "description",
-                          e.target.value
+                          html
                         )
                       }
-                      className="pl-10 w-full px-4 py-2 border rounded-md text-sm resize-none focus:outline-none focus:ring-2 focus:ring-sky-600"
-                      rows={3}
+                      placeholder="A brief personal summary or tagline"
                     />
                   </div>
                 </div>
@@ -584,6 +586,7 @@ const ResumeForm = () => {
           </div>
         );
 
+      // Experience
       case 4:
         return (
           <div>
@@ -651,19 +654,18 @@ const ResumeForm = () => {
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Description
                     </label>
-                    <FiFileText className="absolute top-9 left-3 text-gray-500" />
-                    <textarea
-                      placeholder="e.g., Worked on scalable frontend apps..."
+
+                    <RichTextInput
                       value={exp.description}
-                      onChange={(e) =>
+                      onChange={(html) =>
                         handleArrayChange(
                           "experience",
                           index,
                           "description",
-                          e.target.value
+                          html
                         )
                       }
-                      className="pl-10 w-full px-4 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-sky-600"
+                      placeholder="e.g., Worked on scalable frontend apps..."
                     />
                   </div>
                 </div>
@@ -681,6 +683,7 @@ const ResumeForm = () => {
           </div>
         );
 
+      // Achievements
       case 5:
         return (
           <div>
@@ -726,19 +729,18 @@ const ResumeForm = () => {
                     <label className="block mb-1 text-sm font-medium text-gray-700">
                       Description
                     </label>
-                    <FiFileText className="absolute top-9 left-3 text-gray-500" />
-                    <textarea
-                      placeholder="e.g., Secured 1st place among 100+ teams"
+
+                    <RichTextInput
                       value={achieve.description}
-                      onChange={(e) =>
+                      onChange={(html) =>
                         handleArrayChange(
                           "achievements",
                           index,
                           "description",
-                          e.target.value
+                          html
                         )
                       }
-                      className="pl-10 w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-black/50"
+                      placeholder="e.g., Secured 1st place among 100+ teams"
                     />
                   </div>
 
