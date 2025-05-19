@@ -651,7 +651,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
         </h2>
 
         <div
-          className={`flex gap-6 w-full${
+          className={`flex gap-6 w-full ${
             settings.descriptionAlign === "center"
               ? "justify-center"
               : settings.descriptionAlign === "right"
