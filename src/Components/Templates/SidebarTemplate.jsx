@@ -19,6 +19,7 @@ import {
   FaGithub,
   FaLinkedinIn,
   FaEye,
+  FaFillDrip,
   FaEyeSlash,
   FaFont,
   FaLink,
@@ -97,9 +98,6 @@ const SidebarTemplate = ({ resume, onChange }) => {
         return "#000000";
     }
   };
-
-  const [showTextColorPicker, setShowTextColorPicker] = useState(false);
-  const [showToggleSection, setshowToggleSection] = useState(false);
 
   useEffect(() => {
     if (!resume.sectionOrder || !Array.isArray(resume.sectionOrder)) {
@@ -727,6 +725,88 @@ const SidebarTemplate = ({ resume, onChange }) => {
       {/* Toolbar */}
       {isEditable && (
         <div className="w-full bg-white  justify-center border border-gray-200 shadow-sm rounded-md px-6 py-3 mb-6 flex flex-wrap items-center gap-3">
+          {/* Background Color Picker */}
+          <div className="relative">
+            {/* Icon trigger */}
+            <button
+              className="p-2 rounded-md hover:bg-gray-200 transition relative group"
+              title={` Background Color`}
+              onClick={() =>
+                setOpenDropdown((prev) =>
+                  prev === "mainColor" ? null : "mainColor"
+                )
+              }
+            >
+              <FaFillDrip className="text-xl text-gray-700" />
+              <span
+                className="absolute w-4 h-4 rounded-full border border-gray-300 right-1 top-1"
+                style={{ backgroundColor: resume.bgColor || "#ffffff" }}
+              ></span>
+            </button>
+
+            {/* Picker panel */}
+            {openDropdown === "mainColor" && (
+              <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl p-4 w-fit right-0">
+                <p className="text-sm font-semibold text-gray-700 mb-3">
+                  Background Color
+                </p>
+
+                <div className="flex items-center gap-4">
+                  <div className="flex gap-2">
+                    {[
+                      "#ffffff",
+                      "#f8fafc",
+                      "#fef3c7",
+                      "#ecfccb",
+                      "#f3e8ff",
+                    ].map((clr) => (
+                      <button
+                        key={clr}
+                        className={`w-6 h-6 rounded-full border transition-all hover:scale-105 ${
+                          clr === resume.bgColor
+                            ? "ring-2 ring-offset-1 ring-sky-500"
+                            : ""
+                        }`}
+                        style={{ backgroundColor: clr }}
+                        onClick={() =>
+                          onChange((prev) => ({ ...prev, bgColor: clr }))
+                        }
+                        title={clr}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Divider */}
+                  <div className="w-px h-6 bg-gray-300 mx-2" />
+
+                  <div className="relative w-6 h-6 rounded-full overflow-hidden border cursor-pointer group">
+                    {/* Invisible Color Picker */}
+                    <input
+                      type="color"
+                      value={resume.bgColor || "#ffffff"}
+                      onChange={(e) =>
+                        onChange((prev) => ({
+                          ...prev,
+                          bgColor: e.target.value,
+                        }))
+                      }
+                      className="absolute inset-0 z-10 opacity-0 cursor-pointer"
+                      title="Pick custom color"
+                    />
+
+                    {/* Visible colored circle with icon */}
+                    <div
+                      className="absolute inset-0 z-0 rounded-full"
+                      style={{ backgroundColor: resume.bgColor || "#ffffff" }}
+                    >
+                      <MdOutlineColorize className="text-gray-500/50 text-lg drop-shadow absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
           {/* Sidebar section color */}
           <div className="relative">
             {/* Color Icon Button */}
@@ -887,88 +967,6 @@ const SidebarTemplate = ({ resume, onChange }) => {
                 <MdOutlineTextIncrease />
               </span>
             </button>
-          </div>
-
-          {/* Background Color Picker */}
-          <div className="relative">
-            {/* Icon trigger */}
-            <button
-              className="p-2 rounded-md hover:bg-gray-200 transition relative group"
-              title={` Background Color`}
-              onClick={() =>
-                setOpenDropdown((prev) =>
-                  prev === "mainColor" ? null : "mainColor"
-                )
-              }
-            >
-              <MdOutlineColorLens className="text-xl text-gray-700" />
-              <span
-                className="absolute w-4 h-4 rounded-full border border-gray-300 right-1 top-1"
-                style={{ backgroundColor: resume.bgColor || "#ffffff" }}
-              ></span>
-            </button>
-
-            {/* Picker panel */}
-            {openDropdown === "mainColor" && (
-              <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl p-4 w-fit right-0">
-                <p className="text-sm font-semibold text-gray-700 mb-3">
-                  Background Color
-                </p>
-
-                <div className="flex items-center gap-4">
-                  <div className="flex gap-2">
-                    {[
-                      "#ffffff",
-                      "#f8fafc",
-                      "#fef3c7",
-                      "#ecfccb",
-                      "#f3e8ff",
-                    ].map((clr) => (
-                      <button
-                        key={clr}
-                        className={`w-6 h-6 rounded-full border transition-all hover:scale-105 ${
-                          clr === resume.bgColor
-                            ? "ring-2 ring-offset-1 ring-sky-500"
-                            : ""
-                        }`}
-                        style={{ backgroundColor: clr }}
-                        onClick={() =>
-                          onChange((prev) => ({ ...prev, bgColor: clr }))
-                        }
-                        title={clr}
-                      />
-                    ))}
-                  </div>
-
-                  {/* Divider */}
-                  <div className="w-px h-6 bg-gray-300 mx-2" />
-
-                  <div className="relative w-6 h-6 rounded-full overflow-hidden border cursor-pointer group">
-                    {/* Invisible Color Picker */}
-                    <input
-                      type="color"
-                      value={resume.bgColor || "#ffffff"}
-                      onChange={(e) =>
-                        onChange((prev) => ({
-                          ...prev,
-                          bgColor: e.target.value,
-                        }))
-                      }
-                      className="absolute inset-0 z-10 opacity-0 cursor-pointer"
-                      title="Pick custom color"
-                    />
-
-                    {/* Visible colored circle with icon */}
-                    <div
-                      className="absolute inset-0 z-0 rounded-full"
-                      style={{ backgroundColor: resume.bgColor || "#ffffff" }}
-                    >
-                      <MdOutlineColorize className="text-gray-500/50 text-lg drop-shadow absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Skill Color Picker */}

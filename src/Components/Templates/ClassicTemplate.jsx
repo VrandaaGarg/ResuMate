@@ -11,6 +11,8 @@ import {
   MdFormatAlignCenter,
   MdFormatAlignJustify,
   MdFormatAlignRight,
+  MdOutlineTextDecrease,
+  MdOutlineTextIncrease,
 } from "react-icons/md";
 import {
   DndContext,
@@ -32,6 +34,27 @@ const ClassicTemplate = ({ resume, onChange }) => {
   const sensors = useSensors(useSensor(PointerSensor));
   const [openDropdown, setOpenDropdown] = useState(null); // values: "toggle", "font", "reorder", etc.
   if (!resume) return null;
+  fontScaleLevel: 0; // default level (0), can be -1, 0, +1, +2
+
+  const getScaledFontClass = (base, level) => {
+    const sizes = [
+      "text-xs",
+      "text-sm",
+      "text-base",
+      "text-lg",
+      "text-xl",
+      "text-2xl",
+      "text-3xl",
+      "text-4xl",
+      "text-5xl",
+      "text-6xl",
+    ];
+
+    const baseIndex = sizes.indexOf(base);
+    const newIndex = Math.min(sizes.length - 1, Math.max(0, baseIndex + level));
+
+    return sizes[newIndex];
+  };
 
   const SortableItem = ({ id }) => {
     const {
@@ -87,7 +110,12 @@ const ClassicTemplate = ({ resume, onChange }) => {
   const sectionMap = {
     name: (
       <div className="text-center">
-        <h1 className="text-4xl font-bold w-full inline-block">
+        <h1
+          className={`${getScaledFontClass(
+            "text-4xl",
+            resume.fontScaleLevel || 0
+          )} font-bold w-full inline-block`}
+        >
           {resume.name}
         </h1>
       </div>
@@ -95,7 +123,12 @@ const ClassicTemplate = ({ resume, onChange }) => {
     details: (
       <div className="text-center space-y-1">
         {/* Contact Line */}
-        <p className="text-sm text-gray-700">
+        <p
+          className={`${getScaledFontClass(
+            "text-sm",
+            resume.fontScaleLevel || 0
+          )} text-gray-700`}
+        >
           {[
             resume.contact.phone,
             resume.contact.email && (
@@ -122,7 +155,12 @@ const ClassicTemplate = ({ resume, onChange }) => {
         </p>
 
         {/* Links */}
-        <div className="text-sm text-blue-600 space-x-1">
+        <div
+          className={` ${getScaledFontClass(
+            "text-sm",
+            resume.fontScaleLevel || 0
+          )} text-blue-600 space-x-1`}
+        >
           {resume.contact.github && (
             <>
               <a
@@ -133,7 +171,9 @@ const ClassicTemplate = ({ resume, onChange }) => {
               >
                 {resume.contact.github}
               </a>
-              {resume.contact.linkedin && <span>|</span>}
+              {resume.contact.linkedin && (
+                <span className="text-gray-700">|</span>
+              )}
             </>
           )}
           {resume.contact.linkedin && (
@@ -152,16 +192,40 @@ const ClassicTemplate = ({ resume, onChange }) => {
 
     description: (
       <div style={{ textAlign: resume.descriptionAlign || "left" }}>
-        <h2 className="text-lg font-bold text-gray-800">PROFILE</h2>
-        <p className="text-gray-700">{resume.description}</p>
+        <h2
+          className={`${getScaledFontClass(
+            "text-lg",
+            resume.fontScaleLevel || 0
+          )} font-bold text-gray-800`}
+        >
+          PROFILE
+        </h2>
+        <p
+          className={`text-gray-700 ${getScaledFontClass(
+            "text-sm",
+            resume.fontScaleLevel || 0
+          )}`}
+        >
+          {resume.description}
+        </p>
       </div>
     ),
 
     education: (
       <div style={{ textAlign: resume.descriptionAlign || "left" }}>
-        <h2 className="text-lg font-bold text-gray-800">EDUCATION</h2>
+        <h2
+          className={`${getScaledFontClass(
+            "text-lg",
+            resume.fontScaleLevel || 0
+          )} font-bold text-gray-800`}
+        >
+          EDUCATION
+        </h2>
         <div
-          className={`flex gap-6 w-full ${
+          className={`flex gap-6 w-full ${getScaledFontClass(
+            "text-sm",
+            resume.fontScaleLevel || 0
+          )} ${
             resume.descriptionAlign === "center"
               ? "justify-center"
               : resume.descriptionAlign === "right"
@@ -177,15 +241,35 @@ const ClassicTemplate = ({ resume, onChange }) => {
             {resume.education.startYear} – {resume.education.endYear}
           </p>
         </div>
-        <p className="">{resume.education.cgpa} CGPA</p>
+        <p
+          className={`${getScaledFontClass(
+            "text-sm",
+            resume.fontScaleLevel || 0
+          )}`}
+        >
+          {resume.education.cgpa} CGPA
+        </p>
       </div>
     ),
 
     skills: (
       <div style={{ textAlign: resume.descriptionAlign || "left" }}>
-        <h2 className="text-lg font-bold text-gray-800">SKILLS</h2>
+        <h2
+          className={`${getScaledFontClass(
+            "text-lg",
+            resume.fontScaleLevel || 0
+          )} font-bold text-gray-800`}
+        >
+          SKILLS
+        </h2>
         {resume.skills.map((skill, i) => (
-          <div key={i}>
+          <div
+            key={i}
+            className={`${getScaledFontClass(
+              "text-sm",
+              resume.fontScaleLevel || 0
+            )}`}
+          >
             <span className="font-semibold mr-2">{skill.domain}:</span>{" "}
             <span>{skill.languages.join(", ")}</span>
           </div>
@@ -195,11 +279,21 @@ const ClassicTemplate = ({ resume, onChange }) => {
 
     projects: (
       <div style={{ textAlign: resume.descriptionAlign || "left" }}>
-        <h2 className="text-lg font-bold text-gray-800">PROJECTS</h2>
+        <h2
+          className={`${getScaledFontClass(
+            "text-lg",
+            resume.fontScaleLevel || 0
+          )} font-bold text-gray-800`}
+        >
+          PROJECTS
+        </h2>
         {resume.projects.map((proj, i) => (
           <div key={i} className="mb-3">
             <div
-              className={`flex gap-6 w-full ${
+              className={`flex gap-6 w-full ${getScaledFontClass(
+                "text-sm",
+                resume.fontScaleLevel || 0
+              )} ${
                 resume.descriptionAlign === "center"
                   ? "justify-center"
                   : resume.descriptionAlign === "right"
@@ -210,7 +304,7 @@ const ClassicTemplate = ({ resume, onChange }) => {
               }`}
             >
               <span className="font-bold">{proj.name}</span>
-              <div className="text-sm">
+              <div>
                 {(proj.demo || proj.github) && (
                   <span>
                     (
@@ -244,7 +338,12 @@ const ClassicTemplate = ({ resume, onChange }) => {
             </div>
 
             {/* Description */}
-            <p className="mt-1 text-gray-700">
+            <p
+              className={`mt-1 text-gray-700 ${getScaledFontClass(
+                "text-sm",
+                resume.fontScaleLevel || 0
+              )}`}
+            >
               {proj.description?.split("\n").map((line, idx) => (
                 <p key={idx} className="mb-1">
                   {line}
@@ -258,10 +357,23 @@ const ClassicTemplate = ({ resume, onChange }) => {
 
     experience: (
       <div style={{ textAlign: resume.descriptionAlign || "left" }}>
-        <h2 className="text-lg font-bold text-gray-800">EXPERIENCE</h2>
+        <h2
+          className={`${getScaledFontClass(
+            "text-lg",
+            resume.fontScaleLevel || 0
+          )} font-bold text-gray-800`}
+        >
+          EXPERIENCE
+        </h2>
         <ul className="list-disc pl-5 space-y-2">
           {resume.experience.map((a, i) => (
-            <li key={i}>
+            <li
+              key={i}
+              className={`${getScaledFontClass(
+                "text-sm",
+                resume.fontScaleLevel || 0
+              )}`}
+            >
               <div
                 className={`flex gap-6 w-full ${
                   resume.descriptionAlign === "center"
@@ -285,10 +397,23 @@ const ClassicTemplate = ({ resume, onChange }) => {
 
     achievements: (
       <div style={{ textAlign: resume.descriptionAlign || "left" }}>
-        <h2 className="text-lg font-bold text-gray-800">ACHIEVEMENTS</h2>
-        <ul className="list-disc pl-5 space-y-2">
+        <h2
+          className={`${getScaledFontClass(
+            "text-lg",
+            resume.fontScaleLevel || 0
+          )} font-bold text-gray-800`}
+        >
+          ACHIEVEMENTS
+        </h2>
+        <ul className="list-disc pl-5 space-y-2 ">
           {resume.achievements.map((a, i) => (
-            <li key={i}>
+            <li
+              key={i}
+              className={`${getScaledFontClass(
+                "text-sm",
+                resume.fontScaleLevel || 0
+              )}`}
+            >
               <span className="font-semibold">{a.title}</span> —{" "}
               <span className="text-gray-700">{a.description}</span>
             </li>
@@ -481,6 +606,38 @@ const ClassicTemplate = ({ resume, onChange }) => {
                 </div>
               </div>
             )}
+          </div>
+
+          <div className="flex items-center gap-1">
+            <button
+              title="Decrease Font Size"
+              onClick={() =>
+                onChange((prev) => ({
+                  ...prev,
+                  fontScaleLevel: Math.max(-2, (prev.fontScaleLevel || 0) - 1),
+                }))
+              }
+              className="p-2 rounded hover:bg-gray-200"
+            >
+              <span className="text-xl">
+                <MdOutlineTextDecrease />
+              </span>
+            </button>
+
+            <button
+              title="Increase Font Size"
+              onClick={() =>
+                onChange((prev) => ({
+                  ...prev,
+                  fontScaleLevel: Math.min(3, (prev.fontScaleLevel || 0) + 1),
+                }))
+              }
+              className="p-2 rounded hover:bg-gray-200"
+            >
+              <span className="text-xl">
+                <MdOutlineTextIncrease />
+              </span>
+            </button>
           </div>
 
           {/* Border Width Dropdown */}
