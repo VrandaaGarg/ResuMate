@@ -41,6 +41,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import DOMPurify from "dompurify";
 
 const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
   const { isEditable } = useEditResume();
@@ -299,8 +300,8 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
               Description
             </h2>
 
-            <p
-              className={`bg-transparent ${getScaledFontClass(
+            <div
+              className={`bg-transparent resume-content ${getScaledFontClass(
                 "text-sm",
                 settings.fontScaleLevel || 0
               )} outline-none w-full whitespace-pre-line`}
@@ -308,9 +309,10 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                 textAlign: settings.descriptionAlign || "left",
                 color: settings.textColors?.["h3"] || "text-blue-200",
               }}
-            >
-              {resume.description}
-            </p>
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(resume.description),
+              }}
+            />
           </div>
         )}
       </div>
@@ -509,15 +511,16 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
             </div>
 
             <p
-              className="mt-1 text-gray-800 whitespace-pre-line"
+              className="resume-content text-gray-800 "
               style={{
                 textAlign: settings.descriptionAlign || "left",
                 color:
                   settings.mainTextColors?.["h3"] || defaultMainTextColor("h3"),
               }}
-            >
-              {exp.description}
-            </p>
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(exp.description),
+              }}
+            />
           </div>
         ))}
       </section>
@@ -568,7 +571,12 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                 {proj.name}
               </p>
 
-              <div className="text-sm">
+              <div
+                className={`${getScaledFontClass(
+                  "text-sm",
+                  settings.fontScaleLevel || 0
+                )}`}
+              >
                 {(proj.demo || proj.github) && (
                   <span>
                     (
@@ -605,24 +613,22 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
 
             <div
               className={`mt-1 ${getScaledFontClass(
-                "text-xs",
+                "text-sm",
                 settings.fontScaleLevel || 0
               )} text-gray-700 whitespace-pre-line`}
             >
-              {proj.description?.split("\n").map((line, idx) => (
-                <p
-                  key={idx}
-                  className="mb-1"
-                  style={{
-                    textAlign: settings.descriptionAlign || "left",
-                    color:
-                      settings.mainTextColors?.["h3"] ||
-                      defaultMainTextColor("h3"),
-                  }}
-                >
-                  {line}
-                </p>
-              ))}
+              <div
+                className="mb-1 resume-content"
+                style={{
+                  textAlign: settings.descriptionAlign || "left",
+                  color:
+                    settings.mainTextColors?.["h3"] ||
+                    defaultMainTextColor("h3"),
+                }}
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(proj.description),
+                }}
+              />
             </div>
           </div>
         ))}
@@ -645,7 +651,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
         </h2>
 
         <div
-          className={`flex gap-6 w-full mb-4 ${
+          className={`flex gap-6 w-full${
             settings.descriptionAlign === "center"
               ? "justify-center"
               : settings.descriptionAlign === "right"
@@ -720,7 +726,13 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                   settings.mainTextColors?.["h2"] || defaultMainTextColor("h2"),
               }}
             >
-              <strong>{ach.title}</strong> – {ach.description}
+              <strong>{ach.title}</strong> –{" "}
+              <span
+                className="resume-content"
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(ach.description),
+                }}
+              />
             </li>
           ))}
         </ul>
