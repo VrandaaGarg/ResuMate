@@ -4,7 +4,7 @@ import { useEditResume } from "../../Contexts/EditResumeContext";
 import { BsBorderWidth, BsBoundingBoxCircles } from "react-icons/bs";
 import { TbBorderCornerPill } from "react-icons/tb";
 import { BiShowAlt } from "react-icons/bi";
-import { FaEye, FaEyeSlash, FaFillDrip, FaFont } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaFillDrip, FaFont, FaLink } from "react-icons/fa";
 import { IoReorderThreeSharp } from "react-icons/io5";
 import {
   MdFormatAlignLeft,
@@ -13,6 +13,7 @@ import {
   MdFormatAlignRight,
   MdOutlineTextDecrease,
   MdOutlineTextIncrease,
+  MdOutlineColorize,
 } from "react-icons/md";
 import {
   DndContext,
@@ -29,7 +30,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
-const ClassicTemplate = ({ resume, onChange }) => {
+const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
   const { isEditable } = useEditResume();
   const sensors = useSensors(useSensor(PointerSensor));
   const [openDropdown, setOpenDropdown] = useState(null); // values: "toggle", "font", "reorder", etc.
@@ -90,8 +91,8 @@ const ClassicTemplate = ({ resume, onChange }) => {
   };
 
   useEffect(() => {
-    if (!resume.visibleSections) {
-      onChange((prev) => ({
+    if (!settings.visibleSections) {
+      onSettingsChange((prev) => ({
         ...prev,
         visibleSections: {
           name: true,
@@ -107,13 +108,37 @@ const ClassicTemplate = ({ resume, onChange }) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (!settings.sectionOrder) {
+      onSettingsChange((prev) => ({
+        ...prev,
+        sectionOrder: [
+          "name",
+          "details",
+          "description",
+          "education",
+          "skills",
+          "projects",
+          "experience",
+          "achievements",
+        ],
+      }));
+    }
+  }, []);
+
+  const hasAnyProjectLink =
+    resume.contact?.email ||
+    resume.contact?.linkedin ||
+    resume.contact?.github ||
+    resume.projects?.some((proj) => proj.demo || proj.github);
+
   const sectionMap = {
     name: (
       <div className="text-center">
         <h1
           className={`${getScaledFontClass(
             "text-4xl",
-            resume.fontScaleLevel || 0
+            settings.fontScaleLevel || 0
           )} font-bold w-full inline-block`}
         >
           {resume.name}
@@ -126,7 +151,7 @@ const ClassicTemplate = ({ resume, onChange }) => {
         <p
           className={`${getScaledFontClass(
             "text-sm",
-            resume.fontScaleLevel || 0
+            settings.fontScaleLevel || 0
           )} text-gray-700`}
         >
           {[
@@ -136,13 +161,15 @@ const ClassicTemplate = ({ resume, onChange }) => {
                 href={`mailto:${resume.contact.email}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600"
+                style={{ color: settings.linkColor || "#2563eb" }}
               >
                 {resume.contact.email}
               </a>
             ),
             resume.contact.location && (
-              <span className="text-blue-600">{resume.contact.location}</span>
+              <span style={{ color: settings.linkColor || "#2563eb" }}>
+                {resume.contact.location}
+              </span>
             ),
           ]
             .filter(Boolean)
@@ -158,8 +185,9 @@ const ClassicTemplate = ({ resume, onChange }) => {
         <div
           className={` ${getScaledFontClass(
             "text-sm",
-            resume.fontScaleLevel || 0
-          )} text-blue-600 space-x-1`}
+            settings.fontScaleLevel || 0
+          )}  space-x-1`}
+          style={{ color: settings.linkColor || "#2563eb" }}
         >
           {resume.contact.github && (
             <>
@@ -191,11 +219,11 @@ const ClassicTemplate = ({ resume, onChange }) => {
     ),
 
     description: (
-      <div style={{ textAlign: resume.descriptionAlign || "left" }}>
+      <div style={{ textAlign: settings.descriptionAlign || "left" }}>
         <h2
           className={`${getScaledFontClass(
             "text-lg",
-            resume.fontScaleLevel || 0
+            settings.fontScaleLevel || 0
           )} font-bold text-gray-800`}
         >
           PROFILE
@@ -203,7 +231,7 @@ const ClassicTemplate = ({ resume, onChange }) => {
         <p
           className={`text-gray-700 ${getScaledFontClass(
             "text-sm",
-            resume.fontScaleLevel || 0
+            settings.fontScaleLevel || 0
           )}`}
         >
           {resume.description}
@@ -212,11 +240,11 @@ const ClassicTemplate = ({ resume, onChange }) => {
     ),
 
     education: (
-      <div style={{ textAlign: resume.descriptionAlign || "left" }}>
+      <div style={{ textAlign: settings.descriptionAlign || "left" }}>
         <h2
           className={`${getScaledFontClass(
             "text-lg",
-            resume.fontScaleLevel || 0
+            settings.fontScaleLevel || 0
           )} font-bold text-gray-800`}
         >
           EDUCATION
@@ -224,13 +252,13 @@ const ClassicTemplate = ({ resume, onChange }) => {
         <div
           className={`flex gap-6 w-full ${getScaledFontClass(
             "text-sm",
-            resume.fontScaleLevel || 0
+            settings.fontScaleLevel || 0
           )} ${
-            resume.descriptionAlign === "center"
+            settings.descriptionAlign === "center"
               ? "justify-center"
-              : resume.descriptionAlign === "right"
+              : settings.descriptionAlign === "right"
               ? "justify-end"
-              : resume.descriptionAlign === "justify"
+              : settings.descriptionAlign === "justify"
               ? "justify-between"
               : "justify-start"
           }`}
@@ -244,7 +272,7 @@ const ClassicTemplate = ({ resume, onChange }) => {
         <p
           className={`${getScaledFontClass(
             "text-sm",
-            resume.fontScaleLevel || 0
+            settings.fontScaleLevel || 0
           )}`}
         >
           {resume.education.cgpa} CGPA
@@ -253,11 +281,11 @@ const ClassicTemplate = ({ resume, onChange }) => {
     ),
 
     skills: (
-      <div style={{ textAlign: resume.descriptionAlign || "left" }}>
+      <div style={{ textAlign: settings.descriptionAlign || "left" }}>
         <h2
           className={`${getScaledFontClass(
             "text-lg",
-            resume.fontScaleLevel || 0
+            settings.fontScaleLevel || 0
           )} font-bold text-gray-800`}
         >
           SKILLS
@@ -267,7 +295,7 @@ const ClassicTemplate = ({ resume, onChange }) => {
             key={i}
             className={`${getScaledFontClass(
               "text-sm",
-              resume.fontScaleLevel || 0
+              settings.fontScaleLevel || 0
             )}`}
           >
             <span className="font-semibold mr-2">{skill.domain}:</span>{" "}
@@ -278,11 +306,11 @@ const ClassicTemplate = ({ resume, onChange }) => {
     ),
 
     projects: (
-      <div style={{ textAlign: resume.descriptionAlign || "left" }}>
+      <div style={{ textAlign: settings.descriptionAlign || "left" }}>
         <h2
           className={`${getScaledFontClass(
             "text-lg",
-            resume.fontScaleLevel || 0
+            settings.fontScaleLevel || 0
           )} font-bold text-gray-800`}
         >
           PROJECTS
@@ -292,13 +320,13 @@ const ClassicTemplate = ({ resume, onChange }) => {
             <div
               className={`flex gap-6 w-full ${getScaledFontClass(
                 "text-sm",
-                resume.fontScaleLevel || 0
+                settings.fontScaleLevel || 0
               )} ${
-                resume.descriptionAlign === "center"
+                settings.descriptionAlign === "center"
                   ? "justify-center"
-                  : resume.descriptionAlign === "right"
+                  : settings.descriptionAlign === "right"
                   ? "justify-end"
-                  : resume.descriptionAlign === "justify"
+                  : settings.descriptionAlign === "justify"
                   ? "justify-between"
                   : "justify-start"
               }`}
@@ -313,7 +341,8 @@ const ClassicTemplate = ({ resume, onChange }) => {
                         href={proj.demo}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="underline text-blue-900"
+                        className="underline "
+                        style={{ color: settings.linkColor || "#2563eb" }}
                       >
                         Live Demo
                       </a>
@@ -326,7 +355,8 @@ const ClassicTemplate = ({ resume, onChange }) => {
                         href={proj.github}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="underline text-blue-900"
+                        className="underline "
+                        style={{ color: settings.linkColor || "#2563eb" }}
                       >
                         GitHub
                       </a>
@@ -338,10 +368,10 @@ const ClassicTemplate = ({ resume, onChange }) => {
             </div>
 
             {/* Description */}
-            <p
+            <div
               className={`mt-1 text-gray-700 ${getScaledFontClass(
                 "text-sm",
-                resume.fontScaleLevel || 0
+                settings.fontScaleLevel || 0
               )}`}
             >
               {proj.description?.split("\n").map((line, idx) => (
@@ -349,18 +379,18 @@ const ClassicTemplate = ({ resume, onChange }) => {
                   {line}
                 </p>
               ))}
-            </p>
+            </div>
           </div>
         ))}
       </div>
     ),
 
     experience: (
-      <div style={{ textAlign: resume.descriptionAlign || "left" }}>
+      <div style={{ textAlign: settings.descriptionAlign || "left" }}>
         <h2
           className={`${getScaledFontClass(
             "text-lg",
-            resume.fontScaleLevel || 0
+            settings.fontScaleLevel || 0
           )} font-bold text-gray-800`}
         >
           EXPERIENCE
@@ -371,16 +401,16 @@ const ClassicTemplate = ({ resume, onChange }) => {
               key={i}
               className={`${getScaledFontClass(
                 "text-sm",
-                resume.fontScaleLevel || 0
+                settings.fontScaleLevel || 0
               )}`}
             >
               <div
                 className={`flex gap-6 w-full ${
-                  resume.descriptionAlign === "center"
+                  settings.descriptionAlign === "center"
                     ? "justify-center"
-                    : resume.descriptionAlign === "right"
+                    : settings.descriptionAlign === "right"
                     ? "justify-end"
-                    : resume.descriptionAlign === "justify"
+                    : settings.descriptionAlign === "justify"
                     ? "justify-between"
                     : "justify-start"
                 }`}
@@ -396,11 +426,11 @@ const ClassicTemplate = ({ resume, onChange }) => {
     ),
 
     achievements: (
-      <div style={{ textAlign: resume.descriptionAlign || "left" }}>
+      <div style={{ textAlign: settings.descriptionAlign || "left" }}>
         <h2
           className={`${getScaledFontClass(
             "text-lg",
-            resume.fontScaleLevel || 0
+            settings.fontScaleLevel || 0
           )} font-bold text-gray-800`}
         >
           ACHIEVEMENTS
@@ -411,7 +441,7 @@ const ClassicTemplate = ({ resume, onChange }) => {
               key={i}
               className={`${getScaledFontClass(
                 "text-sm",
-                resume.fontScaleLevel || 0
+                settings.fontScaleLevel || 0
               )}`}
             >
               <span className="font-semibold">{a.title}</span> —{" "}
@@ -442,7 +472,9 @@ const ClassicTemplate = ({ resume, onChange }) => {
               <FaFillDrip className="text-xl text-gray-700" />
               <span
                 className="absolute w-4 h-4 rounded-full border border-gray-300 right-1 top-1"
-                style={{ backgroundColor: resume.backgroundColor || "#ffffff" }}
+                style={{
+                  backgroundColor: settings.backgroundColor || "#ffffff",
+                }}
               ></span>
             </button>
 
@@ -466,13 +498,13 @@ const ClassicTemplate = ({ resume, onChange }) => {
                       <button
                         key={clr}
                         className={`w-6 h-6 rounded-full border transition-all hover:scale-105 ${
-                          clr === resume.backgroundColor
+                          clr === settings.backgroundColor
                             ? "ring-2 ring-offset-1 ring-sky-500"
                             : ""
                         }`}
                         style={{ backgroundColor: clr }}
                         onClick={() =>
-                          onChange((prev) => ({
+                          onSettingsChange((prev) => ({
                             ...prev,
                             backgroundColor: clr,
                           }))
@@ -490,7 +522,7 @@ const ClassicTemplate = ({ resume, onChange }) => {
                     <div
                       className="absolute inset-0 z-0 flex items-center justify-center rounded-full"
                       style={{
-                        backgroundColor: resume.backgroundColor || "#ffffff",
+                        backgroundColor: settings.backgroundColor || "#ffffff",
                       }}
                     >
                       <FaFillDrip className="text-gray-600/50 text-sm drop-shadow group-hover:scale-110 transition" />
@@ -498,9 +530,9 @@ const ClassicTemplate = ({ resume, onChange }) => {
 
                     <input
                       type="color"
-                      value={resume.backgroundColor || "#ffffff"}
+                      value={settings.backgroundColor || "#ffffff"}
                       onChange={(e) =>
-                        onChange((prev) => ({
+                        onSettingsChange((prev) => ({
                           ...prev,
                           backgroundColor: e.target.value,
                         }))
@@ -542,10 +574,13 @@ const ClassicTemplate = ({ resume, onChange }) => {
                 <button
                   key={value}
                   onClick={() =>
-                    onChange((prev) => ({ ...prev, descriptionAlign: value }))
+                    onSettingsChange((prev) => ({
+                      ...prev,
+                      descriptionAlign: value,
+                    }))
                   }
                   className={`p-2 rounded-md transition ${
-                    resume.descriptionAlign === value
+                    settings.descriptionAlign === value
                       ? "bg-white shadow  "
                       : "hover:bg-white/80"
                   }`}
@@ -590,11 +625,14 @@ const ClassicTemplate = ({ resume, onChange }) => {
                     <button
                       key={font}
                       onClick={() => {
-                        onChange((prev) => ({ ...prev, fontFamily: font }));
+                        onSettingsChange((prev) => ({
+                          ...prev,
+                          fontFamily: font,
+                        }));
                         setOpenDropdown(false);
                       }}
                       className={`text-sm text-left px-3 py-1 rounded hover:bg-gray-100 transition ${
-                        resume.fontFamily === font
+                        settings.fontFamily === font
                           ? "bg-sky-50 text-sky-700 font-medium"
                           : "text-gray-700"
                       }`}
@@ -608,11 +646,12 @@ const ClassicTemplate = ({ resume, onChange }) => {
             )}
           </div>
 
+          {/* Font Size Adjustments */}
           <div className="flex items-center gap-1">
             <button
               title="Decrease Font Size"
               onClick={() =>
-                onChange((prev) => ({
+                onSettingsChange((prev) => ({
                   ...prev,
                   fontScaleLevel: Math.max(-2, (prev.fontScaleLevel || 0) - 1),
                 }))
@@ -627,7 +666,7 @@ const ClassicTemplate = ({ resume, onChange }) => {
             <button
               title="Increase Font Size"
               onClick={() =>
-                onChange((prev) => ({
+                onSettingsChange((prev) => ({
                   ...prev,
                   fontScaleLevel: Math.min(3, (prev.fontScaleLevel || 0) + 1),
                 }))
@@ -672,14 +711,14 @@ const ClassicTemplate = ({ resume, onChange }) => {
                     <li key={w.value}>
                       <button
                         onClick={() => {
-                          onChange((prev) => ({
+                          onSettingsChange((prev) => ({
                             ...prev,
                             borderWidth: w.value,
                           }));
                           setOpenDropdown(false);
                         }}
                         className={`w-full justify-center h-5 px-1 py-1.5 rounded-xs flex items-center gap-5 hover:bg-sky-50 transition ${
-                          resume.borderWidth === w.value
+                          settings.borderWidth === w.value
                             ? "bg-sky-100"
                             : "text-gray-800"
                         }`}
@@ -730,9 +769,9 @@ const ClassicTemplate = ({ resume, onChange }) => {
                     Style
                   </label>
                   <select
-                    value={resume.borderStyle || "solid"}
+                    value={settings.borderStyle || "solid"}
                     onChange={(e) =>
-                      onChange((prev) => ({
+                      onSettingsChange((prev) => ({
                         ...prev,
                         borderStyle: e.target.value,
                       }))
@@ -757,9 +796,9 @@ const ClassicTemplate = ({ resume, onChange }) => {
                   </label>
                   <input
                     type="color"
-                    value={resume.borderColor || "#cbd5e1"}
+                    value={settings.borderColor || "#cbd5e1"}
                     onChange={(e) =>
-                      onChange((prev) => ({
+                      onSettingsChange((prev) => ({
                         ...prev,
                         borderColor: e.target.value,
                       }))
@@ -806,14 +845,14 @@ const ClassicTemplate = ({ resume, onChange }) => {
                     <li key={r.value}>
                       <button
                         onClick={() => {
-                          onChange((prev) => ({
+                          onSettingsChange((prev) => ({
                             ...prev,
                             borderRadius: r.value,
                           }));
                           setOpenDropdown(false);
                         }}
                         className={`w-full px-3 py-1.5 rounded-sm flex items-center gap-3 hover:bg-gray-50 transition ${
-                          resume.borderRadius === r.value
+                          settings.borderRadius === r.value
                             ? "bg-sky-50 "
                             : "text-gray-800"
                         }`}
@@ -838,6 +877,90 @@ const ClassicTemplate = ({ resume, onChange }) => {
             )}
           </div>
 
+          {/* Link Color Button */}
+          {hasAnyProjectLink && (
+            <div className="relative">
+              {/* Trigger Button */}
+              <button
+                onClick={() =>
+                  setOpenDropdown((prev) =>
+                    prev === "linkColor" ? null : "linkColor"
+                  )
+                }
+                className="p-2 rounded-md hover:bg-gray-100 transition"
+                title="Change Project Link Color"
+              >
+                <FaLink className="text-lg text-gray-700" />
+              </button>
+
+              {/* Picker Panel */}
+              {openDropdown === "linkColor" && (
+                <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl p-4 w-fit right-0">
+                  <p className="text-sm font-semibold text-gray-700 mb-3">
+                    Project Link Color
+                  </p>
+
+                  <div className="flex items-center gap-4">
+                    {/* Preset Swatches */}
+                    <div className="flex gap-2">
+                      {[
+                        "#2563eb", // blue
+                        "#7c3aed", // purple
+                        "#16a34a", // green
+                        "#f59e0b", // amber
+                        "#dc2626", // red
+                      ].map((clr) => (
+                        <button
+                          key={clr}
+                          className={`w-6 h-6 rounded-full border transition-all hover:scale-105 ${
+                            clr === settings.linkColor
+                              ? "ring-2 ring-offset-1 ring-sky-500"
+                              : ""
+                          }`}
+                          style={{ backgroundColor: clr }}
+                          onClick={() =>
+                            onSettingsChange((prev) => ({
+                              ...prev,
+                              linkColor: clr,
+                            }))
+                          }
+                          title={clr}
+                        />
+                      ))}
+                    </div>
+
+                    {/* Divider */}
+                    <div className="w-px h-6 bg-gray-300 mx-2" />
+
+                    {/* Custom Color Picker Circle */}
+                    <div className="relative w-6 h-6 rounded-full overflow-hidden border cursor-pointer group">
+                      <input
+                        type="color"
+                        value={settings.linkColor || "#2563eb"}
+                        onChange={(e) =>
+                          onSettingsChange((prev) => ({
+                            ...prev,
+                            linkColor: e.target.value,
+                          }))
+                        }
+                        className="absolute inset-0 z-10 opacity-0 cursor-pointer"
+                        title="Pick custom color"
+                      />
+                      <div
+                        className="absolute inset-0 z-0 rounded-full"
+                        style={{
+                          backgroundColor: settings.linkColor || "#2563eb",
+                        }}
+                      >
+                        <MdOutlineColorize className="text-gray-500/50 text-lg drop-shadow absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Toggle Visibility Dropdown */}
           <div className="relative">
             <button
@@ -859,8 +982,8 @@ const ClassicTemplate = ({ resume, onChange }) => {
                   </h3>
 
                   <div className="grid grid-cols-2 gap-2">
-                    {Object.keys(resume.visibleSections).map((key) => {
-                      const isVisible = resume.visibleSections[key];
+                    {Object.keys(settings.visibleSections).map((key) => {
+                      const isVisible = settings.visibleSections[key];
                       const label = key
                         .replace(/([A-Z])/g, " $1")
                         .replace(/^./, (str) => str.toUpperCase());
@@ -869,7 +992,7 @@ const ClassicTemplate = ({ resume, onChange }) => {
                         <button
                           key={key}
                           onClick={() =>
-                            onChange((prev) => ({
+                            onSettingsChange((prev) => ({
                               ...prev,
                               visibleSections: {
                                 ...prev.visibleSections,
@@ -928,26 +1051,26 @@ const ClassicTemplate = ({ resume, onChange }) => {
                     onDragEnd={({ active, over }) => {
                       if (!over || active.id === over.id) return;
 
-                      const oldIndex = resume.sectionOrder.indexOf(active.id);
-                      const newIndex = resume.sectionOrder.indexOf(over.id);
+                      const oldIndex = settings.sectionOrder.indexOf(active.id);
+                      const newIndex = settings.sectionOrder.indexOf(over.id);
                       const newOrder = arrayMove(
-                        resume.sectionOrder,
+                        settings.sectionOrder,
                         oldIndex,
                         newIndex
                       );
 
-                      onChange((prev) => ({
+                      onSettingsChange((prev) => ({
                         ...prev,
                         sectionOrder: newOrder,
                       }));
                     }}
                   >
                     <SortableContext
-                      items={resume.sectionOrder}
+                      items={settings.sectionOrder}
                       strategy={verticalListSortingStrategy}
                     >
                       <div className="space-y-1.5">
-                        {resume.sectionOrder.map((id) => (
+                        {settings.sectionOrder.map((id) => (
                           <SortableItem key={id} id={id} />
                         ))}
                       </div>
@@ -964,8 +1087,8 @@ const ClassicTemplate = ({ resume, onChange }) => {
       <div
         className="max-w-4xl mx-auto p-5 text-sm leading-relaxed space-y-5 border border-gray-200 shadow-md"
         style={{
-          fontFamily: resume.fontFamily || "Inter",
-          backgroundColor: resume.backgroundColor || "#ffffff",
+          fontFamily: settings.fontFamily || "Inter",
+          backgroundColor: settings.backgroundColor || "#ffffff",
         }}
       >
         {/* Inner Resume Container */}
@@ -973,21 +1096,21 @@ const ClassicTemplate = ({ resume, onChange }) => {
           className="p-7 flex flex-col gap-5"
           style={{
             border:
-              resume.borderWidth && resume.borderWidth !== "0px"
-                ? `${resume.borderWidth} ${resume.borderStyle || "solid"} ${
-                    resume.borderColor || "#cbd5e1"
+              settings.borderWidth && settings.borderWidth !== "0px"
+                ? `${settings.borderWidth} ${settings.borderStyle || "solid"} ${
+                    settings.borderColor || "#cbd5e1"
                   }`
                 : "none",
-            borderRadius: resume.borderRadius || "0px",
+            borderRadius: settings.borderRadius || "0px",
           }}
         >
-          {/* Dynamically Render Sections */}
-          {resume.sectionOrder.map(
-            (sectionKey) =>
-              resume.visibleSections[sectionKey] && (
-                <div key={sectionKey}>{sectionMap[sectionKey]}</div>
-              )
-          )}
+          {Array.isArray(settings?.sectionOrder) &&
+            settings.sectionOrder.map(
+              (sectionKey) =>
+                settings.visibleSections?.[sectionKey] && (
+                  <div key={sectionKey}>{sectionMap[sectionKey]}</div>
+                )
+            )}
         </div>
       </div>
     </div>

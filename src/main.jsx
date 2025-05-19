@@ -7,14 +7,23 @@ import "./index.css";
 import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "./Contexts/AuthContext";
 import { EditResumeProvider } from "./Contexts/EditResumeContext";
+import { ResumeDataProvider } from "./Contexts/ResumeDataContext";
+import { ClassicSettingProvider } from "./Contexts/ClassicSettingContext";
+import { SidebarSettingProvider } from "./Contexts/SidebarSettingContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <EditResumeProvider>
-          <App />
-        </EditResumeProvider>
+        <ResumeDataProvider>
+          <ClassicSettingProvider>
+            <SidebarSettingProvider>
+              <EditResumeProvider>
+                <App />
+              </EditResumeProvider>
+            </SidebarSettingProvider>
+          </ClassicSettingProvider>
+        </ResumeDataProvider>
       </AuthProvider>
       <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
     </BrowserRouter>

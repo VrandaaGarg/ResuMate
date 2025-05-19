@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { RxCrossCircled, RxCross1, RxCross2 } from "react-icons/rx";
+import { useResumeData } from "../Contexts/ResumeDataContext";
 import {
   FiUser,
   FiAlignLeft,
@@ -45,8 +46,8 @@ const steps = [
 
 const ResumeForm = () => {
   const navigate = useNavigate();
+  const { setResume } = useResumeData();
   const [step, setStep] = useState(0);
-
   const [formData, setFormData] = useState(() => {
     const saved = localStorage.getItem("resumeData");
     return saved
@@ -91,6 +92,7 @@ const ResumeForm = () => {
       else curr = curr[key];
     });
     setFormData(updated);
+    setResume(updated);
   };
 
   const addItem = (section, domainIndex = null) => {
@@ -169,6 +171,7 @@ const ResumeForm = () => {
 
   const saveResumeToLocal = () => {
     localStorage.setItem("resumeData", JSON.stringify(formData));
+    setResume(formData);
     toast.success("Resume saved successfully!");
     navigate("/resume");
   };

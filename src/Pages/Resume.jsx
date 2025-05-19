@@ -3,9 +3,15 @@ import React, { useEffect, useState } from "react";
 import ClassicTemplate from "../Components/Templates/ClassicTemplate";
 import SidebarTemplate from "../Components/Templates/SidebarTemplate";
 import { useEditResume } from "../Contexts/EditResumeContext";
+import { useResumeData } from "../Contexts/ResumeDataContext";
+import { useClassicSetting } from "../Contexts/ClassicSettingContext";
+import { useSidebarSetting } from "../Contexts/SidebarSettingContext";
 
 export default function Resume() {
-  const [resume, setResume] = useState(null);
+  const { resume, setResume } = useResumeData();
+  const { classicSettings, setClassicSettings } = useClassicSetting();
+  const { sidebarSettings, setSidebarSettings } = useSidebarSetting();
+
   const [selectedTemplate, setSelectedTemplate] = useState(
     () => localStorage.getItem("selectedTemplate") || "classic"
   );
@@ -16,18 +22,6 @@ export default function Resume() {
   }, [selectedTemplate]);
 
   // Load from localStorage
-  useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem("resumeData"));
-    if (saved) setResume(saved);
-  }, []);
-
-  // Save changes to localStorage
-  useEffect(() => {
-    if (resume) {
-      localStorage.setItem("resumeData", JSON.stringify(resume));
-      localStorage.setItem("resumeDataSavedAt", Date.now());
-    }
-  }, [resume]);
 
   const [sectionOrder, setSectionOrder] = useState([
     "details",
@@ -97,6 +91,8 @@ export default function Resume() {
               onChange={setResume}
               sectionOrder={sectionOrder}
               visibleSections={visibleSections}
+              settings={sidebarSettings}
+              onSettingsChange={setSidebarSettings}
             />
           )}
 
@@ -106,6 +102,8 @@ export default function Resume() {
               onChange={setResume}
               sectionOrder={sectionOrder}
               visibleSections={visibleSections}
+              settings={classicSettings}
+              onSettingsChange={setClassicSettings}
             />
           )}
         </div>
