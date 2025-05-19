@@ -6,6 +6,7 @@ import { TbBorderCornerPill } from "react-icons/tb";
 import { BiShowAlt } from "react-icons/bi";
 import { FaEye, FaEyeSlash, FaFillDrip, FaFont, FaLink } from "react-icons/fa";
 import { IoReorderThreeSharp } from "react-icons/io5";
+import DOMPurify from "dompurify";
 import {
   MdFormatAlignLeft,
   MdFormatAlignCenter,
@@ -228,14 +229,15 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
         >
           PROFILE
         </h2>
-        <p
-          className={`text-gray-700 ${getScaledFontClass(
+        <div
+          className={`resume-content text-gray-700 ${getScaledFontClass(
             "text-sm",
             settings.fontScaleLevel || 0
           )}`}
-        >
-          {resume.description}
-        </p>
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(resume.description),
+          }}
+        />
       </div>
     ),
 
@@ -369,17 +371,14 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
 
             {/* Description */}
             <div
-              className={`mt-1 text-gray-700 ${getScaledFontClass(
+              className={`resume-content text-gray-700 ${getScaledFontClass(
                 "text-sm",
                 settings.fontScaleLevel || 0
               )}`}
-            >
-              {proj.description?.split("\n").map((line, idx) => (
-                <p key={idx} className="mb-1">
-                  {line}
-                </p>
-              ))}
-            </div>
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(proj.description),
+              }}
+            />
           </div>
         ))}
       </div>
@@ -395,7 +394,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
         >
           EXPERIENCE
         </h2>
-        <ul className="list-disc pl-5 space-y-2">
+        <ul className="list-disc pl-5 ">
           {resume.experience.map((a, i) => (
             <li
               key={i}
@@ -418,7 +417,12 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                 <span className="font-semibold">{a.company}</span>
                 <span className="italic">{a.years}</span>
               </div>
-              <p className="text-gray-700">{a.description}</p>
+              <div
+                className={`resume-content  text-gray-700 `}
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(a.description),
+                }}
+              />
             </li>
           ))}
         </ul>
@@ -435,7 +439,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
         >
           ACHIEVEMENTS
         </h2>
-        <ul className="list-disc pl-5 space-y-2 ">
+        <ul className="list-disc pl-5 ">
           {resume.achievements.map((a, i) => (
             <li
               key={i}
@@ -444,8 +448,27 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                 settings.fontScaleLevel || 0
               )}`}
             >
-              <span className="font-semibold">{a.title}</span> —{" "}
-              <span className="text-gray-700">{a.description}</span>
+              <div
+                className={`flex gap-6 w-full ${
+                  settings.descriptionAlign === "center"
+                    ? "justify-center"
+                    : settings.descriptionAlign === "right"
+                    ? "justify-end"
+                    : settings.descriptionAlign === "justify"
+                    ? "justify-between"
+                    : "justify-start"
+                }`}
+              >
+                <span className="font-semibold">{a.title}</span>
+                <span className="italic">{a.year || ""}</span>
+              </div>
+
+              <div
+                className="resume-content text-gray-700"
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(a.description),
+                }}
+              />
             </li>
           ))}
         </ul>

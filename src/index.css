@@ -4,34 +4,50 @@
 
 /* src/components/Companies.css */
 
+@keyframes scrollLeft {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.input {
+  @apply w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-sky-700 transition;
+}
+.btn {
+  @apply bg-sky-700 text-white px-4 py-2 rounded hover:bg-sky-800 transition;
+}
+.btn-primary {
+  @apply flex items-center gap-2 bg-sky-700 text-white px-4 py-2 rounded hover:bg-sky-800 transition;
+}
+.btn-secondary {
+  @apply flex items-center gap-2 bg-gray-100 text-gray-800 px-4 py-2 rounded hover:bg-gray-200 transition;
+}
+
+[contenteditable] ul {
+  list-style-type: disc;
+  padding-left: 1.25rem;
+}
+
+[contenteditable] ol {
+  list-style-type: decimal;
+  padding-left: 1.25rem;
+}
+
+.resume-content ul {
+  list-style-type: disc;
+  padding-left: 1.25rem;
+}
+
+.resume-content ol {
+  list-style-type: decimal;
+  padding-left: 1.25rem;
+}
+
 .marquee-track {
-    display: flex;
-    animation: scrollLeft 30s linear infinite;
-    width: max-content;
-  }
-  
-  @keyframes scrollLeft {
-    0% {
-      transform: translateX(0%);
-    }
-    100% {
-      transform: translateX(-50%);
-    }
-  }
-
-
-  .input {
-    @apply w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-sky-700 transition;
-  }
-  .btn {
-    @apply bg-sky-700 text-white px-4 py-2 rounded hover:bg-sky-800 transition;
-  }
-  .btn-primary {
-    @apply flex items-center gap-2 bg-sky-700 text-white px-4 py-2 rounded hover:bg-sky-800 transition;
-  }
-  .btn-secondary {
-    @apply flex items-center gap-2 bg-gray-100 text-gray-800 px-4 py-2 rounded hover:bg-gray-200 transition;
-  }
-  
-  
-  
+  display: flex;
+  animation: scrollLeft 30s linear infinite;
+  width: max-content;
+}
