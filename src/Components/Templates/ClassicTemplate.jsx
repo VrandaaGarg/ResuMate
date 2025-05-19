@@ -15,6 +15,7 @@ import {
   MdOutlineTextDecrease,
   MdOutlineTextIncrease,
   MdOutlineColorize,
+  MdFormatColorText,
 } from "react-icons/md";
 import {
   DndContext,
@@ -56,6 +57,21 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
     const newIndex = Math.min(sizes.length - 1, Math.max(0, baseIndex + level));
 
     return sizes[newIndex];
+  };
+
+  const defaultTextColor = (tag) => {
+    switch (tag) {
+      case "h1":
+        return "#1e293b"; // dark slate
+      case "h2":
+        return "#334155"; // slightly lighter
+      case "h3":
+        return "#475569"; // even lighter
+      case "h4":
+        return "#64748b"; // light slate
+      default:
+        return "#000000";
+    }
   };
 
   const SortableItem = ({ id }) => {
@@ -141,6 +157,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
             "text-4xl",
             settings.fontScaleLevel || 0
           )} font-bold w-full inline-block`}
+          style={{ color: settings.TextColors?.["h1"] || "black" }}
         >
           {resume.name}
         </h1>
@@ -156,7 +173,11 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
           )} text-gray-700`}
         >
           {[
-            resume.contact.phone,
+            resume.contact.phone && (
+              <span style={{ color: settings.TextColors?.["h3"] || "#475569" }}>
+                {resume.contact.phone}
+              </span>
+            ),
             resume.contact.email && (
               <a
                 href={`mailto:${resume.contact.email}`}
@@ -226,6 +247,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
             "text-lg",
             settings.fontScaleLevel || 0
           )} font-bold text-gray-800`}
+          style={{ color: settings.TextColors?.["h2"] || "#334155" }}
         >
           PROFILE
         </h2>
@@ -234,6 +256,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
             "text-sm",
             settings.fontScaleLevel || 0
           )}`}
+          style={{ color: settings.TextColors?.["h3"] || "#475569" }}
           dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(resume.description),
           }}
@@ -248,10 +271,12 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
             "text-lg",
             settings.fontScaleLevel || 0
           )} font-bold text-gray-800`}
+          style={{ color: settings.TextColors?.["h2"] || "#334155" }}
         >
           EDUCATION
         </h2>
         <div
+          style={{ color: settings.TextColors?.["h3"] || "#475569" }}
           className={`flex gap-6 w-full ${getScaledFontClass(
             "text-sm",
             settings.fontScaleLevel || 0
@@ -276,6 +301,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
             "text-sm",
             settings.fontScaleLevel || 0
           )}`}
+          style={{ color: settings.TextColors?.["h3"] || "#475569" }}
         >
           {resume.education.cgpa} CGPA
         </p>
@@ -289,6 +315,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
             "text-lg",
             settings.fontScaleLevel || 0
           )} font-bold text-gray-800`}
+          style={{ color: settings.TextColors?.["h2"] || "#334155" }}
         >
           SKILLS
         </h2>
@@ -300,8 +327,15 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
               settings.fontScaleLevel || 0
             )}`}
           >
-            <span className="font-semibold mr-2">{skill.domain}:</span>{" "}
-            <span>{skill.languages.join(", ")}</span>
+            <span
+              className="font-semibold mr-2"
+              style={{ color: settings.TextColors?.["h3"] || "#475569" }}
+            >
+              {skill.domain}:
+            </span>{" "}
+            <span style={{ color: settings.TextColors?.["h4"] || "#64748b" }}>
+              {skill.languages.join(", ")}
+            </span>
           </div>
         ))}
       </div>
@@ -314,6 +348,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
             "text-lg",
             settings.fontScaleLevel || 0
           )} font-bold text-gray-800`}
+          style={{ color: settings.TextColors?.["h2"] || "#334155" }}
         >
           PROJECTS
         </h2>
@@ -333,7 +368,12 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                   : "justify-start"
               }`}
             >
-              <span className="font-bold">{proj.name}</span>
+              <span
+                className="font-bold"
+                style={{ color: settings.TextColors?.["h3"] || "#475569" }}
+              >
+                {proj.name}
+              </span>
               <div>
                 {(proj.demo || proj.github) && (
                   <span>
@@ -371,10 +411,11 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
 
             {/* Description */}
             <div
-              className={`resume-content text-gray-700 ${getScaledFontClass(
+              className={`resume-content  ${getScaledFontClass(
                 "text-sm",
                 settings.fontScaleLevel || 0
               )}`}
+              style={{ color: settings.TextColors?.["h4"] || "#64748b" }}
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(proj.description),
               }}
@@ -391,6 +432,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
             "text-lg",
             settings.fontScaleLevel || 0
           )} font-bold text-gray-800`}
+          style={{ color: settings.TextColors?.["h2"] || "#334155" }}
         >
           EXPERIENCE
         </h2>
@@ -404,6 +446,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
               )}`}
             >
               <div
+                style={{ color: settings.TextColors?.["h3"] || "#475569" }}
                 className={`flex gap-6 w-full ${
                   settings.descriptionAlign === "center"
                     ? "justify-center"
@@ -418,7 +461,8 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                 <span className="italic">{a.years}</span>
               </div>
               <div
-                className={`resume-content  text-gray-700 `}
+                className={`resume-content   `}
+                style={{ color: settings.TextColors?.["h4"] || "#64748b" }}
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(a.description),
                 }}
@@ -436,6 +480,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
             "text-lg",
             settings.fontScaleLevel || 0
           )} font-bold text-gray-800`}
+          style={{ color: settings.TextColors?.["h2"] || "#334155" }}
         >
           ACHIEVEMENTS
         </h2>
@@ -449,6 +494,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
               )}`}
             >
               <div
+                style={{ color: settings.TextColors?.["h3"] || "#475569" }}
                 className={`flex gap-6 w-full ${
                   settings.descriptionAlign === "center"
                     ? "justify-center"
@@ -464,7 +510,8 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
               </div>
 
               <div
-                className="resume-content text-gray-700"
+                className="resume-content "
+                style={{ color: settings.TextColors?.["h4"] || "#64748b" }}
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(a.description),
                 }}
@@ -896,6 +943,58 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                     </li>
                   ))}
                 </ul>
+              </div>
+            )}
+          </div>
+
+          {/* Text Color Button */}
+          <div className="relative group">
+            <button
+              className="p-2 rounded-md hover:bg-gray-100 transition"
+              title="Text Color"
+              onClick={() =>
+                setOpenDropdown((prev) =>
+                  prev === "TextColor" ? null : "TextColor"
+                )
+              }
+            >
+              <MdFormatColorText className="text-lg text-gray-700" />
+            </button>
+
+            {openDropdown === "TextColor" && (
+              <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl p-4 w-fit right-0">
+                {["h1", "h2", "h3", "h4"].map((tag) => (
+                  <div key={tag} className="flex items-center gap-3 mb-2">
+                    <span className="uppercase text-xs w-5">{tag}</span>
+
+                    <div className="relative w-5 h-5 rounded-full overflow-hidden border cursor-pointer group">
+                      <div
+                        className="absolute inset-0 z-0 rounded-full"
+                        style={{
+                          backgroundColor:
+                            settings.TextColors?.[tag] || defaultTextColor(tag),
+                        }}
+                      />
+                      <input
+                        type="color"
+                        value={
+                          settings.TextColors?.[tag] || defaultTextColor(tag)
+                        }
+                        onChange={(e) =>
+                          onSettingsChange((prev) => ({
+                            ...prev,
+                            TextColors: {
+                              ...prev.TextColors,
+                              [tag]: e.target.value,
+                            },
+                          }))
+                        }
+                        className="absolute inset-0 z-10 opacity-0 cursor-pointer"
+                        title={`Change ${tag.toUpperCase()} color`}
+                      />
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
           </div>
