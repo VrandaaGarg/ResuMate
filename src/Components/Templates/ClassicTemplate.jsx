@@ -1,14 +1,11 @@
 // src/Components/Templates/ClassicTemplate.jsx
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useEditResume } from "../../Contexts/EditResumeContext";
-import { useState } from "react";
-import { FaFillDrip } from "react-icons/fa";
-import { FaFont } from "react-icons/fa6"; // Add at top
-import { BsBoundingBoxCircles } from "react-icons/bs"; // At the top
-import { BsBorderWidth } from "react-icons/bs";
+import { BsBorderWidth, BsBoundingBoxCircles } from "react-icons/bs";
 import { TbBorderCornerPill } from "react-icons/tb";
 import { BiShowAlt } from "react-icons/bi";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaFillDrip, FaFont } from "react-icons/fa";
+import { IoReorderThreeSharp } from "react-icons/io5";
 import {
   DndContext,
   closestCenter,
@@ -23,13 +20,12 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { IoReorderThreeSharp } from "react-icons/io5";
 
 const ClassicTemplate = ({ resume, onChange }) => {
   const { isEditable } = useEditResume();
-  if (!resume) return null;
   const sensors = useSensors(useSensor(PointerSensor));
   const [openDropdown, setOpenDropdown] = useState(null); // values: "toggle", "font", "reorder", etc.
+  if (!resume) return null;
 
   const SortableItem = ({ id }) => {
     const {

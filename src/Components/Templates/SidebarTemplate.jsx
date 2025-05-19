@@ -5,26 +5,27 @@ import {
   MdOutlineColorize,
   MdOutlineMailOutline,
   MdOutlineColorLens,
-} from "react-icons/md";
-import { CiLocationOn, CiPhone } from "react-icons/ci";
-import {
-  FaGithub,
-  FaLinkedinIn,
-  FaChevronDown,
-  FaChevronUp,
-  FaEye,
-  FaEyeSlash,
-  FaFont,
-  FaLink,
-} from "react-icons/fa6";
-import {
   MdFormatAlignLeft,
   MdFormatAlignCenter,
   MdFormatAlignRight,
   MdFormatAlignJustify,
   MdOutlineFormatColorFill,
-  MdDragHandle,
+  MdOutlineTextIncrease,
+  MdOutlineTextDecrease,
+  MdFormatColorText,
 } from "react-icons/md";
+import { CiLocationOn, CiPhone } from "react-icons/ci";
+import {
+  FaGithub,
+  FaLinkedinIn,
+  FaEye,
+  FaEyeSlash,
+  FaFont,
+  FaLink,
+} from "react-icons/fa6";
+import { RiFontColor } from "react-icons/ri";
+import { BiShowAlt } from "react-icons/bi";
+import { IoReorderThreeSharp } from "react-icons/io5";
 import {
   DndContext,
   closestCenter,
@@ -39,23 +40,12 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { RiFontColor } from "react-icons/ri";
-import { BiShowAlt } from "react-icons/bi";
-import { IoReorderThreeSharp } from "react-icons/io5";
-import { MdFormatColorText } from "react-icons/md";
-import { MdOutlineTextIncrease, MdOutlineTextDecrease } from "react-icons/md";
 
 const SidebarTemplate = ({ resume, onChange }) => {
-  const [showBgColorPicker, setShowBgColorPicker] = useState(false);
-  const [showSkillColorPicker, setShowSkillColorPicker] = useState(false);
-  const [showFontMenu, setShowFontMenu] = useState(false);
-  const [showLinkColorPicker, setShowLinkColorPicker] = useState(false);
-  const [showColorPicker, setShowColorPicker] = useState(false);
-  const [showReorder, setShowReorder] = useState(false);
   const { isEditable } = useEditResume();
   const pointerSensor = useSensor(PointerSensor);
-  const [showMainTextColorPicker, setShowMainTextColorPicker] = useState(false);
   const sensors = useSensors(pointerSensor);
+  const [openDropdown, setOpenDropdown] = useState(null); // values: "toggle", "font", "reorder", etc.
   const sidebarSections = ["name", "details", "description", "skills"];
   const mainSections = ["experience", "projects", "education", "achievements"];
   fontScaleLevel: 0; // default level (0), can be -1, 0, +1, +2
@@ -743,7 +733,11 @@ const SidebarTemplate = ({ resume, onChange }) => {
             <button
               className="p-2 rounded-md hover:bg-gray-200 transition relative group"
               title={`Sidebar Color`}
-              onClick={() => setShowColorPicker((prev) => !prev)}
+              onClick={() =>
+                setOpenDropdown((prev) =>
+                  prev === "sidebarColor" ? null : "sidebarColor"
+                )
+              }
             >
               <MdOutlineColorize className="text-xl text-gray-700" />
               <span
@@ -753,7 +747,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
             </button>
 
             {/* Color Picker Panel */}
-            {showColorPicker && (
+            {openDropdown === "sidebarColor" && (
               <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl p-4 w-fit right-1/2">
                 <p className="text-sm font-semibold text-gray-700 mb-3">
                   Sidebar Color
@@ -901,7 +895,11 @@ const SidebarTemplate = ({ resume, onChange }) => {
             <button
               className="p-2 rounded-md hover:bg-gray-200 transition relative group"
               title={` Background Color`}
-              onClick={() => setShowBgColorPicker((prev) => !prev)}
+              onClick={() =>
+                setOpenDropdown((prev) =>
+                  prev === "mainColor" ? null : "mainColor"
+                )
+              }
             >
               <MdOutlineColorLens className="text-xl text-gray-700" />
               <span
@@ -911,7 +909,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
             </button>
 
             {/* Picker panel */}
-            {showBgColorPicker && (
+            {openDropdown === "mainColor" && (
               <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl p-4 w-fit right-0">
                 <p className="text-sm font-semibold text-gray-700 mb-3">
                   Background Color
@@ -977,7 +975,11 @@ const SidebarTemplate = ({ resume, onChange }) => {
           {resume.skills && resume.skills.length > 0 && (
             <div className="relative">
               <button
-                onClick={() => setShowSkillColorPicker((prev) => !prev)}
+                onClick={() =>
+                  setOpenDropdown((prev) =>
+                    prev === "skillColor" ? null : "skillColor"
+                  )
+                }
                 className="p-2 rounded-md hover:bg-gray-200 transition group relative"
                 title="Customize Skill Colors"
               >
@@ -985,7 +987,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
               </button>
 
               {/* Popover Panel */}
-              {showSkillColorPicker && (
+              {openDropdown === "skillColor" && (
                 <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-xl shadow-xl p-4 w-max right-0">
                   <p className="text-sm font-semibold text-gray-700 mb-3">
                     Skill Bar Colors
@@ -1038,7 +1040,9 @@ const SidebarTemplate = ({ resume, onChange }) => {
           <div className="relative">
             {/* Trigger Button */}
             <button
-              onClick={() => setShowFontMenu((prev) => !prev)}
+              onClick={() =>
+                setOpenDropdown((prev) => (prev === "font" ? null : "font"))
+              }
               title="Change Font"
               className="p-2 rounded-md hover:bg-gray-100  transition"
             >
@@ -1046,7 +1050,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
             </button>
 
             {/* Dropdown Menu */}
-            {showFontMenu && (
+            {openDropdown === "font" && (
               <div className="absolute z-50 mt-2 bg-white border border-gray-200 shadow-lg rounded-lg p-3 w-52 right-0">
                 <p className="text-sm font-semibold text-gray-700 mb-2">
                   Select Font
@@ -1066,7 +1070,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
                       key={font}
                       onClick={() => {
                         onChange((prev) => ({ ...prev, fontFamily: font }));
-                        setShowFontMenu(false);
+                        setOpenDropdown(false);
                       }}
                       className={`text-sm text-left px-3 py-1 rounded hover:bg-gray-100 transition ${
                         resume.fontFamily === font
@@ -1088,7 +1092,11 @@ const SidebarTemplate = ({ resume, onChange }) => {
             <div className="relative">
               {/* Trigger Button */}
               <button
-                onClick={() => setShowLinkColorPicker((prev) => !prev)}
+                onClick={() =>
+                  setOpenDropdown((prev) =>
+                    prev === "linkColor" ? null : "linkColor"
+                  )
+                }
                 className="p-2 rounded-md hover:bg-gray-100 transition"
                 title="Change Project Link Color"
               >
@@ -1096,7 +1104,7 @@ const SidebarTemplate = ({ resume, onChange }) => {
               </button>
 
               {/* Picker Panel */}
-              {showLinkColorPicker && (
+              {openDropdown === "linkColor" && (
                 <div className="absolute right-0 mt-2 bg-white border border-gray-200 rounded-md shadow-md px-4 py-3 z-50 w-52">
                   <p className="text-xs font-semibold text-gray-700 mb-2">
                     Project Link Color
@@ -1140,13 +1148,17 @@ const SidebarTemplate = ({ resume, onChange }) => {
             <button
               className="p-2 rounded-md hover:bg-gray-100 transition"
               title="Sidebar Text Color"
-              onClick={() => setShowTextColorPicker((prev) => !prev)}
+              onClick={() =>
+                setOpenDropdown((prev) =>
+                  prev === "textSidebar" ? null : "textSidebar"
+                )
+              }
             >
               <RiFontColor className="text-lg text-gray-700" />
             </button>
 
             {/* Color Panel */}
-            {showTextColorPicker && (
+            {openDropdown === "textSidebar" && (
               <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl p-4 w-fit right-0">
                 {/* <p className="text-xs font-medium text-gray-600 mb-2">
                   Heading & Text Colors
@@ -1193,12 +1205,16 @@ const SidebarTemplate = ({ resume, onChange }) => {
             <button
               className="p-2 rounded-md hover:bg-gray-100 transition"
               title="Mainbar Text Color"
-              onClick={() => setShowMainTextColorPicker((prev) => !prev)}
+              onClick={() =>
+                setOpenDropdown((prev) =>
+                  prev === "mainTextColor" ? null : "mainTextColor"
+                )
+              }
             >
               <MdFormatColorText className="text-lg text-gray-700" />
             </button>
 
-            {showMainTextColorPicker && (
+            {openDropdown === "mainTextColor" && (
               <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl p-4 w-fit right-0">
                 {/* <p className="text-xs font-medium text-gray-600 mb-2">
                   Mainbar Text Colors
@@ -1247,12 +1263,16 @@ const SidebarTemplate = ({ resume, onChange }) => {
             <button
               className="p-2 rounded-md hover:bg-gray-100 transition"
               title="Show/Hide Sections"
-              onClick={() => setshowToggleSection((prev) => !prev)}
+              onClick={() =>
+                setOpenDropdown((prev) =>
+                  prev === "toggleSection" ? null : "toggleSection"
+                )
+              }
             >
               <BiShowAlt className="text-xl text-gray-700" />
             </button>
 
-            {showToggleSection && (
+            {openDropdown === "toggleSection" && (
               <div className="absolute right-0 mt-2 z-50 w-72 max-h-72 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg">
                 <div className="p-4">
                   <h3 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
@@ -1301,12 +1321,16 @@ const SidebarTemplate = ({ resume, onChange }) => {
             <button
               className="p-2 rounded-md hover:bg-gray-100 transition"
               title="Reorder Sections"
-              onClick={() => setShowReorder((prev) => !prev)}
+              onClick={() =>
+                setOpenDropdown((prev) =>
+                  prev === "reorder" ? null : "reorder"
+                )
+              }
             >
               <IoReorderThreeSharp className="text-xl text-gray-700" />
             </button>
 
-            {showReorder && (
+            {openDropdown === "reorder" && (
               <div className="absolute right-0 mt-2 z-50 w-64 max-h-80 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg">
                 <div className="p-4">
                   <h3 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
