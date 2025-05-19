@@ -7,6 +7,12 @@ import { BiShowAlt } from "react-icons/bi";
 import { FaEye, FaEyeSlash, FaFillDrip, FaFont } from "react-icons/fa";
 import { IoReorderThreeSharp } from "react-icons/io5";
 import {
+  MdFormatAlignLeft,
+  MdFormatAlignCenter,
+  MdFormatAlignJustify,
+  MdFormatAlignRight,
+} from "react-icons/md";
+import {
   DndContext,
   closestCenter,
   PointerSensor,
@@ -145,29 +151,42 @@ const ClassicTemplate = ({ resume, onChange }) => {
     ),
 
     description: (
-      <div>
+      <div style={{ textAlign: resume.descriptionAlign || "left" }}>
         <h2 className="text-lg font-bold text-gray-800">PROFILE</h2>
         <p className="text-gray-700">{resume.description}</p>
       </div>
     ),
 
     education: (
-      <div>
+      <div style={{ textAlign: resume.descriptionAlign || "left" }}>
         <h2 className="text-lg font-bold text-gray-800">EDUCATION</h2>
-        <p className="font-semibold">{resume.education.college}</p>
-        <p className="italic">
-          {resume.education.startYear} – {resume.education.endYear} —{" "}
-          {resume.education.cgpa} CGPA
-        </p>
+        <div
+          className={`flex gap-6 w-full ${
+            resume.descriptionAlign === "center"
+              ? "justify-center"
+              : resume.descriptionAlign === "right"
+              ? "justify-end"
+              : resume.descriptionAlign === "justify"
+              ? "justify-between"
+              : "justify-start"
+          }`}
+        >
+          <p className="font-semibold">{resume.education.college}</p>
+          <p className="italic">
+            {" "}
+            {resume.education.startYear} – {resume.education.endYear}
+          </p>
+        </div>
+        <p className="">{resume.education.cgpa} CGPA</p>
       </div>
     ),
 
     skills: (
-      <div>
+      <div style={{ textAlign: resume.descriptionAlign || "left" }}>
         <h2 className="text-lg font-bold text-gray-800">SKILLS</h2>
         {resume.skills.map((skill, i) => (
           <div key={i}>
-            <span className="font-semibold">{skill.domain}:</span>{" "}
+            <span className="font-semibold mr-2">{skill.domain}:</span>{" "}
             <span>{skill.languages.join(", ")}</span>
           </div>
         ))}
@@ -175,55 +194,85 @@ const ClassicTemplate = ({ resume, onChange }) => {
     ),
 
     projects: (
-      <div>
+      <div style={{ textAlign: resume.descriptionAlign || "left" }}>
         <h2 className="text-lg font-bold text-gray-800">PROJECTS</h2>
         {resume.projects.map((proj, i) => (
           <div key={i} className="mb-3">
-            <div className="flex justify-between">
+            <div
+              className={`flex gap-6 w-full ${
+                resume.descriptionAlign === "center"
+                  ? "justify-center"
+                  : resume.descriptionAlign === "right"
+                  ? "justify-end"
+                  : resume.descriptionAlign === "justify"
+                  ? "justify-between"
+                  : "justify-start"
+              }`}
+            >
               <span className="font-bold">{proj.name}</span>
-              <span className="italic">
-                {proj.month} {proj.year}
-              </span>
-            </div>
-
-            {/* Project Links */}
-            <div className="text-sm text-blue-600 space-x-2">
-              {proj.demo && (
-                <a
-                  href={proj.demo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline"
-                >
-                  Live Demo
-                </a>
-              )}
-              {proj.github && (
-                <a
-                  href={proj.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline"
-                >
-                  GitHub
-                </a>
-              )}
+              <div className="text-sm">
+                {(proj.demo || proj.github) && (
+                  <span>
+                    (
+                    {proj.demo && (
+                      <a
+                        href={proj.demo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline text-blue-900"
+                      >
+                        Live Demo
+                      </a>
+                    )}
+                    {proj.demo && proj.github && (
+                      <span className="mx-1">|</span>
+                    )}
+                    {proj.github && (
+                      <a
+                        href={proj.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline text-blue-900"
+                      >
+                        GitHub
+                      </a>
+                    )}
+                    )
+                  </span>
+                )}
+              </div>
             </div>
 
             {/* Description */}
-            <p className="mt-1 text-gray-700">{proj.description}</p>
+            <p className="mt-1 text-gray-700">
+              {proj.description?.split("\n").map((line, idx) => (
+                <p key={idx} className="mb-1">
+                  {line}
+                </p>
+              ))}
+            </p>
           </div>
         ))}
       </div>
     ),
 
     experience: (
-      <div>
+      <div style={{ textAlign: resume.descriptionAlign || "left" }}>
         <h2 className="text-lg font-bold text-gray-800">EXPERIENCE</h2>
         <ul className="list-disc pl-5 space-y-2">
           {resume.experience.map((a, i) => (
             <li key={i}>
-              <div className="flex justify-between">
+              <div
+                className={`flex gap-6 w-full ${
+                  resume.descriptionAlign === "center"
+                    ? "justify-center"
+                    : resume.descriptionAlign === "right"
+                    ? "justify-end"
+                    : resume.descriptionAlign === "justify"
+                    ? "justify-between"
+                    : "justify-start"
+                }`}
+              >
                 <span className="font-semibold">{a.company}</span>
                 <span className="italic">{a.years}</span>
               </div>
@@ -235,7 +284,7 @@ const ClassicTemplate = ({ resume, onChange }) => {
     ),
 
     achievements: (
-      <div>
+      <div style={{ textAlign: resume.descriptionAlign || "left" }}>
         <h2 className="text-lg font-bold text-gray-800">ACHIEVEMENTS</h2>
         <ul className="list-disc pl-5 space-y-2">
           {resume.achievements.map((a, i) => (
@@ -338,6 +387,49 @@ const ClassicTemplate = ({ resume, onChange }) => {
                 </div>
               </div>
             )}
+          </div>
+
+          {/* Description Alignment */}
+          <div className="flex items-center gap-3">
+            <div className="flex gap-2 bg-gray-100 p-1 rounded-md">
+              {[
+                {
+                  icon: <MdFormatAlignLeft />,
+                  value: "left",
+                  title: "Align left",
+                },
+                {
+                  icon: <MdFormatAlignCenter />,
+                  value: "center",
+                  title: "Align center",
+                },
+                {
+                  icon: <MdFormatAlignRight />,
+                  value: "right",
+                  title: "Align right",
+                },
+                {
+                  icon: <MdFormatAlignJustify />,
+                  value: "justify",
+                  title: "Align justify",
+                },
+              ].map(({ icon, value }) => (
+                <button
+                  key={value}
+                  onClick={() =>
+                    onChange((prev) => ({ ...prev, descriptionAlign: value }))
+                  }
+                  className={`p-2 rounded-md transition ${
+                    resume.descriptionAlign === value
+                      ? "bg-white shadow  "
+                      : "hover:bg-white/80"
+                  }`}
+                  title={`Align ${value}`}
+                >
+                  {icon}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Font Selector */}
