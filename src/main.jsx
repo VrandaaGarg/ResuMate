@@ -19,7 +19,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <ClassicSettingProvider>
             <SidebarSettingProvider>
               <EditResumeProvider>
-                <App />
+                <div className="overflow-x-hidden">
+                  <App />
+                </div>
               </EditResumeProvider>
             </SidebarSettingProvider>
           </ClassicSettingProvider>

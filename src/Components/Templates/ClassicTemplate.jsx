@@ -202,36 +202,35 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
               </span>
             ))}
         </p>
-
         {/* Links */}
         <div
-          className={` ${getScaledFontClass(
+          className={`${getScaledFontClass(
             "text-sm",
             settings.fontScaleLevel || 0
-          )}  space-x-1`}
+          )} break-words whitespace-normal flex flex-wrap justify-center gap-x-2 gap-y-1`}
           style={{ color: settings.linkColor || "#2563eb" }}
         >
           {resume.contact.github && (
-            <>
-              <a
-                href={resume.contact.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline"
-              >
-                {resume.contact.github}
-              </a>
-              {resume.contact.linkedin && (
-                <span className="text-gray-700">|</span>
-              )}
-            </>
+            <a
+              href={resume.contact.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline break-all"
+            >
+              {resume.contact.github}
+            </a>
           )}
+
+          {resume.contact.github && resume.contact.linkedin && (
+            <span className="text-gray-700 hidden sm:inline">|</span>
+          )}
+
           {resume.contact.linkedin && (
             <a
               href={resume.contact.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="underline"
+              className="underline break-all"
             >
               {resume.contact.linkedin}
             </a>
@@ -563,7 +562,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
   return (
     <div className="">
       {isEditable && (
-        <div className="w-full bg-white justify-center border border-gray-200 shadow-sm rounded-md px-6 py-3 mb-6 flex flex-wrap items-center gap-3">
+        <div className="w-full bg-white justify-center border border-gray-200 shadow-sm rounded-md px-1 md:px-6 py-3 mb-6 flex flex-wrap items-center gap-1.5 md:gap-3">
           {/* Resume Background Color */}
           <div className="relative">
             {/* Color Icon Button */}
@@ -655,7 +654,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
 
           {/* Description Alignment */}
           <div className="flex items-center gap-3">
-            <div className="flex gap-2 bg-gray-100 p-1 rounded-md">
+            <div className="flex gap-1 md:gap-2 bg-gray-100 p-1 rounded-md">
               {[
                 {
                   icon: <MdFormatAlignLeft />,
@@ -1244,7 +1243,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
 
       {/* Resume Preview */}
       <div
-        className="max-w-4xl mx-auto p-5 text-sm leading-relaxed space-y-5 border border-gray-200 shadow-md"
+        className="w-full mx-auto p-2 md:p-5 text-sm leading-relaxed space-y-5 border border-gray-200 shadow-md"
         style={{
           fontFamily: settings.fontFamily || "Inter",
           backgroundColor: settings.backgroundColor || "#ffffff",
@@ -1252,7 +1251,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
       >
         {/* Inner Resume Container */}
         <div
-          className="p-7 flex flex-col gap-5"
+          className="p-2 md:p-7 flex flex-col gap-1.5 md:gap-5"
           style={{
             border:
               settings.borderWidth && settings.borderWidth !== "0px"

@@ -50,41 +50,46 @@ export default function Resume() {
   }
 
   return (
-    <div className="min-h-screen p-6 bg-gray-100">
+    <div className="min-h-screen p-2.5 md:p-6 bg-gray-100">
       <div className="max-w-5xl mx-auto space-y-6">
         {/* Header */}
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-start">
           <div>
-            <h1 className="text-2xl font-bold text-sky-800">Your Resume</h1>
+            <h1 className="text-sm md:text-2xl font-bold text-sky-800">
+              Your Resume
+            </h1>
             <p className="text-sm text-gray-500">
               Mode: {isEditable ? "Edit" : "View"}
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
-            <label className="text-sm font-medium text-gray-700">
-              Template:
-            </label>
-            <select
-              value={selectedTemplate}
-              onChange={(e) => setSelectedTemplate(e.target.value)}
-              className="border border-gray-300 rounded px-3 py-1 text-sm"
-            >
-              <option value="classic">Classic</option>
-              <option value="sidebar">Sidebar</option>
-            </select>
-
-            <button
-              onClick={toggleEditing}
-              className="px-4 py-1.5 text-sm rounded bg-sky-700 hover:bg-sky-800 text-white font-medium transition"
-            >
-              {isEditable ? "Disable Edit" : "Edit"}
-            </button>
+          <div className="flex gap-2.5">
+            <div className="flex flex-col md:flex-row items-center gap-1  md:gap-3">
+              <label className="text-xs md:text-sm font-medium text-gray-700">
+                Template:
+              </label>
+              <select
+                value={selectedTemplate}
+                onChange={(e) => setSelectedTemplate(e.target.value)}
+                className="border border-gray-300 rounded px-2 md:px-3 py-1 text-xs md:text-sm"
+              >
+                <option value="classic">Classic</option>
+                <option value="sidebar">Sidebar</option>
+              </select>
+            </div>
+            <div className="">
+              <button
+                onClick={toggleEditing}
+                className="px-2 md:px-4 py-1 md:py-1.5 text-xs md:text-sm rounded bg-sky-700 hover:bg-sky-800 text-white font-medium transition"
+              >
+                {isEditable ? "Disable Edit" : "Edit"}
+              </button>
+            </div>
           </div>
         </div>
 
         {/* Resume Preview */}
-        <div className="bg-white shadow p-6 rounded-lg relative">
+        <div className="bg-white shadow p-2.5 md:p-6 rounded-lg relative">
           {selectedTemplate === "sidebar" && (
             <SidebarTemplate
               resume={resume}
