@@ -27,14 +27,25 @@
   @apply flex items-center gap-2 bg-gray-100 text-gray-800 px-4 py-2 rounded hover:bg-gray-200 transition;
 }
 
-[contenteditable] ul,
-[contenteditable] ol,
-.resume-content ul,
-.resume-content ol {
+[contenteditable] ul {
   list-style-type: disc;
-  padding-left: 1.25rem; /* default for desktop */
+  padding-left: 1.25rem;
 }
 
+[contenteditable] ol {
+  list-style-type: decimal;
+  padding-left: 1.25rem;
+}
+
+.resume-content ul {
+  list-style-type: disc;
+  padding-left: 1.25rem;
+}
+
+.resume-content ol {
+  list-style-type: decimal;
+  padding-left: 1.25rem;
+}
 /* Reduce left margin on small screens */
 @media (max-width: 640px) {
   [contenteditable] ul,

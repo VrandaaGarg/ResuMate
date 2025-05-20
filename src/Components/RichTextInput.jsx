@@ -1,34 +1,39 @@
-import React, { useRef, useEffect } from "react";
-import { FaBold, FaItalic, FaUnderline, FaListOl } from "react-icons/fa";
-import { motion, AnimatePresence } from "framer-motion";
-import { FaListUl } from "react-icons/fa";
+import React, { useRef, useEffect, useState } from "react";
+import {
+  FaBold,
+  FaItalic,
+  FaUnderline,
+  FaListOl,
+  FaListUl,
+} from "react-icons/fa";
+import { motion } from "framer-motion";
 
 const RichTextInput = ({ value, onChange, placeholder = "Type here..." }) => {
   const ref = useRef();
+  const [isEmpty, setIsEmpty] = useState(true);
 
-  // Load existing HTML into editable box
   useEffect(() => {
     if (ref.current && value !== ref.current.innerHTML) {
       ref.current.innerHTML = value || "";
     }
+    setIsEmpty(!value || value === "<br>");
   }, [value]);
 
-  // Save edited HTML
   const handleInput = () => {
     if (ref.current) {
-      onChange(ref.current.innerHTML);
+      const html = ref.current.innerHTML;
+      setIsEmpty(!html || html === "<br>");
+      onChange(html);
     }
   };
 
-  // Add formatting
   const format = (cmd) => {
-    // Fix for list issues in some browsers
     document.execCommand("defaultParagraphSeparator", false, "p");
     document.execCommand(cmd, false, null);
   };
 
   return (
-    <div className="space-y-2 w-full">
+    <div className="space-y-2 w-full relative">
       {/* Toolbar */}
       <motion.div
         layout
@@ -62,7 +67,6 @@ const RichTextInput = ({ value, onChange, placeholder = "Type here..." }) => {
         >
           <FaListOl className="text-gray-700" />
         </button>
-
         <button
           onClick={() => format("insertUnorderedList")}
           title="Bullet List"
@@ -73,20 +77,23 @@ const RichTextInput = ({ value, onChange, placeholder = "Type here..." }) => {
       </motion.div>
 
       {/* Editable Field */}
-      <motion.div
-        layout
-        ref={ref}
-        contentEditable
-        suppressContentEditableWarning
-        spellCheck={false}
-        onInput={handleInput}
-        className="min-h-[100px] border border-gray-300 rounded p-3 focus:outline-none text-sm text-gray-800 bg-white transition"
-        style={{
-          minHeight: "100px",
-        }}
-      >
-        {/* Fallback empty content if needed */}
-      </motion.div>
+      <div className="relative">
+        {isEmpty && (
+          <div className="absolute left-3 top-3 text-gray-400 text-sm pointer-events-none select-none">
+            {placeholder}
+          </div>
+        )}
+        <motion.div
+          layout
+          ref={ref}
+          contentEditable
+          suppressContentEditableWarning
+          spellCheck={false}
+          onInput={handleInput}
+          className="min-h-[100px] border border-gray-300 rounded p-3 focus:outline-none text-sm text-gray-800 bg-white transition"
+          style={{ whiteSpace: "pre-wrap" }}
+        />
+      </div>
     </div>
   );
 };
