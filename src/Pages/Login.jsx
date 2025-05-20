@@ -34,7 +34,7 @@ export default function Login() {
 
   return (
     <motion.div
-      className="h-[90lvh] flex items-center justify-center bg-background px-4"
+      className="py-9 md:py-20 flex items-center justify-center bg-background px-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
