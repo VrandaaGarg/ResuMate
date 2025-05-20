@@ -180,7 +180,7 @@ const Home = () => {
   return (
     <div className="bg-gray-100 overflow-x-hidden">
       {/* Hero Section */}
-      <section className="relative h-[90lvh] px-6 md:px-20 py-9 flex flex-col items-center justify-center text-center gap-8 bg-gray-100 ">
+      <section className="relative h-[95lvh] px-6 md:px-20 py-9 flex flex-col items-center justify-center text-center gap-8 bg-gray-100 ">
         {/* Gradient Background Blobs */}
         <div className="absolute -top-24 -left-20 w-80 h-80 bg-blue-300 opacity-40 rounded-full blur-3xl z-0" />
         <div className="absolute -bottom-28 -right-32 w-96 h-96 bg-green-200 opacity-20 rounded-full blur-3xl z-0" />
@@ -193,13 +193,13 @@ const Home = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          <h1 className="text-4xl md:text-5xl mb-4 [font-family:'Lilita_One',cursive] leading-tight">
+          <h1 className="text-3xl md:text-5xl mb-4 [font-family:'Lilita_One',cursive] leading-tight">
             Craft a Winning Resume with <br />
-            <span className="text-6xl text-black font-extrabold">
+            <span className="text-5xl md:text-6xl text-black font-extrabold">
               Resu<span className="text-sky-700">Mate</span>
             </span>
           </h1>
-          <p className="text-lg mb-6 text-gray-800">
+          <p className="text-sm md:text-lg mb-6 text-gray-800">
             AI-powered platform that helps users build, optimize, and perfect
             their resumes to stand out in today’s competitive job market. With a
             live editor, customizable formatting, and Gemini AI integration,
