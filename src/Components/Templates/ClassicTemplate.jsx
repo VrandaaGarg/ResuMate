@@ -37,26 +37,44 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
   const sensors = useSensors(useSensor(PointerSensor));
   const [openDropdown, setOpenDropdown] = useState(null); // values: "toggle", "font", "reorder", etc.
   if (!resume) return null;
+  const canIncrease = settings.fontScaleLevel < 10;
+  const canDecrease = settings.fontScaleLevel > -10;
+
   fontScaleLevel: 0; // default level (0), can be -1, 0, +1, +2
 
-  const getScaledFontClass = (base, level) => {
-    const sizes = [
-      "text-xs",
-      "text-sm",
-      "text-base",
-      "text-lg",
-      "text-xl",
-      "text-2xl",
-      "text-3xl",
-      "text-4xl",
-      "text-5xl",
-      "text-6xl",
-    ];
+  // const getScaledFontClass = (base, level) => {
+  //   const sizes = [
+  //     "text-xs",
+  //     "text-sm",
+  //     "text-base",
+  //     "text-lg",
+  //     "text-xl",
+  //     "text-2xl",
+  //     "text-3xl",
+  //     "text-4xl",
+  //     "text-5xl",
+  //     "text-6xl",
+  //   ];
 
-    const baseIndex = sizes.indexOf(base);
-    const newIndex = Math.min(sizes.length - 1, Math.max(0, baseIndex + level));
+  //   const baseIndex = sizes.indexOf(base);
+  //   const newIndex = Math.min(sizes.length - 1, Math.max(0, baseIndex + level));
 
-    return sizes[newIndex];
+  //   return sizes[newIndex];
+  // };
+
+  const pixelSizes = [
+    4, 6, 8, 10, 12, 14, 16, 18, 20, 24, 30, 36, 48, 60, 72, 96, 128,
+  ];
+
+  const getCustomFontClass = (basePx, level = 0) => {
+    const base = parseInt(basePx.replace(/\D/g, ""), 10);
+    const index = pixelSizes.indexOf(base);
+    if (index === -1) return `text-[${base}px]`; // fallback
+    const newIndex = Math.max(
+      0,
+      Math.min(pixelSizes.length - 1, index + level)
+    );
+    return `text-[${pixelSizes[newIndex]}px]`;
   };
 
   const defaultTextColor = (tag) => {
@@ -153,9 +171,9 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
     name: (
       <div className="text-center">
         <h1
-          className={`${getScaledFontClass(
-            "text-4xl",
-            settings.fontScaleLevel || 0
+          className={`${getCustomFontClass(
+            "text-[36px]",
+            settings.fontScaleLevel
           )} font-bold w-full inline-block`}
           style={{ color: settings.TextColors?.["h1"] || "black" }}
         >
@@ -163,13 +181,14 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
         </h1>
       </div>
     ),
+
     details: (
-      <div className="text-center space-y-1">
+      <div className="text-center ">
         {/* Contact Line */}
         <p
-          className={`${getScaledFontClass(
-            "text-sm",
-            settings.fontScaleLevel || 0
+          className={`${getCustomFontClass(
+            "text-[14px]",
+            settings.fontScaleLevel
           )} text-gray-700`}
         >
           {[
@@ -204,10 +223,10 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
         </p>
         {/* Links */}
         <div
-          className={`${getScaledFontClass(
-            "text-sm",
-            settings.fontScaleLevel || 0
-          )} break-words whitespace-normal flex flex-wrap justify-center gap-x-2 gap-y-1`}
+          className={`${getCustomFontClass(
+            "text-[14px]",
+            settings.fontScaleLevel
+          )} break-words whitespace-normal flex flex-wrap justify-center gap-x-2 `}
           style={{ color: settings.linkColor || "#2563eb" }}
         >
           {resume.contact.github && (
@@ -242,18 +261,18 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
     description: (
       <div style={{ textAlign: settings.descriptionAlign || "left" }}>
         <h2
-          className={`${getScaledFontClass(
-            "text-lg",
-            settings.fontScaleLevel || 0
+          className={`${getCustomFontClass(
+            "text-[18px]",
+            settings.fontScaleLevel
           )} font-bold text-gray-800`}
           style={{ color: settings.TextColors?.["h2"] || "#334155" }}
         >
           PROFILE
         </h2>
         <div
-          className={`resume-content text-gray-700 ${getScaledFontClass(
-            "text-sm",
-            settings.fontScaleLevel || 0
+          className={`resume-content text-gray-700 ${getCustomFontClass(
+            "text-[14px]",
+            settings.fontScaleLevel
           )}`}
           style={{ color: settings.TextColors?.["h3"] || "#475569" }}
           dangerouslySetInnerHTML={{
@@ -266,9 +285,9 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
     education: (
       <div style={{ textAlign: settings.descriptionAlign || "left" }}>
         <h2
-          className={`${getScaledFontClass(
-            "text-lg",
-            settings.fontScaleLevel || 0
+          className={`${getCustomFontClass(
+            "text-[18px]",
+            settings.fontScaleLevel
           )} font-bold text-gray-800`}
           style={{ color: settings.TextColors?.["h2"] || "#334155" }}
         >
@@ -276,9 +295,9 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
         </h2>
         <div
           style={{ color: settings.TextColors?.["h3"] || "#475569" }}
-          className={`flex gap-6 w-full ${getScaledFontClass(
-            "text-sm",
-            settings.fontScaleLevel || 0
+          className={`flex gap-6 w-full ${getCustomFontClass(
+            "text-[14px]",
+            settings.fontScaleLevel
           )} ${
             settings.descriptionAlign === "center"
               ? "justify-center"
@@ -293,16 +312,16 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
           <p className="italic"> {resume.education.location}</p>
         </div>
         <div
-          className={` ${getScaledFontClass(
-            "text-sm",
-            settings.fontScaleLevel || 0
+          className={` ${getCustomFontClass(
+            "text-[14px]",
+            settings.fontScaleLevel
           )}`}
           style={{ color: settings.TextColors?.["h3"] || "#475569" }}
         >
           <div
-            className={`flex gap-6 w-full ${getScaledFontClass(
-              "text-sm",
-              settings.fontScaleLevel || 0
+            className={`flex gap-6 w-full ${getCustomFontClass(
+              "text-[14px]",
+              settings.fontScaleLevel
             )} ${
               settings.descriptionAlign === "center"
                 ? "justify-center"
@@ -333,9 +352,9 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
     skills: (
       <div style={{ textAlign: settings.descriptionAlign || "left" }}>
         <h2
-          className={`${getScaledFontClass(
-            "text-lg",
-            settings.fontScaleLevel || 0
+          className={`${getCustomFontClass(
+            "text-[18px]",
+            settings.fontScaleLevel
           )} font-bold text-gray-800`}
           style={{ color: settings.TextColors?.["h2"] || "#334155" }}
         >
@@ -344,9 +363,9 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
         {resume.skills.map((skill, i) => (
           <div
             key={i}
-            className={`${getScaledFontClass(
-              "text-sm",
-              settings.fontScaleLevel || 0
+            className={`${getCustomFontClass(
+              "text-[14px]",
+              settings.fontScaleLevel
             )}`}
           >
             <span
@@ -366,20 +385,20 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
     projects: (
       <div style={{ textAlign: settings.descriptionAlign || "left" }}>
         <h2
-          className={`${getScaledFontClass(
-            "text-lg",
-            settings.fontScaleLevel || 0
+          className={`${getCustomFontClass(
+            "text-[18px]",
+            settings.fontScaleLevel
           )} font-bold text-gray-800`}
           style={{ color: settings.TextColors?.["h2"] || "#334155" }}
         >
           PROJECTS
         </h2>
         {resume.projects.map((proj, i) => (
-          <div key={i} className="mb-3">
+          <div key={i} className="md:mb-3">
             <div
-              className={`flex gap-6 w-full ${getScaledFontClass(
-                "text-sm",
-                settings.fontScaleLevel || 0
+              className={`flex gap-2 md:gap-6 w-full ${getCustomFontClass(
+                "text-[14px]",
+                settings.fontScaleLevel
               )} ${
                 settings.descriptionAlign === "center"
                   ? "justify-center"
@@ -433,9 +452,9 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
 
             {/* Description */}
             <div
-              className={`resume-content  ${getScaledFontClass(
-                "text-sm",
-                settings.fontScaleLevel || 0
+              className={`resume-content   ${getCustomFontClass(
+                "text-[14px]",
+                settings.fontScaleLevel
               )}`}
               style={{ color: settings.TextColors?.["h4"] || "#64748b" }}
               dangerouslySetInnerHTML={{
@@ -450,26 +469,26 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
     experience: (
       <div style={{ textAlign: settings.descriptionAlign || "left" }}>
         <h2
-          className={`${getScaledFontClass(
-            "text-lg",
-            settings.fontScaleLevel || 0
+          className={` ${getCustomFontClass(
+            "text-[18px]",
+            settings.fontScaleLevel
           )} font-bold text-gray-800`}
           style={{ color: settings.TextColors?.["h2"] || "#334155" }}
         >
           EXPERIENCE
         </h2>
-        <ul className="list-disc pl-5 ">
+        <ul className="gap-2">
           {resume.experience.map((a, i) => (
             <li
               key={i}
-              className={`mb-3 ${getScaledFontClass(
-                "text-sm",
-                settings.fontScaleLevel || 0
+              className={`md:mb-3  ${getCustomFontClass(
+                "text-[14px]",
+                settings.fontScaleLevel
               )}`}
             >
               <div
                 style={{ color: settings.TextColors?.["h3"] || "#475569" }}
-                className={`flex gap-6 w-full ${
+                className={`flex gap-2 md:gap-6 w-full ${
                   settings.descriptionAlign === "center"
                     ? "justify-center"
                     : settings.descriptionAlign === "right"
@@ -486,7 +505,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
               </div>
               {a.technologies && a.technologies.trim() !== "" && (
                 <p
-                  className="my-0.5"
+                  className="md:my-0.5"
                   style={{ color: settings.TextColors?.["h4"] || "#64748b" }}
                 >
                   <span className="font-bold">Technologies:</span>{" "}
@@ -510,21 +529,21 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
     achievements: (
       <div style={{ textAlign: settings.descriptionAlign || "left" }}>
         <h2
-          className={`${getScaledFontClass(
-            "text-lg",
-            settings.fontScaleLevel || 0
+          className={` ${getCustomFontClass(
+            "text-[18px]",
+            settings.fontScaleLevel
           )} font-bold text-gray-800`}
           style={{ color: settings.TextColors?.["h2"] || "#334155" }}
         >
           ACHIEVEMENTS
         </h2>
-        <ul className="list-disc pl-5 ">
+        <ul className="list-disc pl-1.5 md:pl-5 ">
           {resume.achievements.map((a, i) => (
             <li
               key={i}
-              className={`${getScaledFontClass(
-                "text-sm",
-                settings.fontScaleLevel || 0
+              className={` ${getCustomFontClass(
+                "text-[14px]",
+                settings.fontScaleLevel
               )}`}
             >
               <div
@@ -562,12 +581,12 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
   return (
     <div className="">
       {isEditable && (
-        <div className="w-full bg-white justify-center border border-gray-200 shadow-sm rounded-md px-1 md:px-6 py-3 mb-6 flex flex-wrap items-center gap-1.5 md:gap-3">
+        <div className="w-full bg-white justify-center border border-gray-200 shadow-sm rounded-md px-1 md:px-6 py-0.5 md:py-3 mb-2.5 md:mb-6 flex flex-wrap items-center gap-3">
           {/* Resume Background Color */}
           <div className="relative">
             {/* Color Icon Button */}
             <button
-              className="p-2 rounded-md hover:bg-gray-200 transition relative group"
+              className="md:p-2 rounded-md hover:bg-gray-200 transition relative group"
               title={`Background Color`}
               onClick={() =>
                 setOpenDropdown((prev) =>
@@ -575,9 +594,9 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                 )
               }
             >
-              <FaFillDrip className="text-xl text-gray-700" />
+              <FaFillDrip className="text-sm md:text-xl text-gray-700" />
               <span
-                className="absolute w-4 h-4 rounded-full border border-gray-300 right-1 top-1"
+                className="hidden md:block absolute w-4 h-4 rounded-full border border-gray-300 right-1 top-1"
                 style={{
                   backgroundColor: settings.backgroundColor || "#ffffff",
                 }}
@@ -653,7 +672,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
           </div>
 
           {/* Description Alignment */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1 md:gap-3">
             <div className="flex gap-1 md:gap-2 bg-gray-100 p-1 rounded-md">
               {[
                 {
@@ -685,7 +704,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                       descriptionAlign: value,
                     }))
                   }
-                  className={`p-2 rounded-md transition ${
+                  className={`p-1 md:p-2 text-sm md:text-lg md:rounded-md transition ${
                     settings.descriptionAlign === value
                       ? "bg-white shadow  "
                       : "hover:bg-white/80"
@@ -706,9 +725,9 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                 setOpenDropdown((prev) => (prev === "font" ? null : "font"))
               }
               title="Change Font"
-              className="p-2 rounded-md hover:bg-gray-100 transition"
+              className="md:p-2 rounded-md hover:bg-gray-100 transition"
             >
-              <FaFont className="text-gray-700 text-lg" />
+              <FaFont className="text-gray-700 text-sm md:text-lg" />
             </button>
 
             {/* Dropdown Menu */}
@@ -759,12 +778,12 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
               onClick={() =>
                 onSettingsChange((prev) => ({
                   ...prev,
-                  fontScaleLevel: Math.max(-2, (prev.fontScaleLevel || 0) - 1),
+                  fontScaleLevel: Math.max(-10, (prev.fontScaleLevel || 0) - 1),
                 }))
               }
-              className="p-2 rounded hover:bg-gray-200"
+              className="md:p-2 rounded hover:bg-gray-200"
             >
-              <span className="text-xl">
+              <span className="text-lg md:text-xl">
                 <MdOutlineTextDecrease />
               </span>
             </button>
@@ -774,12 +793,12 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
               onClick={() =>
                 onSettingsChange((prev) => ({
                   ...prev,
-                  fontScaleLevel: Math.min(3, (prev.fontScaleLevel || 0) + 1),
+                  fontScaleLevel: Math.min(10, (prev.fontScaleLevel || 0) + 1),
                 }))
               }
-              className="p-2 rounded hover:bg-gray-200"
+              className="md:p-2 rounded hover:bg-gray-200"
             >
-              <span className="text-xl">
+              <span className="text-lg md:text-xl">
                 <MdOutlineTextIncrease />
               </span>
             </button>
@@ -794,9 +813,9 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                 )
               }
               title="Border Width"
-              className="p-2 rounded-md hover:bg-gray-100 transition"
+              className="md:p-2 rounded-md text-center align-middle hover:bg-gray-100 transition"
             >
-              <BsBorderWidth className="text-gray-700 text-lg" />
+              <BsBorderWidth className="text-gray-700 text-sm md:text-lg" />
             </button>
 
             {openDropdown === "borderWidth" && (
@@ -858,9 +877,9 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                 )
               }
               title="Border style and color"
-              className="p-2 rounded-md hover:bg-gray-100 transition"
+              className="md:p-2 rounded-md hover:bg-gray-100 transition"
             >
-              <BsBoundingBoxCircles className="text-gray-700 text-lg" />
+              <BsBoundingBoxCircles className="text-gray-700 text-sm md:text-lg" />
             </button>
 
             {openDropdown === "borderStyles" && (
@@ -925,9 +944,9 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                 )
               }
               title="Border Radius"
-              className="p-2 rounded-md hover:bg-gray-100 transition"
+              className="md:p-2 rounded-md hover:bg-gray-100 transition"
             >
-              <TbBorderCornerPill className="text-gray-700 text-lg" />
+              <TbBorderCornerPill className="text-gray-700 text-sm md:text-lg" />
             </button>
 
             {openDropdown === "borderRadius" && (
@@ -986,7 +1005,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
           {/* Text Color Button */}
           <div className="relative group">
             <button
-              className="p-2 rounded-md hover:bg-gray-100 transition"
+              className="md:p-2 rounded-md hover:bg-gray-100 transition"
               title="Text Color"
               onClick={() =>
                 setOpenDropdown((prev) =>
@@ -994,7 +1013,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                 )
               }
             >
-              <MdFormatColorText className="text-lg text-gray-700" />
+              <MdFormatColorText className="text-sm md:text-lg text-gray-700" />
             </button>
 
             {openDropdown === "TextColor" && (
@@ -1045,10 +1064,10 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                     prev === "linkColor" ? null : "linkColor"
                   )
                 }
-                className="p-2 rounded-md hover:bg-gray-100 transition"
+                className="md:p-2 rounded-md hover:bg-gray-100 transition"
                 title="Change Project Link Color"
               >
-                <FaLink className="text-lg text-gray-700" />
+                <FaLink className="text-sm md:text-lg text-gray-700" />
               </button>
 
               {/* Picker Panel */}
@@ -1122,13 +1141,13 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
           {/* Toggle Visibility Dropdown */}
           <div className="relative">
             <button
-              className="p-2 rounded-md hover:bg-gray-100 transition"
+              className="md:p-2 rounded-md hover:bg-gray-100 transition"
               title="Show/Hide Sections"
               onClick={() =>
                 setOpenDropdown((prev) => (prev === "toggle" ? null : "toggle"))
               }
             >
-              <BiShowAlt className="text-xl text-gray-700" />
+              <BiShowAlt className="text-lg md:text-xl text-gray-700" />
             </button>
 
             {openDropdown === "toggle" && (
@@ -1184,7 +1203,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
           {/* Reorder Sections Dropdown */}
           <div className="relative">
             <button
-              className="p-2 rounded-md hover:bg-gray-100 transition"
+              className="md:p-2 rounded-md hover:bg-gray-100 transition"
               title="Reorder Sections"
               onClick={() =>
                 setOpenDropdown((prev) =>
@@ -1192,7 +1211,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                 )
               }
             >
-              <IoReorderThreeSharp className="text-xl text-gray-700" />
+              <IoReorderThreeSharp className="text-lg md:text-xl text-gray-700" />
             </button>
 
             {openDropdown === "reorder" && (
@@ -1251,7 +1270,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
       >
         {/* Inner Resume Container */}
         <div
-          className="p-2 md:p-7 flex flex-col gap-1.5 md:gap-5"
+          className="p-2 md:p-7 flex flex-col gap-1 md:gap-5"
           style={{
             border:
               settings.borderWidth && settings.borderWidth !== "0px"
