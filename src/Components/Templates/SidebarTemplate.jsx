@@ -496,7 +496,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                     defaultMainTextColor("h2"),
                 }}
               >
-                {exp.company}
+                {exp.company} – {exp.role}
               </p>
               <p
                 className="italic"
@@ -510,8 +510,23 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
               </p>
             </div>
 
+            {exp.technologies && exp.technologies.trim() !== "" && (
+              <p
+                className="my-0.5"
+                style={{
+                  textAlign: settings.descriptionAlign || "left",
+                  color:
+                    settings.mainTextColors?.["h3"] ||
+                    defaultMainTextColor("h3"),
+                }}
+              >
+                <span className="font-bold">Technologies :</span>{" "}
+                {exp.technologies}
+              </p>
+            )}
+
             <p
-              className="resume-content text-gray-800 "
+              className="resume-content "
               style={{
                 textAlign: settings.descriptionAlign || "left",
                 color:
@@ -669,6 +684,34 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
             }}
           >
             {resume.education.college}
+          </p>
+
+          <p
+            className="italic"
+            style={{
+              color:
+                settings.mainTextColors?.["h2"] || defaultMainTextColor("h2"),
+            }}
+          >
+            {resume.education.location}
+          </p>
+        </div>
+
+        <div
+          className={`flex gap-6 w-full ${
+            settings.descriptionAlign === "center"
+              ? "justify-center"
+              : settings.descriptionAlign === "right"
+              ? "justify-end"
+              : settings.descriptionAlign === "justify"
+              ? "justify-between"
+              : "justify-start"
+          } ${getScaledFontClass("text-sm", settings.fontScaleLevel || 0)}`}
+        >
+          <p>
+            {resume.education.degree}
+            {resume.education.specialization &&
+              ` (${resume.education.specialization})`}
           </p>
 
           <p

@@ -5,36 +5,33 @@ import { useNavigate } from "react-router-dom";
 import { RxCrossCircled, RxCross1, RxCross2 } from "react-icons/rx";
 import { useResumeData } from "../Contexts/ResumeDataContext";
 import RichTextInput from "../Components/RichTextInput";
-
+import { GoLocation } from "react-icons/go";
+import { GiBookCover } from "react-icons/gi";
+import { GrTechnology } from "react-icons/gr";
 import {
   FiUser,
-  FiAlignLeft,
   FiBookOpen,
   FiBarChart2,
   FiBriefcase,
   FiCalendar,
-  FiFileText,
   FiAward,
-} from "react-icons/fi";
-import {
-  FaCheckCircle,
-  FaProjectDiagram,
-  FaLink,
-  FaGithub,
-  FaPlus,
-  FaArrowRight,
-  FaArrowLeft,
-  FaTrash,
-} from "react-icons/fa";
-import { TbWorld } from "react-icons/tb";
-import { MdOutlineDescription } from "react-icons/md";
-import {
   FiPhone,
   FiMail,
   FiGithub,
   FiLinkedin,
   FiMapPin,
 } from "react-icons/fi";
+import {
+  FaCheckCircle,
+  FaLink,
+  FaGithub,
+  FaPlus,
+  FaArrowRight,
+  FaBookReader,
+  FaArrowLeft,
+  FaRegUser,
+} from "react-icons/fa";
+import { TbWorld } from "react-icons/tb";
 
 const steps = [
   "Personal Info",
@@ -59,17 +56,27 @@ const ResumeForm = () => {
           description: "",
           education: {
             college: "",
+            degree: "",
+            specialization: "",
+            location: "",
             startYear: "",
             endYear: "",
             cgpa: "",
             school: "",
-            schoolEndYear: "",
             tenth: "",
             twelfth: "",
           },
           skills: [{ domain: "", languages: [""] }],
           projects: [{ name: "", description: "", github: "", demo: "" }],
-          experience: [{ company: "", years: "", description: "" }],
+          experience: [
+            {
+              company: "",
+              role: "",
+              technologies: "",
+              years: "",
+              description: "",
+            },
+          ],
           achievements: [{ title: "", description: "", year: "", month: "" }],
           contact: {
             phone: "",
@@ -112,7 +119,13 @@ const ResumeForm = () => {
         section === "projects"
           ? { name: "", description: "", github: "", demo: "" }
           : section === "experience"
-          ? { company: "", years: "", description: "" }
+          ? {
+              company: "",
+              role: "",
+              technologies: "",
+              years: "",
+              description: "",
+            }
           : { title: "", description: "", year: "", month: "" };
 
       setFormData({ ...formData, [section]: [...formData[section], newItem] });
@@ -246,6 +259,60 @@ const ResumeForm = () => {
               />
             </div>
 
+            <div className="relative">
+              <label
+                htmlFor="college"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Degree Or Program
+              </label>
+              <FaBookReader className="absolute top-9 left-3 text-gray-500 text-sm" />
+              <input
+                id="college"
+                type="text"
+                placeholder="e.g., B.Tech in Computer Science"
+                value={formData.education.degree}
+                onChange={(e) => handleChange(e, "education.degree")}
+                className="w-full px-4 py-2 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-sky-600 bg-white text-sm text-gray-800"
+              />
+            </div>
+
+            <div className="relative">
+              <label
+                htmlFor="college"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Specialization if any
+              </label>
+              <GiBookCover className="absolute top-9 left-3 text-gray-500 text-sm" />
+              <input
+                id="college"
+                type="text"
+                placeholder="e.g., Artificial Intelligence"
+                value={formData.education.specialization}
+                onChange={(e) => handleChange(e, "education.specialization")}
+                className="w-full px-4 py-2 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-sky-600 bg-white text-sm text-gray-800"
+              />
+            </div>
+
+            <div className="relative">
+              <label
+                htmlFor="college"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Location
+              </label>
+              <GoLocation className="absolute top-9 left-3 text-gray-500 text-sm" />
+              <input
+                id="college"
+                type="text"
+                placeholder="City and state/country of the college"
+                value={formData.education.location}
+                onChange={(e) => handleChange(e, "education.location")}
+                className="w-full px-4 py-2 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-sky-600 bg-white text-sm text-gray-800"
+              />
+            </div>
+
             {/* Start & End Year */}
             <div className="flex gap-4">
               <div className="flex-1 relative">
@@ -318,25 +385,6 @@ const ResumeForm = () => {
                 placeholder="e.g., DPS Delhi"
                 value={formData.education.school}
                 onChange={(e) => handleChange(e, "education.school")}
-                className="w-full px-4 py-2 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-sky-600 bg-white text-sm text-gray-800"
-              />
-            </div>
-
-            {/* School End Year */}
-            <div className="relative">
-              <label
-                htmlFor="schoolEndYear"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                School End Year
-              </label>
-              <FiCalendar className="absolute top-9 left-3 text-gray-500 text-sm" />
-              <input
-                id="schoolEndYear"
-                type="text"
-                placeholder="e.g., 2020"
-                value={formData.education.schoolEndYear}
-                onChange={(e) => handleChange(e, "education.schoolEndYear")}
                 className="w-full px-4 py-2 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-sky-600 bg-white text-sm text-gray-800"
               />
             </div>
@@ -620,6 +668,48 @@ const ResumeForm = () => {
                           "experience",
                           index,
                           "company",
+                          e.target.value
+                        )
+                      }
+                      className="pl-10 w-full px-4 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-sky-600"
+                    />
+                  </div>
+
+                  <div className="relative mb-3">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Role
+                    </label>
+                    <FaRegUser className="absolute top-9 left-3 text-gray-500" />
+                    <input
+                      type="text"
+                      placeholder="e.g., Event Manager"
+                      value={exp.role}
+                      onChange={(e) =>
+                        handleArrayChange(
+                          "experience",
+                          index,
+                          "role",
+                          e.target.value
+                        )
+                      }
+                      className="pl-10 w-full px-4 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-sky-600"
+                    />
+                  </div>
+
+                  <div className="relative mb-3">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Technologies Used
+                    </label>
+                    <GrTechnology className="absolute top-9 left-3 text-gray-500" />
+                    <input
+                      type="text"
+                      placeholder="e.g., React, Node.js, MongoDB"
+                      value={exp.technologies}
+                      onChange={(e) =>
+                        handleArrayChange(
+                          "experience",
+                          index,
+                          "technologies",
                           e.target.value
                         )
                       }
