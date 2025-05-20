@@ -819,7 +819,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
             </button>
 
             {openDropdown === "borderWidth" && (
-              <div className="absolute z-50 mt-2 md:right-0 left-0  bg-white border border-gray-200 shadow-xl rounded-lg p-1.5 md:p-3 w-40 max-w-[90vw]">
+              <div className="absolute z-50 mt-2 left-1/2 -translate-x-1/2 bg-white border border-gray-200 shadow-xl rounded-lg p-1.5 md:p-3  w-32 md:max-w-[90vw]">
                 <p className="text-xs md:text-sm font-semibold text-gray-700 mb-1.5 md:mb-3 text-center">
                   Select Width
                 </p>

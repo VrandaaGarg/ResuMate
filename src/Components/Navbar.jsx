@@ -1,17 +1,17 @@
-import { FaBars } from "react-icons/fa";
+import { FaBars, FaUserCircle, FaSignOutAlt } from "react-icons/fa";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import { SiGoogleforms } from "react-icons/si";
-import { RxCross2 } from "react-icons/rx"; // Close icon
+import { RxCross2 } from "react-icons/rx";
 import { useAuth } from "../Contexts/AuthContext";
 
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -28,20 +28,20 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed top-0 z-50 w-full backdrop-blur-md border-b border-gray-200 shadow-sm">
+    <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 shadow-sm">
       <div className="px-4 py-3 flex items-center justify-between max-w-7xl mx-auto">
-        {/* Left: Logo */}
-        <div className="flex items-center gap-3">
+        {/* Left: Logo + Sidebar Toggle */}
+        <div className="flex items-center gap-4">
           <button
-            className="sm:hidden text-gray-600 hover:text-sky-700 transition"
+            className="sm:hidden text-gray-700 hover:text-sky-700 transition"
             onClick={toggleSidebar}
           >
             {isSidebarOpen ? <RxCross2 size={22} /> : <FaBars size={20} />}
           </button>
 
           <Link to="/" className="flex items-center gap-2 group">
-            <SiGoogleforms className="text-sky-700 text-2xl group-hover:scale-110 hover:rotate-3 transition-transform duration-200" />
-            <span className="text-xl font-bold text-[#0f172a] transition">
+            <SiGoogleforms className="text-2xl text-sky-700 group-hover:scale-110 transition-transform duration-200" />
+            <span className="text-xl font-bold tracking-wide text-gray-900 group-hover:text-sky-700 transition">
               ResuMate
             </span>
           </Link>
@@ -53,13 +53,13 @@ const Navbar = () => {
             <>
               <Link
                 to="/login"
-                className="px-4 py-1.5 bg-black text-white rounded-full hover:bg-sky-800 transition"
+                className="px-4 py-1.5 bg-white border border-sky-700 text-sky-700 rounded-full font-medium hover:bg-sky-50 transition"
               >
                 Login
               </Link>
               <Link
                 to="/signup"
-                className="px-4 py-1.5 bg-sky-700 text-white rounded-full hover:bg-sky-800 transition"
+                className="px-4 py-1.5 bg-sky-700 text-white rounded-full font-medium hover:bg-sky-800 transition"
               >
                 Sign Up
               </Link>
@@ -67,10 +67,10 @@ const Navbar = () => {
           ) : (
             <div className="relative">
               <button
-                className="flex items-center border border-gray-200 bg-sky-700/10 hover:shadow px-1.5 py-1 rounded-full transition"
+                className="flex items-center gap-2 bg-sky-50 text-sky-700 px-2 py-1.5 rounded-full border border-sky-100 hover:shadow transition"
                 onClick={() => setDropdownOpen((prev) => !prev)}
               >
-                <div className="w-9 h-9 rounded-full bg-sky-700/85 text-white flex items-center justify-center font-semibold text-lg uppercase">
+                <div className="w-8 h-8 rounded-full bg-sky-700 text-white flex items-center justify-center font-semibold text-sm uppercase">
                   {user?.name?.charAt(0) || "U"}
                 </div>
               </button>
@@ -79,16 +79,14 @@ const Navbar = () => {
                 {dropdownOpen && (
                   <motion.div
                     key="dropdown"
-                    initial={{ opacity: 0, y: -8 }}
+                    initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
+                    exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute right-0 top-12 w-60 bg-white border border-gray-200 rounded-md shadow-lg z-50"
+                    className="absolute right-0 top-14 w-64 bg-white text-gray-700 border border-gray-200 rounded-xl shadow-xl z-50 overflow-hidden"
                   >
-                    <div className="px-4 py-3">
-                      <p className="text-sm font-semibold text-gray-800">
-                        {user.name}
-                      </p>
+                    <div className="px-4 py-3 border-b">
+                      <p className="text-sm font-semibold">{user.name}</p>
                       <p className="text-xs text-gray-500 truncate">
                         {user.email}
                       </p>
@@ -97,7 +95,7 @@ const Navbar = () => {
                       <li>
                         <Link
                           to="/dashboard"
-                          className="block px-4 py-2 hover:bg-sky-50 transition text-gray-700"
+                          className="block px-4 py-2 hover:bg-sky-50 transition"
                         >
                           Dashboard
                         </Link>
@@ -105,7 +103,7 @@ const Navbar = () => {
                       <li>
                         <Link
                           to="/profile"
-                          className="block px-4 py-2 hover:bg-sky-50 transition text-gray-700"
+                          className="block px-4 py-2 hover:bg-sky-50 transition"
                         >
                           Profile
                         </Link>
@@ -113,8 +111,9 @@ const Navbar = () => {
                       <li>
                         <button
                           onClick={handleLogout}
-                          className="w-full text-left px-4 py-2 hover:bg-red-50 text-red-600 transition"
+                          className="w-full text-left px-4 py-2 hover:bg-red-50 text-red-600 flex items-center gap-2 transition"
                         >
+                          <FaSignOutAlt className="text-sm" />
                           Logout
                         </button>
                       </li>

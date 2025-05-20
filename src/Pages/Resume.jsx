@@ -75,7 +75,7 @@ export default function Resume() {
   }
 
   return (
-    <div className="min-h-screen p-2.5 md:p-6 bg-gray-100">
+    <div className=" p-2.5 md:p-6 bg-gray-100">
       <div className="max-w-5xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex justify-between items-start">

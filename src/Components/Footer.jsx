@@ -1,84 +1,70 @@
-// src/components/Footer.jsx
-import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
+import { motion } from "framer-motion";
+import { FaGithub, FaHeart, FaBug, FaEnvelope } from "react-icons/fa";
 import { SiGoogleforms } from "react-icons/si";
-import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-100 text-[#0f172a] border-t border-gray-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6 md:gap-0">
-          {/* Logo & Name */}
-          <Link
-            to="/"
-            className="flex items-center gap-2 text-xl font-bold text-black"
-          >
-            <SiGoogleforms className="text-2xl" />
-            ResuMate
-          </Link>
-
-          {/* Footer Links */}
-          <ul className="flex flex-wrap justify-center gap-6 text-sm font-medium text-gray-600">
-            <li>
-              <Link to="/about" className="hover:text-sky-700 transition">
-                About
-              </Link>
-            </li>
-            <li>
-              <Link to="/privacy" className="hover:text-sky-700 transition">
-                Privacy Policy
-              </Link>
-            </li>
-            <li>
-              <Link to="/terms" className="hover:text-sky-700 transition">
-                Terms
-              </Link>
-            </li>
-            <li>
-              <Link to="/contact" className="hover:text-sky-700 transition">
-                Contact
-              </Link>
-            </li>
-          </ul>
-
-          {/* Social Icons */}
-          <div className="flex gap-4 text-gray-500">
-            <a
-              href="https://github.com"
-              target="_blank"
-              rel="noreferrer"
-              className="hover:text-sky-700 transition"
-            >
-              <FaGithub size={22} />
-            </a>
-            <a
-              href="https://linkedin.com"
-              target="_blank"
-              rel="noreferrer"
-              className="hover:text-sky-700 transition"
-            >
-              <FaLinkedin size={22} />
-            </a>
-            <a
-              href="https://twitter.com"
-              target="_blank"
-              rel="noreferrer"
-              className="hover:text-sky-700 transition"
-            >
-              <FaTwitter size={22} />
-            </a>
+    <footer className="bg-white border-t border-gray-200 py-4 px-6 text-gray-700">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+        {/* Left: Created with Love */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="flex  flex-col gap-1 text-sm"
+        >
+          {/* Logo */}
+          <div className="text-center md:text-left">
+            <span className="font-bold text-lg text-sky-700">ResuMate</span>
           </div>
-        </div>
 
-        {/* Divider */}
-        <hr className="my-2 border-transparent" />
+          {/* Created with ❤️ by ResuMate */}
+          <div className="flex items-center gap-1 text-gray-500">
+            <span>Created with</span>
+            <motion.span
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ repeat: Infinity, duration: 1.2 }}
+            >
+              <FaHeart className="text-sky-700" />
+            </motion.span>
+          </div>
+        </motion.div>
 
-        {/* Copyright */}
-        <p className="text-sm text-center text-gray-500">
-          © {new Date().getFullYear()}{" "}
-          <span className="font-semibold">ResuMate</span>. All rights reserved.
-        </p>
+        {/* Right: Icons and Bug Button */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="flex items-center gap-4"
+        >
+          <button
+            onClick={() => alert("Report Bug")}
+            className="flex items-center gap-1 px-3 py-1 text-sm text-sky-700 border border-sky-700 rounded hover:bg-sky-50 transition"
+          >
+            <FaBug />
+            Report Bug
+          </button>
+          <a
+            href="https://github.com/VrandaaGarg/ResuMate"
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-sky-700 transition"
+          >
+            <FaGithub size={18} />
+          </a>
+          <a
+            href="mailto:connect@vrandacodz.xyz"
+            className="hover:text-sky-700 transition"
+          >
+            <FaEnvelope size={18} />
+          </a>
+        </motion.div>
       </div>
+
+      {/* Copyright */}
+      <p className="text-xs text-center text-gray-400 mt-3">
+        © {new Date().getFullYear()} ResuMate. All rights reserved.
+      </p>
     </footer>
   );
 }
