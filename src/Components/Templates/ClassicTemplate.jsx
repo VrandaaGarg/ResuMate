@@ -34,7 +34,15 @@ import { CSS } from "@dnd-kit/utilities";
 
 const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
   const { isEditable } = useEditResume();
-  const sensors = useSensors(useSensor(PointerSensor));
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 150,
+        tolerance: 5,
+      },
+    })
+  );
   const [openDropdown, setOpenDropdown] = useState(null); // values: "toggle", "font", "reorder", etc.
   if (!resume) return null;
   const canIncrease = settings.fontScaleLevel < 10;
@@ -114,7 +122,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
         style={style}
         {...attributes}
         {...listeners}
-        className="flex items-center justify-between px-2 py-1 md:py-2 bg-gray-50 border border-gray-200 rounded-md text-[12px] md:text-xs cursor-grab max-w-full hover:bg-gray-100 transition"
+        className="flex items-center justify-between px-2 py-1 md:py-2 bg-gray-50 border border-gray-200 rounded-md text-[12px] md:text-xs cursor-grab touch-none hover:bg-gray-100 transition"
         title={id}
       >
         <span className="capitalize text-gray-700 truncate max-w-[80%]">
