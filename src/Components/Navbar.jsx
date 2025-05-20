@@ -28,7 +28,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 shadow-sm">
+    <nav className="fixed  top-0 z-50 w-full backdrop-blur-3xl border-b border-gray-200 shadow-sm">
       <div className="px-4 py-3 flex items-center justify-between max-w-7xl mx-auto">
         {/* Left: Logo + Sidebar Toggle */}
         <div className="flex items-center gap-4">
