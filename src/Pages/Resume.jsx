@@ -47,7 +47,6 @@ export default function Resume() {
     achievements: true,
   });
 
-  console.log("Resume Data:", resume);
   if (!resume?.name || resume.name.trim() === "") {
     return (
       <motion.div
