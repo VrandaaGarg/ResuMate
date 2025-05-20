@@ -17,12 +17,12 @@ const companies = [
 const Companies = () => {
   return (
     <section className="py-10 px-6 md:px-20 bg-sky-800/10">
-      <h2 className="text-3xl text-center mb-20 [font-family:'Lilita_One',cursive]">
+      <h2 className="text-xl md:text-3xl text-center mb-9 md:mb-20 [font-family:'Lilita_One',cursive]">
         Our Resumes Got Users Into
       </h2>
 
       <div className=" relative w-full">
-        <div className="marquee-track flex gap-12 w-max">
+        <div className="marquee-track flex gap-6 md:gap-12 w-max">
           {[...companies, ...companies].map((company, i) => (
             <div
               key={i}
@@ -31,7 +31,7 @@ const Companies = () => {
               <img
                 src={company.logo}
                 alt={company.name}
-                className="h-5 w-auto mb-2"
+                className="h-4 md:h-5 w-auto mb-2"
                 loading="lazy"
               />
               {/* <p
