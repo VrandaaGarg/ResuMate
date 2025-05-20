@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "tailwindcss";
 
 /* h1 [font-family:'Lilita_One',cursive] */
 
@@ -26,24 +27,22 @@
   @apply flex items-center gap-2 bg-gray-100 text-gray-800 px-4 py-2 rounded hover:bg-gray-200 transition;
 }
 
-[contenteditable] ul {
-  list-style-type: disc;
-  padding-left: 1.25rem;
-}
-
-[contenteditable] ol {
-  list-style-type: decimal;
-  padding-left: 1.25rem;
-}
-
-.resume-content ul {
-  list-style-type: disc;
-  padding-left: 1.25rem;
-}
-
+[contenteditable] ul,
+[contenteditable] ol,
+.resume-content ul,
 .resume-content ol {
-  list-style-type: decimal;
-  padding-left: 1.25rem;
+  list-style-type: disc;
+  padding-left: 1.25rem; /* default for desktop */
+}
+
+/* Reduce left margin on small screens */
+@media (max-width: 640px) {
+  [contenteditable] ul,
+  [contenteditable] ol,
+  .resume-content ul,
+  .resume-content ol {
+    padding-left: 0.75rem; /* or 0.5rem if you want it even tighter */
+  }
 }
 
 .marquee-track {
