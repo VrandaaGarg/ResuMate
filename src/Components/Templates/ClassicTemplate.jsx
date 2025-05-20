@@ -32,6 +32,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+//hello
 
 const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
   const { isEditable } = useEditResume();
