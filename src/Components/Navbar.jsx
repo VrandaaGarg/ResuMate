@@ -31,7 +31,7 @@ const Navbar = () => {
     <nav className="fixed  top-0 z-50 w-full backdrop-blur-3xl border-b border-gray-200 shadow-sm">
       <div className="px-4 py-3 flex items-center justify-between max-w-7xl mx-auto">
         {/* Left: Logo + Sidebar Toggle */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2.5 md:gap-4">
           <button
             className="sm:hidden text-gray-700 hover:text-sky-700 transition"
             onClick={toggleSidebar}
@@ -39,7 +39,7 @@ const Navbar = () => {
             {isSidebarOpen ? <RxCross2 size={22} /> : <FaBars size={20} />}
           </button>
 
-          <Link to="/" className="flex items-center gap-2 group">
+          <Link to="/" className="flex items-center gap-1 md:gap-2 group">
             <SiGoogleforms className="text-2xl text-sky-700 group-hover:scale-110 transition-transform duration-200" />
             <span className="text-xl font-bold tracking-wide text-gray-900 group-hover:text-sky-700 transition">
               ResuMate
@@ -48,18 +48,18 @@ const Navbar = () => {
         </div>
 
         {/* Right: Auth / Dropdown */}
-        <div className="relative flex items-center gap-4">
+        <div className="relative flex items-center gap-1.5 md:gap-4">
           {!user ? (
             <>
               <Link
                 to="/login"
-                className="px-4 py-1.5 bg-white border border-sky-700 text-sky-700 rounded-full font-medium hover:bg-sky-50 transition"
+                className="px-1 md:px-4 py-1 md:py-1.5 bg-white border border-sky-700 text-sky-700 rounded md:rounded-full font-medium hover:bg-sky-50 transition"
               >
                 Login
               </Link>
               <Link
                 to="/signup"
-                className="px-4 py-1.5 bg-sky-700 text-white rounded-full font-medium hover:bg-sky-800 transition"
+                className="px-1 md:px-4 py-1 md:py-1.5 bg-sky-700 text-white rounded md:rounded-full font-medium hover:bg-sky-800 transition"
               >
                 Sign Up
               </Link>

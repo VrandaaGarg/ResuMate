@@ -5,6 +5,7 @@ import { FiUser, FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
 import { AuthContext } from "../Contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { FiCheckCircle, FiXCircle } from "react-icons/fi";
+import { Link } from "react-router-dom";
 
 const Signup = () => {
   const { signup } = useContext(AuthContext);
@@ -67,7 +68,7 @@ const Signup = () => {
 
   return (
     <motion.div
-      className="min-h-screen py-11 pb-16 flex items-center justify-center bg-background px-4"
+      className="min-h-screen py-2.5 md:py-11 pb-5 md:pb-16 flex items-center justify-center bg-background px-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
@@ -233,6 +234,15 @@ const Signup = () => {
           >
             Sign Up
           </button>
+          <p className="text-sm text-center text-gray-500">
+            Already have an account?{" "}
+            <Link
+              to="/login"
+              className="text-sky-700 font-medium hover:underline"
+            >
+              Login
+            </Link>
+          </p>
         </form>
       </div>
     </motion.div>
