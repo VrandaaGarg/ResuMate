@@ -37,40 +37,25 @@ import { CSS } from "@dnd-kit/utilities";
 const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
   const { isEditable } = useEditResume();
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5, // start drag after small pointer move
+      },
+    }),
     useSensor(TouchSensor, {
       activationConstraint: {
-        delay: 150,
-        tolerance: 5,
+        delay: 100, // long press for smoother intent
+        tolerance: 10, // slight finger movement allowed
       },
     })
   );
+
   const [openDropdown, setOpenDropdown] = useState(null); // values: "toggle", "font", "reorder", etc.
   if (!resume) return null;
   const canIncrease = settings.fontScaleLevel < 10;
   const canDecrease = settings.fontScaleLevel > -10;
 
   fontScaleLevel: 0; // default level (0), can be -1, 0, +1, +2
-
-  // const getScaledFontClass = (base, level) => {
-  //   const sizes = [
-  //     "text-xs",
-  //     "text-sm",
-  //     "text-base",
-  //     "text-lg",
-  //     "text-xl",
-  //     "text-2xl",
-  //     "text-3xl",
-  //     "text-4xl",
-  //     "text-5xl",
-  //     "text-6xl",
-  //   ];
-
-  //   const baseIndex = sizes.indexOf(base);
-  //   const newIndex = Math.min(sizes.length - 1, Math.max(0, baseIndex + level));
-
-  //   return sizes[newIndex];
-  // };
 
   const pixelSizes = [
     4, 6, 8, 10, 12, 14, 16, 18, 20, 24, 30, 36, 48, 60, 72, 96, 128,
@@ -113,9 +98,14 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
     } = useSortable({ id });
 
     const style = {
-      transform: CSS.Transform.toString(transform),
-      transition,
-      opacity: isDragging ? 0.5 : 1,
+      transform: CSS.Transform.toString({
+        ...transform,
+        scaleX: isDragging ? 1.03 : 1,
+        scaleY: isDragging ? 1.03 : 1,
+      }),
+
+      transition: transition ?? "transform 200ms ease",
+      opacity: isDragging ? 0.6 : 1,
     };
 
     return (
