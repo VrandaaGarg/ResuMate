@@ -1,11 +1,13 @@
 // src/pages/Dashboard.jsx
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FaPlus, FaUpload } from "react-icons/fa";
+import { FaPlus, FaUpload, FaPen } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { useResumeData } from "../Contexts/ResumeDataContext";
 
 export default function Dashboard() {
   const [resumes, setResumes] = useState([]);
+  const { resume, setResume } = useResumeData();
 
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem("resumes")) || [];
@@ -32,7 +34,8 @@ export default function Dashboard() {
               to="/resume-form"
               className="flex items-center justify-center gap-2 px-6 py-2 bg-sky-700 text-white rounded-md hover:bg-sky-800 transition"
             >
-              <FaPlus /> Create Resume
+              {resume?.name ? <FaPen /> : <FaPlus />}
+              {resume?.name ? "Edit Resume" : "Create Resume"}
             </Link>
             <Link
               to="/upload"
