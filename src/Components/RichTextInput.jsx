@@ -34,10 +34,29 @@ const RichTextInput = ({ value, onChange, placeholder = "Type here..." }) => {
 
   return (
     <div className="space-y-2 w-full relative">
+      {/* Editable Field */}
+      <div className="relative">
+        {isEmpty && (
+          <div className="absolute left-3 top-3 text-gray-400 text-sm pointer-events-none select-none">
+            {placeholder}
+          </div>
+        )}
+        <motion.div
+          layout
+          ref={ref}
+          contentEditable
+          suppressContentEditableWarning
+          spellCheck={false}
+          onInput={handleInput}
+          className="min-h-[100px] border border-gray-300 rounded p-3 focus:outline-none text-sm text-gray-800 bg-white transition"
+          style={{ whiteSpace: "pre-wrap" }}
+        />
+      </div>
+
       {/* Toolbar */}
       <motion.div
         layout
-        className="flex gap-2 bg-gray-100 p-1.5 rounded border border-gray-200 shadow-sm text-sm"
+        className="flex gap-2 bg-gray-100 p-1.5 justify-center rounded border border-gray-200 shadow-sm text-sm"
       >
         <button
           onClick={() => format("bold")}
@@ -75,25 +94,6 @@ const RichTextInput = ({ value, onChange, placeholder = "Type here..." }) => {
           <FaListUl className="text-gray-700" />
         </button>
       </motion.div>
-
-      {/* Editable Field */}
-      <div className="relative">
-        {isEmpty && (
-          <div className="absolute left-3 top-3 text-gray-400 text-sm pointer-events-none select-none">
-            {placeholder}
-          </div>
-        )}
-        <motion.div
-          layout
-          ref={ref}
-          contentEditable
-          suppressContentEditableWarning
-          spellCheck={false}
-          onInput={handleInput}
-          className="min-h-[100px] border border-gray-300 rounded p-3 focus:outline-none text-sm text-gray-800 bg-white transition"
-          style={{ whiteSpace: "pre-wrap" }}
-        />
-      </div>
     </div>
   );
 };

@@ -114,7 +114,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
         style={style}
         {...attributes}
         {...listeners}
-        className="flex items-center justify-between px-2 py-2 bg-gray-50 border border-gray-200 rounded-md text-xs cursor-grab max-w-full hover:bg-gray-100 transition"
+        className="flex items-center justify-between px-2 py-1 md:py-2 bg-gray-50 border border-gray-200 rounded-md text-[12px] md:text-xs cursor-grab max-w-full hover:bg-gray-100 transition"
         title={id}
       >
         <span className="capitalize text-gray-700 truncate max-w-[80%]">
@@ -262,7 +262,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
       <div style={{ textAlign: settings.descriptionAlign || "left" }}>
         <h2
           className={`${getCustomFontClass(
-            "text-[18px]",
+            "text-[16px]",
             settings.fontScaleLevel
           )} font-bold text-gray-800`}
           style={{ color: settings.TextColors?.["h2"] || "#334155" }}
@@ -286,7 +286,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
       <div style={{ textAlign: settings.descriptionAlign || "left" }}>
         <h2
           className={`${getCustomFontClass(
-            "text-[18px]",
+            "text-[16px]",
             settings.fontScaleLevel
           )} font-bold text-gray-800`}
           style={{ color: settings.TextColors?.["h2"] || "#334155" }}
@@ -353,7 +353,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
       <div style={{ textAlign: settings.descriptionAlign || "left" }}>
         <h2
           className={`${getCustomFontClass(
-            "text-[18px]",
+            "text-[16px]",
             settings.fontScaleLevel
           )} font-bold text-gray-800`}
           style={{ color: settings.TextColors?.["h2"] || "#334155" }}
@@ -386,7 +386,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
       <div style={{ textAlign: settings.descriptionAlign || "left" }}>
         <h2
           className={`${getCustomFontClass(
-            "text-[18px]",
+            "text-[16px]",
             settings.fontScaleLevel
           )} font-bold text-gray-800`}
           style={{ color: settings.TextColors?.["h2"] || "#334155" }}
@@ -470,7 +470,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
       <div style={{ textAlign: settings.descriptionAlign || "left" }}>
         <h2
           className={` ${getCustomFontClass(
-            "text-[18px]",
+            "text-[16px]",
             settings.fontScaleLevel
           )} font-bold text-gray-800`}
           style={{ color: settings.TextColors?.["h2"] || "#334155" }}
@@ -530,7 +530,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
       <div style={{ textAlign: settings.descriptionAlign || "left" }}>
         <h2
           className={` ${getCustomFontClass(
-            "text-[18px]",
+            "text-[16px]",
             settings.fontScaleLevel
           )} font-bold text-gray-800`}
           style={{ color: settings.TextColors?.["h2"] || "#334155" }}
@@ -581,7 +581,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
   return (
     <div className="">
       {isEditable && (
-        <div className="w-full bg-white justify-center border border-gray-200 shadow-sm rounded-md px-1 md:px-6 py-0.5 md:py-3 mb-2.5 md:mb-6 flex flex-wrap items-center gap-3">
+        <div className="w-full bg-white justify-center border border-gray-200 shadow-sm rounded-md px-2.5 md:px-6 py-2.5 md:py-3 mb-2.5 md:mb-6 flex flex-wrap items-center gap-3">
           {/* Resume Background Color */}
           <div className="relative">
             {/* Color Icon Button */}
@@ -605,14 +605,14 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
 
             {/* Color Picker Panel */}
             {openDropdown === "bgColor" && (
-              <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl p-4 w-fit right-1/2">
-                <p className="text-sm font-semibold text-gray-700 mb-3">
+              <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl p-4 w-fit left-0">
+                <p className="text-xs md:text-sm font-semibold text-gray-700 mb-3">
                   Background Color
                 </p>
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 md:gap-4">
                   {/* Fixed Swatches (Left) */}
-                  <div className="flex gap-2">
+                  <div className="flex gap-1 md:gap-2">
                     {[
                       "#ffffff",
                       "#f1f5f9",
@@ -622,7 +622,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                     ].map((clr) => (
                       <button
                         key={clr}
-                        className={`w-6 h-6 rounded-full border transition-all hover:scale-105 ${
+                        className={`h-4 w-4 md:w-6 md:h-6 rounded-full border transition-all hover:scale-105 ${
                           clr === settings.backgroundColor
                             ? "ring-2 ring-offset-1 ring-sky-500"
                             : ""
@@ -643,14 +643,14 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                   <div className="w-px h-6 bg-gray-300" />
 
                   {/* Custom Color Picker (Right) */}
-                  <div className="relative w-6 h-6 rounded-full overflow-hidden border cursor-pointer group">
+                  <div className="relative h-4 w-4 md:w-6 md:h-6 rounded-full overflow-hidden border cursor-pointer group">
                     <div
                       className="absolute inset-0 z-0 flex items-center justify-center rounded-full"
                       style={{
                         backgroundColor: settings.backgroundColor || "#ffffff",
                       }}
                     >
-                      <FaFillDrip className="text-gray-600/50 text-sm drop-shadow group-hover:scale-110 transition" />
+                      <FaFillDrip className="text-gray-600/50 text-[10px] md:text-sm drop-shadow group-hover:scale-110 transition" />
                     </div>
 
                     <input
@@ -727,13 +727,13 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
               title="Change Font"
               className="md:p-2 rounded-md hover:bg-gray-100 transition"
             >
-              <FaFont className="text-gray-700 text-sm md:text-lg" />
+              <FaFont className="text-gray-700 text-xs md:text-lg" />
             </button>
 
             {/* Dropdown Menu */}
             {openDropdown === "font" && (
-              <div className="absolute z-50 mt-2 bg-white border border-gray-200 shadow-lg rounded-lg p-3 w-52 right-0">
-                <p className="text-sm font-semibold text-gray-700 mb-2">
+              <div className="absolute z-50 mt-2 bg-white border border-gray-200 shadow-lg rounded-lg p-3 w-40 md:w-52 right-0">
+                <p className="text-xs md:text-sm font-semibold text-gray-700 mb-2">
                   Select Font
                 </p>
 
@@ -756,7 +756,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                         }));
                         setOpenDropdown(false);
                       }}
-                      className={`text-sm text-left px-3 py-1 rounded hover:bg-gray-100 transition ${
+                      className={`text-xs md:text-sm text-left px-2 md:px-3 py-1 rounded hover:bg-gray-100 transition ${
                         settings.fontFamily === font
                           ? "bg-sky-50 text-sky-700 font-medium"
                           : "text-gray-700"
@@ -772,7 +772,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
           </div>
 
           {/* Font Size Adjustments */}
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-3">
             <button
               title="Decrease Font Size"
               onClick={() =>
@@ -781,9 +781,9 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                   fontScaleLevel: Math.max(-10, (prev.fontScaleLevel || 0) - 1),
                 }))
               }
-              className="md:p-2 rounded hover:bg-gray-200"
+              className="md:p-2 align-middle  rounded hover:bg-gray-200"
             >
-              <span className="text-lg md:text-xl">
+              <span className="text-lg align-middle md:text-xl">
                 <MdOutlineTextDecrease />
               </span>
             </button>
@@ -796,9 +796,9 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                   fontScaleLevel: Math.min(10, (prev.fontScaleLevel || 0) + 1),
                 }))
               }
-              className="md:p-2 rounded hover:bg-gray-200"
+              className="md:p-2 align-middle rounded hover:bg-gray-200"
             >
-              <span className="text-lg md:text-xl">
+              <span className="text-lg align-middle md:text-xl">
                 <MdOutlineTextIncrease />
               </span>
             </button>
@@ -819,8 +819,8 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
             </button>
 
             {openDropdown === "borderWidth" && (
-              <div className="absolute z-50 mt-2 right-0 sm:left-1/2 sm:-translate-x-1/2 bg-white border border-gray-200 shadow-xl rounded-lg p-3 w-56 max-w-[90vw]">
-                <p className="text-sm font-semibold text-gray-700 mb-3 text-center">
+              <div className="absolute z-50 mt-2 md:right-0 left-0  bg-white border border-gray-200 shadow-xl rounded-lg p-1.5 md:p-3 w-40 max-w-[90vw]">
+                <p className="text-xs md:text-sm font-semibold text-gray-700 mb-1.5 md:mb-3 text-center">
                   Select Width
                 </p>
 
@@ -849,7 +849,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                         }`}
                       >
                         {w.value === "0px" ? (
-                          <span className="text-sm text-center text-gray-500">
+                          <span className="text-xs md:text-sm text-center text-gray-500">
                             No Border
                           </span>
                         ) : (
@@ -877,19 +877,19 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                 )
               }
               title="Border style and color"
-              className="md:p-2 rounded-md hover:bg-gray-100 transition"
+              className="md:p-2 text-center align-middle rounded-md hover:bg-gray-100 transition"
             >
               <BsBoundingBoxCircles className="text-gray-700 text-sm md:text-lg" />
             </button>
 
             {openDropdown === "borderStyles" && (
-              <div className="absolute z-50 mt-2 bg-white border border-gray-200 shadow-lg rounded-lg p-3 w-64 right-0">
-                <p className="text-sm font-semibold text-gray-700 mb-2">
+              <div className="absolute z-50 mt-2 bg-white border border-gray-200 shadow-lg rounded-lg p-3 w-40 left-0">
+                <p className="text-xs md:text-sm font-semibold text-gray-700 mb-2">
                   Border Settings
                 </p>
 
                 {/* Border Style */}
-                <div className="mb-4">
+                <div className="mb-2 md:mb-4">
                   <label className="block text-xs text-gray-500 mb-1">
                     Style
                   </label>
@@ -901,7 +901,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                         borderStyle: e.target.value,
                       }))
                     }
-                    className="w-full border text-sm rounded px-2 py-1 focus:outline-none"
+                    className="w-full border text-xs md:text-sm rounded px-2 py-1 focus:outline-none"
                   >
                     <option value="solid">Solid</option>
                     <option value="dotted">Dotted</option>
@@ -944,13 +944,13 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                 )
               }
               title="Border Radius"
-              className="md:p-2 rounded-md hover:bg-gray-100 transition"
+              className="md:p-2 align-middle text-center rounded-md hover:bg-gray-100 transition"
             >
               <TbBorderCornerPill className="text-gray-700 text-sm md:text-lg" />
             </button>
 
             {openDropdown === "borderRadius" && (
-              <div className="absolute z-50 mt-2 right-0 sm:left-1/2 sm:-translate-x-1/2 bg-white border border-gray-200 shadow-xl rounded-lg p-3 w-56 max-w-[90vw]">
+              <div className="absolute z-50 mt-2  bg-white border border-gray-200 shadow-xl rounded-lg p-3 w-40 max-w-[90vw]">
                 <p className="text-sm font-semibold text-gray-700 mb-3 text-center">
                   Border Radius
                 </p>
@@ -976,7 +976,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                           }));
                           setOpenDropdown(false);
                         }}
-                        className={`w-full px-3 py-1.5 rounded-sm flex items-center gap-3 hover:bg-gray-50 transition ${
+                        className={`w-full px-3 py-0.5 md:py-1.5 rounded-sm flex items-center gap-3 hover:bg-gray-50 transition ${
                           settings.borderRadius === r.value
                             ? "bg-sky-50 "
                             : "text-gray-800"
@@ -989,7 +989,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
 
                         {/* Preview Box */}
                         <div
-                          className="h-6 flex-1 border border-gray-300 bg-white"
+                          className="h-4 md:h-6 flex-1 border border-gray-300 bg-white"
                           style={{
                             borderRadius: r.value,
                           }}
@@ -1005,7 +1005,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
           {/* Text Color Button */}
           <div className="relative group">
             <button
-              className="md:p-2 rounded-md hover:bg-gray-100 transition"
+              className="md:p-2 align-middle text-center rounded-md hover:bg-gray-100 transition"
               title="Text Color"
               onClick={() =>
                 setOpenDropdown((prev) =>
@@ -1064,7 +1064,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                     prev === "linkColor" ? null : "linkColor"
                   )
                 }
-                className="md:p-2 rounded-md hover:bg-gray-100 transition"
+                className="md:p-2 align-middle rounded-md hover:bg-gray-100 transition"
                 title="Change Project Link Color"
               >
                 <FaLink className="text-sm md:text-lg text-gray-700" />
@@ -1072,14 +1072,14 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
 
               {/* Picker Panel */}
               {openDropdown === "linkColor" && (
-                <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl p-4 w-fit right-0">
-                  <p className="text-sm font-semibold text-gray-700 mb-3">
+                <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl p-2.5 md:p-4 w-fit right-0">
+                  <p className="text-xs md:text-sm font-semibold text-gray-700 mb-3">
                     Project Link Color
                   </p>
 
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2.5 md:gap-4">
                     {/* Preset Swatches */}
-                    <div className="flex gap-2">
+                    <div className="flex gap-1 md:gap-2">
                       {[
                         "#2563eb", // blue
                         "#7c3aed", // purple
@@ -1089,7 +1089,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                       ].map((clr) => (
                         <button
                           key={clr}
-                          className={`w-6 h-6 rounded-full border transition-all hover:scale-105 ${
+                          className={`w-4 h-4 md:w-6 md:h-6 rounded-full border transition-all hover:scale-105 ${
                             clr === settings.linkColor
                               ? "ring-2 ring-offset-1 ring-sky-500"
                               : ""
@@ -1110,7 +1110,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                     <div className="w-px h-6 bg-gray-300 mx-2" />
 
                     {/* Custom Color Picker Circle */}
-                    <div className="relative w-6 h-6 rounded-full overflow-hidden border cursor-pointer group">
+                    <div className="relative w-4 h-4 md:w-6 md:h-6 rounded-full overflow-hidden border cursor-pointer group">
                       <input
                         type="color"
                         value={settings.linkColor || "#2563eb"}
@@ -1129,7 +1129,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                           backgroundColor: settings.linkColor || "#2563eb",
                         }}
                       >
-                        <MdOutlineColorize className="text-gray-500/50 text-lg drop-shadow absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
+                        <MdOutlineColorize className="text-gray-500/50 text-xs md:text-lg drop-shadow absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
                       </div>
                     </div>
                   </div>
@@ -1141,7 +1141,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
           {/* Toggle Visibility Dropdown */}
           <div className="relative">
             <button
-              className="md:p-2 rounded-md hover:bg-gray-100 transition"
+              className="md:p-2 rounded-md align-middle hover:bg-gray-100 transition"
               title="Show/Hide Sections"
               onClick={() =>
                 setOpenDropdown((prev) => (prev === "toggle" ? null : "toggle"))
@@ -1151,14 +1151,14 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
             </button>
 
             {openDropdown === "toggle" && (
-              <div className="absolute right-0 mt-2 z-50 w-72 max-h-72 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg">
+              <div className="absolute right-0 mt-2 z-50 w-48 md:w-72 max-h-72 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg">
                 <div className="p-4">
-                  <h3 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                  <h3 className="text-[12px] md:text-sm font-semibold text-gray-800 mb-1.5 md:mb-3 flex items-center gap-1 md:gap-2">
                     <FaEye className="text-blue-600" />
                     Show/Hide Sections
                   </h3>
 
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-2 gap-1.5 md:gap-2">
                     {Object.keys(settings.visibleSections).map((key) => {
                       const isVisible = settings.visibleSections[key];
                       const label = key
@@ -1177,13 +1177,13 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                               },
                             }))
                           }
-                          className={`flex items-center justify-between px-3 py-1.5 rounded-md border text-xs transition-all ${
+                          className={`flex items-center justify-between px-1.5 md:px-3 py-1.5 rounded-md border text-[10px] md:text-xs transition-all ${
                             isVisible
                               ? "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100"
                               : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
                           }`}
                         >
-                          <span className="truncate w-24 text-left">
+                          <span className="truncate w-10 md:w-24 text-left">
                             {label}
                           </span>
                           {isVisible ? (
@@ -1203,7 +1203,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
           {/* Reorder Sections Dropdown */}
           <div className="relative">
             <button
-              className="md:p-2 rounded-md hover:bg-gray-100 transition"
+              className="md:p-2 align-middle rounded-md hover:bg-gray-100 transition"
               title="Reorder Sections"
               onClick={() =>
                 setOpenDropdown((prev) =>
@@ -1215,10 +1215,10 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
             </button>
 
             {openDropdown === "reorder" && (
-              <div className="absolute right-0 mt-2 z-50 w-64 max-h-80 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg">
-                <div className="p-4">
-                  <h3 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                    <IoReorderThreeSharp className="text-blue-600" />
+              <div className="absolute right-0 mt-2 z-50 w-40 md:w-64 max-h-80 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg">
+                <div className="p-2.5 md:p-4">
+                  <h3 className="text-[16px] md:text-sm font-semibold text-gray-800 mb-2 md:mb-3 flex items-center gap-2">
+                    <IoReorderThreeSharp className="text-sky-700" />
                     Reorder Sections
                   </h3>
 
@@ -1270,7 +1270,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
       >
         {/* Inner Resume Container */}
         <div
-          className="p-2 md:p-7 flex flex-col gap-1 md:gap-5"
+          className="p-2 md:p-7 flex flex-col gap-2.5 md:gap-5"
           style={{
             border:
               settings.borderWidth && settings.borderWidth !== "0px"
