@@ -291,20 +291,43 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
           }`}
         >
           <p className="font-semibold">{resume.education.college}</p>
-          <p className="italic">
-            {" "}
-            {resume.education.startYear} – {resume.education.endYear}
-          </p>
+          <p className="italic"> {resume.education.location}</p>
         </div>
-        <p
-          className={`${getScaledFontClass(
+        <div
+          className={` ${getScaledFontClass(
             "text-sm",
             settings.fontScaleLevel || 0
           )}`}
           style={{ color: settings.TextColors?.["h3"] || "#475569" }}
         >
-          {resume.education.cgpa} CGPA
-        </p>
+          <div
+            className={`flex gap-6 w-full ${getScaledFontClass(
+              "text-sm",
+              settings.fontScaleLevel || 0
+            )} ${
+              settings.descriptionAlign === "center"
+                ? "justify-center"
+                : settings.descriptionAlign === "right"
+                ? "justify-end"
+                : settings.descriptionAlign === "justify"
+                ? "justify-between"
+                : "justify-start"
+            }`}
+          >
+            <p>
+              {resume.education.degree}
+              {resume.education.specialization &&
+                ` (${resume.education.specialization})`}
+            </p>
+
+            <p className="italic">
+              {" "}
+              {resume.education.startYear} – {resume.education.endYear}
+            </p>
+          </div>
+
+          <p>{resume.education.cgpa} CGPA</p>
+        </div>
       </div>
     ),
 
@@ -440,7 +463,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
           {resume.experience.map((a, i) => (
             <li
               key={i}
-              className={`${getScaledFontClass(
+              className={`mb-3 ${getScaledFontClass(
                 "text-sm",
                 settings.fontScaleLevel || 0
               )}`}
@@ -457,9 +480,21 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                     : "justify-start"
                 }`}
               >
-                <span className="font-semibold">{a.company}</span>
+                <span className="font-semibold">
+                  {a.company} - {a.role}
+                </span>
                 <span className="italic">{a.years}</span>
               </div>
+              {a.technologies && a.technologies.trim() !== "" && (
+                <p
+                  className="my-0.5"
+                  style={{ color: settings.TextColors?.["h4"] || "#64748b" }}
+                >
+                  <span className="font-bold">Technologies:</span>{" "}
+                  {a.technologies}
+                </p>
+              )}
+
               <div
                 className={`resume-content   `}
                 style={{ color: settings.TextColors?.["h4"] || "#64748b" }}
