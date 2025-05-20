@@ -541,7 +541,9 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                 }`}
               >
                 <span className="font-semibold">{a.title}</span>
-                <span className="italic">{a.year || ""}</span>
+                <span className="italic">
+                  {a.month || ""} {a.year || ""}
+                </span>
               </div>
 
               <div
