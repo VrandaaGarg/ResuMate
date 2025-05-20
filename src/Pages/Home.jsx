@@ -232,11 +232,11 @@ const Home = () => {
         <div className="absolute -top-24 -left-24 w-72 h-72 bg-blue-300 opacity-20 blur-3xl rounded-full z-0" />
         <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-green-200 opacity-10 blur-3xl rounded-full z-0" />
 
-        <h2 className="text-4xl font-semibold text-center text-black mb-14 relative z-10 [font-family:'Lilita_One',cursive]">
+        <h2 className="text-2xl md:text-4xl md:font-semibold text-center text-black mb-7 md:mb-14 relative z-10 [font-family:'Lilita_One',cursive]">
           Why Use ResuMate?
         </h2>
 
-        <div className="grid md:grid-cols-3 gap-10 place-items-center relative z-10">
+        <div className="grid md:grid-cols-3 gap-5 md:gap-10 place-items-center relative z-10">
           {features.map((feature, i) => {
             const Icon = icons[i % icons.length];
             return (
@@ -247,7 +247,7 @@ const Home = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
                 viewport={{ once: true }}
-                className="bg-white p-6 rounded-xl border border-gray-100 shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col items-start gap-4 w-full h-full max-w-sm"
+                className="bg-white p-3.5 md:p-6 rounded-xl border border-gray-100 shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col items-start gap-4 w-full h-full max-w-sm"
               >
                 <motion.div
                   whileHover={{ rotate: 8 }}
@@ -255,10 +255,12 @@ const Home = () => {
                 >
                   <Icon size={24} />
                 </motion.div>
-                <h3 className="text-lg font-semibold text-gray-800">
+                <h3 className="text-base md:text-lg font-semibold text-gray-800">
                   {feature.title}
                 </h3>
-                <p className="text-sm text-gray-600">{feature.desc}</p>
+                <p className="text-xs md:text-sm text-gray-600">
+                  {feature.desc}
+                </p>
               </motion.div>
             );
           })}
@@ -269,21 +271,21 @@ const Home = () => {
       <StatsSection />
 
       {/* Steps Section */}
-      <section className="py-28 px-6 md:px-20 bg-background">
+      <section className="py-20 md:py-28 px-6 md:px-20 bg-background">
         <h4 className="text-center text-sm uppercase tracking-wider text-sky-700 font-semibold mb-2">
           Step-by-step journey
         </h4>
-        <h2 className="text-4xl mb-12 text-center [font-family:'Lilita_One',cursive]">
+        <h2 className="text-3xl md:text-4xl mb-12 text-center [font-family:'Lilita_One',cursive]">
           How It Works
         </h2>
 
-        <div className="grid md:grid-cols-5 gap-6 text-center">
+        <div className="grid md:grid-cols-5 gap-3.5 md:gap-6 text-center">
           {steps.map((step) => (
             <motion.div
               key={step.id}
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.3 }}
-              className="relative bg-white border-2  hover:border-sky-700/30 border-sky-600/20 rounded-xl p-6 pt-14 shadow-md group"
+              className="relative bg-white border-2  hover:border-sky-700/30 border-sky-600/20 rounded-xl p-6 pt-8 md:pt-14 shadow-md group"
             >
               <div className="absolute -top-6 left-0  w-12 h-12 bg-sky-700 text-white text-xl font-bold rounded-full flex items-center justify-center shadow-md group-hover:scale-105 transition">
                 {step.id}
@@ -299,11 +301,11 @@ const Home = () => {
 
       {/* Popular Templates */}
       <section className="py-8 md:py-16 px-6 md:px-20 bg-gray-100">
-        <h2 className="text-4xl mb-4 text-center [font-family:'Lilita_One',cursive]">
+        <h2 className="text-2xl md:text-4xl mb-4 text-center [font-family:'Lilita_One',cursive]">
           Popular Templates
         </h2>
 
-        <p className="text-center max-w-2xl mx-auto text-gray-600 mb-10 text-xl">
+        <p className="text-center max-w-2xl mx-auto text-gray-600 mb-10 text-sm md:text-xl">
           Choose from beautifully crafted templates designed for maximum impact.
           Each template is fully customizable — change fonts, colors, layout,
           and structure as you go. Build a professional resume in minutes.
@@ -356,7 +358,7 @@ const Home = () => {
           <FaQuoteRight className="absolute -bottom-2 right-6 text-black text-4xl z-0" />
 
           <motion.div
-            className="flex flex-col md:flex-row items-center gap-12"
+            className="flex flex-col md:flex-row items-center gap-6 md:gap-12"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
@@ -364,7 +366,7 @@ const Home = () => {
           >
             {/* Left: Video */}
             <div className="w-full md:w-3/5">
-              <div className="relative w-full h-64 md:h-60 rounded-lg overflow-hidden shadow-lg">
+              <div className="relative w-full h-36 md:h-60 rounded-lg overflow-hidden shadow-lg">
                 <iframe
                   className="absolute inset-0 w-full h-full"
                   src="https://www.youtube.com/embed/dQw4w9WgXcQ"
@@ -381,7 +383,7 @@ const Home = () => {
               <h2 className="text-2xl md:text-4xl [font-family:'Lilita_One',cursive] mb-4">
                 Watch How It Works
               </h2>
-              <p className="text-white/85 text-sm leading-relaxed">
+              <p className="text-white/85 text-xs md:text-sm leading-relaxed">
                 See how ResuMate helps you create, edit, and optimize your
                 resume step-by-step with our intuitive editor and AI-powered
                 enhancements. In under 2 minutes, you’ll understand how to build
@@ -401,11 +403,11 @@ const Home = () => {
         {/* Gradient Overlay Center */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-sky-300 opacity-10 rounded-full blur-3xl z-0"></div>
 
-        <h2 className="text-4xl mb-12 text-center [font-family:'Lilita_One',cursive] z-10 relative">
+        <h2 className="text-2xl md:text-4xl mb-7 md:mb-12 text-center [font-family:'Lilita_One',cursive] z-10 relative">
           What Users Say
         </h2>
 
-        <div className="grid md:px-44 md:grid-cols-3 gap-8 relative z-10">
+        <div className="grid md:px-44 md:grid-cols-3 gap-4 md:gap-8 relative z-10">
           {testimonials.map((user, i) => (
             <motion.div
               key={i}
@@ -414,9 +416,9 @@ const Home = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: i * 0.1 }}
               viewport={{ once: true }}
-              className="bg-white p-6 rounded-xl shadow-md border border-gray-200 relative"
+              className="bg-white p-3 md:p-6 rounded-xl shadow-md border border-gray-200 relative"
             >
-              <p className="text-lg italic mb-6 text-gray-700">{`"${user.feedback}"`}</p>
+              <p className="text-sm md:text-lg italic mb-6 text-gray-700">{`"${user.feedback}"`}</p>
 
               <div className="flex items-center gap-4">
                 <img
@@ -437,7 +439,7 @@ const Home = () => {
 
       {/* FAQs */}
       <section className="md:py-20 px-6 md:px-20 bg-background">
-        <h2 className="text-4xl  mb-10 text-center [font-family:'Lilita_One',cursive]">
+        <h2 className="text-2xl md:text-4xl mb-5 md:mb-10 text-center [font-family:'Lilita_One',cursive]">
           FAQs
         </h2>
         <div className="max-w-2xl mx-auto space-y-4">
@@ -448,11 +450,13 @@ const Home = () => {
             >
               <button
                 onClick={() => toggleFAQ(i)}
-                className={`w-full px-5 py-4 flex justify-between items-center text-left  transition ${
+                className={`w-full px-5 py-2.5 md:py-4 flex justify-between items-center text-left  transition ${
                   openIndex === i ? "bg-sky-700/10" : ""
                 }`}
               >
-                <span className="font-medium text-[#0f172a]">{faq.q}</span>
+                <span className="text-xs md:text-lg font-medium text-[#0f172a]">
+                  {faq.q}
+                </span>
                 <FaChevronDown
                   className={`ml-4 text-gray-500 transform transition-transform duration-300 ${
                     openIndex === i ? "rotate-180" : ""
@@ -467,7 +471,7 @@ const Home = () => {
                     : "max-h-0 opacity-0 py-0"
                 }`}
               >
-                <p className="text-sm text-gray-600 py-2">{faq.a}</p>
+                <p className="text-xs md:text-sm text-gray-600 py-2">{faq.a}</p>
               </div>
             </div>
           ))}
