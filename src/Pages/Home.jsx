@@ -298,7 +298,7 @@ const Home = () => {
       </section>
 
       {/* Popular Templates */}
-      <section className="py-16 px-6 md:px-20 bg-gray-100">
+      <section className="py-8 md:py-16 px-6 md:px-20 bg-gray-100">
         <h2 className="text-4xl mb-4 text-center [font-family:'Lilita_One',cursive]">
           Popular Templates
         </h2>
@@ -309,13 +309,13 @@ const Home = () => {
           and structure as you go. Build a professional resume in minutes.
         </p>
 
-        <div className="grid px-40 sm:grid-cols-2 md:grid-cols-3 gap-12">
+        <div className="grid md:px-40 sm:grid-cols-1 md:grid-cols-3 gap-12">
           {Template.map((temp) => (
             <motion.div
               key={temp.id}
               whileHover={{ scale: 1.03 }}
               transition={{ duration: 0.3 }}
-              className="relative  overflow-hidden  "
+              className="relative p-2.5  overflow-hidden flex flex-col items-center justify-center bg-white border border-gray-200 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300"
             >
               {/* Icon */}
               <div className="absolute top-3 right-3 bg-sky-700/10 text-sky-700 p-2 rounded-full">
@@ -323,7 +323,7 @@ const Home = () => {
               </div>
 
               {/* Image */}
-              <div className="w-full h-[400px]  overflow-hidden">
+              <div className="w-[300px]  md:h-[400px]  overflow-hidden">
                 <img
                   src={temp.image}
                   alt={`Template ${temp.id}`}
@@ -333,7 +333,7 @@ const Home = () => {
               </div>
 
               {/* Caption */}
-              <div className="p-4">
+              <div className="">
                 <p className="text-center text-sky-700 font-medium">
                   {temp.name}
                 </p>
@@ -397,7 +397,7 @@ const Home = () => {
       <Marquee />
 
       {/* Testimonials */}
-      <section className="relative py-20 px-6 md:px-20 bg-[#f0f4f8] overflow-hidden">
+      <section className="relative py-14 md:py-20 px-6 md:px-20 bg-[#f0f4f8] overflow-hidden">
         {/* Gradient Overlay Center */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-sky-300 opacity-10 rounded-full blur-3xl z-0"></div>
 
@@ -405,7 +405,7 @@ const Home = () => {
           What Users Say
         </h2>
 
-        <div className="grid px-44 md:grid-cols-3 gap-8 relative z-10">
+        <div className="grid md:px-44 md:grid-cols-3 gap-8 relative z-10">
           {testimonials.map((user, i) => (
             <motion.div
               key={i}
@@ -436,7 +436,7 @@ const Home = () => {
       </section>
 
       {/* FAQs */}
-      <section className="py-20 px-6 md:px-20 bg-background">
+      <section className="md:py-20 px-6 md:px-20 bg-background">
         <h2 className="text-4xl  mb-10 text-center [font-family:'Lilita_One',cursive]">
           FAQs
         </h2>
