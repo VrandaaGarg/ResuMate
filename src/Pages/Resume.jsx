@@ -9,12 +9,18 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaUserEdit } from "react-icons/fa";
 import { useSidebarSetting } from "../Contexts/SidebarSettingContext";
+import StandardTemplate from "../Components/Templates/StandardTemplate";
+import { useStandardSetting } from "../Contexts/StandardSettingContext";
+import { useModernSetting } from "../Contexts/ModernSettingContext";
+import ModernTemplate from "../Components/Templates/ModernTemplate";
 
 export default function Resume() {
   const navigate = useNavigate();
   const { resume, setResume } = useResumeData();
   const { classicSettings, setClassicSettings } = useClassicSetting();
   const { sidebarSettings, setSidebarSettings } = useSidebarSetting();
+  const { standardSettings, setStandardSettings } = useStandardSetting();
+  const { modernSettings, setModernSettings } = useModernSetting();
 
   const [selectedTemplate, setSelectedTemplate] = useState(
     () => localStorage.getItem("selectedTemplate") || "classic"
@@ -99,6 +105,8 @@ export default function Resume() {
               >
                 <option value="classic">Classic</option>
                 <option value="sidebar">Sidebar</option>
+                <option value="standard">Standard</option>
+                <option value="modern">Modern</option>
               </select>
             </div>
             <div className="">
@@ -133,6 +141,28 @@ export default function Resume() {
               visibleSections={visibleSections}
               settings={classicSettings}
               onSettingsChange={setClassicSettings}
+            />
+          )}
+
+          {selectedTemplate === "standard" && (
+            <StandardTemplate
+              resume={resume}
+              onChange={setResume}
+              sectionOrder={sectionOrder}
+              visibleSections={visibleSections}
+              settings={standardSettings}
+              onSettingsChange={setStandardSettings}
+            />
+          )}
+
+          {selectedTemplate === "modern" && (
+            <ModernTemplate
+              resume={resume}
+              onChange={setResume}
+              sectionOrder={sectionOrder}
+              visibleSections={visibleSections}
+              settings={modernSettings}
+              onSettingsChange={setModernSettings}
             />
           )}
         </div>
