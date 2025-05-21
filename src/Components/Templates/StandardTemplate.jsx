@@ -188,7 +188,7 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
 
     details: (
       <div
-        className="  pt-2 md:pt-4 pb-2 md:pb-4"
+        className={`${settings.sectionPaddingY || "py-4"}`}
         style={{ textAlign: settings.descriptionAlign || "left" }}
       >
         {/* Contact Line */}
@@ -270,8 +270,15 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
 
     description: (
       <div
-        className="flex border-t border-grgrayay-700  pt-2 md:pt-4 pb-2 md:pb-4"
-        style={{ textAlign: settings.descriptionAlign || "left" }}
+        className={`flex gap-4 border-t border-grgrayay-700 ${
+          settings.sectionPaddingY || "py-4"
+        }`}
+        style={{
+          textAlign: settings.descriptionAlign || "left",
+          borderTopWidth: settings.borderTopWidth || "1px",
+          borderTopStyle: settings.borderStyle || "solid",
+          borderColor: settings.borderColor || "#cbd5e1",
+        }}
       >
         <h2
           className={`w-1/3 ${getCustomFontClass(
@@ -297,8 +304,15 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
 
     education: (
       <div
-        className="flex border-t border-gray-700 pt-2 md:pt-4 pb-2 md:pb-4"
-        style={{ textAlign: settings.descriptionAlign || "left" }}
+        className={`flex gap-4 border-t border-gray-700 ${
+          settings.sectionPaddingY || "py-4"
+        }`}
+        style={{
+          textAlign: settings.descriptionAlign || "left",
+          borderTopWidth: settings.borderTopWidth || "1px",
+          borderTopStyle: settings.borderStyle || "solid",
+          borderColor: settings.borderColor || "#cbd5e1",
+        }}
       >
         <h2
           className={`w-1/3 ${getCustomFontClass(
@@ -369,8 +383,15 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
 
     skills: (
       <div
-        className="flex border-t border-gray-700 pt-2 md:pt-4 pb-2 md:pb-4"
-        style={{ textAlign: settings.descriptionAlign || "left" }}
+        className={`flex gap-4 border-t border-gray-700 ${
+          settings.sectionPaddingY || "py-4"
+        }`}
+        style={{
+          textAlign: settings.descriptionAlign || "left",
+          borderTopWidth: settings.borderTopWidth || "1px",
+          borderTopStyle: settings.borderStyle || "solid",
+          borderColor: settings.borderColor || "#cbd5e1",
+        }}
       >
         <h2
           className={`w-1/3 ${getCustomFontClass(
@@ -407,8 +428,15 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
 
     projects: (
       <div
-        className="flex border-t border-gray-700 pt-2 md:pt-4 pb-2 md:pb-4"
-        style={{ textAlign: settings.descriptionAlign || "left" }}
+        className={`flex gap-4 border-t border-gray-700 ${
+          settings.sectionPaddingY || "py-4"
+        }`}
+        style={{
+          textAlign: settings.descriptionAlign || "left",
+          borderTopWidth: settings.borderTopWidth || "1px",
+          borderTopStyle: settings.borderStyle || "solid",
+          borderColor: settings.borderColor || "#cbd5e1",
+        }}
       >
         <h2
           className={`w-1/3 ${getCustomFontClass(
@@ -496,8 +524,15 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
 
     experience: (
       <div
-        className="flex border-t border-gray-700 pt-2 md:pt-4 pb-2 md:pb-4"
-        style={{ textAlign: settings.descriptionAlign || "left" }}
+        className={`flex gap-4 border-t border-gray-700 ${
+          settings.sectionPaddingY || "py-4"
+        }`}
+        style={{
+          textAlign: settings.descriptionAlign || "left",
+          borderTopWidth: settings.borderTopWidth || "1px",
+          borderTopStyle: settings.borderStyle || "solid",
+          borderColor: settings.borderColor || "#cbd5e1",
+        }}
       >
         <h2
           className={`w-1/3 ${getCustomFontClass(
@@ -561,8 +596,15 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
 
     achievements: (
       <div
-        className="flex border-t border-gray-700 pt-2 md:pt-4 pb-2 md:pb-4"
-        style={{ textAlign: settings.descriptionAlign || "left" }}
+        className={`flex gap-4 border-t border-gray-700 ${
+          settings.sectionPaddingY || "py-4"
+        }`}
+        style={{
+          textAlign: settings.descriptionAlign || "left",
+          borderTopWidth: settings.borderTopWidth || "1px",
+          borderTopStyle: settings.borderStyle || "solid",
+          borderColor: settings.borderColor || "#cbd5e1",
+        }}
       >
         <h2
           className={`w-1/3 ${getCustomFontClass(
@@ -863,22 +905,22 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
 
                 <ul className="space-y-1 text-sm text-gray-600">
                   {[
-                    { label: "None", value: 0 },
-                    { label: "Small", value: 8 },
-                    { label: "Medium", value: 16 },
-                    { label: "Large", value: 24 },
-                    { label: "Extra Large", value: 32 },
+                    { label: "None", class: "py-0" },
+                    { label: "Small", class: "py-2" },
+                    { label: "Medium", class: "py-4" },
+                    { label: "Large", class: "py-6" },
+                    { label: "Extra Large", class: "py-8" },
                   ].map((option) => (
                     <li
-                      key={option.value}
+                      key={option.class}
                       onClick={() =>
                         onSettingsChange((prev) => ({
                           ...prev,
-                          sectionGap: option.value,
+                          sectionPaddingY: option.class,
                         }))
                       }
                       className={`px-3 py-1.5 rounded cursor-pointer hover:bg-sky-50 transition ${
-                        settings.sectionGap === option.value
+                        settings.sectionPaddingY === option.class
                           ? "bg-sky-100 text-sky-700 font-semibold"
                           : ""
                       }`}
@@ -891,24 +933,24 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
             )}
           </div>
 
-          {/* Border Width Dropdown */}
+          {/* Top Border Width Dropdown */}
           <div className="relative">
             <button
               onClick={() =>
                 setOpenDropdown((prev) =>
-                  prev === "borderWidth" ? null : "borderWidth"
+                  prev === "borderTopWidth" ? null : "borderTopWidth"
                 )
               }
-              title="Border Width"
+              title="Sections Border Width"
               className="md:p-2 rounded-md text-center align-middle hover:bg-gray-100 transition"
             >
               <BsBorderWidth className="text-gray-700 text-sm md:text-lg" />
             </button>
 
-            {openDropdown === "borderWidth" && (
-              <div className="absolute z-50 mt-2 left-1/2 -translate-x-1/2 bg-white border border-gray-200 shadow-xl rounded-lg p-1.5 md:p-3  w-32 md:max-w-[90vw]">
+            {openDropdown === "borderTopWidth" && (
+              <div className="absolute z-50 mt-2 left-1/2 -translate-x-1/2 bg-white border border-gray-200 shadow-xl rounded-lg p-1.5 md:p-3 w-32 md:max-w-[90vw]">
                 <p className="text-xs md:text-sm font-semibold text-gray-700 mb-1.5 md:mb-3 text-center">
-                  Select Width
+                  Top Border
                 </p>
 
                 <ul className="flex flex-col gap-1 max-h-60 overflow-y-auto pr-1">
@@ -925,12 +967,12 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
                         onClick={() => {
                           onSettingsChange((prev) => ({
                             ...prev,
-                            borderWidth: w.value,
+                            borderTopWidth: w.value,
                           }));
                           setOpenDropdown(false);
                         }}
                         className={`w-full justify-center h-5 px-1 py-1.5 rounded-xs flex items-center gap-5 hover:bg-sky-50 transition ${
-                          settings.borderWidth === w.value
+                          settings.borderTopWidth === w.value
                             ? "bg-sky-100"
                             : "text-gray-800"
                         }`}
@@ -942,7 +984,7 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
                         ) : (
                           <div
                             style={{
-                              borderBottom: `${w.value} solid #334155`,
+                              borderTop: `${w.value} solid #334155`,
                               width: "100%",
                             }}
                           ></div>
@@ -963,7 +1005,7 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
                   prev === "borderStyles" ? null : "borderStyles"
                 )
               }
-              title="Border style and color"
+              title="Section Border style and color"
               className="md:p-2 text-center align-middle rounded-md hover:bg-gray-100 transition"
             >
               <BsBoundingBoxCircles className="text-gray-700 text-sm md:text-lg" />
@@ -1018,73 +1060,6 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
                     className="w-full h-8 rounded border cursor-pointer"
                   />
                 </div>
-              </div>
-            )}
-          </div>
-
-          {/* Border Radius Dropdown */}
-          <div className="relative">
-            <button
-              onClick={() =>
-                setOpenDropdown((prev) =>
-                  prev === "borderRadius" ? null : "borderRadius"
-                )
-              }
-              title="Border Radius"
-              className="md:p-2 align-middle text-center rounded-md hover:bg-gray-100 transition"
-            >
-              <TbBorderCornerPill className="text-gray-700 text-sm md:text-lg" />
-            </button>
-
-            {openDropdown === "borderRadius" && (
-              <div className="absolute z-50 mt-2  bg-white border border-gray-200 shadow-xl rounded-lg p-3 w-40 max-w-[90vw]">
-                <p className="text-sm font-semibold text-gray-700 mb-3 text-center">
-                  Border Radius
-                </p>
-
-                <ul className="flex flex-col gap-1 max-h-60 overflow-y-auto pr-1">
-                  {[
-                    { label: "None", value: "0px" },
-                    { label: "2px", value: "2px" },
-                    { label: "4px", value: "4px" },
-                    { label: "6px", value: "6px" },
-                    { label: "8px", value: "8px" },
-                    { label: "12px", value: "12px" },
-                    { label: "16px", value: "16px" },
-                    { label: "24px", value: "24px" },
-                    { label: "32px", value: "32px" },
-                  ].map((r) => (
-                    <li key={r.value}>
-                      <button
-                        onClick={() => {
-                          onSettingsChange((prev) => ({
-                            ...prev,
-                            borderRadius: r.value,
-                          }));
-                          setOpenDropdown(false);
-                        }}
-                        className={`w-full px-3 py-0.5 md:py-1.5 rounded-sm flex items-center gap-3 hover:bg-gray-50 transition ${
-                          settings.borderRadius === r.value
-                            ? "bg-sky-50 "
-                            : "text-gray-800"
-                        }`}
-                      >
-                        {/* Text label */}
-                        <span className="text-xs w-12 text-left text-gray-600">
-                          {r.value}
-                        </span>
-
-                        {/* Preview Box */}
-                        <div
-                          className="h-4 md:h-6 flex-1 border border-gray-300 bg-white"
-                          style={{
-                            borderRadius: r.value,
-                          }}
-                        ></div>
-                      </button>
-                    </li>
-                  ))}
-                </ul>
               </div>
             )}
           </div>
@@ -1358,7 +1333,7 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
       >
         {/* Inner Resume Container */}
         <div
-          className="p-2 md:p-7 flex flex-col"
+          className={`p-2 md:p-7 flex flex-col `}
           style={{
             border:
               settings.borderWidth && settings.borderWidth !== "0px"
@@ -1366,8 +1341,6 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
                     settings.borderColor || "#cbd5e1"
                   }`
                 : "none",
-            borderRadius: settings.borderRadius || "0px",
-            rowGap: `${settings.sectionGap ?? 16}px`,
           }}
         >
           {Array.isArray(settings?.sectionOrder) &&
