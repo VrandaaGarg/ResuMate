@@ -1204,7 +1204,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
               <div className="absolute right-0 mt-2 z-50 w-48 md:w-72 max-h-72 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg">
                 <div className="p-4">
                   <h3 className="text-[12px] md:text-sm font-semibold text-gray-800 mb-1.5 md:mb-3 flex items-center gap-1 md:gap-2">
-                    <FaEye className="text-blue-600" />
+                    <FaEye className="text-sky-700" />
                     Show/Hide Sections
                   </h3>
 
@@ -1229,7 +1229,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                           }
                           className={`flex items-center justify-between px-1.5 md:px-3 py-1.5 rounded-md border text-[10px] md:text-xs transition-all ${
                             isVisible
-                              ? "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100"
+                              ? "bg-blue-50 text-sky-700 border-sky-300 hover:bg-sky-100"
                               : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
                           }`}
                         >
