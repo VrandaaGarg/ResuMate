@@ -61,27 +61,6 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
   const [openDropdown, setOpenDropdown] = useState(null); // values: "toggle", "font", "reorder", etc.
   const sidebarSections = ["name", "details", "description", "skills"];
   const mainSections = ["experience", "projects", "education", "achievements"];
-  fontScaleLevel: 0; // default level (0), can be -1, 0, +1, +2
-
-  const getScaledFontClass = (base, level) => {
-    const sizes = [
-      "text-xs",
-      "text-sm",
-      "text-base",
-      "text-lg",
-      "text-xl",
-      "text-2xl",
-      "text-3xl",
-      "text-4xl",
-      "text-5xl",
-      "text-6xl",
-    ];
-
-    const baseIndex = sizes.indexOf(base);
-    const newIndex = Math.min(sizes.length - 1, Math.max(0, baseIndex + level));
-
-    return sizes[newIndex];
-  };
 
   const pixelSizes = [
     4, 6, 8, 10, 12, 14, 16, 18, 20, 26, 30, 36, 48, 60, 72, 96, 128,
@@ -362,7 +341,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
           Skills Overview
         </h2>
 
-        <div className="md:space-y-2.5 space-y-1">
+        <div className="">
           {resume.skills.map((skill, i) => {
             const totalSkills = resume.skills.reduce(
               (acc, s) => acc + s.languages.length,
@@ -373,20 +352,18 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
 
             return (
               <div key={i}>
-                <div className="align-middle">
-                  <span
-                    className={`${getCustomFontClass(
-                      "text-[14px]",
-                      settings.fontScaleLevel
-                    )} font-medium`}
-                    style={{
-                      color: settings.textColors?.["h3"] || "text-blue-200",
-                      textAlign: settings.descriptionAlign || "left",
-                    }}
-                  >
-                    {skill.domain}
-                  </span>
-                </div>
+                <span
+                  className={`${getCustomFontClass(
+                    "text-[14px]",
+                    settings.fontScaleLevel
+                  )} font-medium`}
+                  style={{
+                    color: settings.textColors?.["h3"] || "text-blue-200",
+                    textAlign: settings.descriptionAlign || "left",
+                  }}
+                >
+                  {skill.domain}
+                </span>
 
                 <p
                   className={`${getCustomFontClass(

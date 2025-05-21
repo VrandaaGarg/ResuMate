@@ -53,10 +53,6 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
 
   const [openDropdown, setOpenDropdown] = useState(null); // values: "toggle", "font", "reorder", etc.
   if (!resume) return null;
-  const canIncrease = settings.fontScaleLevel < 10;
-  const canDecrease = settings.fontScaleLevel > -10;
-
-  fontScaleLevel: 0; // default level (0), can be -1, 0, +1, +2
 
   const pixelSizes = [
     4, 6, 8, 10, 12, 14, 16, 18, 20, 24, 30, 36, 48, 60, 72, 96, 128,

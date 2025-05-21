@@ -53,10 +53,6 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
 
   const [openDropdown, setOpenDropdown] = useState(null); // values: "toggle", "font", "reorder", etc.
   if (!resume) return null;
-  const canIncrease = settings.fontScaleLevel < 10;
-  const canDecrease = settings.fontScaleLevel > -10;
-
-  fontScaleLevel: 0; // default level (0), can be -1, 0, +1, +2
 
   const pixelSizes = [
     4, 6, 8, 10, 12, 14, 16, 18, 20, 24, 30, 36, 48, 60, 72, 96, 128,
@@ -173,7 +169,7 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
       <div className="">
         <h1
           className={`${getCustomFontClass(
-            "text-[48px]",
+            "text-[36px]",
             settings.fontScaleLevel
           )} font-bold w-full inline-block`}
           style={{
@@ -194,7 +190,7 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
         {/* Contact Line */}
         <p
           className={`${getCustomFontClass(
-            "text-[14px]",
+            "text-[12px]",
             settings.fontScaleLevel
           )} text-gray-700`}
         >
@@ -231,7 +227,7 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
         {/* Links */}
         <div
           className={`${getCustomFontClass(
-            "text-[14px]",
+            "text-[12px]",
             settings.fontScaleLevel
           )} break-words whitespace-normal flex-wrap gap-x-2 `}
           style={{
@@ -282,7 +278,7 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
       >
         <h2
           className={`w-1/3 ${getCustomFontClass(
-            "text-[16px]",
+            "text-[14px]",
             settings.fontScaleLevel
           )} font-bold text-gray-800`}
           style={{ color: settings.TextColors?.["h2"] || "#334155" }}
@@ -291,7 +287,7 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
         </h2>
         <div
           className={`w-2/3 resume-content text-gray-700 ${getCustomFontClass(
-            "text-[14px]",
+            "text-[12px]",
             settings.fontScaleLevel
           )}`}
           style={{ color: settings.TextColors?.["h3"] || "#475569" }}
@@ -316,7 +312,7 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
       >
         <h2
           className={`w-1/3 ${getCustomFontClass(
-            "text-[16px]",
+            "text-[14px]",
             settings.fontScaleLevel
           )} font-bold text-gray-800`}
           style={{ color: settings.TextColors?.["h2"] || "#334155" }}
@@ -327,7 +323,7 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
           <div
             style={{ color: settings.TextColors?.["h3"] || "#475569" }}
             className={`flex gap-6 w-full ${getCustomFontClass(
-              "text-[14px]",
+              "text-[12px]",
               settings.fontScaleLevel
             )} ${
               settings.descriptionAlign === "center"
@@ -344,14 +340,14 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
           </div>
           <div
             className={` ${getCustomFontClass(
-              "text-[14px]",
+              "text-[12px]",
               settings.fontScaleLevel
             )}`}
             style={{ color: settings.TextColors?.["h3"] || "#475569" }}
           >
             <div
               className={`flex gap-6 w-full ${getCustomFontClass(
-                "text-[14px]",
+                "text-[12px]",
                 settings.fontScaleLevel
               )} ${
                 settings.descriptionAlign === "center"
@@ -395,7 +391,7 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
       >
         <h2
           className={`w-1/3 ${getCustomFontClass(
-            "text-[16px]",
+            "text-[14px]",
             settings.fontScaleLevel
           )} font-bold text-gray-800`}
           style={{ color: settings.TextColors?.["h2"] || "#334155" }}
@@ -407,7 +403,7 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
             <div
               key={i}
               className={` ${getCustomFontClass(
-                "text-[14px]",
+                "text-[12px]",
                 settings.fontScaleLevel
               )}`}
             >
@@ -440,7 +436,7 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
       >
         <h2
           className={`w-1/3 ${getCustomFontClass(
-            "text-[16px]",
+            "text-[14px]",
             settings.fontScaleLevel
           )} font-bold text-gray-800`}
           style={{ color: settings.TextColors?.["h2"] || "#334155" }}
@@ -452,7 +448,7 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
             <div key={i} className="md:mb-3">
               <div
                 className={`flex gap-2 md:gap-6 w-full ${getCustomFontClass(
-                  "text-[14px]",
+                  "text-[12px]",
                   settings.fontScaleLevel
                 )} ${
                   settings.descriptionAlign === "center"
@@ -508,7 +504,7 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
               {/* Description */}
               <div
                 className={`resume-content   ${getCustomFontClass(
-                  "text-[14px]",
+                  "text-[12px]",
                   settings.fontScaleLevel
                 )}`}
                 style={{ color: settings.TextColors?.["h4"] || "#64748b" }}
@@ -536,7 +532,7 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
       >
         <h2
           className={`w-1/3 ${getCustomFontClass(
-            "text-[16px]",
+            "text-[14px]",
             settings.fontScaleLevel
           )} font-bold text-gray-800`}
           style={{ color: settings.TextColors?.["h2"] || "#334155" }}
@@ -549,7 +545,7 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
               <li
                 key={i}
                 className={`md:mb-3  ${getCustomFontClass(
-                  "text-[14px]",
+                  "text-[12px]",
                   settings.fontScaleLevel
                 )}`}
               >
@@ -608,7 +604,7 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
       >
         <h2
           className={`w-1/3 ${getCustomFontClass(
-            "text-[16px]",
+            "text-[14px]",
             settings.fontScaleLevel
           )} font-bold text-gray-800`}
           style={{ color: settings.TextColors?.["h2"] || "#334155" }}
@@ -621,7 +617,7 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
               <li
                 key={i}
                 className={` ${getCustomFontClass(
-                  "text-[14px]",
+                  "text-[12px]",
                   settings.fontScaleLevel
                 )}`}
               >
