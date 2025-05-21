@@ -1,4 +1,4 @@
-// src/Components/Templates/ClassicTemplate.jsx
+// src/Components/Templates/StandardTemplate;.jsx
 import React, { useEffect, useState } from "react";
 import { useEditResume } from "../../Contexts/EditResumeContext";
 import { BsBorderWidth, BsBoundingBoxCircles } from "react-icons/bs";
@@ -35,7 +35,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 
-const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
+const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
   const { isEditable } = useEditResume();
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -170,13 +170,16 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
 
   const sectionMap = {
     name: (
-      <div className="text-center">
+      <div className="">
         <h1
           className={`${getCustomFontClass(
-            "text-[36px]",
+            "text-[48px]",
             settings.fontScaleLevel
           )} font-bold w-full inline-block`}
-          style={{ color: settings.TextColors?.["h1"] || "black" }}
+          style={{
+            color: settings.TextColors?.["h1"] || "black",
+            textAlign: settings.descriptionAlign || "left",
+          }}
         >
           {resume.name}
         </h1>
@@ -184,7 +187,10 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
     ),
 
     details: (
-      <div className="text-center ">
+      <div
+        className={`${settings.sectionPaddingY || "py-4"}`}
+        style={{ textAlign: settings.descriptionAlign || "left" }}
+      >
         {/* Contact Line */}
         <p
           className={`${getCustomFontClass(
@@ -194,7 +200,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
         >
           {[
             resume.contact.phone && (
-              <span style={{ color: settings.TextColors?.["h3"] || "#475569" }}>
+              <span style={{ color: settings.TextColors?.["h3"] || "black" }}>
                 {resume.contact.phone}
               </span>
             ),
@@ -203,13 +209,13 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                 href={`mailto:${resume.contact.email}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ color: settings.linkColor || "#2563eb" }}
+                style={{ color: settings.linkColor || "black" }}
               >
                 {resume.contact.email}
               </a>
             ),
             resume.contact.location && (
-              <span style={{ color: settings.linkColor || "#2563eb" }}>
+              <span style={{ color: settings.linkColor || "black" }}>
                 {resume.contact.location}
               </span>
             ),
@@ -227,8 +233,11 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
           className={`${getCustomFontClass(
             "text-[14px]",
             settings.fontScaleLevel
-          )} break-words whitespace-normal flex flex-wrap justify-center gap-x-2 `}
-          style={{ color: settings.linkColor || "#2563eb" }}
+          )} break-words whitespace-normal flex-wrap gap-x-2 `}
+          style={{
+            color: settings.linkColor || "black",
+            textAlign: settings.descriptionAlign || "left",
+          }}
         >
           {resume.contact.github && (
             <a
@@ -242,7 +251,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
           )}
 
           {resume.contact.github && resume.contact.linkedin && (
-            <span className="text-gray-700 hidden sm:inline">|</span>
+            <span className="text-gray-700 mx-1 hidden sm:inline">|</span>
           )}
 
           {resume.contact.linkedin && (
@@ -260,18 +269,28 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
     ),
 
     description: (
-      <div style={{ textAlign: settings.descriptionAlign || "left" }}>
+      <div
+        className={`flex gap-4 border-t border-grgrayay-700 ${
+          settings.sectionPaddingY || "py-4"
+        }`}
+        style={{
+          textAlign: settings.descriptionAlign || "left",
+          borderTopWidth: settings.borderTopWidth || "1px",
+          borderTopStyle: settings.borderStyle || "solid",
+          borderColor: settings.borderColor || "#cbd5e1",
+        }}
+      >
         <h2
-          className={`${getCustomFontClass(
+          className={`w-1/3 ${getCustomFontClass(
             "text-[16px]",
             settings.fontScaleLevel
           )} font-bold text-gray-800`}
           style={{ color: settings.TextColors?.["h2"] || "#334155" }}
         >
-          PROFILE
+          PERSONAL SUMMARY
         </h2>
         <div
-          className={`resume-content text-gray-700 ${getCustomFontClass(
+          className={`w-2/3 resume-content text-gray-700 ${getCustomFontClass(
             "text-[14px]",
             settings.fontScaleLevel
           )}`}
@@ -284,9 +303,19 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
     ),
 
     education: (
-      <div style={{ textAlign: settings.descriptionAlign || "left" }}>
+      <div
+        className={`flex gap-4 border-t border-gray-700 ${
+          settings.sectionPaddingY || "py-4"
+        }`}
+        style={{
+          textAlign: settings.descriptionAlign || "left",
+          borderTopWidth: settings.borderTopWidth || "1px",
+          borderTopStyle: settings.borderStyle || "solid",
+          borderColor: settings.borderColor || "#cbd5e1",
+        }}
+      >
         <h2
-          className={`${getCustomFontClass(
+          className={`w-1/3 ${getCustomFontClass(
             "text-[16px]",
             settings.fontScaleLevel
           )} font-bold text-gray-800`}
@@ -294,32 +323,9 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
         >
           EDUCATION
         </h2>
-        <div
-          style={{ color: settings.TextColors?.["h3"] || "#475569" }}
-          className={`flex gap-6 w-full ${getCustomFontClass(
-            "text-[14px]",
-            settings.fontScaleLevel
-          )} ${
-            settings.descriptionAlign === "center"
-              ? "justify-center"
-              : settings.descriptionAlign === "right"
-              ? "justify-end"
-              : settings.descriptionAlign === "justify"
-              ? "justify-between"
-              : "justify-start"
-          }`}
-        >
-          <p className="font-semibold">{resume.education.college}</p>
-          <p className="italic"> {resume.education.location}</p>
-        </div>
-        <div
-          className={` ${getCustomFontClass(
-            "text-[14px]",
-            settings.fontScaleLevel
-          )}`}
-          style={{ color: settings.TextColors?.["h3"] || "#475569" }}
-        >
+        <div className="w-2/3">
           <div
+            style={{ color: settings.TextColors?.["h3"] || "#475569" }}
             className={`flex gap-6 w-full ${getCustomFontClass(
               "text-[14px]",
               settings.fontScaleLevel
@@ -333,71 +339,18 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                 : "justify-start"
             }`}
           >
-            <p>
-              {resume.education.degree}
-              {resume.education.specialization &&
-                ` (${resume.education.specialization})`}
-            </p>
-
-            <p className="italic">
-              {" "}
-              {resume.education.startYear} – {resume.education.endYear}
-            </p>
+            <p className="font-semibold">{resume.education.college}</p>
+            <p className="italic"> {resume.education.location}</p>
           </div>
-
-          <p>{resume.education.cgpa} CGPA</p>
-        </div>
-      </div>
-    ),
-
-    skills: (
-      <div style={{ textAlign: settings.descriptionAlign || "left" }}>
-        <h2
-          className={`${getCustomFontClass(
-            "text-[16px]",
-            settings.fontScaleLevel
-          )} font-bold text-gray-800`}
-          style={{ color: settings.TextColors?.["h2"] || "#334155" }}
-        >
-          SKILLS
-        </h2>
-        {resume.skills.map((skill, i) => (
           <div
-            key={i}
-            className={`${getCustomFontClass(
+            className={` ${getCustomFontClass(
               "text-[14px]",
               settings.fontScaleLevel
             )}`}
+            style={{ color: settings.TextColors?.["h3"] || "#475569" }}
           >
-            <span
-              className="font-semibold mr-2"
-              style={{ color: settings.TextColors?.["h3"] || "#475569" }}
-            >
-              {skill.domain}:
-            </span>{" "}
-            <span style={{ color: settings.TextColors?.["h4"] || "#64748b" }}>
-              {skill.languages.join(", ")}
-            </span>
-          </div>
-        ))}
-      </div>
-    ),
-
-    projects: (
-      <div style={{ textAlign: settings.descriptionAlign || "left" }}>
-        <h2
-          className={`${getCustomFontClass(
-            "text-[16px]",
-            settings.fontScaleLevel
-          )} font-bold text-gray-800`}
-          style={{ color: settings.TextColors?.["h2"] || "#334155" }}
-        >
-          PROJECTS
-        </h2>
-        {resume.projects.map((proj, i) => (
-          <div key={i} className="md:mb-3">
             <div
-              className={`flex gap-2 md:gap-6 w-full ${getCustomFontClass(
+              className={`flex gap-6 w-full ${getCustomFontClass(
                 "text-[14px]",
                 settings.fontScaleLevel
               )} ${
@@ -410,67 +363,179 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                   : "justify-start"
               }`}
             >
-              <span
-                className="font-bold"
-                style={{ color: settings.TextColors?.["h3"] || "#475569" }}
-              >
-                {proj.name}
-              </span>
-              <div>
-                {(proj.demo || proj.github) && (
-                  <span>
-                    (
-                    {proj.demo && (
-                      <a
-                        href={proj.demo}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="underline "
-                        style={{ color: settings.linkColor || "#2563eb" }}
-                      >
-                        Live Demo
-                      </a>
-                    )}
-                    {proj.demo && proj.github && (
-                      <span className="mx-1">|</span>
-                    )}
-                    {proj.github && (
-                      <a
-                        href={proj.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="underline "
-                        style={{ color: settings.linkColor || "#2563eb" }}
-                      >
-                        GitHub
-                      </a>
-                    )}
-                    )
-                  </span>
-                )}
-              </div>
+              <p>
+                {resume.education.degree}
+                {resume.education.specialization &&
+                  ` (${resume.education.specialization})`}
+              </p>
+
+              <p className="italic">
+                {" "}
+                {resume.education.startYear} – {resume.education.endYear}
+              </p>
             </div>
 
-            {/* Description */}
+            <p>{resume.education.cgpa} CGPA</p>
+          </div>
+        </div>
+      </div>
+    ),
+
+    skills: (
+      <div
+        className={`flex gap-4 border-t border-gray-700 ${
+          settings.sectionPaddingY || "py-4"
+        }`}
+        style={{
+          textAlign: settings.descriptionAlign || "left",
+          borderTopWidth: settings.borderTopWidth || "1px",
+          borderTopStyle: settings.borderStyle || "solid",
+          borderColor: settings.borderColor || "#cbd5e1",
+        }}
+      >
+        <h2
+          className={`w-1/3 ${getCustomFontClass(
+            "text-[16px]",
+            settings.fontScaleLevel
+          )} font-bold text-gray-800`}
+          style={{ color: settings.TextColors?.["h2"] || "#334155" }}
+        >
+          SKILLS
+        </h2>
+        <div className="w-2/3">
+          {resume.skills.map((skill, i) => (
             <div
-              className={`resume-content   ${getCustomFontClass(
+              key={i}
+              className={` ${getCustomFontClass(
                 "text-[14px]",
                 settings.fontScaleLevel
               )}`}
-              style={{ color: settings.TextColors?.["h4"] || "#64748b" }}
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(proj.description),
-              }}
-            />
-          </div>
-        ))}
+            >
+              <span
+                className="font-semibold mr-2"
+                style={{ color: settings.TextColors?.["h3"] || "#475569" }}
+              >
+                {skill.domain}:
+              </span>
+              <span style={{ color: settings.TextColors?.["h4"] || "#64748b" }}>
+                {skill.languages.join(", ")}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    ),
+
+    projects: (
+      <div
+        className={`flex gap-4 border-t border-gray-700 ${
+          settings.sectionPaddingY || "py-4"
+        }`}
+        style={{
+          textAlign: settings.descriptionAlign || "left",
+          borderTopWidth: settings.borderTopWidth || "1px",
+          borderTopStyle: settings.borderStyle || "solid",
+          borderColor: settings.borderColor || "#cbd5e1",
+        }}
+      >
+        <h2
+          className={`w-1/3 ${getCustomFontClass(
+            "text-[16px]",
+            settings.fontScaleLevel
+          )} font-bold text-gray-800`}
+          style={{ color: settings.TextColors?.["h2"] || "#334155" }}
+        >
+          PROJECTS
+        </h2>
+        <div className="w-2/3">
+          {resume.projects.map((proj, i) => (
+            <div key={i} className="md:mb-3">
+              <div
+                className={`flex gap-2 md:gap-6 w-full ${getCustomFontClass(
+                  "text-[14px]",
+                  settings.fontScaleLevel
+                )} ${
+                  settings.descriptionAlign === "center"
+                    ? "justify-center"
+                    : settings.descriptionAlign === "right"
+                    ? "justify-end"
+                    : settings.descriptionAlign === "justify"
+                    ? "justify-between"
+                    : "justify-start"
+                }`}
+              >
+                <span
+                  className="font-bold"
+                  style={{ color: settings.TextColors?.["h3"] || "#475569" }}
+                >
+                  {proj.name}
+                </span>
+                <div>
+                  {(proj.demo || proj.github) && (
+                    <span>
+                      (
+                      {proj.demo && (
+                        <a
+                          href={proj.demo}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline "
+                          style={{ color: settings.linkColor || "#2563eb" }}
+                        >
+                          Live Demo
+                        </a>
+                      )}
+                      {proj.demo && proj.github && (
+                        <span className="mx-1">|</span>
+                      )}
+                      {proj.github && (
+                        <a
+                          href={proj.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline "
+                          style={{ color: settings.linkColor || "#2563eb" }}
+                        >
+                          GitHub
+                        </a>
+                      )}
+                      )
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Description */}
+              <div
+                className={`resume-content   ${getCustomFontClass(
+                  "text-[14px]",
+                  settings.fontScaleLevel
+                )}`}
+                style={{ color: settings.TextColors?.["h4"] || "#64748b" }}
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(proj.description),
+                }}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     ),
 
     experience: (
-      <div style={{ textAlign: settings.descriptionAlign || "left" }}>
+      <div
+        className={`flex gap-4 border-t border-gray-700 ${
+          settings.sectionPaddingY || "py-4"
+        }`}
+        style={{
+          textAlign: settings.descriptionAlign || "left",
+          borderTopWidth: settings.borderTopWidth || "1px",
+          borderTopStyle: settings.borderStyle || "solid",
+          borderColor: settings.borderColor || "#cbd5e1",
+        }}
+      >
         <h2
-          className={` ${getCustomFontClass(
+          className={`w-1/3 ${getCustomFontClass(
             "text-[16px]",
             settings.fontScaleLevel
           )} font-bold text-gray-800`}
@@ -478,59 +543,71 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
         >
           EXPERIENCE
         </h2>
-        <ul className="gap-2">
-          {resume.experience.map((a, i) => (
-            <li
-              key={i}
-              className={`md:mb-3  ${getCustomFontClass(
-                "text-[14px]",
-                settings.fontScaleLevel
-              )}`}
-            >
-              <div
-                style={{ color: settings.TextColors?.["h3"] || "#475569" }}
-                className={`flex gap-2 md:gap-6 w-full ${
-                  settings.descriptionAlign === "center"
-                    ? "justify-center"
-                    : settings.descriptionAlign === "right"
-                    ? "justify-end"
-                    : settings.descriptionAlign === "justify"
-                    ? "justify-between"
-                    : "justify-start"
-                }`}
+        <div className="w-2/3">
+          <ul className="gap-2">
+            {resume.experience.map((a, i) => (
+              <li
+                key={i}
+                className={`md:mb-3  ${getCustomFontClass(
+                  "text-[14px]",
+                  settings.fontScaleLevel
+                )}`}
               >
-                <span className="font-semibold">
-                  {a.company} - {a.role}
-                </span>
-                <span className="italic">{a.years}</span>
-              </div>
-              {a.technologies && a.technologies.trim() !== "" && (
-                <p
-                  className="md:my-0.5"
-                  style={{ color: settings.TextColors?.["h4"] || "#64748b" }}
+                <div
+                  style={{ color: settings.TextColors?.["h3"] || "#475569" }}
+                  className={`flex gap-2 md:gap-6 w-full ${
+                    settings.descriptionAlign === "center"
+                      ? "justify-center"
+                      : settings.descriptionAlign === "right"
+                      ? "justify-end"
+                      : settings.descriptionAlign === "justify"
+                      ? "justify-between"
+                      : "justify-start"
+                  }`}
                 >
-                  <span className="font-bold">Technologies:</span>{" "}
-                  {a.technologies}
-                </p>
-              )}
+                  <span className="font-semibold">
+                    {a.company} - {a.role}
+                  </span>
+                  <span className="italic">{a.years}</span>
+                </div>
+                {a.technologies && a.technologies.trim() !== "" && (
+                  <p
+                    className="md:my-0.5"
+                    style={{ color: settings.TextColors?.["h4"] || "#64748b" }}
+                  >
+                    <span className="font-bold">Technologies:</span>{" "}
+                    {a.technologies}
+                  </p>
+                )}
 
-              <div
-                className={`resume-content   `}
-                style={{ color: settings.TextColors?.["h4"] || "#64748b" }}
-                dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(a.description),
-                }}
-              />
-            </li>
-          ))}
-        </ul>
+                <div
+                  className={`resume-content   `}
+                  style={{ color: settings.TextColors?.["h4"] || "#64748b" }}
+                  dangerouslySetInnerHTML={{
+                    __html: DOMPurify.sanitize(a.description),
+                  }}
+                />
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     ),
 
     achievements: (
-      <div style={{ textAlign: settings.descriptionAlign || "left" }}>
+      <div
+        className={`flex gap-4 border-t border-gray-700 ${
+          settings.sectionPaddingY || "py-4"
+        }`}
+        style={{
+          textAlign: settings.descriptionAlign || "left",
+          borderTopWidth: settings.borderTopWidth || "1px",
+          borderTopStyle: settings.borderStyle || "solid",
+          borderColor: settings.borderColor || "#cbd5e1",
+        }}
+      >
         <h2
-          className={` ${getCustomFontClass(
+          className={`w-1/3 ${getCustomFontClass(
             "text-[16px]",
             settings.fontScaleLevel
           )} font-bold text-gray-800`}
@@ -538,43 +615,45 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
         >
           ACHIEVEMENTS
         </h2>
-        <ul className="list-disc pl-1.5 md:pl-5 ">
-          {resume.achievements.map((a, i) => (
-            <li
-              key={i}
-              className={` ${getCustomFontClass(
-                "text-[14px]",
-                settings.fontScaleLevel
-              )}`}
-            >
-              <div
-                style={{ color: settings.TextColors?.["h3"] || "#475569" }}
-                className={`flex gap-6 w-full ${
-                  settings.descriptionAlign === "center"
-                    ? "justify-center"
-                    : settings.descriptionAlign === "right"
-                    ? "justify-end"
-                    : settings.descriptionAlign === "justify"
-                    ? "justify-between"
-                    : "justify-start"
-                }`}
+        <div className="w-2/3">
+          <ul className="gap-2">
+            {resume.achievements.map((a, i) => (
+              <li
+                key={i}
+                className={` ${getCustomFontClass(
+                  "text-[14px]",
+                  settings.fontScaleLevel
+                )}`}
               >
-                <span className="font-semibold">{a.title}</span>
-                <span className="italic">
-                  {a.month || ""} {a.year || ""}
-                </span>
-              </div>
+                <div
+                  style={{ color: settings.TextColors?.["h3"] || "#475569" }}
+                  className={`flex gap-6 w-full ${
+                    settings.descriptionAlign === "center"
+                      ? "justify-center"
+                      : settings.descriptionAlign === "right"
+                      ? "justify-end"
+                      : settings.descriptionAlign === "justify"
+                      ? "justify-between"
+                      : "justify-start"
+                  }`}
+                >
+                  <span className="font-semibold">{a.title}</span>
+                  <span className="italic">
+                    {a.month || ""} {a.year || ""}
+                  </span>
+                </div>
 
-              <div
-                className="resume-content "
-                style={{ color: settings.TextColors?.["h4"] || "#64748b" }}
-                dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(a.description),
-                }}
-              />
-            </li>
-          ))}
-        </ul>
+                <div
+                  className="resume-content "
+                  style={{ color: settings.TextColors?.["h4"] || "#64748b" }}
+                  dangerouslySetInnerHTML={{
+                    __html: DOMPurify.sanitize(a.description),
+                  }}
+                />
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     ),
   };
@@ -846,7 +925,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                   Section Spacing
                 </h3>
 
-                <ul className="space-y-1  text-sm text-gray-600">
+                <ul className="space-y-1 text-sm text-gray-600">
                   {[
                     { label: "None", value: 0 },
                     { label: "Extra Small", value: 4 },
@@ -863,15 +942,15 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                     { label: "Epic", value: 48 },
                   ].map((option) => (
                     <li
-                      key={option.value}
+                      key={option.class}
                       onClick={() =>
                         onSettingsChange((prev) => ({
                           ...prev,
-                          sectionGap: option.value,
+                          sectionPaddingY: option.class,
                         }))
                       }
-                      className={`px-3 gap- py-1.5 rounded cursor-pointer hover:bg-sky-50 transition ${
-                        settings.sectionGap === option.value
+                      className={`px-3 py-1.5 rounded cursor-pointer hover:bg-sky-50 transition ${
+                        settings.sectionPaddingY === option.class
                           ? "bg-sky-100 text-sky-700 font-semibold"
                           : ""
                       }`}
@@ -884,26 +963,26 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
             )}
           </div>
 
-          {/* Border Width Dropdown */}
+          {/* Top Border Width Dropdown */}
           <div className="relative">
             <button
               onClick={() =>
                 setOpenDropdown((prev) =>
-                  prev === "borderWidth" ? null : "borderWidth"
+                  prev === "borderTopWidth" ? null : "borderTopWidth"
                 )
               }
-              title="Border Width"
+              title="Sections Border Width"
               className={`md:p-2 rounded-md text-center align-middle hover:bg-gray-100 transition ${
-                openDropdown === "borderWidth" ? "bg-gray-100" : ""
+                openDropdown === "borderTopWidth" ? "bg-gray-100" : ""
               }`}
             >
               <BsBorderWidth className="text-gray-700 text-sm md:text-lg" />
             </button>
 
-            {openDropdown === "borderWidth" && (
-              <div className="absolute z-50 mt-2 left-1/2 -translate-x-1/2 bg-white border border-gray-200 shadow-xl rounded-lg p-1.5 md:p-3  w-32 md:max-w-[90vw]">
+            {openDropdown === "borderTopWidth" && (
+              <div className="absolute z-50 mt-2 left-1/2 -translate-x-1/2 bg-white border border-gray-200 shadow-xl rounded-lg p-1.5 md:p-3 w-32 md:max-w-[90vw]">
                 <p className="text-xs md:text-sm font-semibold text-gray-700 mb-1.5 md:mb-3 text-center">
-                  Select Width
+                  Top Border
                 </p>
 
                 <ul className="flex flex-col gap-1 max-h-60 overflow-y-auto pr-1">
@@ -920,12 +999,12 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                         onClick={() => {
                           onSettingsChange((prev) => ({
                             ...prev,
-                            borderWidth: w.value,
+                            borderTopWidth: w.value,
                           }));
                           setOpenDropdown(false);
                         }}
                         className={`w-full justify-center h-5 px-1 py-1.5 rounded-xs flex items-center gap-5 hover:bg-sky-50 transition ${
-                          settings.borderWidth === w.value
+                          settings.borderTopWidth === w.value
                             ? "bg-sky-100"
                             : "text-gray-800"
                         }`}
@@ -937,7 +1016,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                         ) : (
                           <div
                             style={{
-                              borderBottom: `${w.value} solid #334155`,
+                              borderTop: `${w.value} solid #334155`,
                               width: "100%",
                             }}
                           ></div>
@@ -958,7 +1037,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                   prev === "borderStyles" ? null : "borderStyles"
                 )
               }
-              title="Border style and color"
+              title="Section Border style and color"
               className={`md:p-2 text-center align-middle rounded-md hover:bg-gray-100 transition ${
                 openDropdown === "borderStyles" ? "bg-gray-100" : ""
               }`}
@@ -1015,75 +1094,6 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                     className="w-full h-8 rounded border cursor-pointer"
                   />
                 </div>
-              </div>
-            )}
-          </div>
-
-          {/* Border Radius Dropdown */}
-          <div className="relative">
-            <button
-              onClick={() =>
-                setOpenDropdown((prev) =>
-                  prev === "borderRadius" ? null : "borderRadius"
-                )
-              }
-              title="Border Radius"
-              className={`md:p-2 align-middle text-center rounded-md hover:bg-gray-100 transition ${
-                openDropdown === "borderRadius" ? "bg-gray-100" : ""
-              }`}
-            >
-              <TbBorderCornerPill className="text-gray-700 text-sm md:text-lg" />
-            </button>
-
-            {openDropdown === "borderRadius" && (
-              <div className="absolute z-50 mt-2  bg-white border border-gray-200 shadow-xl rounded-lg p-3 w-40 max-w-[90vw]">
-                <p className="text-sm font-semibold text-gray-700 mb-3 text-center">
-                  Border Radius
-                </p>
-
-                <ul className="flex flex-col gap-1 max-h-60 overflow-y-auto pr-1">
-                  {[
-                    { label: "None", value: "0px" },
-                    { label: "2px", value: "2px" },
-                    { label: "4px", value: "4px" },
-                    { label: "6px", value: "6px" },
-                    { label: "8px", value: "8px" },
-                    { label: "12px", value: "12px" },
-                    { label: "16px", value: "16px" },
-                    { label: "24px", value: "24px" },
-                    { label: "32px", value: "32px" },
-                  ].map((r) => (
-                    <li key={r.value}>
-                      <button
-                        onClick={() => {
-                          onSettingsChange((prev) => ({
-                            ...prev,
-                            borderRadius: r.value,
-                          }));
-                          setOpenDropdown(false);
-                        }}
-                        className={`w-full px-3 py-0.5 md:py-1.5 rounded-sm flex items-center gap-3 hover:bg-gray-50 transition ${
-                          settings.borderRadius === r.value
-                            ? "bg-sky-50 "
-                            : "text-gray-800"
-                        }`}
-                      >
-                        {/* Text label */}
-                        <span className="text-xs w-12 text-left text-gray-600">
-                          {r.value}
-                        </span>
-
-                        {/* Preview Box */}
-                        <div
-                          className="h-4 md:h-6 flex-1 border border-gray-300 bg-white"
-                          style={{
-                            borderRadius: r.value,
-                          }}
-                        ></div>
-                      </button>
-                    </li>
-                  ))}
-                </ul>
               </div>
             )}
           </div>
@@ -1365,7 +1375,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
       >
         {/* Inner Resume Container */}
         <div
-          className="p-2 md:p-7 flex flex-col"
+          className={`p-2 md:p-7 flex flex-col `}
           style={{
             border:
               settings.borderWidth && settings.borderWidth !== "0px"
@@ -1373,8 +1383,6 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                     settings.borderColor || "#cbd5e1"
                   }`
                 : "none",
-            borderRadius: settings.borderRadius || "0px",
-            rowGap: `${settings.sectionGap ?? 16}px`,
           }}
         >
           {Array.isArray(settings?.sectionOrder) &&
@@ -1390,4 +1398,4 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
   );
 };
 
-export default ClassicTemplate;
+export default StandardTemplate;
