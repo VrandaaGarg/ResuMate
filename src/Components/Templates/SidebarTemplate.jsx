@@ -821,7 +821,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
           <div className="relative">
             {/* Icon trigger */}
             <button
-              className="md:p-2 rounded-md hover:bg-gray-200 transition relative group"
+              className={`md:p-2 rounded-md hover:bg-gray-200 transition relative group ${
+                openDropdown === "mainColor" ? "bg-gray-200" : ""
+              }`}
               title={` Background Color`}
               onClick={() =>
                 setOpenDropdown((prev) =>
@@ -906,7 +908,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
           <div className="relative">
             {/* Color Icon Button */}
             <button
-              className="md:p-2 rounded-md hover:bg-gray-200 transition relative group"
+              className={`md:p-2 rounded-md hover:bg-gray-200 transition relative group ${
+                openDropdown === "sidebarColor" ? "bg-gray-200" : ""
+              }`}
               title={`Sidebar Color`}
               onClick={() =>
                 setOpenDropdown((prev) =>
@@ -1045,9 +1049,11 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                 setOpenDropdown((prev) => (prev === "font" ? null : "font"))
               }
               title="Change Font"
-              className="md:p-2 rounded-md hover:bg-gray-100 transition"
+              className={`md:p-2 rounded-md hover:bg-gray-100 transition ${
+                openDropdown === "font" ? "bg-gray-100 " : ""
+              }`}
             >
-              <FaFont className="text-gray-700 text-xs md:text-lg" />
+              <FaFont className={`text-gray-700 text-xs md:text-lg`} />
             </button>
 
             {/* Dropdown Menu */}
@@ -1064,8 +1070,24 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                     "Poppins",
                     "Lato",
                     "Merriweather",
+                    "Open Sans",
+                    "Nunito",
+                    "Montserrat",
+                    "Work Sans",
+                    "DM Sans",
+                    "Ubuntu",
+                    "Fira Sans",
+                    "Source Sans Pro",
+                    "Raleway",
+                    "Mulish",
+                    "PT Sans",
+                    "Helvetica",
+                    "Segoe UI",
                     "Georgia",
+                    "Times New Roman",
                     "Courier New",
+                    "Lucida Console",
+                    "Arial",
                   ].map((font) => (
                     <button
                       key={font}
@@ -1133,7 +1155,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                     prev === "skillColor" ? null : "skillColor"
                   )
                 }
-                className="md:p-2 align-middle  rounded hover:bg-gray-200"
+                className={`md:p-2 align-middle  rounded hover:bg-gray-200 ${
+                  openDropdown === "skillColor" ? "bg-gray-200" : ""
+                }`}
                 title="Customize Skill Colors"
               >
                 <span className="text-lg align-middle md:text-xl">
@@ -1202,7 +1226,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                     prev === "linkColor" ? null : "linkColor"
                   )
                 }
-                className="md:p-2 align-middle rounded-md hover:bg-gray-100 transition"
+                className={`md:p-2 align-middle rounded-md hover:bg-gray-100 transition ${
+                  openDropdown === "linkColor" ? "bg-gray-100" : ""
+                }`}
                 title="Change Project Link Color"
               >
                 <FaLink className="text-sm md:text-lg text-gray-700" />
@@ -1279,7 +1305,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
           {/* Text Color Picker Button for sidebar */}
           <div className="relative group">
             <button
-              className="md:p-2 align-middle text-center rounded-md hover:bg-gray-100 transition"
+              className={`md:p-2 align-middle text-center rounded-md hover:bg-gray-100 transition ${
+                openDropdown === "textSidebar" ? "bg-gray-100" : ""
+              }`}
               title="Sidebar Text Color"
               onClick={() =>
                 setOpenDropdown((prev) =>
@@ -1336,7 +1364,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
           {/* Mainbar Text Color Picker */}
           <div className="relative group">
             <button
-              className="md:p-2 align-middle text-center rounded-md hover:bg-gray-100 transition"
+              className={`md:p-2 align-middle text-center rounded-md hover:bg-gray-100 transition ${
+                openDropdown === "mainTextColor" ? "bg-gray-100" : ""
+              }`}
               title="Mainbar Text Color"
               onClick={() =>
                 setOpenDropdown((prev) =>
@@ -1397,14 +1427,16 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
               onClick={() =>
                 setOpenDropdown((prev) => (prev === "gap" ? null : "gap"))
               }
-              className="md:p-2 text-center align-middle rounded-md hover:bg-gray-100 transition"
+              className={`md:p-2 text-center align-middle rounded-md hover:bg-gray-100 transition ${
+                openDropdown === "gap" ? "bg-gray-100" : ""
+              }`}
               title="Adjust Section Spacing"
             >
               <CgSpaceBetweenV className="text-lg md:text-xl text-gray-700" />
             </button>
 
             {openDropdown === "gap" && (
-              <div className="absolute left-1/2 -translate-x-1/2 mt-2 z-50 w-40 md:w-56 bg-white border border-gray-200 rounded-lg shadow-lg p-1.5 md:p-3">
+              <div className="absolute max-h-48 overflow-auto left-1/2 -translate-x-1/2 mt-2 z-50 w-40 md:w-56 bg-white border border-gray-200 rounded-lg shadow-lg p-1.5 md:p-3">
                 <h3 className="text-xs md:text-sm font-semibold text-gray-800 mb-2 flex items-center gap-2">
                   <CgSpaceBetweenV className="text-sky-700" />
                   Section Spacing
@@ -1413,10 +1445,18 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                 <ul className="space-y-1 text-[12px] md:text-sm text-gray-600">
                   {[
                     { label: "None", value: 0 },
+                    { label: "Extra Small", value: 4 },
                     { label: "Small", value: 8 },
+                    { label: "Medium", value: 12 },
                     { label: "Medium", value: 16 },
-                    { label: "Large", value: 24 },
-                    { label: "Extra Large", value: 32 },
+                    { label: "Large", value: 20 },
+                    { label: "Extra Large", value: 24 },
+                    { label: "Huge", value: 28 },
+                    { label: "Massive", value: 32 },
+                    { label: "Giant", value: 36 },
+                    { label: "Colossal", value: 40 },
+                    { label: "Titanic", value: 44 },
+                    { label: "Epic", value: 48 },
                   ].map((option) => (
                     <li
                       key={option.value}
@@ -1443,7 +1483,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
           {/* Show/Hide Sections Button */}
           <div className="relative">
             <button
-              className="md:p-2 rounded-md align-middle hover:bg-gray-100 transition"
+              className={`md:p-2 rounded-md align-middle hover:bg-gray-100 transition ${
+                openDropdown === "toggleSection" ? "bg-gray-100" : ""
+              }`}
               title="Show/Hide Sections"
               onClick={() =>
                 setOpenDropdown((prev) =>
@@ -1507,7 +1549,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
           {/* Reorder Sections Button */}
           <div className="relative">
             <button
-              className="md:p-2 align-middle rounded-md hover:bg-gray-100 transition"
+              className={`md:p-2 align-middle rounded-md hover:bg-gray-100 transition ${
+                openDropdown === "reorder" ? "bg-gray-100" : ""
+              }`}
               title="Reorder Sections"
               onClick={() =>
                 setOpenDropdown((prev) =>

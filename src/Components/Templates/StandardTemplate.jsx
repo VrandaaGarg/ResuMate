@@ -666,7 +666,9 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
           <div className="relative">
             {/* Color Icon Button */}
             <button
-              className="md:p-2 rounded-md hover:bg-gray-200 transition relative group"
+              className={`md:p-2 rounded-md hover:bg-gray-200 transition relative group ${
+                openDropdown === "bgColor" ? "bg-gray-200" : ""
+              }`}
               title={`Background Color`}
               onClick={() =>
                 setOpenDropdown((prev) =>
@@ -805,7 +807,9 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
                 setOpenDropdown((prev) => (prev === "font" ? null : "font"))
               }
               title="Change Font"
-              className="md:p-2 rounded-md hover:bg-gray-100 transition"
+              className={`md:p-2 rounded-md hover:bg-gray-100 transition ${
+                openDropdown === "font" ? "bg-gray-100" : ""
+              }`}
             >
               <FaFont className="text-gray-700 text-xs md:text-lg" />
             </button>
@@ -824,8 +828,24 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
                     "Poppins",
                     "Lato",
                     "Merriweather",
+                    "Open Sans",
+                    "Nunito",
+                    "Montserrat",
+                    "Work Sans",
+                    "DM Sans",
+                    "Ubuntu",
+                    "Fira Sans",
+                    "Source Sans Pro",
+                    "Raleway",
+                    "Mulish",
+                    "PT Sans",
+                    "Helvetica",
+                    "Segoe UI",
                     "Georgia",
+                    "Times New Roman",
                     "Courier New",
+                    "Lucida Console",
+                    "Arial",
                   ].map((font) => (
                     <button
                       key={font}
@@ -890,14 +910,16 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
               onClick={() =>
                 setOpenDropdown((prev) => (prev === "gap" ? null : "gap"))
               }
-              className="md:p-2 text-center align-middle rounded-md hover:bg-gray-100 transition"
+              className={`md:p-2 text-center align-middle rounded-md hover:bg-gray-100 transition ${
+                openDropdown === "gap" ? "bg-gray-100" : ""
+              }`}
               title="Adjust Section Spacing"
             >
               <CgSpaceBetweenV className="text-lg md:text-xl text-gray-700" />
             </button>
 
             {openDropdown === "gap" && (
-              <div className="absolute left-1/2 -translate-x-1/2 mt-2 z-50 w-56 bg-white border border-gray-200 rounded-lg shadow-lg p-3">
+              <div className="absolute max-h-48 overflow-auto left-1/2 -translate-x-1/2 mt-2 z-50 w-56 bg-white border border-gray-200 rounded-lg shadow-lg p-3">
                 <h3 className="text-sm font-semibold text-gray-800 mb-2 flex items-center gap-2">
                   <CgSpaceBetweenV className="text-sky-700" />
                   Section Spacing
@@ -905,11 +927,19 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
 
                 <ul className="space-y-1 text-sm text-gray-600">
                   {[
-                    { label: "None", class: "py-0" },
-                    { label: "Small", class: "py-2" },
-                    { label: "Medium", class: "py-4" },
-                    { label: "Large", class: "py-6" },
-                    { label: "Extra Large", class: "py-8" },
+                    { label: "None", value: 0 },
+                    { label: "Extra Small", value: 4 },
+                    { label: "Small", value: 8 },
+                    { label: "Medium", value: 12 },
+                    { label: "Medium", value: 16 },
+                    { label: "Large", value: 20 },
+                    { label: "Extra Large", value: 24 },
+                    { label: "Huge", value: 28 },
+                    { label: "Massive", value: 32 },
+                    { label: "Giant", value: 36 },
+                    { label: "Colossal", value: 40 },
+                    { label: "Titanic", value: 44 },
+                    { label: "Epic", value: 48 },
                   ].map((option) => (
                     <li
                       key={option.class}
@@ -942,7 +972,9 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
                 )
               }
               title="Sections Border Width"
-              className="md:p-2 rounded-md text-center align-middle hover:bg-gray-100 transition"
+              className={`md:p-2 rounded-md text-center align-middle hover:bg-gray-100 transition ${
+                openDropdown === "borderTopWidth" ? "bg-gray-100" : ""
+              }`}
             >
               <BsBorderWidth className="text-gray-700 text-sm md:text-lg" />
             </button>
@@ -1006,7 +1038,9 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
                 )
               }
               title="Section Border style and color"
-              className="md:p-2 text-center align-middle rounded-md hover:bg-gray-100 transition"
+              className={`md:p-2 text-center align-middle rounded-md hover:bg-gray-100 transition ${
+                openDropdown === "borderStyles" ? "bg-gray-100" : ""
+              }`}
             >
               <BsBoundingBoxCircles className="text-gray-700 text-sm md:text-lg" />
             </button>
@@ -1067,7 +1101,9 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
           {/* Text Color Button */}
           <div className="relative group">
             <button
-              className="md:p-2 align-middle text-center rounded-md hover:bg-gray-100 transition"
+              className={`md:p-2 align-middle text-center rounded-md hover:bg-gray-100 transition ${
+                openDropdown === "TextColor" ? "bg-gray-100" : ""
+              }`}
               title="Text Color"
               onClick={() =>
                 setOpenDropdown((prev) =>
@@ -1126,7 +1162,9 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
                     prev === "linkColor" ? null : "linkColor"
                   )
                 }
-                className="md:p-2 align-middle rounded-md hover:bg-gray-100 transition"
+                className={`md:p-2 align-middle rounded-md hover:bg-gray-100 transition ${
+                  openDropdown === "linkColor" ? "bg-gray-100" : ""
+                }`}
                 title="Change Project Link Color"
               >
                 <FaLink className="text-sm md:text-lg text-gray-700" />
@@ -1203,7 +1241,9 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
           {/* Toggle Visibility Dropdown */}
           <div className="relative">
             <button
-              className="md:p-2 rounded-md align-middle hover:bg-gray-100 transition"
+              className={`md:p-2 rounded-md align-middle hover:bg-gray-100 transition ${
+                openDropdown === "toggle" ? "bg-gray-100" : ""
+              }`}
               title="Show/Hide Sections"
               onClick={() =>
                 setOpenDropdown((prev) => (prev === "toggle" ? null : "toggle"))
@@ -1265,7 +1305,9 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
           {/* Reorder Sections Dropdown */}
           <div className="relative">
             <button
-              className="md:p-2 align-middle rounded-md hover:bg-gray-100 transition"
+              className={`md:p-2 align-middle rounded-md hover:bg-gray-100 transition ${
+                openDropdown === "reorder" ? "bg-gray-100" : ""
+              }`}
               title="Reorder Sections"
               onClick={() =>
                 setOpenDropdown((prev) =>
