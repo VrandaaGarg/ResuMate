@@ -32,6 +32,7 @@ import {
   FaRegUser,
 } from "react-icons/fa";
 import { TbWorld } from "react-icons/tb";
+import showSuccessToast from "../Components/showSuccessToast";
 
 const steps = [
   "Personal Info",
@@ -187,7 +188,7 @@ const ResumeForm = () => {
   const saveResumeToLocal = () => {
     localStorage.setItem("resumeData", JSON.stringify(formData));
     setResume(formData);
-    toast.success("Resume saved successfully!");
+    showSuccessToast("Resume build successfully!");
     navigate("/resume");
   };
 
@@ -1011,7 +1012,7 @@ const ResumeForm = () => {
   };
 
   return (
-    <motion.div className="max-w-xl mx-auto px-6 py-10 bg-gray-100/55 rounded-2xl border-1 shadow-2x border-gray-300">
+    <motion.div className="max-w-xl mx-auto px-6 py-10 bg-gradient-to-br from-white via-sky-50 to-white rounded-2xl border-1 shadow-xl border-gray-200">
       <h2 className="text-3xl text-sky-700 [font-family:'Lilita_One',cursive] text-center mb-6">
         {steps[step]}
       </h2>
@@ -1034,7 +1035,7 @@ const ResumeForm = () => {
           disabled={step === 0}
           className={`inline-flex items-center gap-2 px-5 py-2 rounded-md font-semibold shadow transition ${
             step === 0
-              ? "bg-gray-300 text-white cursor-not-allowed"
+              ? "bg-sky-700/15 text-white cursor-not-allowed"
               : "bg-neutral-900 hover:bg-neutral-700 text-white"
           }`}
         >
@@ -1046,7 +1047,7 @@ const ResumeForm = () => {
         {step === steps.length - 1 ? (
           <button
             onClick={saveResumeToLocal}
-            className="inline-flex items-center gap-2 px-5 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-md shadow transition"
+            className="inline-flex items-center gap-2 px-5 py-2 bg-sky-700 hover:bg-sky-600 text-white font-semibold rounded-md shadow transition"
           >
             <FaCheckCircle className="text-white" />
             Build Resume

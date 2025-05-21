@@ -58,7 +58,7 @@ export default function Resume() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col items-center justify-center min-h-[60vh] text-center p-6 bg-white rounded-xl shadow-lg"
+        className="flex flex-col items-center justify-center min-h-[60vh] text-center p-6  bg-gradient-to-br from-white via-sky-50 to-white"
       >
         <FaUserEdit className="text-5xl text-sky-700 mb-4 animate-pulse" />
         <h2 className="text-2xl font-semibold text-gray-800 mb-2">
@@ -80,7 +80,7 @@ export default function Resume() {
   }
 
   return (
-    <div className=" p-2.5 md:p-6 bg-gray-100">
+    <div className=" p-2.5 md:p-6 bg-gradient-to-br from-white via-sky-50 to-white   ">
       <div className="max-w-5xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex justify-between items-start">
@@ -114,7 +114,7 @@ export default function Resume() {
                 onClick={toggleEditing}
                 className="px-2 md:px-4 py-1 md:py-1.5 text-xs md:text-sm rounded bg-sky-700 hover:bg-sky-800 text-white font-medium transition"
               >
-                {isEditable ? "Disable Edit" : "Edit"}
+                {isEditable ? "Save Changes" : "Edit"}
               </button>
             </div>
           </div>

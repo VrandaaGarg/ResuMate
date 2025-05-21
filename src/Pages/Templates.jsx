@@ -10,7 +10,7 @@ export default function Templates() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="flex flex-col items-center justify-center min-h-[60vh] text-center p-6 bg-white rounded-xl shadow-lg"
+      className="flex flex-col items-center justify-center min-h-[60vh] text-center p-6 bg-gradient-to-br from-white via-sky-50 to-white "
     >
       <FaRegClock className="text-5xl text-sky-700 mb-4 animate-pulse" />
       <h2 className="text-2xl font-semibold text-gray-800 mb-2">
