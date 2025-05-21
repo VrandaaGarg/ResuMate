@@ -905,12 +905,12 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
           </div>
 
           {/* Section Spacing */}
-          <div className="relative">
+          <div className="relative ">
             <button
               onClick={() =>
                 setOpenDropdown((prev) => (prev === "gap" ? null : "gap"))
               }
-              className={`md:p-2 text-center align-middle rounded-md hover:bg-gray-100 transition ${
+              className={`md:p-2   text-center align-middle rounded-md hover:bg-gray-100 transition ${
                 openDropdown === "gap" ? "bg-gray-100" : ""
               }`}
               title="Adjust Section Spacing"
@@ -927,31 +927,31 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
 
                 <ul className="space-y-1 text-sm text-gray-600">
                   {[
-                    { label: "None", value: 0 },
-                    { label: "Extra Small", value: 4 },
-                    { label: "Small", value: 8 },
-                    { label: "Medium", value: 12 },
-                    { label: "Medium", value: 16 },
-                    { label: "Large", value: 20 },
-                    { label: "Extra Large", value: 24 },
-                    { label: "Huge", value: 28 },
-                    { label: "Massive", value: 32 },
-                    { label: "Giant", value: 36 },
-                    { label: "Colossal", value: 40 },
-                    { label: "Titanic", value: 44 },
-                    { label: "Epic", value: 48 },
+                    { label: "None", value: "py-0" },
+                    { label: "Extra Small", value: "py-1" },
+                    { label: "Small", value: "py-2" },
+                    { label: "Medium", value: "py-3" },
+                    { label: "Large", value: "py-4" },
+                    { label: "Extra Large", value: "py-5" },
+                    { label: "Huge", value: "py-6" },
+                    { label: "Massive", value: "py-7" },
+                    { label: "Giant", value: "py-8" },
+                    { label: "Colossal", value: "py-10" },
+                    { label: "Titanic", value: "py-12" },
+                    { label: "Epic", value: "py-14" },
                   ].map((option) => (
                     <li
-                      key={option.class}
-                      onClick={() =>
+                      key={option.value}
+                      onClick={() => {
                         onSettingsChange((prev) => ({
                           ...prev,
-                          sectionPaddingY: option.class,
-                        }))
-                      }
+                          sectionPaddingY: option.value,
+                        }));
+                        setOpenDropdown(null); // Close dropdown after selection
+                      }}
                       className={`px-3 py-1.5 rounded cursor-pointer hover:bg-sky-50 transition ${
-                        settings.sectionPaddingY === option.class
-                          ? "bg-sky-100 text-sky-700 font-semibold"
+                        settings.sectionPaddingY === option.value
+                          ? "bg-sky-100 text-sky-700 "
                           : ""
                       }`}
                     >
