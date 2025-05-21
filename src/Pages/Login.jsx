@@ -4,6 +4,8 @@ import { toast } from "react-hot-toast";
 import { FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../Contexts/AuthContext";
+import showSuccessToast from "../Components/showSuccessToast";
+import showErrorToast from "../Components/showErrorToast";
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -22,10 +24,10 @@ export default function Login() {
     const result = login({ email: form.email, password: form.password });
 
     if (result.success) {
-      toast.success("Login successful!");
+      showSuccessToast("Login successful!");
       navigate("/dashboard");
     } else {
-      toast.error(result.message);
+      showErrorToast(result.message || "Login failed");
     }
   };
 

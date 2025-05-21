@@ -2,11 +2,11 @@ import { FaBars, FaUserCircle, FaSignOutAlt } from "react-icons/fa";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import toast from "react-hot-toast";
 import { SiGoogleforms } from "react-icons/si";
 import { RxCross2 } from "react-icons/rx";
 import { useAuth } from "../Contexts/AuthContext";
 import { useLocation } from "react-router-dom";
+import showSuccessToast from "./showSuccessToast";
 
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -19,7 +19,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     logout();
-    toast.success("Logged out successfully!");
+    showSuccessToast("Logged out successfully!");
     navigate("/");
   };
 

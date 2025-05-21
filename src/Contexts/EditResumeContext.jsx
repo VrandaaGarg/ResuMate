@@ -1,12 +1,16 @@
 // src/Contexts/EditResumeContext.jsx
 import React, { createContext, useContext, useState } from "react";
+import showSuccessToast from "../Components/showSuccessToast";
 
 const EditResumeContext = createContext();
 
 export const EditResumeProvider = ({ children }) => {
   const [isEditable, setIsEditable] = useState(false);
 
-  const toggleEditing = () => setIsEditable((prev) => !prev);
+  const toggleEditing = () => {
+    setIsEditable((prev) => !prev);
+    isEditable ? showSuccessToast("Changes saved") : "";
+  };
 
   return (
     <EditResumeContext.Provider value={{ isEditable, toggleEditing }}>

@@ -3,6 +3,7 @@ import { FiEdit2, FiLogOut, FiUser } from "react-icons/fi";
 import { useAuth } from "../Contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import showSuccessToast from "../Components/showSuccessToast";
 
 const Profile = () => {
   const { user, logout, updateUser } = useAuth();
@@ -20,7 +21,7 @@ const Profile = () => {
 
   const handleSave = () => {
     updateUser(form);
-    toast.success("Profile updated!");
+    showSuccessToast("Profile updated successfully!");
     setEditing(false);
   };
 

@@ -6,6 +6,7 @@ import { AuthContext } from "../Contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { FiCheckCircle, FiXCircle } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import showSuccessToast from "../Components/showSuccessToast";
 
 const Signup = () => {
   const { signup } = useContext(AuthContext);
@@ -54,10 +55,10 @@ const Signup = () => {
         email: form.email,
         password: form.password,
       });
-      toast.success("Signup successful!");
+      showSuccessToast("Signup successful!");
       navigate("/dashboard");
     } catch (err) {
-      toast.error(err.message || "Signup failed");
+      showErrorToast(err.message || "Signup failed");
     }
   };
 
@@ -173,7 +174,7 @@ const Signup = () => {
             />
             <button
               type="button"
-              className="absolute top-10 right-3 text-gray-500"
+              className="absolute top-9 right-3 text-gray-500"
               onClick={() => setShowConfirm(!showConfirm)}
             >
               {showConfirm ? <FiEyeOff /> : <FiEye />}

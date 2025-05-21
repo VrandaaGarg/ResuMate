@@ -15,7 +15,7 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="min-h-[67lvh] rounded-2xl px-6 md:px-20 py-16 bg-gray-100">
+    <div className="min-h-[67lvh]  px-6 md:px-20 py-16 bg-gradient-to-br from-white via-sky-50 to-white">
       {resumes.length === 0 ? (
         <motion.div
           initial={{ opacity: 0, y: 30 }}

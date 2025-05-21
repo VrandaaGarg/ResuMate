@@ -84,7 +84,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
   };
 
   const pixelSizes = [
-    4, 6, 8, 10, 12, 14, 16, 18, 20, 24, 30, 36, 48, 60, 72, 96, 128,
+    4, 6, 8, 10, 12, 14, 16, 18, 20, 26, 30, 36, 48, 60, 72, 96, 128,
   ];
 
   const getCustomFontClass = (basePx, level = 0) => {
@@ -103,9 +103,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
       case "h1":
         return "white";
       case "h2":
-        return "text-blue-300";
+        return "#F4F3F3";
       case "h3":
-        return "text-blue-200";
+        return "#D6D5D5";
       case "h4":
         return "text-gray-300";
       default:
@@ -118,9 +118,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
       case "h1":
         return "#1e293b"; // dark slate
       case "h2":
-        return "#334155"; // slightly lighter
+        return "#F4F3F3"; // slightly lighter
       case "h3":
-        return "#475569"; // even lighter
+        return "#D6D5D5"; // even lighter
       default:
         return "#000000";
     }
@@ -213,7 +213,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
       <div className="text-center">
         <h1
           className={`${getCustomFontClass(
-            "text-[48px]",
+            "text-[30px]",
             settings.fontScaleLevel
           )} font-bold bg-transparent w-full text-center outline-none`}
           style={{ color: settings.textColors?.["h1"] || "white" }}
@@ -223,14 +223,14 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
       </div>
     ),
     details: (
-      <div className="">
+      <div className="mb-1 md:mb-2">
         <h2
           className={`font-semibold uppercase tracking-wide mb-1  md:mb-2 ${getCustomFontClass(
-            "text-24px]",
+            "text-16px]",
             settings.fontScaleLevel
           )}`}
           style={{
-            color: settings.textColors?.["h2"] || "text-blue-300",
+            color: settings.textColors?.["h2"] || "#F4F3F3",
             textAlign: settings.descriptionAlign || "left",
           }}
         >
@@ -238,7 +238,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
         </h2>
         <div
           className={`flex break-words whitespace-normal flex-col space-y-0.5 md:space-y-2 ${getCustomFontClass(
-            "text-[18px]",
+            "text-[14px]",
             settings.fontScaleLevel
           )}`}
           style={{
@@ -310,12 +310,12 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
     ),
 
     description: (
-      <div>
+      <div className="mb-1 md:mb-2">
         {resume.description && (
           <div>
             <h2
               className={`font-semibold break-all uppercase tracking-wide mb-1 md:mb-2 ${getCustomFontClass(
-                "text-[24px]",
+                "text-[16px]",
                 settings.fontScaleLevel
               )}`}
               style={{
@@ -328,7 +328,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
 
             <div
               className={`bg-transparent resume-content ${getCustomFontClass(
-                "text-[18px]",
+                "text-[14px]",
                 settings.fontScaleLevel
               )} outline-none w-full whitespace-pre-line`}
               style={{
@@ -345,10 +345,13 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
     ),
 
     skills: (
-      <div style={{ textAlign: settings.descriptionAlign || "left" }}>
+      <div
+        style={{ textAlign: settings.descriptionAlign || "left" }}
+        className="mb-1 md:mb-2"
+      >
         <h2
           className={`font-semibold  uppercase tracking-wide md:mb-2 ${getCustomFontClass(
-            "text-[24px]",
+            "text-[16px]",
             settings.fontScaleLevel
           )}`}
           style={{
@@ -359,7 +362,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
           Skills Overview
         </h2>
 
-        <div className="md:space-y-4">
+        <div className="md:space-y-2.5 space-y-1">
           {resume.skills.map((skill, i) => {
             const totalSkills = resume.skills.reduce(
               (acc, s) => acc + s.languages.length,
@@ -373,7 +376,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                 <div className="align-middle">
                   <span
                     className={`${getCustomFontClass(
-                      "text-[18px]",
+                      "text-[14px]",
                       settings.fontScaleLevel
                     )} font-medium`}
                     style={{
@@ -387,7 +390,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
 
                 <p
                   className={`${getCustomFontClass(
-                    "text-[18px]",
+                    "text-[14px]",
                     settings.fontScaleLevel
                   )}`}
                   style={{
@@ -403,7 +406,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
 
         <p
           className={`font-semibold ${getCustomFontClass(
-            "text-[20px]",
+            "text-[16px]",
             settings.fontScaleLevel
           )} uppercase tracking-wide my-1 md:my-3`}
           style={{ color: settings.textColors?.["h2"] || "text-blue-300" }}
@@ -437,7 +440,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
         {/* Legend */}
         <div
           className={`${getCustomFontClass(
-            "text-[18px]",
+            "text-[14px]",
             settings.fontScaleLevel
           )} space-y-1`}
         >
@@ -488,7 +491,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
       <section style={{ textAlign: settings.descriptionAlign || "left" }}>
         <h2
           className={`${getCustomFontClass(
-            "text-[24px]",
+            "text-[16px]",
             settings.fontScaleLevel
           )} font-bold mb-1 md:mb-2`}
           style={{
@@ -502,7 +505,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
           <div
             key={i}
             className={`mb-4 ${getCustomFontClass(
-              "text-[18px]",
+              "text-[14px]",
               settings.fontScaleLevel
             )}`}
           >
@@ -574,7 +577,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
       <section style={{ textAlign: settings.descriptionAlign || "left" }}>
         <h2
           className={`${getCustomFontClass(
-            "text-[24px]",
+            "text-[16px]",
             settings.fontScaleLevel
           )} font-bold mb-1 md:mb-2`}
           style={{
@@ -589,7 +592,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
           <div
             key={i}
             className={`mb-4 ${getCustomFontClass(
-              "text-[18px]",
+              "text-[14px]",
               settings.fontScaleLevel
             )}`}
           >
@@ -617,7 +620,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
 
               <div
                 className={`break-all ${getCustomFontClass(
-                  "text-[18px]",
+                  "text-[14px]",
                   settings.fontScaleLevel
                 )}`}
               >
@@ -657,7 +660,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
 
             <div
               className={`mt-1 ${getCustomFontClass(
-                "text-[18px]",
+                "text-[14px]",
                 settings.fontScaleLevel
               )} text-gray-700 whitespace-pre-line`}
             >
@@ -683,7 +686,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
       <section style={{ textAlign: settings.descriptionAlign || "left" }}>
         <h2
           className={`${getCustomFontClass(
-            "text-[24px]",
+            "text-[16px]",
             settings.fontScaleLevel
           )} font-bold mb-2`}
           style={{
@@ -703,7 +706,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
               : settings.descriptionAlign === "justify"
               ? "justify-between"
               : "justify-start"
-          } ${getCustomFontClass("text-[18px]", settings.fontScaleLevel)}`}
+          } ${getCustomFontClass("text-[14px]", settings.fontScaleLevel)}`}
         >
           <p
             className="font-semibold"
@@ -735,7 +738,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
               : settings.descriptionAlign === "justify"
               ? "justify-between"
               : "justify-start"
-          } ${getCustomFontClass("text-[18px]", settings.fontScaleLevel)}`}
+          } ${getCustomFontClass("text-[14px]", settings.fontScaleLevel)}`}
         >
           <p>
             {resume.education.degree}
@@ -756,7 +759,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
 
         <p
           className={`${getCustomFontClass(
-            "text-[18px]",
+            "text-[14px]",
             settings.fontScaleLevel
           )}`}
           style={{
@@ -773,7 +776,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
       <section style={{ textAlign: settings.descriptionAlign || "left" }}>
         <h2
           className={`${getCustomFontClass(
-            "text-[24px]",
+            "text-[16px]",
             settings.fontScaleLevel
           )} font-bold mb-1 md:mb-2`}
           style={{
@@ -785,7 +788,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
         </h2>
         <ul
           className={`list-disc ${getCustomFontClass(
-            "text-[18px]",
+            "text-[14px]",
             settings.fontScaleLevel
           )} pl-5 space-y-2 text-gray-800`}
         >
@@ -927,7 +930,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
 
             {/* Color Picker Panel */}
             {openDropdown === "sidebarColor" && (
-              <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl p-4 w-fit left-0">
+              <div className="absolute z-50 mt-2 bg-white border bg-gra border-gray-200 rounded-lg shadow-xl p-4 w-fit left-0">
                 <p className="text-xs md:text-sm font-semibold text-gray-700 mb-3">
                   Sidebar Color
                 </p>
@@ -936,11 +939,11 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                   {/* Fixed Swatches (Left) */}
                   <div className="flex gap-1 md:gap-2">
                     {[
-                      "#1e3a8a",
-                      "#0f766e",
-                      "#7c3aed",
-                      "#f59e0b",
-                      "#dc2626",
+                      "#2B2B2C",
+                      "#02396D",
+                      "#2E2020",
+                      "#264700",
+                      "#2F2135",
                     ].map((clr) => (
                       <button
                         key={clr}
@@ -1245,11 +1248,11 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                     {/* Preset Swatches */}
                     <div className="flex gap-1 md:gap-2">
                       {[
-                        "#2563eb", // blue
-                        "#7c3aed", // purple
-                        "#16a34a", // green
-                        "#f59e0b", // amber
-                        "#dc2626", // red
+                        "#2B2B2C",
+                        "#02396D",
+                        "#2E2020",
+                        "#264700",
+                        "#2F2135",
                       ].map((clr) => (
                         <button
                           key={clr}
@@ -1450,7 +1453,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                     { label: "Medium", value: 12 },
                     { label: "Medium", value: 16 },
                     { label: "Large", value: 20 },
-                    { label: "Extra Large", value: 24 },
+                    { label: "Extra Large", value: 16 },
                     { label: "Huge", value: 28 },
                     { label: "Massive", value: 32 },
                     { label: "Giant", value: 36 },
