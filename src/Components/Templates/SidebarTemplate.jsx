@@ -15,6 +15,8 @@ import {
   MdFormatColorText,
 } from "react-icons/md";
 import { CiLocationOn, CiPhone } from "react-icons/ci";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import { CgSpaceBetweenV } from "react-icons/cg";
 import {
   FaGithub,
   FaLinkedinIn,
@@ -30,6 +32,7 @@ import { IoReorderThreeSharp } from "react-icons/io5";
 import {
   DndContext,
   closestCenter,
+  TouchSensor,
   PointerSensor,
   useSensor,
   useSensors,
@@ -45,8 +48,16 @@ import DOMPurify from "dompurify";
 
 const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
   const { isEditable } = useEditResume();
-  const pointerSensor = useSensor(PointerSensor);
-  const sensors = useSensors(pointerSensor);
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 150,
+        tolerance: 5,
+      },
+    })
+  );
+
   const [openDropdown, setOpenDropdown] = useState(null); // values: "toggle", "font", "reorder", etc.
   const sidebarSections = ["name", "details", "description", "skills"];
   const mainSections = ["experience", "projects", "education", "achievements"];
@@ -70,6 +81,21 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
     const newIndex = Math.min(sizes.length - 1, Math.max(0, baseIndex + level));
 
     return sizes[newIndex];
+  };
+
+  const pixelSizes = [
+    4, 6, 8, 10, 12, 14, 16, 18, 20, 24, 30, 36, 48, 60, 72, 96, 128,
+  ];
+
+  const getCustomFontClass = (basePx, level = 0) => {
+    const base = parseInt(basePx.replace(/\D/g, ""), 10);
+    const index = pixelSizes.indexOf(base);
+    if (index === -1) return `text-[${base}px]`; // fallback
+    const newIndex = Math.max(
+      0,
+      Math.min(pixelSizes.length - 1, index + level)
+    );
+    return `text-[${pixelSizes[newIndex]}px]`;
   };
 
   const defaultTextColor = (tag) => {
@@ -168,16 +194,16 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
     return (
       <div
         ref={setNodeRef}
-        style={style}
         {...attributes}
         {...listeners}
-        className="flex items-center justify-between px-2 py-2 bg-gray-50 border border-gray-200 rounded-md text-xs cursor-grab max-w-full"
+        style={style}
         title={id}
+        className="flex items-center overflow-y-hidden justify-between px-1 md:px-2 py-0.5 md:py-2 bg-gray-50 border border-gray-200 rounded-xs md:rounded-md text-[10px] md:text-xs cursor-grab touch-none hover:bg-gray-100 transition"
       >
-        <span className="capitalize text-gray-700 truncate max-w-[80%]">
-          {id}
+        <span className="capitalize text-gray-700 truncate w-full max-w-[85%] break-words">
+          {id.replace(/([A-Z])/g, " $1").replace(/^./, (s) => s.toUpperCase())}
         </span>
-        <IoReorderThreeSharp className="text-gray-500 flex-shrink-0" />
+        <IoReorderThreeSharp className="text-gray-500 flex-shrink-0 ml-2" />
       </div>
     );
   };
@@ -186,9 +212,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
     name: (
       <div className="text-center">
         <h1
-          className={`${getScaledFontClass(
-            "text-3xl",
-            settings.fontScaleLevel || 0
+          className={`${getCustomFontClass(
+            "text-[48px]",
+            settings.fontScaleLevel
           )} font-bold bg-transparent w-full text-center outline-none`}
           style={{ color: settings.textColors?.["h1"] || "white" }}
         >
@@ -197,11 +223,11 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
       </div>
     ),
     details: (
-      <div className="mr-3.5">
+      <div className="">
         <h2
-          className={`font-semibold uppercase tracking-wide  mb-2 ${getScaledFontClass(
-            "text-base",
-            settings.fontScaleLevel || 0
+          className={`font-semibold uppercase tracking-wide mb-1  md:mb-2 ${getCustomFontClass(
+            "text-24px]",
+            settings.fontScaleLevel
           )}`}
           style={{
             color: settings.textColors?.["h2"] || "text-blue-300",
@@ -211,9 +237,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
           Details
         </h2>
         <div
-          className={`flex flex-col space-y-2 ${getScaledFontClass(
-            "text-sm",
-            settings.fontScaleLevel || 0
+          className={`flex break-words whitespace-normal flex-col space-y-0.5 md:space-y-2 ${getCustomFontClass(
+            "text-[18px]",
+            settings.fontScaleLevel
           )}`}
           style={{
             color: settings.textColors?.["h3"] || "text-blue-200",
@@ -223,16 +249,16 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
           {resume.contact.location && (
             <div className="flex items-start  gap-2">
               <CiLocationOn className="flex-shrink-0  mt-1" />
-              <p className="bg-transparent outline-none w-full break-words">
+              <p className="bg-transparent outline-none w-full break-all">
                 {resume.contact.location}
               </p>
             </div>
           )}
 
           {resume.contact.phone && (
-            <div className="flex items-center ">
-              <CiPhone className="mr-2" />
-              <p className="bg-transparent outline-none w-full">
+            <div className="flex items-start  gap-2 ">
+              <CiPhone className="flex-shrink-0  mt-1" />
+              <p className="bg-transparent outline-none w-full break-all">
                 {resume.contact.phone}
               </p>
             </div>
@@ -245,7 +271,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                 href={`mailto:${resume.contact.email}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-transparent outline-none w-full break-words"
+                className="bg-transparent outline-none w-full break-all"
               >
                 {resume.contact.email}
               </a>
@@ -254,12 +280,12 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
 
           {resume.contact.linkedin && (
             <div className="flex items-start gap-2">
-              <FaLinkedinIn className="flex-shrink-0 text-lg mt-1" />
+              <FaLinkedinIn className="flex-shrink-0  mt-1" />
               <a
                 href={`${resume.contact.linkedin}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-transparent outline-none w-full break-words"
+                className="bg-transparent outline-none w-full break-all"
               >
                 {resume.contact.linkedin}
               </a>
@@ -273,7 +299,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                 href={`${resume.contact.github}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-transparent outline-none w-full break-words"
+                className="bg-transparent outline-none w-full break-all"
               >
                 {resume.contact.github}
               </a>
@@ -288,9 +314,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
         {resume.description && (
           <div>
             <h2
-              className={`font-semibold uppercase tracking-wide  mb-2 ${getScaledFontClass(
-                "text-base",
-                settings.fontScaleLevel || 0
+              className={`font-semibold break-all uppercase tracking-wide mb-1 md:mb-2 ${getCustomFontClass(
+                "text-[24px]",
+                settings.fontScaleLevel
               )}`}
               style={{
                 color: settings.textColors?.["h2"] || "text-blue-300",
@@ -301,9 +327,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
             </h2>
 
             <div
-              className={`bg-transparent resume-content ${getScaledFontClass(
-                "text-sm",
-                settings.fontScaleLevel || 0
+              className={`bg-transparent resume-content ${getCustomFontClass(
+                "text-[18px]",
+                settings.fontScaleLevel
               )} outline-none w-full whitespace-pre-line`}
               style={{
                 textAlign: settings.descriptionAlign || "left",
@@ -321,9 +347,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
     skills: (
       <div style={{ textAlign: settings.descriptionAlign || "left" }}>
         <h2
-          className={`font-semibold uppercase tracking-wide mb-3 ${getScaledFontClass(
-            "text-base",
-            settings.fontScaleLevel || 0
+          className={`font-semibold  uppercase tracking-wide md:mb-2 ${getCustomFontClass(
+            "text-[24px]",
+            settings.fontScaleLevel
           )}`}
           style={{
             color: settings.textColors?.["h2"] || "text-blue-300",
@@ -333,7 +359,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
           Skills Overview
         </h2>
 
-        <div className="space-y-4">
+        <div className="md:space-y-4">
           {resume.skills.map((skill, i) => {
             const totalSkills = resume.skills.reduce(
               (acc, s) => acc + s.languages.length,
@@ -344,11 +370,11 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
 
             return (
               <div key={i}>
-                <div className="mb-1">
+                <div className="align-middle">
                   <span
-                    className={`${getScaledFontClass(
-                      "text-sm",
-                      settings.fontScaleLevel || 0
+                    className={`${getCustomFontClass(
+                      "text-[18px]",
+                      settings.fontScaleLevel
                     )} font-medium`}
                     style={{
                       color: settings.textColors?.["h3"] || "text-blue-200",
@@ -360,10 +386,10 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                 </div>
 
                 <p
-                  className={`${getScaledFontClass(
-                    "text-xs",
-                    settings.fontScaleLevel || 0
-                  )} mt-1`}
+                  className={`${getCustomFontClass(
+                    "text-[18px]",
+                    settings.fontScaleLevel
+                  )}`}
                   style={{
                     color: settings.textColors?.["h4"] || "text-blue-200",
                   }}
@@ -376,10 +402,10 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
         </div>
 
         <p
-          className={`font-semibold ${getScaledFontClass(
-            "text-sm",
-            settings.fontScaleLevel || 0
-          )} uppercase tracking-wide  my-3`}
+          className={`font-semibold ${getCustomFontClass(
+            "text-[20px]",
+            settings.fontScaleLevel
+          )} uppercase tracking-wide my-1 md:my-3`}
           style={{ color: settings.textColors?.["h2"] || "text-blue-300" }}
         >
           Skills Distribution
@@ -387,7 +413,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
 
         {/* Segmented Bar */}
 
-        <div className="flex w-full h-2 rounded-4xl overflow-hidden bg-white/10 mb-2">
+        <div className="flex w-full h-1 md:h-2 rounded-4xl overflow-hidden bg-white/10 mb-2">
           {resume.skills.map((skill, i) => {
             const totalSkills = resume.skills.reduce(
               (acc, s) => acc + s.languages.length,
@@ -410,9 +436,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
 
         {/* Legend */}
         <div
-          className={`${getScaledFontClass(
-            "text-xs",
-            settings.fontScaleLevel || 0
+          className={`${getCustomFontClass(
+            "text-[18px]",
+            settings.fontScaleLevel
           )} space-y-1`}
         >
           {resume.skills.map((skill, i) => {
@@ -428,9 +454,12 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
             const color = settings.skillColors?.[skill.domain] || "#60a5fa";
 
             return (
-              <div key={i} className="flex items-center gap-2">
+              <div
+                key={i}
+                className="flex break-all justify-between items-center gap-0.5 md:gap-2"
+              >
                 <span
-                  className="w-3 h-3 rounded-sm"
+                  className="w-2 h-2  md:w-3 md:h-3 rounded-sm"
                   style={{ backgroundColor: color }}
                 ></span>
                 <span
@@ -458,10 +487,10 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
     experience: (
       <section style={{ textAlign: settings.descriptionAlign || "left" }}>
         <h2
-          className={`${getScaledFontClass(
-            "text-xl",
-            settings.fontScaleLevel || 0
-          )} font-bold  mb-2`}
+          className={`${getCustomFontClass(
+            "text-[24px]",
+            settings.fontScaleLevel
+          )} font-bold mb-1 md:mb-2`}
           style={{
             color:
               settings.mainTextColors?.["h1"] || defaultMainTextColor("h1"),
@@ -472,13 +501,13 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
         {resume.experience.map((exp, i) => (
           <div
             key={i}
-            className={`mb-4 ${getScaledFontClass(
-              "text-sm",
-              settings.fontScaleLevel || 0
+            className={`mb-4 ${getCustomFontClass(
+              "text-[18px]",
+              settings.fontScaleLevel
             )}`}
           >
             <div
-              className={`flex gap-6 w-full ${
+              className={`flex gap-6 break-all w-full ${
                 settings.descriptionAlign === "center"
                   ? "justify-center"
                   : settings.descriptionAlign === "right"
@@ -496,7 +525,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                     defaultMainTextColor("h2"),
                 }}
               >
-                {exp.company} – {exp.role}
+                {exp.company}–{exp.role}
               </p>
               <p
                 className="italic"
@@ -544,10 +573,10 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
     projects: (
       <section style={{ textAlign: settings.descriptionAlign || "left" }}>
         <h2
-          className={`${getScaledFontClass(
-            "text-xl",
-            settings.fontScaleLevel || 0
-          )} font-bold  mb-2`}
+          className={`${getCustomFontClass(
+            "text-[24px]",
+            settings.fontScaleLevel
+          )} font-bold mb-1 md:mb-2`}
           style={{
             color:
               settings.mainTextColors?.["h1"] || defaultMainTextColor("h1"),
@@ -559,9 +588,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
         {resume.projects.map((proj, i) => (
           <div
             key={i}
-            className={`mb-4 ${getScaledFontClass(
-              "text-sm",
-              settings.fontScaleLevel || 0
+            className={`mb-4 ${getCustomFontClass(
+              "text-[18px]",
+              settings.fontScaleLevel
             )}`}
           >
             <div
@@ -587,9 +616,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
               </p>
 
               <div
-                className={`${getScaledFontClass(
-                  "text-sm",
-                  settings.fontScaleLevel || 0
+                className={`break-all ${getCustomFontClass(
+                  "text-[18px]",
+                  settings.fontScaleLevel
                 )}`}
               >
                 {(proj.demo || proj.github) && (
@@ -627,9 +656,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
             </div>
 
             <div
-              className={`mt-1 ${getScaledFontClass(
-                "text-sm",
-                settings.fontScaleLevel || 0
+              className={`mt-1 ${getCustomFontClass(
+                "text-[18px]",
+                settings.fontScaleLevel
               )} text-gray-700 whitespace-pre-line`}
             >
               <div
@@ -653,9 +682,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
     education: (
       <section style={{ textAlign: settings.descriptionAlign || "left" }}>
         <h2
-          className={`${getScaledFontClass(
-            "text-xl",
-            settings.fontScaleLevel || 0
+          className={`${getCustomFontClass(
+            "text-[24px]",
+            settings.fontScaleLevel
           )} font-bold mb-2`}
           style={{
             color:
@@ -666,7 +695,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
         </h2>
 
         <div
-          className={`flex gap-6 w-full ${
+          className={`flex gap-6 break-all w-full ${
             settings.descriptionAlign === "center"
               ? "justify-center"
               : settings.descriptionAlign === "right"
@@ -674,7 +703,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
               : settings.descriptionAlign === "justify"
               ? "justify-between"
               : "justify-start"
-          } ${getScaledFontClass("text-sm", settings.fontScaleLevel || 0)}`}
+          } ${getCustomFontClass("text-[18px]", settings.fontScaleLevel)}`}
         >
           <p
             className="font-semibold"
@@ -698,7 +727,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
         </div>
 
         <div
-          className={`flex gap-6 w-full ${
+          className={`flex break-all gap-6 w-full ${
             settings.descriptionAlign === "center"
               ? "justify-center"
               : settings.descriptionAlign === "right"
@@ -706,7 +735,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
               : settings.descriptionAlign === "justify"
               ? "justify-between"
               : "justify-start"
-          } ${getScaledFontClass("text-sm", settings.fontScaleLevel || 0)}`}
+          } ${getCustomFontClass("text-[18px]", settings.fontScaleLevel)}`}
         >
           <p>
             {resume.education.degree}
@@ -726,9 +755,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
         </div>
 
         <p
-          className={`${getScaledFontClass(
-            "text-sm",
-            settings.fontScaleLevel || 0
+          className={`${getCustomFontClass(
+            "text-[18px]",
+            settings.fontScaleLevel
           )}`}
           style={{
             color:
@@ -743,10 +772,10 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
     achievements: (
       <section style={{ textAlign: settings.descriptionAlign || "left" }}>
         <h2
-          className={`${getScaledFontClass(
-            "text-lg",
-            settings.fontScaleLevel || 0
-          )} font-bold  mb-2`}
+          className={`${getCustomFontClass(
+            "text-[24px]",
+            settings.fontScaleLevel
+          )} font-bold mb-1 md:mb-2`}
           style={{
             color:
               settings.mainTextColors?.["h1"] || defaultMainTextColor("h1"),
@@ -755,9 +784,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
           ACHIEVEMENTS
         </h2>
         <ul
-          className={`list-disc ${getScaledFontClass(
-            "text-sm",
-            settings.fontScaleLevel || 0
+          className={`list-disc ${getCustomFontClass(
+            "text-[18px]",
+            settings.fontScaleLevel
           )} pl-5 space-y-2 text-gray-800`}
         >
           {resume.achievements.map((ach, i) => (
@@ -769,7 +798,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                   settings.mainTextColors?.["h2"] || defaultMainTextColor("h2"),
               }}
             >
-              <strong>{ach.title}</strong> –{" "}
+              <strong>{ach.title}</strong>–
               <span
                 className="resume-content"
                 dangerouslySetInnerHTML={{
@@ -787,12 +816,12 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
     <div className="">
       {/* Toolbar */}
       {isEditable && (
-        <div className="w-full bg-white  justify-center border border-gray-200 shadow-sm rounded-md px-6 py-3 mb-6 flex flex-wrap items-center gap-3">
+        <div className="w-full bg-white justify-center border border-gray-200 shadow-sm rounded-md px-2.5 md:px-6 py-2.5 md:py-3 mb-2.5 md:mb-6 flex flex-wrap items-center gap-3">
           {/* Background Color Picker */}
           <div className="relative">
             {/* Icon trigger */}
             <button
-              className="p-2 rounded-md hover:bg-gray-200 transition relative group"
+              className="md:p-2 rounded-md hover:bg-gray-200 transition relative group"
               title={` Background Color`}
               onClick={() =>
                 setOpenDropdown((prev) =>
@@ -800,22 +829,22 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                 )
               }
             >
-              <FaFillDrip className="text-xl text-gray-700" />
+              <FaFillDrip className="text-sm md:text-xl text-gray-700" />
               <span
-                className="absolute w-4 h-4 rounded-full border border-gray-300 right-1 top-1"
+                className="absolute hidden md:block w-4 h-4 rounded-full border border-gray-300 right-1 top-1"
                 style={{ backgroundColor: settings.bgColor || "#ffffff" }}
               ></span>
             </button>
 
             {/* Picker panel */}
             {openDropdown === "mainColor" && (
-              <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl p-4 w-fit right-0">
+              <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl p-4 w-fit left-0">
                 <p className="text-sm font-semibold text-gray-700 mb-3">
                   Background Color
                 </p>
 
-                <div className="flex items-center gap-4">
-                  <div className="flex gap-2">
+                <div className="flex items-center gap-2 md:gap-4">
+                  <div className="flex gap-1 md:gap-2">
                     {[
                       "#ffffff",
                       "#f8fafc",
@@ -825,7 +854,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                     ].map((clr) => (
                       <button
                         key={clr}
-                        className={`w-6 h-6 rounded-full border transition-all hover:scale-105 ${
+                        className={`h-4 w-4 md:w-6 md:h-6 rounded-full border transition-all hover:scale-105 ${
                           clr === settings.bgColor
                             ? "ring-2 ring-offset-1 ring-sky-500"
                             : ""
@@ -845,7 +874,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                   {/* Divider */}
                   <div className="w-px h-6 bg-gray-300 mx-2" />
 
-                  <div className="relative w-6 h-6 rounded-full overflow-hidden border cursor-pointer group">
+                  <div className="relative h-4 w-4 md:w-6 md:h-6 rounded-full overflow-hidden border cursor-pointer group">
                     {/* Invisible Color Picker */}
                     <input
                       type="color"
@@ -865,7 +894,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                       className="absolute inset-0 z-0 rounded-full"
                       style={{ backgroundColor: settings.bgColor || "#ffffff" }}
                     >
-                      <MdOutlineColorize className="text-gray-500/50 text-lg drop-shadow absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
+                      <MdOutlineColorize className="text-gray-500/50 text-[10px] md:text-lg drop-shadow absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
                     </div>
                   </div>
                 </div>
@@ -877,7 +906,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
           <div className="relative">
             {/* Color Icon Button */}
             <button
-              className="p-2 rounded-md hover:bg-gray-200 transition relative group"
+              className="md:p-2 rounded-md hover:bg-gray-200 transition relative group"
               title={`Sidebar Color`}
               onClick={() =>
                 setOpenDropdown((prev) =>
@@ -885,23 +914,23 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                 )
               }
             >
-              <MdOutlineColorize className="text-xl text-gray-700" />
+              <MdOutlineColorize className="text-sm md:text-xl text-gray-700" />
               <span
-                className="absolute w-4 h-4 rounded-full border border-gray-300 right-1 top-1"
+                className="absolute hidden md:block w-4 h-4 rounded-full border border-gray-300 right-1 top-1"
                 style={{ backgroundColor: settings.sidebarColor || "#1e3a8a" }}
               ></span>
             </button>
 
             {/* Color Picker Panel */}
             {openDropdown === "sidebarColor" && (
-              <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl p-4 w-fit right-1/2">
-                <p className="text-sm font-semibold text-gray-700 mb-3">
+              <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl p-4 w-fit left-0">
+                <p className="text-xs md:text-sm font-semibold text-gray-700 mb-3">
                   Sidebar Color
                 </p>
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 md:gap-4">
                   {/* Fixed Swatches (Left) */}
-                  <div className="flex gap-2">
+                  <div className="flex gap-1 md:gap-2">
                     {[
                       "#1e3a8a",
                       "#0f766e",
@@ -911,7 +940,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                     ].map((clr) => (
                       <button
                         key={clr}
-                        className={`w-6 h-6 rounded-full border transition-all hover:scale-105 ${
+                        className={`h-4 w-4 md:w-6 md:h-6 rounded-full border transition-all hover:scale-105 ${
                           clr === settings.sidebarColor
                             ? "ring-2 ring-offset-1 ring-sky-500"
                             : ""
@@ -932,7 +961,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                   <div className="w-px h-6 bg-gray-300" />
 
                   {/* Custom Color Picker (Right) */}
-                  <div className="relative w-6 h-6 rounded-full overflow-hidden border cursor-pointer group">
+                  <div className="relative h-4 w-4 md:w-6 md:h-6 rounded-full overflow-hidden border cursor-pointer group">
                     {/* Colored background + icon (underneath) */}
                     <div
                       className="absolute inset-0 z-0 flex items-center justify-center rounded-full"
@@ -940,7 +969,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                         backgroundColor: settings.sidebarColor || "#1e3a8a",
                       }}
                     >
-                      <MdOutlineColorize className="text-white/30 text-sm drop-shadow group-hover:scale-110 transition" />
+                      <MdOutlineColorize className="text-white/30 text-[10px] md:text-sm drop-shadow group-hover:scale-110 transition" />
                     </div>
 
                     {/* Color input (on top but invisible) */}
@@ -963,8 +992,8 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
           </div>
 
           {/* Description Alignment */}
-          <div className="flex items-center gap-3">
-            <div className="flex gap-2 bg-gray-100 p-1 rounded-md">
+          <div className="flex items-center gap-1 md:gap-3">
+            <div className="flex gap-1 md:gap-2 bg-gray-100 p-1 rounded-md">
               {[
                 {
                   icon: <MdFormatAlignLeft />,
@@ -995,7 +1024,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                       descriptionAlign: value,
                     }))
                   }
-                  className={`p-2 rounded-md transition ${
+                  className={`p-1 md:p-2 text-sm md:text-lg md:rounded-md transition  ${
                     settings.descriptionAlign === value
                       ? "bg-white shadow  "
                       : "hover:bg-white/80"
@@ -1008,19 +1037,73 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
             </div>
           </div>
 
+          {/* Font Selector */}
+          <div className="relative">
+            {/* Trigger Button */}
+            <button
+              onClick={() =>
+                setOpenDropdown((prev) => (prev === "font" ? null : "font"))
+              }
+              title="Change Font"
+              className="md:p-2 rounded-md hover:bg-gray-100 transition"
+            >
+              <FaFont className="text-gray-700 text-xs md:text-lg" />
+            </button>
+
+            {/* Dropdown Menu */}
+            {openDropdown === "font" && (
+              <div className="absolute z-50 mt-2 bg-white border border-gray-200 shadow-lg rounded-lg p-3 w-40 md:w-52 right-0">
+                <p className="text-xs md:text-sm font-semibold text-gray-700 mb-2">
+                  Select Font
+                </p>
+
+                <div className="flex flex-col gap-1 max-h-48 overflow-y-auto">
+                  {[
+                    "Inter",
+                    "Roboto",
+                    "Poppins",
+                    "Lato",
+                    "Merriweather",
+                    "Georgia",
+                    "Courier New",
+                  ].map((font) => (
+                    <button
+                      key={font}
+                      onClick={() => {
+                        onSettingsChange((prev) => ({
+                          ...prev,
+                          fontFamily: font,
+                        }));
+                        setOpenDropdown(false);
+                      }}
+                      className={`text-xs md:text-sm text-left px-2 md:px-3 py-1 rounded hover:bg-gray-100 transition ${
+                        settings.fontFamily === font
+                          ? "bg-sky-50 text-sky-700 font-medium"
+                          : "text-gray-700"
+                      }`}
+                      style={{ fontFamily: font }}
+                    >
+                      {font}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
           {/* Font Size Adjuster */}
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-3">
             <button
               title="Decrease Font Size"
               onClick={() =>
                 onSettingsChange((prev) => ({
                   ...prev,
-                  fontScaleLevel: Math.max(-2, (prev.fontScaleLevel || 0) - 1),
+                  fontScaleLevel: Math.max(-10, (prev.fontScaleLevel || 0) - 1),
                 }))
               }
-              className="p-2 rounded hover:bg-gray-200"
+              className="md:p-2 align-middle  rounded hover:bg-gray-200"
             >
-              <span className="text-xl">
+              <span className="text-lg align-middle md:text-xl">
                 <MdOutlineTextDecrease />
               </span>
             </button>
@@ -1030,12 +1113,12 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
               onClick={() =>
                 onSettingsChange((prev) => ({
                   ...prev,
-                  fontScaleLevel: Math.min(3, (prev.fontScaleLevel || 0) + 1),
+                  fontScaleLevel: Math.min(10, (prev.fontScaleLevel || 0) + 1),
                 }))
               }
-              className="p-2 rounded hover:bg-gray-200"
+              className="md:p-2 align-middle rounded hover:bg-gray-200"
             >
-              <span className="text-xl">
+              <span className="text-lg align-middle md:text-xl">
                 <MdOutlineTextIncrease />
               </span>
             </button>
@@ -1050,29 +1133,31 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                     prev === "skillColor" ? null : "skillColor"
                   )
                 }
-                className="p-2 rounded-md hover:bg-gray-200 transition group relative"
+                className="md:p-2 align-middle  rounded hover:bg-gray-200"
                 title="Customize Skill Colors"
               >
-                <MdOutlineFormatColorFill className="text-xl text-gray-700" />
+                <span className="text-lg align-middle md:text-xl">
+                  <MdOutlineFormatColorFill />
+                </span>
               </button>
 
               {/* Popover Panel */}
               {openDropdown === "skillColor" && (
-                <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-xl shadow-xl p-4 w-max right-0">
+                <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-xl shadow-xl p-2 md:p-4 w-max right-1/2 transform translate-x-1/2">
                   <p className="text-sm font-semibold text-gray-700 mb-3">
                     Skill Bar Colors
                   </p>
 
-                  <div className="flex flex-wrap gap-2 max-w-xs">
+                  <div className="grid grid-cols-1 gap-2">
                     {resume.skills.map((skill, i) => (
                       <div
                         key={i}
-                        className="flex items-center gap-1 text-xs bg-white border border-gray-200 rounded-xs px-3 py-1 shadow-sm"
+                        className="flex items-center gap-2 text-xs bg-white border border-gray-200 rounded-xs px-3 py-1 shadow-sm"
                       >
                         <span className="text-gray-700 font-medium">
                           {skill.domain}
                         </span>
-                        <label className="relative w-5 h-5 cursor-pointer">
+                        <label className="relative w-3 h-3 md:w-5 md:h-5 cursor-pointer">
                           <input
                             type="color"
                             value={
@@ -1107,60 +1192,6 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
             </div>
           )}
 
-          {/* Font Selector */}
-          <div className="relative">
-            {/* Trigger Button */}
-            <button
-              onClick={() =>
-                setOpenDropdown((prev) => (prev === "font" ? null : "font"))
-              }
-              title="Change Font"
-              className="p-2 rounded-md hover:bg-gray-100  transition"
-            >
-              <FaFont className="text-gray-700 text-lg" />
-            </button>
-
-            {/* Dropdown Menu */}
-            {openDropdown === "font" && (
-              <div className="absolute z-50 mt-2 bg-white border border-gray-200 shadow-lg rounded-lg p-3 w-52 right-0">
-                <p className="text-sm font-semibold text-gray-700 mb-2">
-                  Select Font
-                </p>
-
-                <div className="flex flex-col gap-1 max-h-48 overflow-y-auto">
-                  {[
-                    "Inter",
-                    "Roboto",
-                    "Poppins",
-                    "Lato",
-                    "Merriweather",
-                    "Georgia",
-                    "Courier New",
-                  ].map((font) => (
-                    <button
-                      key={font}
-                      onClick={() => {
-                        onSettingsChange((prev) => ({
-                          ...prev,
-                          fontFamily: font,
-                        }));
-                        setOpenDropdown(false);
-                      }}
-                      className={`text-sm text-left px-3 py-1 rounded hover:bg-gray-100 transition ${
-                        settings.fontFamily === font
-                          ? "bg-sky-50 text-sky-700 font-medium"
-                          : "text-gray-700"
-                      }`}
-                      style={{ fontFamily: font }}
-                    >
-                      {font}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
           {/* Link Color Button */}
           {hasAnyProjectLink && (
             <div className="relative">
@@ -1171,22 +1202,22 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                     prev === "linkColor" ? null : "linkColor"
                   )
                 }
-                className="p-2 rounded-md hover:bg-gray-100 transition"
+                className="md:p-2 align-middle rounded-md hover:bg-gray-100 transition"
                 title="Change Project Link Color"
               >
-                <FaLink className="text-lg text-gray-700" />
+                <FaLink className="text-sm md:text-lg text-gray-700" />
               </button>
 
               {/* Picker Panel */}
               {openDropdown === "linkColor" && (
-                <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl p-4 w-fit right-0">
-                  <p className="text-sm font-semibold text-gray-700 mb-3">
+                <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl p-2.5 md:p-4 w-fit right-1/2 transform translate-x-1/2">
+                  <p className="text-xs md:text-sm font-semibold text-gray-700 mb-3">
                     Project Link Color
                   </p>
 
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2.5 md:gap-4">
                     {/* Preset Swatches */}
-                    <div className="flex gap-2">
+                    <div className="flex gap-1 md:gap-2">
                       {[
                         "#2563eb", // blue
                         "#7c3aed", // purple
@@ -1196,7 +1227,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                       ].map((clr) => (
                         <button
                           key={clr}
-                          className={`w-6 h-6 rounded-full border transition-all hover:scale-105 ${
+                          className={`w-4 h-4 md:w-6 md:h-6 rounded-full border transition-all hover:scale-105 ${
                             clr === settings.linkColor
                               ? "ring-2 ring-offset-1 ring-sky-500"
                               : ""
@@ -1217,7 +1248,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                     <div className="w-px h-6 bg-gray-300 mx-2" />
 
                     {/* Custom Color Picker Circle */}
-                    <div className="relative w-6 h-6 rounded-full overflow-hidden border cursor-pointer group">
+                    <div className="relative w-4 h-4 md:w-6 md:h-6 rounded-full overflow-hidden border cursor-pointer group">
                       <input
                         type="color"
                         value={settings.linkColor || "#2563eb"}
@@ -1236,7 +1267,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                           backgroundColor: settings.linkColor || "#2563eb",
                         }}
                       >
-                        <MdOutlineColorize className="text-gray-500/50 text-lg drop-shadow absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
+                        <MdOutlineColorize className="text-gray-500/50 text-xs md:text-lg drop-shadow absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
                       </div>
                     </div>
                   </div>
@@ -1248,7 +1279,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
           {/* Text Color Picker Button for sidebar */}
           <div className="relative group">
             <button
-              className="p-2 rounded-md hover:bg-gray-100 transition"
+              className="md:p-2 align-middle text-center rounded-md hover:bg-gray-100 transition"
               title="Sidebar Text Color"
               onClick={() =>
                 setOpenDropdown((prev) =>
@@ -1256,7 +1287,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                 )
               }
             >
-              <RiFontColor className="text-lg text-gray-700" />
+              <RiFontColor className="text-sm md:text-lg text-gray-700" />
             </button>
 
             {/* Color Panel */}
@@ -1305,7 +1336,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
           {/* Mainbar Text Color Picker */}
           <div className="relative group">
             <button
-              className="p-2 rounded-md hover:bg-gray-100 transition"
+              className="md:p-2 align-middle text-center rounded-md hover:bg-gray-100 transition"
               title="Mainbar Text Color"
               onClick={() =>
                 setOpenDropdown((prev) =>
@@ -1313,7 +1344,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                 )
               }
             >
-              <MdFormatColorText className="text-lg text-gray-700" />
+              <MdFormatColorText className="text-sm md:text-lg text-gray-700" />
             </button>
 
             {openDropdown === "mainTextColor" && (
@@ -1360,10 +1391,59 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
             )}
           </div>
 
+          {/* Section Spacing */}
+          <div className="relative">
+            <button
+              onClick={() =>
+                setOpenDropdown((prev) => (prev === "gap" ? null : "gap"))
+              }
+              className="md:p-2 text-center align-middle rounded-md hover:bg-gray-100 transition"
+              title="Adjust Section Spacing"
+            >
+              <CgSpaceBetweenV className="text-lg md:text-xl text-gray-700" />
+            </button>
+
+            {openDropdown === "gap" && (
+              <div className="absolute left-1/2 -translate-x-1/2 mt-2 z-50 w-40 md:w-56 bg-white border border-gray-200 rounded-lg shadow-lg p-1.5 md:p-3">
+                <h3 className="text-xs md:text-sm font-semibold text-gray-800 mb-2 flex items-center gap-2">
+                  <CgSpaceBetweenV className="text-sky-700" />
+                  Section Spacing
+                </h3>
+
+                <ul className="space-y-1 text-[12px] md:text-sm text-gray-600">
+                  {[
+                    { label: "None", value: 0 },
+                    { label: "Small", value: 8 },
+                    { label: "Medium", value: 16 },
+                    { label: "Large", value: 24 },
+                    { label: "Extra Large", value: 32 },
+                  ].map((option) => (
+                    <li
+                      key={option.value}
+                      onClick={() =>
+                        onSettingsChange((prev) => ({
+                          ...prev,
+                          sectionGap: option.value,
+                        }))
+                      }
+                      className={`px-1.5 md:px-3 py-1 md:py-1.5 rounded cursor-pointer hover:bg-sky-50 transition ${
+                        settings.sectionGap === option.value
+                          ? "bg-sky-100 text-sky-700 font-semibold"
+                          : ""
+                      }`}
+                    >
+                      {option.label}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+
           {/* Show/Hide Sections Button */}
           <div className="relative">
             <button
-              className="p-2 rounded-md hover:bg-gray-100 transition"
+              className="md:p-2 rounded-md align-middle hover:bg-gray-100 transition"
               title="Show/Hide Sections"
               onClick={() =>
                 setOpenDropdown((prev) =>
@@ -1371,20 +1451,24 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                 )
               }
             >
-              <BiShowAlt className="text-xl text-gray-700" />
+              <BiShowAlt className="text-lg md:text-xl text-gray-700" />
             </button>
 
             {openDropdown === "toggleSection" && (
-              <div className="absolute right-0 mt-2 z-50 w-72 max-h-72 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg">
+              <div className="absolute right-0 mt-2 z-50 w-48 md:w-72 max-w-[90vw] max-h-72 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg">
                 <div className="p-4">
-                  <h3 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                    <FaEye className="text-blue-600" />
+                  <h3 className="text-[12px] md:text-sm font-semibold text-gray-800 mb-1.5 md:mb-3 flex items-center gap-1 md:gap-2">
+                    <FaEye className="text-sky-700 text-[14px] md:text-base" />
                     Show/Hide Sections
                   </h3>
 
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-2 gap-1.5 md:gap-2">
                     {Object.keys(settings.visibleSections).map((key) => {
                       const isVisible = settings.visibleSections[key];
+                      const label = key
+                        .replace(/([A-Z])/g, " $1")
+                        .replace(/^./, (str) => str.toUpperCase());
+
                       return (
                         <button
                           key={key}
@@ -1397,17 +1481,19 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                               },
                             }))
                           }
-                          className={`flex items-center justify-between px-3 py-1.5 rounded-md border text-xs capitalize transition-all ${
+                          className={`flex items-center justify-between px-1.5 md:px-3 py-1.5 rounded-md border transition-all text-[10px] md:text-xs ${
                             isVisible
-                              ? "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100"
+                              ? "bg-blue-50 text-sky-700 border-sky-300 hover:bg-sky-100"
                               : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
                           }`}
                         >
-                          <span className="truncate w-24">{key}</span>
+                          <span className="truncate w-16 md:w-28 text-left">
+                            {label}
+                          </span>
                           {isVisible ? (
-                            <FaEye className="text-blue-500 text-sm shrink-0" />
+                            <FaEye className="text-blue-500 text-[10px] md:text-sm shrink-0" />
                           ) : (
-                            <FaEyeSlash className="text-gray-400 text-sm shrink-0" />
+                            <FaEyeSlash className="text-gray-400 text-[10px] md:text-sm shrink-0" />
                           )}
                         </button>
                       );
@@ -1421,7 +1507,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
           {/* Reorder Sections Button */}
           <div className="relative">
             <button
-              className="p-2 rounded-md hover:bg-gray-100 transition"
+              className="md:p-2 align-middle rounded-md hover:bg-gray-100 transition"
               title="Reorder Sections"
               onClick={() =>
                 setOpenDropdown((prev) =>
@@ -1429,26 +1515,28 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                 )
               }
             >
-              <IoReorderThreeSharp className="text-xl text-gray-700" />
+              <IoReorderThreeSharp className="text-lg md:text-xl text-gray-700" />
             </button>
 
             {openDropdown === "reorder" && (
-              <div className="absolute right-0 mt-2 z-50 w-64 max-h-80 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg">
-                <div className="p-4">
-                  <h3 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                    <IoReorderThreeSharp className="text-blue-600" />
+              <div className="absolute right-1/2 transform translate-x-1/2 mt-2 z-50 w-40 md:w-64 max-h-80 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg">
+                <div className="p-1.5 md:p-4">
+                  <h3 className="text-xs md:text-sm font-semibold text-gray-800 mb-1.5 md:mb-3 flex items-center gap-1 md:gap-2">
+                    <IoReorderThreeSharp className="text-sky-600" />
                     Reorder Sections
                   </h3>
 
                   <DndContext
                     sensors={sensors}
                     collisionDetection={closestCenter}
+                    modifiers={[restrictToVerticalAxis]} // restrict drag to vertical
                     onDragEnd={({ active, over }) => {
                       if (!over || active.id === over.id) return;
 
                       const oldIndex = settings.sectionOrder.indexOf(active.id);
                       const newIndex = settings.sectionOrder.indexOf(over.id);
 
+                      // Ensure drag happens within same section group
                       const isSidebar = sidebarSections.includes(active.id);
                       const overIsSidebar = sidebarSections.includes(over.id);
                       const isMain = mainSections.includes(active.id);
@@ -1470,10 +1558,10 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                       }
                     }}
                   >
-                    <div className="grid grid-cols-2 gap-4 text-xs">
+                    <div className="grid grid-cols-2 gap-1.5 md:gap-4 text-xs">
                       {/* Sidebar Sections */}
                       <div>
-                        <p className="text-xs text-gray-500 mb-1 font-medium">
+                        <p className="text-[12px] md:text-xs text-gray-500 mb-1 font-medium">
                           Sidebar
                         </p>
                         <SortableContext
@@ -1494,7 +1582,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
 
                       {/* Main Sections */}
                       <div>
-                        <p className="text-xs text-gray-500 mb-1 font-medium">
+                        <p className="text-[12px] md:text-xs text-gray-500 mb-1 font-medium">
                           Main
                         </p>
                         <SortableContext
@@ -1523,7 +1611,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
 
       {/* Resume Preview */}
       <div
-        className="min-h-screen border border-gray-400 p-4 flex"
+        className=" border border-gray-400 p-2 md:p-4 flex"
         style={{
           backgroundColor: settings.bgColor || "#ffffff",
           fontFamily: settings.fontFamily || "Inter",
@@ -1531,8 +1619,11 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
       >
         {/* Sidebar */}
         <aside
-          className="w-1/3 text-white p-6 space-y-6"
-          style={{ backgroundColor: settings.sidebarColor || "#1e3a8a" }}
+          className="w-full md:w-1/3 text-white p-3 md:p-6 flex flex-col"
+          style={{
+            backgroundColor: settings.sidebarColor || "#1e3a8a",
+            rowGap: `${settings.sectionGap ?? 16}px`,
+          }}
         >
           {(settings.sectionOrder || [])
             .filter(
@@ -1545,7 +1636,12 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
         </aside>
 
         {/* Mainbar */}
-        <main className="w-2/3 p-8 space-y-6">
+        <main
+          className="w-full md:w-2/3 p-2 md:p-8 flex flex-col"
+          style={{
+            rowGap: `${settings.sectionGap ?? 16}px`,
+          }}
+        >
           {(settings.sectionOrder || [])
             .filter(
               (key) =>

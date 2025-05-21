@@ -7,6 +7,7 @@ import { BiShowAlt } from "react-icons/bi";
 import { FaEye, FaEyeSlash, FaFillDrip, FaFont, FaLink } from "react-icons/fa";
 import { IoReorderThreeSharp } from "react-icons/io5";
 import DOMPurify from "dompurify";
+import { CgSpaceBetweenV } from "react-icons/cg";
 import {
   MdFormatAlignLeft,
   MdFormatAlignCenter,
@@ -32,7 +33,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-//hello
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 
 const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
   const { isEditable } = useEditResume();
@@ -114,7 +115,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
         style={style}
         {...attributes}
         {...listeners}
-        className="flex items-center justify-between px-2 py-1 md:py-2 bg-gray-50 border border-gray-200 rounded-md text-[12px] md:text-xs cursor-grab touch-none hover:bg-gray-100 transition"
+        className="flex items-center overflow-y-hidden justify-between px-2 py-1 md:py-2 bg-gray-50 border border-gray-200 rounded-md text-[12px] md:text-xs cursor-grab touch-none hover:bg-gray-100 transition"
         title={id}
       >
         <span className="capitalize text-gray-700 truncate max-w-[80%]">
@@ -804,6 +805,55 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
             </button>
           </div>
 
+          {/* Section Spacing */}
+          <div className="relative">
+            <button
+              onClick={() =>
+                setOpenDropdown((prev) => (prev === "gap" ? null : "gap"))
+              }
+              className="md:p-2 text-center align-middle rounded-md hover:bg-gray-100 transition"
+              title="Adjust Section Spacing"
+            >
+              <CgSpaceBetweenV className="text-lg md:text-xl text-gray-700" />
+            </button>
+
+            {openDropdown === "gap" && (
+              <div className="absolute left-1/2 -translate-x-1/2 mt-2 z-50 w-56 bg-white border border-gray-200 rounded-lg shadow-lg p-3">
+                <h3 className="text-sm font-semibold text-gray-800 mb-2 flex items-center gap-2">
+                  <CgSpaceBetweenV className="text-sky-700" />
+                  Section Spacing
+                </h3>
+
+                <ul className="space-y-1 text-sm text-gray-600">
+                  {[
+                    { label: "None", value: 0 },
+                    { label: "Small", value: 8 },
+                    { label: "Medium", value: 16 },
+                    { label: "Large", value: 24 },
+                    { label: "Extra Large", value: 32 },
+                  ].map((option) => (
+                    <li
+                      key={option.value}
+                      onClick={() =>
+                        onSettingsChange((prev) => ({
+                          ...prev,
+                          sectionGap: option.value,
+                        }))
+                      }
+                      className={`px-3 py-1.5 rounded cursor-pointer hover:bg-sky-50 transition ${
+                        settings.sectionGap === option.value
+                          ? "bg-sky-100 text-sky-700 font-semibold"
+                          : ""
+                      }`}
+                    >
+                      {option.label}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+
           {/* Border Width Dropdown */}
           <div className="relative">
             <button
@@ -1154,7 +1204,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
               <div className="absolute right-0 mt-2 z-50 w-48 md:w-72 max-h-72 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg">
                 <div className="p-4">
                   <h3 className="text-[12px] md:text-sm font-semibold text-gray-800 mb-1.5 md:mb-3 flex items-center gap-1 md:gap-2">
-                    <FaEye className="text-blue-600" />
+                    <FaEye className="text-sky-700" />
                     Show/Hide Sections
                   </h3>
 
@@ -1179,7 +1229,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                           }
                           className={`flex items-center justify-between px-1.5 md:px-3 py-1.5 rounded-md border text-[10px] md:text-xs transition-all ${
                             isVisible
-                              ? "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100"
+                              ? "bg-blue-50 text-sky-700 border-sky-300 hover:bg-sky-100"
                               : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
                           }`}
                         >
@@ -1225,6 +1275,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                   <DndContext
                     sensors={sensors}
                     collisionDetection={closestCenter}
+                    modifiers={[restrictToVerticalAxis]} // 👈 restrict to vertical only
                     onDragEnd={({ active, over }) => {
                       if (!over || active.id === over.id) return;
 
@@ -1270,7 +1321,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
       >
         {/* Inner Resume Container */}
         <div
-          className="p-2 md:p-7 flex flex-col gap-2.5 md:gap-5"
+          className="p-2 md:p-7 flex flex-col"
           style={{
             border:
               settings.borderWidth && settings.borderWidth !== "0px"
@@ -1279,6 +1330,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                   }`
                 : "none",
             borderRadius: settings.borderRadius || "0px",
+            rowGap: `${settings.sectionGap ?? 16}px`,
           }}
         >
           {Array.isArray(settings?.sectionOrder) &&
