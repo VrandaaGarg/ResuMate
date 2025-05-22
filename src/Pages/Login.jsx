@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { toast } from "react-hot-toast";
 import { FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../Contexts/AuthContext";
@@ -18,16 +17,19 @@ export default function Login() {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const result = login({ email: form.email, password: form.password });
+    const result = await login({
+      email: form.email,
+      password: form.password,
+    });
 
     if (result.success) {
       showSuccessToast("Login successful!");
       navigate("/dashboard");
     } else {
-      showErrorToast(result.message || "Login failed");
+      showErrorToast(result.error || "Login failed");
     }
   };
 

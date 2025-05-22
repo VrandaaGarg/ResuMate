@@ -1,50 +1,62 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  updateProfile,
+} from "firebase/auth";
+import { auth } from "../firebase";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(() => {
-    return JSON.parse(localStorage.getItem("currentUser")) || null;
-  });
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // Prevent flicker on reload
 
   useEffect(() => {
-    localStorage.setItem("currentUser", JSON.stringify(user));
-  }, [user]);
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser);
+      setLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
 
-  const signup = ({ name, email, password }) => {
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const emailExists = users.some((u) => u.email === email);
-    if (emailExists) return { error: "Email already registered" };
-
-    const newUser = { name, email, password: btoa(password) };
-    users.push(newUser);
-    localStorage.setItem("users", JSON.stringify(users));
-    return { success: true };
+  const signup = async ({ name, email, password }) => {
+    try {
+      const { user } = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      await updateProfile(user, { displayName: name });
+      setUser({ ...user, displayName: name });
+      return { success: true };
+    } catch (error) {
+      return { error: error.message };
+    }
   };
 
-  const login = ({ email, password }) => {
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const existingUser = users.find(
-      (u) => u.email === email && u.password === btoa(password)
-    );
-    if (!existingUser) return { error: "Invalid credentials" };
-
-    setUser(existingUser);
-    return { success: true };
+  const login = async ({ email, password }) => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      return { success: true };
+    } catch (error) {
+      console.error("Firebase login error:", error.code, error.message);
+      return { error: error.message };
+    }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    await signOut(auth);
     setUser(null);
-    localStorage.removeItem("currentUser");
   };
 
-  const updateUser = (updatedData) => {
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const updatedUsers = users.map((u) =>
-      u.email === user.email ? { ...u, ...updatedData } : u
-    );
-    localStorage.setItem("users", JSON.stringify(updatedUsers));
-    setUser((prev) => ({ ...prev, ...updatedData }));
+  const updateUser = async (updatedData) => {
+    if (auth.currentUser) {
+      await updateProfile(auth.currentUser, updatedData);
+      setUser({ ...auth.currentUser, ...updatedData });
+    }
   };
 
   return (
@@ -58,7 +70,7 @@ export const AuthProvider = ({ children }) => {
         updateUser,
       }}
     >
-      {children}
+      {!loading && children}
     </AuthContext.Provider>
   );
 };

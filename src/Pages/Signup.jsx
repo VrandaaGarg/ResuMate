@@ -1,15 +1,22 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
-import { FiUser, FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
-import { AuthContext } from "../Contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
-import { FiCheckCircle, FiXCircle } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import {
+  FiUser,
+  FiMail,
+  FiLock,
+  FiEye,
+  FiEyeOff,
+  FiCheckCircle,
+  FiXCircle,
+} from "react-icons/fi";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../Contexts/AuthContext";
 import showSuccessToast from "../Components/showSuccessToast";
+import showErrorToast from "../Components/showErrorToast";
 
 const Signup = () => {
-  const { signup } = useContext(AuthContext);
+  const { signup } = useAuth();
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -41,7 +48,7 @@ const Signup = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const allValid = Object.values(passwordValid).every(Boolean);
@@ -49,16 +56,17 @@ const Signup = () => {
     if (form.password !== form.confirmPassword)
       return toast.error("Passwords do not match.");
 
-    try {
-      signup({
-        name: form.name,
-        email: form.email,
-        password: form.password,
-      });
+    const result = await signup({
+      name: form.name,
+      email: form.email,
+      password: form.password,
+    });
+
+    if (result.success) {
       showSuccessToast("Signup successful!");
       navigate("/dashboard");
-    } catch (err) {
-      showErrorToast(err.message || "Signup failed");
+    } else {
+      showErrorToast(result.error || "Signup failed");
     }
   };
 
