@@ -8,8 +8,11 @@ export const EditResumeProvider = ({ children }) => {
   const [isEditable, setIsEditable] = useState(false);
 
   const toggleEditing = () => {
-    setIsEditable((prev) => !prev);
-    isEditable ? showSuccessToast("Changes saved") : "";
+    setIsEditable((prev) => {
+      const newState = !prev;
+      if (!newState) showSuccessToast("Changes saved"); // only show when turning off edit mode
+      return newState;
+    });
   };
 
   return (
