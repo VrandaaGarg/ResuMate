@@ -1,61 +1,39 @@
-// src/Contexts/ResumeDataContext.jsx
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { getResumeData } from "../config/database";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const ResumeDataContext = createContext();
 
-const defaultResumeData = {
-  name: "",
-  description: "",
-  education: {
-    college: "",
-    degree: "",
-    specialization: "",
-    location: "",
-    startYear: "",
-    endYear: "",
-    cgpa: "",
-    school: "",
-    tenth: "",
-    twelfth: "",
-  },
-  skills: [{ domain: "", languages: [""] }],
-  projects: [{ name: "", description: "", github: "", demo: "" }],
-  experience: [
-    {
-      company: "",
-      role: "",
-      technologies: "",
-      years: "",
-      description: "",
-    },
-  ],
-  achievements: [{ title: "", description: "", year: "", month: "" }],
-  contact: {
-    phone: "",
-    email: "",
-    github: "",
-    linkedin: "",
-    location: "",
-  },
-};
-
 export const ResumeDataProvider = ({ children }) => {
-  const [resume, setResume] = useState(() => {
-    const local = localStorage.getItem("resumeData");
-    return local ? JSON.parse(local) : defaultResumeData;
-  });
+  const [resume, setResume] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    localStorage.setItem("resumeData", JSON.stringify(resume));
-  }, [resume]);
+    const auth = getAuth();
+
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          const data = await getResumeData();
+          setResume(data || null);
+        } catch (err) {
+          console.error("Failed to fetch resume:", err.message);
+          setResume(null);
+        }
+      } else {
+        setResume(null);
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   return (
-    <ResumeDataContext.Provider value={{ resume, setResume }}>
-      {children}
+    <ResumeDataContext.Provider value={{ resume, setResume, loading }}>
+      {!loading && children}
     </ResumeDataContext.Provider>
   );
 };
 
 export const useResumeData = () => useContext(ResumeDataContext);
-
-// defaultResumeData is your original structure without settings like backgroundColor etc.

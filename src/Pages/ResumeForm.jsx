@@ -33,6 +33,7 @@ import {
 } from "react-icons/fa";
 import { TbWorld } from "react-icons/tb";
 import showSuccessToast from "../Components/showSuccessToast";
+import { createResume } from "../config/database"; // 🔥 Firestore function
 
 const steps = [
   "Personal Info",
@@ -46,52 +47,92 @@ const steps = [
 
 const ResumeForm = () => {
   const navigate = useNavigate();
-  const { setResume } = useResumeData();
-  const [step, setStep] = useState(0);
-  const [formData, setFormData] = useState(() => {
-    const saved = localStorage.getItem("resumeData");
-    return saved
-      ? JSON.parse(saved)
-      : {
-          name: "",
-          description: "",
-          education: {
-            college: "",
-            degree: "",
-            specialization: "",
-            location: "",
-            startYear: "",
-            endYear: "",
-            cgpa: "",
-            school: "",
-            tenth: "",
-            twelfth: "",
-          },
-          skills: [{ domain: "", languages: [""] }],
-          projects: [{ name: "", description: "", github: "", demo: "" }],
-          experience: [
-            {
-              company: "",
-              role: "",
-              technologies: "",
-              years: "",
-              description: "",
-            },
-          ],
-          achievements: [{ title: "", description: "", year: "", month: "" }],
-          contact: {
-            phone: "",
-            email: "",
-            github: "",
-            linkedin: "",
-            location: "",
-          },
-        };
-  });
 
-  useEffect(() => {
-    localStorage.setItem("resumeData", JSON.stringify(formData));
-  }, [formData]);
+  const [step, setStep] = useState(0);
+  // const [formData, setFormData] = useState(() => {
+  //   const saved = localStorage.getItem("resumeData");
+  //   return saved
+  //     ? JSON.parse(saved)
+  //     : {
+  //         name: "",
+  //         description: "",
+  //         education: {
+  //           college: "",
+  //           degree: "",
+  //           specialization: "",
+  //           location: "",
+  //           startYear: "",
+  //           endYear: "",
+  //           cgpa: "",
+  //           school: "",
+  //           tenth: "",
+  //           twelfth: "",
+  //         },
+  //         skills: [{ domain: "", languages: [""] }],
+  //         projects: [{ name: "", description: "", github: "", demo: "" }],
+  //         experience: [
+  //           {
+  //             company: "",
+  //             role: "",
+  //             technologies: "",
+  //             years: "",
+  //             description: "",
+  //           },
+  //         ],
+  //         achievements: [{ title: "", description: "", year: "", month: "" }],
+  //         contact: {
+  //           phone: "",
+  //           email: "",
+  //           github: "",
+  //           linkedin: "",
+  //           location: "",
+  //         },
+  //       };
+  // });
+
+  // useEffect(() => {
+  //   localStorage.setItem("resumeData", JSON.stringify(formData));
+  // }, [formData]);
+
+  const defaultResumeData = {
+    name: "",
+    description: "",
+    education: {
+      college: "",
+      degree: "",
+      specialization: "",
+      location: "",
+      startYear: "",
+      endYear: "",
+      cgpa: "",
+      school: "",
+      tenth: "",
+      twelfth: "",
+    },
+    skills: [{ domain: "", languages: [""] }],
+    projects: [{ name: "", description: "", github: "", demo: "" }],
+    experience: [
+      {
+        company: "",
+        role: "",
+        technologies: "",
+        years: "",
+        description: "",
+      },
+    ],
+    achievements: [{ title: "", description: "", year: "", month: "" }],
+    contact: {
+      phone: "",
+      email: "",
+      github: "",
+      linkedin: "",
+      location: "",
+    },
+  };
+
+  const { resume, setResume } = useResumeData();
+
+  const [formData, setFormData] = useState(() => resume || defaultResumeData);
 
   const handleChange = (e, path) => {
     const keys = path.split(".");
@@ -185,11 +226,16 @@ const ResumeForm = () => {
 
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 0));
 
-  const saveResumeToLocal = () => {
-    localStorage.setItem("resumeData", JSON.stringify(formData));
-    setResume(formData);
-    showSuccessToast("Resume build successfully!");
-    navigate("/resume");
+  const saveResumeToFirebase = async () => {
+    try {
+      await createResume(formData);
+      setResume(formData);
+      showSuccessToast("Resume saved successfully!");
+      navigate("/resume");
+    } catch (err) {
+      toast.error("Failed to save resume!");
+      console.error("Firestore error:", err.message);
+    }
   };
 
   const renderStep = () => {
@@ -1046,7 +1092,7 @@ const ResumeForm = () => {
         {/* Next / Finish Button */}
         {step === steps.length - 1 ? (
           <button
-            onClick={saveResumeToLocal}
+            onClick={saveResumeToFirebase}
             className="inline-flex items-center gap-2 px-5 py-2 bg-sky-700 hover:bg-sky-600 text-white font-semibold rounded-md shadow transition"
           >
             <FaCheckCircle className="text-white" />

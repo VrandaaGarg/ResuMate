@@ -26,9 +26,18 @@ export default function Dashboard() {
           <h2 className="text-3xl font-bold text-sky-700 mb-2">
             Welcome to ResuMate 👋
           </h2>
-          <p className="text-gray-600 mb-6 text-sm">
-            You haven't created or uploaded any resumes yet. Let's get started!
-          </p>
+
+          {resume?.name ? (
+            <p className="text-gray-600 mb-6 text-sm">
+              Edit your resume or upload a new one to get started!
+            </p>
+          ) : (
+            <p className="text-gray-600 mb-6 text-sm">
+              You haven't created or uploaded any resumes yet. Let's get
+              started!
+            </p>
+          )}
+
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link
               to="/resume-form"

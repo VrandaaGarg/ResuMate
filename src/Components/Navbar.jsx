@@ -77,7 +77,7 @@ const Navbar = () => {
                 onClick={() => setDropdownOpen((prev) => !prev)}
               >
                 <div className="w-8 h-8 rounded-full bg-sky-700 text-white flex items-center justify-center font-semibold text-sm uppercase">
-                  {user?.name?.charAt(0) || "U"}
+                  {user?.displayName?.charAt(0).toUpperCase() || "U"}
                 </div>
               </button>
 

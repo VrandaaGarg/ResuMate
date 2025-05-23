@@ -24,6 +24,7 @@ import Marquee from "../Components/Marquee";
 import { FaRocket, FaUpload } from "react-icons/fa";
 import StatsSection from "../Components/StatsSection";
 import { useState } from "react";
+import { getAuth } from "firebase/auth";
 
 const features = [
   {
@@ -143,13 +144,14 @@ const testimonials = [
 
 const Home = () => {
   const navigate = useNavigate();
+  const auth = getAuth();
 
   const handleCreateClick = () => {
-    const user = JSON.parse(localStorage.getItem("currentUser"));
+    const user = getAuth().currentUser;
     if (user) {
       navigate("/dashboard");
     } else {
-      navigate("/signup");
+      navigate("/login");
     }
   };
 
