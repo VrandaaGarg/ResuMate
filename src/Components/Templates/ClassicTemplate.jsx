@@ -8,6 +8,7 @@ import { FaEye, FaEyeSlash, FaFillDrip, FaFont, FaLink } from "react-icons/fa";
 import { IoReorderThreeSharp } from "react-icons/io5";
 import DOMPurify from "dompurify";
 import { CgSpaceBetweenV } from "react-icons/cg";
+import { useClassicSetting } from "../../Contexts/ClassicSettingContext";
 import {
   MdFormatAlignLeft,
   MdFormatAlignCenter,
@@ -35,7 +36,8 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 
-const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
+const ClassicTemplate = ({ resume }) => {
+  const { classicSettings, setClassicSettings } = useClassicSetting();
   const { isEditable } = useEditResume();
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -50,6 +52,13 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
       },
     })
   );
+
+  const handleBorderRadiusChange = (value) => {
+    setClassicSettings((prev) => ({
+      ...prev,
+      borderRadius: value,
+    }));
+  };
 
   const [openDropdown, setOpenDropdown] = useState(null); // values: "toggle", "font", "reorder", etc.
   if (!resume) return null;
@@ -123,8 +132,8 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
   };
 
   useEffect(() => {
-    if (!settings.visibleSections) {
-      onSettingsChange((prev) => ({
+    if (!classicSettings.visibleSections) {
+      setClassicSettings((prev) => ({
         ...prev,
         visibleSections: {
           name: true,
@@ -141,8 +150,8 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
   }, []);
 
   useEffect(() => {
-    if (!settings.sectionOrder) {
-      onSettingsChange((prev) => ({
+    if (!classicSettings.sectionOrder) {
+      setClassicSettings((prev) => ({
         ...prev,
         sectionOrder: [
           "name",
@@ -170,9 +179,9 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
         <h1
           className={`${getCustomFontClass(
             "text-[36px]",
-            settings.fontScaleLevel
+            classicSettings.fontScaleLevel
           )} font-bold w-full inline-block`}
-          style={{ color: settings.TextColors?.["h1"] || "black" }}
+          style={{ color: classicSettings.TextColors?.["h1"] || "black" }}
         >
           {resume.name}
         </h1>
@@ -185,12 +194,16 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
         <p
           className={`${getCustomFontClass(
             "text-[14px]",
-            settings.fontScaleLevel
+            classicSettings.fontScaleLevel
           )} text-gray-700`}
         >
           {[
             resume.contact.phone && (
-              <span style={{ color: settings.TextColors?.["h3"] || "#475569" }}>
+              <span
+                style={{
+                  color: classicSettings.TextColors?.["h3"] || "#475569",
+                }}
+              >
                 {resume.contact.phone}
               </span>
             ),
@@ -199,13 +212,13 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                 href={`mailto:${resume.contact.email}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ color: settings.linkColor || "#2563eb" }}
+                style={{ color: classicSettings.linkColor || "#2563eb" }}
               >
                 {resume.contact.email}
               </a>
             ),
             resume.contact.location && (
-              <span style={{ color: settings.linkColor || "#2563eb" }}>
+              <span style={{ color: classicSettings.linkColor || "#2563eb" }}>
                 {resume.contact.location}
               </span>
             ),
@@ -222,9 +235,9 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
         <div
           className={`${getCustomFontClass(
             "text-[14px]",
-            settings.fontScaleLevel
+            classicSettings.fontScaleLevel
           )} break-words whitespace-normal flex flex-wrap justify-center gap-x-2 `}
-          style={{ color: settings.linkColor || "#2563eb" }}
+          style={{ color: classicSettings.linkColor || "#2563eb" }}
         >
           {resume.contact.github && (
             <a
@@ -256,22 +269,22 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
     ),
 
     description: (
-      <div style={{ textAlign: settings.descriptionAlign || "left" }}>
+      <div style={{ textAlign: classicSettings.descriptionAlign || "left" }}>
         <h2
           className={`${getCustomFontClass(
             "text-[16px]",
-            settings.fontScaleLevel
+            classicSettings.fontScaleLevel
           )} font-bold text-gray-800`}
-          style={{ color: settings.TextColors?.["h2"] || "#334155" }}
+          style={{ color: classicSettings.TextColors?.["h2"] || "#334155" }}
         >
           PROFILE
         </h2>
         <div
           className={`resume-content text-gray-700 ${getCustomFontClass(
             "text-[14px]",
-            settings.fontScaleLevel
+            classicSettings.fontScaleLevel
           )}`}
-          style={{ color: settings.TextColors?.["h3"] || "#475569" }}
+          style={{ color: classicSettings.TextColors?.["h3"] || "#475569" }}
           dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(resume.description),
           }}
@@ -280,27 +293,27 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
     ),
 
     education: (
-      <div style={{ textAlign: settings.descriptionAlign || "left" }}>
+      <div style={{ textAlign: classicSettings.descriptionAlign || "left" }}>
         <h2
           className={`${getCustomFontClass(
             "text-[16px]",
-            settings.fontScaleLevel
+            classicSettings.fontScaleLevel
           )} font-bold text-gray-800`}
-          style={{ color: settings.TextColors?.["h2"] || "#334155" }}
+          style={{ color: classicSettings.TextColors?.["h2"] || "#334155" }}
         >
           EDUCATION
         </h2>
         <div
-          style={{ color: settings.TextColors?.["h3"] || "#475569" }}
+          style={{ color: classicSettings.TextColors?.["h3"] || "#475569" }}
           className={`flex gap-6 w-full ${getCustomFontClass(
             "text-[14px]",
-            settings.fontScaleLevel
+            classicSettings.fontScaleLevel
           )} ${
-            settings.descriptionAlign === "center"
+            classicSettings.descriptionAlign === "center"
               ? "justify-center"
-              : settings.descriptionAlign === "right"
+              : classicSettings.descriptionAlign === "right"
               ? "justify-end"
-              : settings.descriptionAlign === "justify"
+              : classicSettings.descriptionAlign === "justify"
               ? "justify-between"
               : "justify-start"
           }`}
@@ -311,20 +324,20 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
         <div
           className={` ${getCustomFontClass(
             "text-[14px]",
-            settings.fontScaleLevel
+            classicSettings.fontScaleLevel
           )}`}
-          style={{ color: settings.TextColors?.["h3"] || "#475569" }}
+          style={{ color: classicSettings.TextColors?.["h3"] || "#475569" }}
         >
           <div
             className={`flex gap-6 w-full ${getCustomFontClass(
               "text-[14px]",
-              settings.fontScaleLevel
+              classicSettings.fontScaleLevel
             )} ${
-              settings.descriptionAlign === "center"
+              classicSettings.descriptionAlign === "center"
                 ? "justify-center"
-                : settings.descriptionAlign === "right"
+                : classicSettings.descriptionAlign === "right"
                 ? "justify-end"
-                : settings.descriptionAlign === "justify"
+                : classicSettings.descriptionAlign === "justify"
                 ? "justify-between"
                 : "justify-start"
             }`}
@@ -347,13 +360,13 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
     ),
 
     skills: (
-      <div style={{ textAlign: settings.descriptionAlign || "left" }}>
+      <div style={{ textAlign: classicSettings.descriptionAlign || "left" }}>
         <h2
           className={`${getCustomFontClass(
             "text-[16px]",
-            settings.fontScaleLevel
+            classicSettings.fontScaleLevel
           )} font-bold text-gray-800`}
-          style={{ color: settings.TextColors?.["h2"] || "#334155" }}
+          style={{ color: classicSettings.TextColors?.["h2"] || "#334155" }}
         >
           SKILLS
         </h2>
@@ -362,16 +375,18 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
             key={i}
             className={`${getCustomFontClass(
               "text-[14px]",
-              settings.fontScaleLevel
+              classicSettings.fontScaleLevel
             )}`}
           >
             <span
               className="font-semibold mr-2"
-              style={{ color: settings.TextColors?.["h3"] || "#475569" }}
+              style={{ color: classicSettings.TextColors?.["h3"] || "#475569" }}
             >
               {skill.domain}:
             </span>{" "}
-            <span style={{ color: settings.TextColors?.["h4"] || "#64748b" }}>
+            <span
+              style={{ color: classicSettings.TextColors?.["h4"] || "#64748b" }}
+            >
               {skill.languages.join(", ")}
             </span>
           </div>
@@ -380,13 +395,13 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
     ),
 
     projects: (
-      <div style={{ textAlign: settings.descriptionAlign || "left" }}>
+      <div style={{ textAlign: classicSettings.descriptionAlign || "left" }}>
         <h2
           className={`${getCustomFontClass(
             "text-[16px]",
-            settings.fontScaleLevel
+            classicSettings.fontScaleLevel
           )} font-bold text-gray-800`}
-          style={{ color: settings.TextColors?.["h2"] || "#334155" }}
+          style={{ color: classicSettings.TextColors?.["h2"] || "#334155" }}
         >
           PROJECTS
         </h2>
@@ -395,20 +410,22 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
             <div
               className={`flex gap-2 md:gap-6 w-full ${getCustomFontClass(
                 "text-[14px]",
-                settings.fontScaleLevel
+                classicSettings.fontScaleLevel
               )} ${
-                settings.descriptionAlign === "center"
+                classicSettings.descriptionAlign === "center"
                   ? "justify-center"
-                  : settings.descriptionAlign === "right"
+                  : classicSettings.descriptionAlign === "right"
                   ? "justify-end"
-                  : settings.descriptionAlign === "justify"
+                  : classicSettings.descriptionAlign === "justify"
                   ? "justify-between"
                   : "justify-start"
               }`}
             >
               <span
                 className="font-bold"
-                style={{ color: settings.TextColors?.["h3"] || "#475569" }}
+                style={{
+                  color: classicSettings.TextColors?.["h3"] || "#475569",
+                }}
               >
                 {proj.name}
               </span>
@@ -422,7 +439,9 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="underline "
-                        style={{ color: settings.linkColor || "#2563eb" }}
+                        style={{
+                          color: classicSettings.linkColor || "#2563eb",
+                        }}
                       >
                         Live Demo
                       </a>
@@ -436,7 +455,9 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="underline "
-                        style={{ color: settings.linkColor || "#2563eb" }}
+                        style={{
+                          color: classicSettings.linkColor || "#2563eb",
+                        }}
                       >
                         GitHub
                       </a>
@@ -451,9 +472,9 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
             <div
               className={`resume-content   ${getCustomFontClass(
                 "text-[14px]",
-                settings.fontScaleLevel
+                classicSettings.fontScaleLevel
               )}`}
-              style={{ color: settings.TextColors?.["h4"] || "#64748b" }}
+              style={{ color: classicSettings.TextColors?.["h4"] || "#64748b" }}
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(proj.description),
               }}
@@ -464,13 +485,13 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
     ),
 
     experience: (
-      <div style={{ textAlign: settings.descriptionAlign || "left" }}>
+      <div style={{ textAlign: classicSettings.descriptionAlign || "left" }}>
         <h2
           className={` ${getCustomFontClass(
             "text-[16px]",
-            settings.fontScaleLevel
+            classicSettings.fontScaleLevel
           )} font-bold text-gray-800`}
-          style={{ color: settings.TextColors?.["h2"] || "#334155" }}
+          style={{ color: classicSettings.TextColors?.["h2"] || "#334155" }}
         >
           EXPERIENCE
         </h2>
@@ -480,17 +501,19 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
               key={i}
               className={`md:mb-3  ${getCustomFontClass(
                 "text-[14px]",
-                settings.fontScaleLevel
+                classicSettings.fontScaleLevel
               )}`}
             >
               <div
-                style={{ color: settings.TextColors?.["h3"] || "#475569" }}
+                style={{
+                  color: classicSettings.TextColors?.["h3"] || "#475569",
+                }}
                 className={`flex gap-2 md:gap-6 w-full ${
-                  settings.descriptionAlign === "center"
+                  classicSettings.descriptionAlign === "center"
                     ? "justify-center"
-                    : settings.descriptionAlign === "right"
+                    : classicSettings.descriptionAlign === "right"
                     ? "justify-end"
-                    : settings.descriptionAlign === "justify"
+                    : classicSettings.descriptionAlign === "justify"
                     ? "justify-between"
                     : "justify-start"
                 }`}
@@ -503,7 +526,9 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
               {a.technologies && a.technologies.trim() !== "" && (
                 <p
                   className="md:my-0.5"
-                  style={{ color: settings.TextColors?.["h4"] || "#64748b" }}
+                  style={{
+                    color: classicSettings.TextColors?.["h4"] || "#64748b",
+                  }}
                 >
                   <span className="font-bold">Technologies:</span>{" "}
                   {a.technologies}
@@ -512,7 +537,9 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
 
               <div
                 className={`resume-content   `}
-                style={{ color: settings.TextColors?.["h4"] || "#64748b" }}
+                style={{
+                  color: classicSettings.TextColors?.["h4"] || "#64748b",
+                }}
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(a.description),
                 }}
@@ -524,13 +551,13 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
     ),
 
     achievements: (
-      <div style={{ textAlign: settings.descriptionAlign || "left" }}>
+      <div style={{ textAlign: classicSettings.descriptionAlign || "left" }}>
         <h2
           className={` ${getCustomFontClass(
             "text-[16px]",
-            settings.fontScaleLevel
+            classicSettings.fontScaleLevel
           )} font-bold text-gray-800`}
-          style={{ color: settings.TextColors?.["h2"] || "#334155" }}
+          style={{ color: classicSettings.TextColors?.["h2"] || "#334155" }}
         >
           ACHIEVEMENTS
         </h2>
@@ -540,17 +567,19 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
               key={i}
               className={` ${getCustomFontClass(
                 "text-[14px]",
-                settings.fontScaleLevel
+                classicSettings.fontScaleLevel
               )}`}
             >
               <div
-                style={{ color: settings.TextColors?.["h3"] || "#475569" }}
+                style={{
+                  color: classicSettings.TextColors?.["h3"] || "#475569",
+                }}
                 className={`flex gap-6 w-full ${
-                  settings.descriptionAlign === "center"
+                  classicSettings.descriptionAlign === "center"
                     ? "justify-center"
-                    : settings.descriptionAlign === "right"
+                    : classicSettings.descriptionAlign === "right"
                     ? "justify-end"
-                    : settings.descriptionAlign === "justify"
+                    : classicSettings.descriptionAlign === "justify"
                     ? "justify-between"
                     : "justify-start"
                 }`}
@@ -563,7 +592,9 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
 
               <div
                 className="resume-content "
-                style={{ color: settings.TextColors?.["h4"] || "#64748b" }}
+                style={{
+                  color: classicSettings.TextColors?.["h4"] || "#64748b",
+                }}
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(a.description),
                 }}
@@ -597,7 +628,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
               <span
                 className="hidden md:block absolute w-4 h-4 rounded-full border border-gray-300 right-1 top-1"
                 style={{
-                  backgroundColor: settings.backgroundColor || "#ffffff",
+                  backgroundColor: classicSettings.backgroundColor || "#ffffff",
                 }}
               ></span>
             </button>
@@ -622,13 +653,13 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                       <button
                         key={clr}
                         className={`h-4 w-4 md:w-6 md:h-6 rounded-full border transition-all hover:scale-105 ${
-                          clr === settings.backgroundColor
+                          clr === classicSettings.backgroundColor
                             ? "ring-2 ring-offset-1 ring-sky-500"
                             : ""
                         }`}
                         style={{ backgroundColor: clr }}
                         onClick={() =>
-                          onSettingsChange((prev) => ({
+                          setClassicSettings((prev) => ({
                             ...prev,
                             backgroundColor: clr,
                           }))
@@ -646,7 +677,8 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                     <div
                       className="absolute inset-0 z-0 flex items-center justify-center rounded-full"
                       style={{
-                        backgroundColor: settings.backgroundColor || "#ffffff",
+                        backgroundColor:
+                          classicSettings.backgroundColor || "#ffffff",
                       }}
                     >
                       <FaFillDrip className="text-gray-600/50 text-[10px] md:text-sm drop-shadow group-hover:scale-110 transition" />
@@ -654,9 +686,9 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
 
                     <input
                       type="color"
-                      value={settings.backgroundColor || "#ffffff"}
+                      value={classicSettings.backgroundColor || "#ffffff"}
                       onChange={(e) =>
-                        onSettingsChange((prev) => ({
+                        setClassicSettings((prev) => ({
                           ...prev,
                           backgroundColor: e.target.value,
                         }))
@@ -669,7 +701,6 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
               </div>
             )}
           </div>
-
           {/* Description Alignment */}
           <div className="flex items-center gap-1 md:gap-3">
             <div className="flex gap-1 md:gap-2 bg-gray-100 p-1 rounded-md">
@@ -698,13 +729,13 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                 <button
                   key={value}
                   onClick={() =>
-                    onSettingsChange((prev) => ({
+                    setClassicSettings((prev) => ({
                       ...prev,
                       descriptionAlign: value,
                     }))
                   }
                   className={`p-1 md:p-2 text-sm md:text-lg md:rounded-md transition ${
-                    settings.descriptionAlign === value
+                    classicSettings.descriptionAlign === value
                       ? "bg-white shadow  "
                       : "hover:bg-white/80"
                   }`}
@@ -715,7 +746,6 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
               ))}
             </div>
           </div>
-
           {/* Font Selector */}
           <div className="relative">
             {/* Trigger Button */}
@@ -767,14 +797,14 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                     <button
                       key={font}
                       onClick={() => {
-                        onSettingsChange((prev) => ({
+                        setClassicSettings((prev) => ({
                           ...prev,
                           fontFamily: font,
                         }));
                         setOpenDropdown(false);
                       }}
                       className={`text-xs md:text-sm text-left px-2 md:px-3 py-1 rounded hover:bg-gray-100 transition ${
-                        settings.fontFamily === font
+                        classicSettings.fontFamily === font
                           ? "bg-sky-50 text-sky-700 font-medium"
                           : "text-gray-700"
                       }`}
@@ -787,13 +817,12 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
               </div>
             )}
           </div>
-
           {/* Font Size Adjustments */}
           <div className="flex items-center gap-3">
             <button
               title="Decrease Font Size"
               onClick={() =>
-                onSettingsChange((prev) => ({
+                setClassicSettings((prev) => ({
                   ...prev,
                   fontScaleLevel: Math.max(-10, (prev.fontScaleLevel || 0) - 1),
                 }))
@@ -808,7 +837,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
             <button
               title="Increase Font Size"
               onClick={() =>
-                onSettingsChange((prev) => ({
+                setClassicSettings((prev) => ({
                   ...prev,
                   fontScaleLevel: Math.min(10, (prev.fontScaleLevel || 0) + 1),
                 }))
@@ -820,7 +849,6 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
               </span>
             </button>
           </div>
-
           {/* Section Spacing */}
           <div className="relative">
             <button
@@ -861,13 +889,13 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                     <li
                       key={option.value}
                       onClick={() =>
-                        onSettingsChange((prev) => ({
+                        setClassicSettings((prev) => ({
                           ...prev,
                           sectionGap: option.value,
                         }))
                       }
                       className={`px-3 gap- py-1.5 rounded cursor-pointer hover:bg-sky-50 transition ${
-                        settings.sectionGap === option.value
+                        classicSettings.sectionGap === option.value
                           ? "bg-sky-100 text-sky-700 font-semibold"
                           : ""
                       }`}
@@ -879,7 +907,6 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
               </div>
             )}
           </div>
-
           {/* Border Width Dropdown */}
           <div className="relative">
             <button
@@ -914,14 +941,14 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                     <li key={w.value}>
                       <button
                         onClick={() => {
-                          onSettingsChange((prev) => ({
+                          setClassicSettings((prev) => ({
                             ...prev,
                             borderWidth: w.value,
                           }));
                           setOpenDropdown(false);
                         }}
                         className={`w-full justify-center h-5 px-1 py-1.5 rounded-xs flex items-center gap-5 hover:bg-sky-50 transition ${
-                          settings.borderWidth === w.value
+                          classicSettings.borderWidth === w.value
                             ? "bg-sky-100"
                             : "text-gray-800"
                         }`}
@@ -945,7 +972,6 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
               </div>
             )}
           </div>
-
           {/*border style and color*/}
           <div className="relative">
             <button
@@ -974,9 +1000,9 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                     Style
                   </label>
                   <select
-                    value={settings.borderStyle || "solid"}
+                    value={classicSettings.borderStyle || "solid"}
                     onChange={(e) =>
-                      onSettingsChange((prev) => ({
+                      setClassicSettings((prev) => ({
                         ...prev,
                         borderStyle: e.target.value,
                       }))
@@ -1001,9 +1027,9 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                   </label>
                   <input
                     type="color"
-                    value={settings.borderColor || "#cbd5e1"}
+                    value={classicSettings.borderColor || "#cbd5e1"}
                     onChange={(e) =>
-                      onSettingsChange((prev) => ({
+                      setClassicSettings((prev) => ({
                         ...prev,
                         borderColor: e.target.value,
                       }))
@@ -1014,8 +1040,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
               </div>
             )}
           </div>
-
-          {/* Border Radius Dropdown */}
+          {/* Border Radius Button */}
           <div className="relative">
             <button
               onClick={() =>
@@ -1032,7 +1057,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
             </button>
 
             {openDropdown === "borderRadius" && (
-              <div className="absolute z-50 mt-2  bg-white border border-gray-200 shadow-xl rounded-lg p-3 w-40 max-w-[90vw]">
+              <div className="absolute z-50 mt-2 bg-white border border-gray-200 shadow-xl rounded-lg p-3 w-40 max-w-[90vw]">
                 <p className="text-sm font-semibold text-gray-700 mb-3 text-center">
                   Border Radius
                 </p>
@@ -1052,29 +1077,24 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                     <li key={r.value}>
                       <button
                         onClick={() => {
-                          onSettingsChange((prev) => ({
+                          setClassicSettings((prev) => ({
                             ...prev,
                             borderRadius: r.value,
                           }));
                           setOpenDropdown(false);
                         }}
                         className={`w-full px-3 py-0.5 md:py-1.5 rounded-sm flex items-center gap-3 hover:bg-gray-50 transition ${
-                          settings.borderRadius === r.value
-                            ? "bg-sky-50 "
+                          classicSettings.borderRadius === r.value
+                            ? "bg-sky-50"
                             : "text-gray-800"
                         }`}
                       >
-                        {/* Text label */}
                         <span className="text-xs w-12 text-left text-gray-600">
                           {r.value}
                         </span>
-
-                        {/* Preview Box */}
                         <div
                           className="h-4 md:h-6 flex-1 border border-gray-300 bg-white"
-                          style={{
-                            borderRadius: r.value,
-                          }}
+                          style={{ borderRadius: r.value }}
                         ></div>
                       </button>
                     </li>
@@ -1083,7 +1103,6 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
               </div>
             )}
           </div>
-
           {/* Text Color Button */}
           <div className="relative group">
             <button
@@ -1111,16 +1130,18 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                         className="absolute inset-0 z-0 rounded-full"
                         style={{
                           backgroundColor:
-                            settings.TextColors?.[tag] || defaultTextColor(tag),
+                            classicSettings.TextColors?.[tag] ||
+                            defaultTextColor(tag),
                         }}
                       />
                       <input
                         type="color"
                         value={
-                          settings.TextColors?.[tag] || defaultTextColor(tag)
+                          classicSettings.TextColors?.[tag] ||
+                          defaultTextColor(tag)
                         }
                         onChange={(e) =>
-                          onSettingsChange((prev) => ({
+                          setClassicSettings((prev) => ({
                             ...prev,
                             TextColors: {
                               ...prev.TextColors,
@@ -1176,13 +1197,13 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                         <button
                           key={clr}
                           className={`w-4 h-4 md:w-6 md:h-6 rounded-full border transition-all hover:scale-105 ${
-                            clr === settings.linkColor
+                            clr === classicSettings.linkColor
                               ? "ring-2 ring-offset-1 ring-sky-500"
                               : ""
                           }`}
                           style={{ backgroundColor: clr }}
                           onClick={() =>
-                            onSettingsChange((prev) => ({
+                            setClassicSettings((prev) => ({
                               ...prev,
                               linkColor: clr,
                             }))
@@ -1199,9 +1220,9 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                     <div className="relative w-4 h-4 md:w-6 md:h-6 rounded-full overflow-hidden border cursor-pointer group">
                       <input
                         type="color"
-                        value={settings.linkColor || "#2563eb"}
+                        value={classicSettings.linkColor || "#2563eb"}
                         onChange={(e) =>
-                          onSettingsChange((prev) => ({
+                          setClassicSettings((prev) => ({
                             ...prev,
                             linkColor: e.target.value,
                           }))
@@ -1212,7 +1233,8 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                       <div
                         className="absolute inset-0 z-0 rounded-full"
                         style={{
-                          backgroundColor: settings.linkColor || "#2563eb",
+                          backgroundColor:
+                            classicSettings.linkColor || "#2563eb",
                         }}
                       >
                         <MdOutlineColorize className="text-gray-500/50 text-xs md:text-lg drop-shadow absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
@@ -1223,7 +1245,6 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
               )}
             </div>
           )}
-
           {/* Toggle Visibility Dropdown */}
           <div className="relative">
             <button
@@ -1247,8 +1268,8 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                   </h3>
 
                   <div className="grid grid-cols-2 gap-1.5 md:gap-2">
-                    {Object.keys(settings.visibleSections).map((key) => {
-                      const isVisible = settings.visibleSections[key];
+                    {Object.keys(classicSettings.visibleSections).map((key) => {
+                      const isVisible = classicSettings.visibleSections[key];
                       const label = key
                         .replace(/([A-Z])/g, " $1")
                         .replace(/^./, (str) => str.toUpperCase());
@@ -1257,7 +1278,7 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                         <button
                           key={key}
                           onClick={() =>
-                            onSettingsChange((prev) => ({
+                            setClassicSettings((prev) => ({
                               ...prev,
                               visibleSections: {
                                 ...prev.visibleSections,
@@ -1287,7 +1308,6 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
               </div>
             )}
           </div>
-
           {/* Reorder Sections Dropdown */}
           <div className="relative">
             <button
@@ -1319,26 +1339,30 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
                     onDragEnd={({ active, over }) => {
                       if (!over || active.id === over.id) return;
 
-                      const oldIndex = settings.sectionOrder.indexOf(active.id);
-                      const newIndex = settings.sectionOrder.indexOf(over.id);
+                      const oldIndex = classicSettings.sectionOrder.indexOf(
+                        active.id
+                      );
+                      const newIndex = classicSettings.sectionOrder.indexOf(
+                        over.id
+                      );
                       const newOrder = arrayMove(
-                        settings.sectionOrder,
+                        classicSettings.sectionOrder,
                         oldIndex,
                         newIndex
                       );
 
-                      onSettingsChange((prev) => ({
+                      setClassicSettings((prev) => ({
                         ...prev,
                         sectionOrder: newOrder,
                       }));
                     }}
                   >
                     <SortableContext
-                      items={settings.sectionOrder}
+                      items={classicSettings.sectionOrder}
                       strategy={verticalListSortingStrategy}
                     >
                       <div className="space-y-1.5">
-                        {settings.sectionOrder.map((id) => (
+                        {classicSettings.sectionOrder.map((id) => (
                           <SortableItem key={id} id={id} />
                         ))}
                       </div>
@@ -1355,8 +1379,8 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
       <div
         className="w-full mx-auto p-2 md:p-5 text-sm leading-relaxed space-y-5 border border-gray-200 shadow-md"
         style={{
-          fontFamily: settings.fontFamily || "Inter",
-          backgroundColor: settings.backgroundColor || "#ffffff",
+          fontFamily: classicSettings.fontFamily || "Inter",
+          backgroundColor: classicSettings.backgroundColor || "#ffffff",
         }}
       >
         {/* Inner Resume Container */}
@@ -1364,19 +1388,20 @@ const ClassicTemplate = ({ resume, settings, onSettingsChange }) => {
           className="p-2 md:p-7 flex flex-col"
           style={{
             border:
-              settings.borderWidth && settings.borderWidth !== "0px"
-                ? `${settings.borderWidth} ${settings.borderStyle || "solid"} ${
-                    settings.borderColor || "#cbd5e1"
-                  }`
+              classicSettings.borderWidth &&
+              classicSettings.borderWidth !== "0px"
+                ? `${classicSettings.borderWidth} ${
+                    classicSettings.borderStyle || "solid"
+                  } ${classicSettings.borderColor || "#cbd5e1"}`
                 : "none",
-            borderRadius: settings.borderRadius || "0px",
-            rowGap: `${settings.sectionGap ?? 16}px`,
+            borderRadius: classicSettings.borderRadius || "0px",
+            rowGap: `${classicSettings.sectionGap ?? 16}px`,
           }}
         >
-          {Array.isArray(settings?.sectionOrder) &&
-            settings.sectionOrder.map(
+          {Array.isArray(classicSettings?.sectionOrder) &&
+            classicSettings.sectionOrder.map(
               (sectionKey) =>
-                settings.visibleSections?.[sectionKey] && (
+                classicSettings.visibleSections?.[sectionKey] && (
                   <div key={sectionKey}>{sectionMap[sectionKey]}</div>
                 )
             )}

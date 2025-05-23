@@ -149,7 +149,7 @@ const Home = () => {
     if (user) {
       navigate("/dashboard");
     } else {
-      navigate("/signup");
+      navigate("/login");
     }
   };
 

@@ -45,9 +45,12 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import DOMPurify from "dompurify";
+import { useSidebarSetting } from "../../Contexts/SidebarSettingContext";
 
-const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
+const SidebarTemplate = ({ resume }) => {
   const { isEditable } = useEditResume();
+  const { sidebarSettings, setSidebarSettings } = useSidebarSetting();
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(TouchSensor, {
@@ -106,8 +109,11 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
   };
 
   useEffect(() => {
-    if (!settings.sectionOrder || !Array.isArray(settings.sectionOrder)) {
-      onSettingsChange((prev) => ({
+    if (
+      !sidebarSettings.sectionOrder ||
+      !Array.isArray(sidebarSettings.sectionOrder)
+    ) {
+      setSidebarSettings((prev) => ({
         ...prev,
         sectionOrder: [
           "name",
@@ -121,11 +127,11 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
         ],
       }));
     }
-  }, [settings.sectionOrder, onSettingsChange]);
+  }, [sidebarSettings.sectionOrder, setSidebarSettings]);
 
   useEffect(() => {
-    if (!settings.visibleSections) {
-      onSettingsChange((prev) => ({
+    if (!sidebarSettings.visibleSections) {
+      setSidebarSettings((prev) => ({
         ...prev,
         visibleSections: {
           name: true,
@@ -142,13 +148,13 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
   }, []);
 
   useEffect(() => {
-    if (!settings.skillColors) {
-      onSettingsChange((prev) => ({
+    if (!sidebarSettings.skillColors) {
+      setSidebarSettings((prev) => ({
         ...prev,
         skillColors: {},
       }));
     }
-  }, [settings.skillColors, onSettingsChange]);
+  }, [sidebarSettings.skillColors, setSidebarSettings]);
 
   const hasAnyProjectLink = resume.projects?.some(
     (proj) => proj.demo || proj.github
@@ -193,9 +199,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
         <h1
           className={`${getCustomFontClass(
             "text-[30px]",
-            settings.fontScaleLevel
+            sidebarSettings.fontScaleLevel
           )} font-bold bg-transparent w-full text-center outline-none`}
-          style={{ color: settings.textColors?.["h1"] || "white" }}
+          style={{ color: sidebarSettings.textColors?.["h1"] || "white" }}
         >
           {resume.name || "Your Name"}
         </h1>
@@ -206,11 +212,11 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
         <h2
           className={`font-semibold uppercase tracking-wide mb-1  md:mb-2 ${getCustomFontClass(
             "text-16px]",
-            settings.fontScaleLevel
+            sidebarSettings.fontScaleLevel
           )}`}
           style={{
-            color: settings.textColors?.["h2"] || "#F4F3F3",
-            textAlign: settings.descriptionAlign || "left",
+            color: sidebarSettings.textColors?.["h2"] || "#F4F3F3",
+            textAlign: sidebarSettings.descriptionAlign || "left",
           }}
         >
           Details
@@ -218,11 +224,11 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
         <div
           className={`flex break-words whitespace-normal flex-col space-y-0.5 md:space-y-2 ${getCustomFontClass(
             "text-[14px]",
-            settings.fontScaleLevel
+            sidebarSettings.fontScaleLevel
           )}`}
           style={{
-            color: settings.textColors?.["h3"] || "text-blue-200",
-            textAlign: settings.descriptionAlign || "left",
+            color: sidebarSettings.textColors?.["h3"] || "text-blue-200",
+            textAlign: sidebarSettings.descriptionAlign || "left",
           }}
         >
           {resume.contact.location && (
@@ -295,11 +301,11 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
             <h2
               className={`font-semibold break-all uppercase tracking-wide mb-1 md:mb-2 ${getCustomFontClass(
                 "text-[16px]",
-                settings.fontScaleLevel
+                sidebarSettings.fontScaleLevel
               )}`}
               style={{
-                color: settings.textColors?.["h2"] || "text-blue-300",
-                textAlign: settings.descriptionAlign || "left",
+                color: sidebarSettings.textColors?.["h2"] || "text-blue-300",
+                textAlign: sidebarSettings.descriptionAlign || "left",
               }}
             >
               Description
@@ -308,11 +314,11 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
             <div
               className={`bg-transparent resume-content ${getCustomFontClass(
                 "text-[14px]",
-                settings.fontScaleLevel
+                sidebarSettings.fontScaleLevel
               )} outline-none w-full whitespace-pre-line`}
               style={{
-                textAlign: settings.descriptionAlign || "left",
-                color: settings.textColors?.["h3"] || "text-blue-200",
+                textAlign: sidebarSettings.descriptionAlign || "left",
+                color: sidebarSettings.textColors?.["h3"] || "text-blue-200",
               }}
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(resume.description),
@@ -325,17 +331,17 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
 
     skills: (
       <div
-        style={{ textAlign: settings.descriptionAlign || "left" }}
+        style={{ textAlign: sidebarSettings.descriptionAlign || "left" }}
         className="mb-1 md:mb-2"
       >
         <h2
           className={`font-semibold  uppercase tracking-wide md:mb-2 ${getCustomFontClass(
             "text-[16px]",
-            settings.fontScaleLevel
+            sidebarSettings.fontScaleLevel
           )}`}
           style={{
-            color: settings.textColors?.["h2"] || "text-blue-300",
-            textAlign: settings.descriptionAlign || "left",
+            color: sidebarSettings.textColors?.["h2"] || "text-blue-300",
+            textAlign: sidebarSettings.descriptionAlign || "left",
           }}
         >
           Skills Overview
@@ -355,11 +361,12 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                 <span
                   className={`${getCustomFontClass(
                     "text-[14px]",
-                    settings.fontScaleLevel
+                    sidebarSettings.fontScaleLevel
                   )} font-medium`}
                   style={{
-                    color: settings.textColors?.["h3"] || "text-blue-200",
-                    textAlign: settings.descriptionAlign || "left",
+                    color:
+                      sidebarSettings.textColors?.["h3"] || "text-blue-200",
+                    textAlign: sidebarSettings.descriptionAlign || "left",
                   }}
                 >
                   {skill.domain}
@@ -368,10 +375,11 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                 <p
                   className={`${getCustomFontClass(
                     "text-[14px]",
-                    settings.fontScaleLevel
+                    sidebarSettings.fontScaleLevel
                   )}`}
                   style={{
-                    color: settings.textColors?.["h4"] || "text-blue-200",
+                    color:
+                      sidebarSettings.textColors?.["h4"] || "text-blue-200",
                   }}
                 >
                   {skill.languages.join(", ")}
@@ -384,9 +392,11 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
         <p
           className={`font-semibold ${getCustomFontClass(
             "text-[16px]",
-            settings.fontScaleLevel
+            sidebarSettings.fontScaleLevel
           )} uppercase tracking-wide my-1 md:my-3`}
-          style={{ color: settings.textColors?.["h2"] || "text-blue-300" }}
+          style={{
+            color: sidebarSettings.textColors?.["h2"] || "text-blue-300",
+          }}
         >
           Skills Distribution
         </p>
@@ -401,7 +411,8 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
             );
             const width = (skill.languages.length / totalSkills) * 100;
 
-            const color = settings.skillColors?.[skill.domain] || "#60a5fa";
+            const color =
+              sidebarSettings.skillColors?.[skill.domain] || "#60a5fa";
 
             return (
               <div
@@ -418,7 +429,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
         <div
           className={`${getCustomFontClass(
             "text-[14px]",
-            settings.fontScaleLevel
+            sidebarSettings.fontScaleLevel
           )} space-y-1`}
         >
           {resume.skills.map((skill, i) => {
@@ -431,7 +442,8 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
               100
             ).toFixed(1);
 
-            const color = settings.skillColors?.[skill.domain] || "#60a5fa";
+            const color =
+              sidebarSettings.skillColors?.[skill.domain] || "#60a5fa";
 
             return (
               <div
@@ -444,7 +456,8 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                 ></span>
                 <span
                   style={{
-                    color: settings.textColors?.["h3"] || "text-blue-200",
+                    color:
+                      sidebarSettings.textColors?.["h3"] || "text-blue-200",
                   }}
                 >
                   {skill.domain}
@@ -452,7 +465,8 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                 <span
                   className="ml-auto "
                   style={{
-                    color: settings.textColors?.["h4"] || "text-gray-300",
+                    color:
+                      sidebarSettings.textColors?.["h4"] || "text-gray-300",
                   }}
                 >
                   {percent}%
@@ -465,15 +479,18 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
     ),
 
     experience: (
-      <section style={{ textAlign: settings.descriptionAlign || "left" }}>
+      <section
+        style={{ textAlign: sidebarSettings.descriptionAlign || "left" }}
+      >
         <h2
           className={`${getCustomFontClass(
             "text-[16px]",
-            settings.fontScaleLevel
+            sidebarSettings.fontScaleLevel
           )} font-bold mb-1 md:mb-2`}
           style={{
             color:
-              settings.mainTextColors?.["h1"] || defaultMainTextColor("h1"),
+              sidebarSettings.mainTextColors?.["h1"] ||
+              defaultMainTextColor("h1"),
           }}
         >
           EXPERIENCE
@@ -483,16 +500,16 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
             key={i}
             className={`mb-4 ${getCustomFontClass(
               "text-[14px]",
-              settings.fontScaleLevel
+              sidebarSettings.fontScaleLevel
             )}`}
           >
             <div
               className={`flex gap-6 break-all w-full ${
-                settings.descriptionAlign === "center"
+                sidebarSettings.descriptionAlign === "center"
                   ? "justify-center"
-                  : settings.descriptionAlign === "right"
+                  : sidebarSettings.descriptionAlign === "right"
                   ? "justify-end"
-                  : settings.descriptionAlign === "justify"
+                  : sidebarSettings.descriptionAlign === "justify"
                   ? "justify-between"
                   : "justify-start"
               }`}
@@ -501,7 +518,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                 className="font-semibold"
                 style={{
                   color:
-                    settings.mainTextColors?.["h2"] ||
+                    sidebarSettings.mainTextColors?.["h2"] ||
                     defaultMainTextColor("h2"),
                 }}
               >
@@ -511,7 +528,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                 className="italic"
                 style={{
                   color:
-                    settings.mainTextColors?.["h2"] ||
+                    sidebarSettings.mainTextColors?.["h2"] ||
                     defaultMainTextColor("h2"),
                 }}
               >
@@ -523,9 +540,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
               <p
                 className="my-0.5"
                 style={{
-                  textAlign: settings.descriptionAlign || "left",
+                  textAlign: sidebarSettings.descriptionAlign || "left",
                   color:
-                    settings.mainTextColors?.["h3"] ||
+                    sidebarSettings.mainTextColors?.["h3"] ||
                     defaultMainTextColor("h3"),
                 }}
               >
@@ -537,9 +554,10 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
             <p
               className="resume-content "
               style={{
-                textAlign: settings.descriptionAlign || "left",
+                textAlign: sidebarSettings.descriptionAlign || "left",
                 color:
-                  settings.mainTextColors?.["h3"] || defaultMainTextColor("h3"),
+                  sidebarSettings.mainTextColors?.["h3"] ||
+                  defaultMainTextColor("h3"),
               }}
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(exp.description),
@@ -551,15 +569,18 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
     ),
 
     projects: (
-      <section style={{ textAlign: settings.descriptionAlign || "left" }}>
+      <section
+        style={{ textAlign: sidebarSettings.descriptionAlign || "left" }}
+      >
         <h2
           className={`${getCustomFontClass(
             "text-[16px]",
-            settings.fontScaleLevel
+            sidebarSettings.fontScaleLevel
           )} font-bold mb-1 md:mb-2`}
           style={{
             color:
-              settings.mainTextColors?.["h1"] || defaultMainTextColor("h1"),
+              sidebarSettings.mainTextColors?.["h1"] ||
+              defaultMainTextColor("h1"),
           }}
         >
           PROJECTS
@@ -570,16 +591,16 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
             key={i}
             className={`mb-4 ${getCustomFontClass(
               "text-[14px]",
-              settings.fontScaleLevel
+              sidebarSettings.fontScaleLevel
             )}`}
           >
             <div
               className={`flex gap-6 w-full ${
-                settings.descriptionAlign === "center"
+                sidebarSettings.descriptionAlign === "center"
                   ? "justify-center"
-                  : settings.descriptionAlign === "right"
+                  : sidebarSettings.descriptionAlign === "right"
                   ? "justify-end"
-                  : settings.descriptionAlign === "justify"
+                  : sidebarSettings.descriptionAlign === "justify"
                   ? "justify-between"
                   : "justify-start"
               }`}
@@ -588,7 +609,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                 className="font-semibold"
                 style={{
                   color:
-                    settings.mainTextColors?.["h2"] ||
+                    sidebarSettings.mainTextColors?.["h2"] ||
                     defaultMainTextColor("h2"),
                 }}
               >
@@ -598,7 +619,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
               <div
                 className={`break-all ${getCustomFontClass(
                   "text-[14px]",
-                  settings.fontScaleLevel
+                  sidebarSettings.fontScaleLevel
                 )}`}
               >
                 {(proj.demo || proj.github) && (
@@ -610,7 +631,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="underline"
-                        style={{ color: settings.linkColor || "#2563eb" }}
+                        style={{
+                          color: sidebarSettings.linkColor || "#2563eb",
+                        }}
                       >
                         Live Demo
                       </a>
@@ -624,7 +647,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="underline"
-                        style={{ color: settings.linkColor || "#2563eb" }}
+                        style={{
+                          color: sidebarSettings.linkColor || "#2563eb",
+                        }}
                       >
                         GitHub
                       </a>
@@ -638,15 +663,15 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
             <div
               className={`mt-1 ${getCustomFontClass(
                 "text-[14px]",
-                settings.fontScaleLevel
+                sidebarSettings.fontScaleLevel
               )} text-gray-700 whitespace-pre-line`}
             >
               <div
                 className="mb-1 resume-content"
                 style={{
-                  textAlign: settings.descriptionAlign || "left",
+                  textAlign: sidebarSettings.descriptionAlign || "left",
                   color:
-                    settings.mainTextColors?.["h3"] ||
+                    sidebarSettings.mainTextColors?.["h3"] ||
                     defaultMainTextColor("h3"),
                 }}
                 dangerouslySetInnerHTML={{
@@ -660,15 +685,18 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
     ),
 
     education: (
-      <section style={{ textAlign: settings.descriptionAlign || "left" }}>
+      <section
+        style={{ textAlign: sidebarSettings.descriptionAlign || "left" }}
+      >
         <h2
           className={`${getCustomFontClass(
             "text-[16px]",
-            settings.fontScaleLevel
+            sidebarSettings.fontScaleLevel
           )} font-bold mb-2`}
           style={{
             color:
-              settings.mainTextColors?.["h1"] || defaultMainTextColor("h1"),
+              sidebarSettings.mainTextColors?.["h1"] ||
+              defaultMainTextColor("h1"),
           }}
         >
           EDUCATION
@@ -676,20 +704,24 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
 
         <div
           className={`flex gap-6 break-all w-full ${
-            settings.descriptionAlign === "center"
+            sidebarSettings.descriptionAlign === "center"
               ? "justify-center"
-              : settings.descriptionAlign === "right"
+              : sidebarSettings.descriptionAlign === "right"
               ? "justify-end"
-              : settings.descriptionAlign === "justify"
+              : sidebarSettings.descriptionAlign === "justify"
               ? "justify-between"
               : "justify-start"
-          } ${getCustomFontClass("text-[14px]", settings.fontScaleLevel)}`}
+          } ${getCustomFontClass(
+            "text-[14px]",
+            sidebarSettings.fontScaleLevel
+          )}`}
         >
           <p
             className="font-semibold"
             style={{
               color:
-                settings.mainTextColors?.["h2"] || defaultMainTextColor("h2"),
+                sidebarSettings.mainTextColors?.["h2"] ||
+                defaultMainTextColor("h2"),
             }}
           >
             {resume.education.college}
@@ -699,7 +731,8 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
             className="italic"
             style={{
               color:
-                settings.mainTextColors?.["h2"] || defaultMainTextColor("h2"),
+                sidebarSettings.mainTextColors?.["h2"] ||
+                defaultMainTextColor("h2"),
             }}
           >
             {resume.education.location}
@@ -708,14 +741,17 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
 
         <div
           className={`flex break-all gap-6 w-full ${
-            settings.descriptionAlign === "center"
+            sidebarSettings.descriptionAlign === "center"
               ? "justify-center"
-              : settings.descriptionAlign === "right"
+              : sidebarSettings.descriptionAlign === "right"
               ? "justify-end"
-              : settings.descriptionAlign === "justify"
+              : sidebarSettings.descriptionAlign === "justify"
               ? "justify-between"
               : "justify-start"
-          } ${getCustomFontClass("text-[14px]", settings.fontScaleLevel)}`}
+          } ${getCustomFontClass(
+            "text-[14px]",
+            sidebarSettings.fontScaleLevel
+          )}`}
         >
           <p>
             {resume.education.degree}
@@ -727,7 +763,8 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
             className="italic"
             style={{
               color:
-                settings.mainTextColors?.["h2"] || defaultMainTextColor("h2"),
+                sidebarSettings.mainTextColors?.["h2"] ||
+                defaultMainTextColor("h2"),
             }}
           >
             {resume.education.startYear} - {resume.education.endYear}
@@ -737,11 +774,12 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
         <p
           className={`${getCustomFontClass(
             "text-[14px]",
-            settings.fontScaleLevel
+            sidebarSettings.fontScaleLevel
           )}`}
           style={{
             color:
-              settings.mainTextColors?.["h3"] || defaultMainTextColor("h3"),
+              sidebarSettings.mainTextColors?.["h3"] ||
+              defaultMainTextColor("h3"),
           }}
         >
           CGPA: {resume.education.cgpa}
@@ -750,15 +788,18 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
     ),
 
     achievements: (
-      <section style={{ textAlign: settings.descriptionAlign || "left" }}>
+      <section
+        style={{ textAlign: sidebarSettings.descriptionAlign || "left" }}
+      >
         <h2
           className={`${getCustomFontClass(
             "text-[16px]",
-            settings.fontScaleLevel
+            sidebarSettings.fontScaleLevel
           )} font-bold mb-1 md:mb-2`}
           style={{
             color:
-              settings.mainTextColors?.["h1"] || defaultMainTextColor("h1"),
+              sidebarSettings.mainTextColors?.["h1"] ||
+              defaultMainTextColor("h1"),
           }}
         >
           ACHIEVEMENTS
@@ -766,16 +807,17 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
         <ul
           className={`list-disc ${getCustomFontClass(
             "text-[14px]",
-            settings.fontScaleLevel
+            sidebarSettings.fontScaleLevel
           )} pl-5 space-y-2 text-gray-800`}
         >
           {resume.achievements.map((ach, i) => (
             <li
               key={i}
               style={{
-                textAlign: settings.descriptionAlign || "left",
+                textAlign: sidebarSettings.descriptionAlign || "left",
                 color:
-                  settings.mainTextColors?.["h2"] || defaultMainTextColor("h2"),
+                  sidebarSettings.mainTextColors?.["h2"] ||
+                  defaultMainTextColor("h2"),
               }}
             >
               <strong>{ach.title}</strong>–
@@ -814,7 +856,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
               <FaFillDrip className="text-sm md:text-xl text-gray-700" />
               <span
                 className="absolute hidden md:block w-4 h-4 rounded-full border border-gray-300 right-1 top-1"
-                style={{ backgroundColor: settings.bgColor || "#ffffff" }}
+                style={{
+                  backgroundColor: sidebarSettings.bgColor || "#ffffff",
+                }}
               ></span>
             </button>
 
@@ -837,13 +881,13 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                       <button
                         key={clr}
                         className={`h-4 w-4 md:w-6 md:h-6 rounded-full border transition-all hover:scale-105 ${
-                          clr === settings.bgColor
+                          clr === sidebarSettings.bgColor
                             ? "ring-2 ring-offset-1 ring-sky-500"
                             : ""
                         }`}
                         style={{ backgroundColor: clr }}
                         onClick={() =>
-                          onSettingsChange((prev) => ({
+                          setSidebarSettings((prev) => ({
                             ...prev,
                             bgColor: clr,
                           }))
@@ -860,9 +904,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                     {/* Invisible Color Picker */}
                     <input
                       type="color"
-                      value={settings.bgColor || "#ffffff"}
+                      value={sidebarSettings.bgColor || "#ffffff"}
                       onChange={(e) =>
-                        onSettingsChange((prev) => ({
+                        setSidebarSettings((prev) => ({
                           ...prev,
                           bgColor: e.target.value,
                         }))
@@ -874,7 +918,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                     {/* Visible colored circle with icon */}
                     <div
                       className="absolute inset-0 z-0 rounded-full"
-                      style={{ backgroundColor: settings.bgColor || "#ffffff" }}
+                      style={{
+                        backgroundColor: sidebarSettings.bgColor || "#ffffff",
+                      }}
                     >
                       <MdOutlineColorize className="text-gray-500/50 text-[10px] md:text-lg drop-shadow absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
                     </div>
@@ -901,7 +947,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
               <MdOutlineColorize className="text-sm md:text-xl text-gray-700" />
               <span
                 className="absolute hidden md:block w-4 h-4 rounded-full border border-gray-300 right-1 top-1"
-                style={{ backgroundColor: settings.sidebarColor || "#1e3a8a" }}
+                style={{
+                  backgroundColor: sidebarSettings.sidebarColor || "#1e3a8a",
+                }}
               ></span>
             </button>
 
@@ -925,13 +973,13 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                       <button
                         key={clr}
                         className={`h-4 w-4 md:w-6 md:h-6 rounded-full border transition-all hover:scale-105 ${
-                          clr === settings.sidebarColor
+                          clr === sidebarSettings.sidebarColor
                             ? "ring-2 ring-offset-1 ring-sky-500"
                             : ""
                         }`}
                         style={{ backgroundColor: clr }}
                         onClick={() =>
-                          onSettingsChange((prev) => ({
+                          setSidebarSettings((prev) => ({
                             ...prev,
                             sidebarColor: clr,
                           }))
@@ -950,7 +998,8 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                     <div
                       className="absolute inset-0 z-0 flex items-center justify-center rounded-full"
                       style={{
-                        backgroundColor: settings.sidebarColor || "#1e3a8a",
+                        backgroundColor:
+                          sidebarSettings.sidebarColor || "#1e3a8a",
                       }}
                     >
                       <MdOutlineColorize className="text-white/30 text-[10px] md:text-sm drop-shadow group-hover:scale-110 transition" />
@@ -959,9 +1008,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                     {/* Color input (on top but invisible) */}
                     <input
                       type="color"
-                      value={settings.sidebarColor || "#1e3a8a"}
+                      value={sidebarSettings.sidebarColor || "#1e3a8a"}
                       onChange={(e) =>
-                        onSettingsChange((prev) => ({
+                        setSidebarSettings((prev) => ({
                           ...prev,
                           sidebarColor: e.target.value,
                         }))
@@ -1003,13 +1052,13 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                 <button
                   key={value}
                   onClick={() =>
-                    onSettingsChange((prev) => ({
+                    setSidebarSettings((prev) => ({
                       ...prev,
                       descriptionAlign: value,
                     }))
                   }
                   className={`p-1 md:p-2 text-sm md:text-lg md:rounded-md transition  ${
-                    settings.descriptionAlign === value
+                    sidebarSettings.descriptionAlign === value
                       ? "bg-white shadow  "
                       : "hover:bg-white/80"
                   }`}
@@ -1072,14 +1121,14 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                     <button
                       key={font}
                       onClick={() => {
-                        onSettingsChange((prev) => ({
+                        setSidebarSettings((prev) => ({
                           ...prev,
                           fontFamily: font,
                         }));
                         setOpenDropdown(false);
                       }}
                       className={`text-xs md:text-sm text-left px-2 md:px-3 py-1 rounded hover:bg-gray-100 transition ${
-                        settings.fontFamily === font
+                        sidebarSettings.fontFamily === font
                           ? "bg-sky-50 text-sky-700 font-medium"
                           : "text-gray-700"
                       }`}
@@ -1098,7 +1147,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
             <button
               title="Decrease Font Size"
               onClick={() =>
-                onSettingsChange((prev) => ({
+                setSidebarSettings((prev) => ({
                   ...prev,
                   fontScaleLevel: Math.max(-10, (prev.fontScaleLevel || 0) - 1),
                 }))
@@ -1113,7 +1162,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
             <button
               title="Increase Font Size"
               onClick={() =>
-                onSettingsChange((prev) => ({
+                setSidebarSettings((prev) => ({
                   ...prev,
                   fontScaleLevel: Math.min(10, (prev.fontScaleLevel || 0) + 1),
                 }))
@@ -1165,10 +1214,11 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                           <input
                             type="color"
                             value={
-                              settings.skillColors?.[skill.domain] || "#60a5fa"
+                              sidebarSettings.skillColors?.[skill.domain] ||
+                              "#60a5fa"
                             }
                             onChange={(e) =>
-                              onSettingsChange((prev) => ({
+                              setSidebarSettings((prev) => ({
                                 ...prev,
                                 skillColors: {
                                   ...prev.skillColors,
@@ -1183,7 +1233,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                             className="w-full h-full rounded-full border"
                             style={{
                               backgroundColor:
-                                settings.skillColors?.[skill.domain] ||
+                                sidebarSettings.skillColors?.[skill.domain] ||
                                 "#60a5fa",
                             }}
                           ></div>
@@ -1234,13 +1284,13 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                         <button
                           key={clr}
                           className={`w-4 h-4 md:w-6 md:h-6 rounded-full border transition-all hover:scale-105 ${
-                            clr === settings.linkColor
+                            clr === sidebarSettings.linkColor
                               ? "ring-2 ring-offset-1 ring-sky-500"
                               : ""
                           }`}
                           style={{ backgroundColor: clr }}
                           onClick={() =>
-                            onSettingsChange((prev) => ({
+                            setSidebarSettings((prev) => ({
                               ...prev,
                               linkColor: clr,
                             }))
@@ -1257,9 +1307,9 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                     <div className="relative w-4 h-4 md:w-6 md:h-6 rounded-full overflow-hidden border cursor-pointer group">
                       <input
                         type="color"
-                        value={settings.linkColor || "#2563eb"}
+                        value={sidebarSettings.linkColor || "#2563eb"}
                         onChange={(e) =>
-                          onSettingsChange((prev) => ({
+                          setSidebarSettings((prev) => ({
                             ...prev,
                             linkColor: e.target.value,
                           }))
@@ -1270,7 +1320,8 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                       <div
                         className="absolute inset-0 z-0 rounded-full"
                         style={{
-                          backgroundColor: settings.linkColor || "#2563eb",
+                          backgroundColor:
+                            sidebarSettings.linkColor || "#2563eb",
                         }}
                       >
                         <MdOutlineColorize className="text-gray-500/50 text-xs md:text-lg drop-shadow absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
@@ -1314,16 +1365,18 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                         className="absolute inset-0 z-0 rounded-full"
                         style={{
                           backgroundColor:
-                            settings.textColors?.[tag] || defaultTextColor(tag),
+                            sidebarSettings.textColors?.[tag] ||
+                            defaultTextColor(tag),
                         }}
                       />
                       <input
                         type="color"
                         value={
-                          settings.textColors?.[tag] || defaultTextColor(tag)
+                          sidebarSettings.textColors?.[tag] ||
+                          defaultTextColor(tag)
                         }
                         onChange={(e) =>
-                          onSettingsChange((prev) => ({
+                          setSidebarSettings((prev) => ({
                             ...prev,
                             textColors: {
                               ...prev.textColors,
@@ -1372,18 +1425,18 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                         className="absolute inset-0 z-0 rounded-full"
                         style={{
                           backgroundColor:
-                            settings.mainTextColors?.[tag] ||
+                            sidebarSettings.mainTextColors?.[tag] ||
                             defaultMainTextColor(tag),
                         }}
                       />
                       <input
                         type="color"
                         value={
-                          settings.mainTextColors?.[tag] ||
+                          sidebarSettings.mainTextColors?.[tag] ||
                           defaultMainTextColor(tag)
                         }
                         onChange={(e) =>
-                          onSettingsChange((prev) => ({
+                          setSidebarSettings((prev) => ({
                             ...prev,
                             mainTextColors: {
                               ...prev.mainTextColors,
@@ -1441,13 +1494,13 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                     <li
                       key={option.value}
                       onClick={() =>
-                        onSettingsChange((prev) => ({
+                        setSidebarSettings((prev) => ({
                           ...prev,
                           sectionGap: option.value,
                         }))
                       }
                       className={`px-1.5 md:px-3 py-1 md:py-1.5 rounded cursor-pointer hover:bg-sky-50 transition ${
-                        settings.sectionGap === option.value
+                        sidebarSettings.sectionGap === option.value
                           ? "bg-sky-100 text-sky-700 font-semibold"
                           : ""
                       }`}
@@ -1485,8 +1538,8 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                   </h3>
 
                   <div className="grid grid-cols-2 gap-1.5 md:gap-2">
-                    {Object.keys(settings.visibleSections).map((key) => {
-                      const isVisible = settings.visibleSections[key];
+                    {Object.keys(sidebarSettings.visibleSections).map((key) => {
+                      const isVisible = sidebarSettings.visibleSections[key];
                       const label = key
                         .replace(/([A-Z])/g, " $1")
                         .replace(/^./, (str) => str.toUpperCase());
@@ -1495,7 +1548,7 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                         <button
                           key={key}
                           onClick={() =>
-                            onSettingsChange((prev) => ({
+                            setSidebarSettings((prev) => ({
                               ...prev,
                               visibleSections: {
                                 ...prev.visibleSections,
@@ -1557,8 +1610,12 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                     onDragEnd={({ active, over }) => {
                       if (!over || active.id === over.id) return;
 
-                      const oldIndex = settings.sectionOrder.indexOf(active.id);
-                      const newIndex = settings.sectionOrder.indexOf(over.id);
+                      const oldIndex = sidebarSettings.sectionOrder.indexOf(
+                        active.id
+                      );
+                      const newIndex = sidebarSettings.sectionOrder.indexOf(
+                        over.id
+                      );
 
                       // Ensure drag happens within same section group
                       const isSidebar = sidebarSections.includes(active.id);
@@ -1571,11 +1628,11 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                         (isMain && overIsMain)
                       ) {
                         const newOrder = arrayMove(
-                          settings.sectionOrder,
+                          sidebarSettings.sectionOrder,
                           oldIndex,
                           newIndex
                         );
-                        onSettingsChange((prev) => ({
+                        setSidebarSettings((prev) => ({
                           ...prev,
                           sectionOrder: newOrder,
                         }));
@@ -1589,13 +1646,13 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                           Sidebar
                         </p>
                         <SortableContext
-                          items={(settings.sectionOrder || []).filter((id) =>
-                            sidebarSections.includes(id)
+                          items={(sidebarSettings.sectionOrder || []).filter(
+                            (id) => sidebarSections.includes(id)
                           )}
                           strategy={verticalListSortingStrategy}
                         >
                           <div className="space-y-1.5 ">
-                            {settings.sectionOrder
+                            {sidebarSettings.sectionOrder
                               .filter((id) => sidebarSections.includes(id))
                               .map((id) => (
                                 <SortableItem key={id} id={id} />
@@ -1610,13 +1667,13 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
                           Main
                         </p>
                         <SortableContext
-                          items={(settings.sectionOrder || []).filter((id) =>
-                            mainSections.includes(id)
+                          items={(sidebarSettings.sectionOrder || []).filter(
+                            (id) => mainSections.includes(id)
                           )}
                           strategy={verticalListSortingStrategy}
                         >
                           <div className="space-y-1.5">
-                            {settings.sectionOrder
+                            {sidebarSettings.sectionOrder
                               .filter((id) => mainSections.includes(id))
                               .map((id) => (
                                 <SortableItem key={id} id={id} />
@@ -1637,22 +1694,23 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
       <div
         className=" border border-gray-400 p-2 md:p-4 flex"
         style={{
-          backgroundColor: settings.bgColor || "#ffffff",
-          fontFamily: settings.fontFamily || "Inter",
+          backgroundColor: sidebarSettings.bgColor || "#ffffff",
+          fontFamily: sidebarSettings.fontFamily || "Inter",
         }}
       >
         {/* Sidebar */}
         <aside
           className="w-full md:w-1/3 text-white p-3 md:p-6 flex flex-col"
           style={{
-            backgroundColor: settings.sidebarColor || "#1e3a8a",
-            rowGap: `${settings.sectionGap ?? 16}px`,
+            backgroundColor: sidebarSettings.sidebarColor || "#1e3a8a",
+            rowGap: `${sidebarSettings.sectionGap ?? 16}px`,
           }}
         >
-          {(settings.sectionOrder || [])
+          {(sidebarSettings.sectionOrder || [])
             .filter(
               (key) =>
-                settings.visibleSections?.[key] && sidebarSections.includes(key)
+                sidebarSettings.visibleSections?.[key] &&
+                sidebarSections.includes(key)
             )
             .map((key) => (
               <React.Fragment key={key}>{sectionMap[key]}</React.Fragment>
@@ -1663,13 +1721,14 @@ const SidebarTemplate = ({ resume, settings, onSettingsChange }) => {
         <main
           className="w-full md:w-2/3 p-2 md:p-8 flex flex-col"
           style={{
-            rowGap: `${settings.sectionGap ?? 16}px`,
+            rowGap: `${sidebarSettings.sectionGap ?? 16}px`,
           }}
         >
-          {(settings.sectionOrder || [])
+          {(sidebarSettings.sectionOrder || [])
             .filter(
               (key) =>
-                settings.visibleSections?.[key] && mainSections.includes(key)
+                sidebarSettings.visibleSections?.[key] &&
+                mainSections.includes(key)
             )
             .map((key) => (
               <React.Fragment key={key}>{sectionMap[key]}</React.Fragment>
