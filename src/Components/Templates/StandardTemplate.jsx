@@ -34,9 +34,11 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import { useStandardSetting } from "../../Contexts/StandardSettingContext";
 
-const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
+const StandardTemplate = ({ resume }) => {
   const { isEditable } = useEditResume();
+  const { standardSettings, setStandardSettings } = useStandardSetting();
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -123,8 +125,8 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
   };
 
   useEffect(() => {
-    if (!settings.visibleSections) {
-      onSettingsChange((prev) => ({
+    if (!standardSettings.visibleSections) {
+      setStandardSettings((prev) => ({
         ...prev,
         visibleSections: {
           name: true,
@@ -141,8 +143,8 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
   }, []);
 
   useEffect(() => {
-    if (!settings.sectionOrder) {
-      onSettingsChange((prev) => ({
+    if (!standardSettings.sectionOrder) {
+      setStandardSettings((prev) => ({
         ...prev,
         sectionOrder: [
           "name",
@@ -170,11 +172,11 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
         <h1
           className={`${getCustomFontClass(
             "text-[36px]",
-            settings.fontScaleLevel
+            standardSettings.fontScaleLevel
           )} font-bold w-full inline-block`}
           style={{
-            color: settings.TextColors?.["h1"] || "black",
-            textAlign: settings.descriptionAlign || "left",
+            color: standardSettings.TextColors?.["h1"] || "black",
+            textAlign: standardSettings.descriptionAlign || "left",
           }}
         >
           {resume.name}
@@ -184,19 +186,23 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
 
     details: (
       <div
-        className={`${settings.sectionPaddingY || "py-4"}`}
-        style={{ textAlign: settings.descriptionAlign || "left" }}
+        className={`${standardSettings.sectionPaddingY || "py-4"}`}
+        style={{ textAlign: standardSettings.descriptionAlign || "left" }}
       >
         {/* Contact Line */}
         <p
           className={`${getCustomFontClass(
             "text-[12px]",
-            settings.fontScaleLevel
+            standardSettings.fontScaleLevel
           )} text-gray-700`}
         >
           {[
             resume.contact.phone && (
-              <span style={{ color: settings.TextColors?.["h3"] || "black" }}>
+              <span
+                style={{
+                  color: standardSettings.TextColors?.["h3"] || "black",
+                }}
+              >
                 {resume.contact.phone}
               </span>
             ),
@@ -205,13 +211,13 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
                 href={`mailto:${resume.contact.email}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ color: settings.linkColor || "black" }}
+                style={{ color: standardSettings.linkColor || "black" }}
               >
                 {resume.contact.email}
               </a>
             ),
             resume.contact.location && (
-              <span style={{ color: settings.linkColor || "black" }}>
+              <span style={{ color: standardSettings.linkColor || "black" }}>
                 {resume.contact.location}
               </span>
             ),
@@ -228,11 +234,11 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
         <div
           className={`${getCustomFontClass(
             "text-[12px]",
-            settings.fontScaleLevel
+            standardSettings.fontScaleLevel
           )} break-words whitespace-normal flex-wrap gap-x-2 `}
           style={{
-            color: settings.linkColor || "black",
-            textAlign: settings.descriptionAlign || "left",
+            color: standardSettings.linkColor || "black",
+            textAlign: standardSettings.descriptionAlign || "left",
           }}
         >
           {resume.contact.github && (
@@ -267,30 +273,30 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
     description: (
       <div
         className={`flex gap-4 border-t border-grgrayay-700 ${
-          settings.sectionPaddingY || "py-4"
+          standardSettings.sectionPaddingY || "py-4"
         }`}
         style={{
-          textAlign: settings.descriptionAlign || "left",
-          borderTopWidth: settings.borderTopWidth || "1px",
-          borderTopStyle: settings.borderStyle || "solid",
-          borderColor: settings.borderColor || "#cbd5e1",
+          textAlign: standardSettings.descriptionAlign || "left",
+          borderTopWidth: standardSettings.borderTopWidth || "1px",
+          borderTopStyle: standardSettings.borderStyle || "solid",
+          borderColor: standardSettings.borderColor || "#cbd5e1",
         }}
       >
         <h2
           className={`w-1/3 ${getCustomFontClass(
             "text-[14px]",
-            settings.fontScaleLevel
+            standardSettings.fontScaleLevel
           )} font-bold text-gray-800`}
-          style={{ color: settings.TextColors?.["h2"] || "#334155" }}
+          style={{ color: standardSettings.TextColors?.["h2"] || "#334155" }}
         >
           PERSONAL SUMMARY
         </h2>
         <div
           className={`w-2/3 resume-content text-gray-700 ${getCustomFontClass(
             "text-[12px]",
-            settings.fontScaleLevel
+            standardSettings.fontScaleLevel
           )}`}
-          style={{ color: settings.TextColors?.["h3"] || "#475569" }}
+          style={{ color: standardSettings.TextColors?.["h3"] || "#475569" }}
           dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(resume.description),
           }}
@@ -301,36 +307,36 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
     education: (
       <div
         className={`flex gap-4 border-t border-gray-700 ${
-          settings.sectionPaddingY || "py-4"
+          standardSettings.sectionPaddingY || "py-4"
         }`}
         style={{
-          textAlign: settings.descriptionAlign || "left",
-          borderTopWidth: settings.borderTopWidth || "1px",
-          borderTopStyle: settings.borderStyle || "solid",
-          borderColor: settings.borderColor || "#cbd5e1",
+          textAlign: standardSettings.descriptionAlign || "left",
+          borderTopWidth: standardSettings.borderTopWidth || "1px",
+          borderTopStyle: standardSettings.borderStyle || "solid",
+          borderColor: standardSettings.borderColor || "#cbd5e1",
         }}
       >
         <h2
           className={`w-1/3 ${getCustomFontClass(
             "text-[14px]",
-            settings.fontScaleLevel
+            standardSettings.fontScaleLevel
           )} font-bold text-gray-800`}
-          style={{ color: settings.TextColors?.["h2"] || "#334155" }}
+          style={{ color: standardSettings.TextColors?.["h2"] || "#334155" }}
         >
           EDUCATION
         </h2>
         <div className="w-2/3">
           <div
-            style={{ color: settings.TextColors?.["h3"] || "#475569" }}
+            style={{ color: standardSettings.TextColors?.["h3"] || "#475569" }}
             className={`flex gap-6 w-full ${getCustomFontClass(
               "text-[12px]",
-              settings.fontScaleLevel
+              standardSettings.fontScaleLevel
             )} ${
-              settings.descriptionAlign === "center"
+              standardSettings.descriptionAlign === "center"
                 ? "justify-center"
-                : settings.descriptionAlign === "right"
+                : standardSettings.descriptionAlign === "right"
                 ? "justify-end"
-                : settings.descriptionAlign === "justify"
+                : standardSettings.descriptionAlign === "justify"
                 ? "justify-between"
                 : "justify-start"
             }`}
@@ -341,20 +347,20 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
           <div
             className={` ${getCustomFontClass(
               "text-[12px]",
-              settings.fontScaleLevel
+              standardSettings.fontScaleLevel
             )}`}
-            style={{ color: settings.TextColors?.["h3"] || "#475569" }}
+            style={{ color: standardSettings.TextColors?.["h3"] || "#475569" }}
           >
             <div
               className={`flex gap-6 w-full ${getCustomFontClass(
                 "text-[12px]",
-                settings.fontScaleLevel
+                standardSettings.fontScaleLevel
               )} ${
-                settings.descriptionAlign === "center"
+                standardSettings.descriptionAlign === "center"
                   ? "justify-center"
-                  : settings.descriptionAlign === "right"
+                  : standardSettings.descriptionAlign === "right"
                   ? "justify-end"
-                  : settings.descriptionAlign === "justify"
+                  : standardSettings.descriptionAlign === "justify"
                   ? "justify-between"
                   : "justify-start"
               }`}
@@ -380,21 +386,21 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
     skills: (
       <div
         className={`flex gap-4 border-t border-gray-700 ${
-          settings.sectionPaddingY || "py-4"
+          standardSettings.sectionPaddingY || "py-4"
         }`}
         style={{
-          textAlign: settings.descriptionAlign || "left",
-          borderTopWidth: settings.borderTopWidth || "1px",
-          borderTopStyle: settings.borderStyle || "solid",
-          borderColor: settings.borderColor || "#cbd5e1",
+          textAlign: standardSettings.descriptionAlign || "left",
+          borderTopWidth: standardSettings.borderTopWidth || "1px",
+          borderTopStyle: standardSettings.borderStyle || "solid",
+          borderColor: standardSettings.borderColor || "#cbd5e1",
         }}
       >
         <h2
           className={`w-1/3 ${getCustomFontClass(
             "text-[14px]",
-            settings.fontScaleLevel
+            standardSettings.fontScaleLevel
           )} font-bold text-gray-800`}
-          style={{ color: settings.TextColors?.["h2"] || "#334155" }}
+          style={{ color: standardSettings.TextColors?.["h2"] || "#334155" }}
         >
           SKILLS
         </h2>
@@ -404,16 +410,22 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
               key={i}
               className={` ${getCustomFontClass(
                 "text-[12px]",
-                settings.fontScaleLevel
+                standardSettings.fontScaleLevel
               )}`}
             >
               <span
                 className="font-semibold mr-2"
-                style={{ color: settings.TextColors?.["h3"] || "#475569" }}
+                style={{
+                  color: standardSettings.TextColors?.["h3"] || "#475569",
+                }}
               >
                 {skill.domain}:
               </span>
-              <span style={{ color: settings.TextColors?.["h4"] || "#64748b" }}>
+              <span
+                style={{
+                  color: standardSettings.TextColors?.["h4"] || "#64748b",
+                }}
+              >
                 {skill.languages.join(", ")}
               </span>
             </div>
@@ -425,21 +437,21 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
     projects: (
       <div
         className={`flex gap-4 border-t border-gray-700 ${
-          settings.sectionPaddingY || "py-4"
+          standardSettings.sectionPaddingY || "py-4"
         }`}
         style={{
-          textAlign: settings.descriptionAlign || "left",
-          borderTopWidth: settings.borderTopWidth || "1px",
-          borderTopStyle: settings.borderStyle || "solid",
-          borderColor: settings.borderColor || "#cbd5e1",
+          textAlign: standardSettings.descriptionAlign || "left",
+          borderTopWidth: standardSettings.borderTopWidth || "1px",
+          borderTopStyle: standardSettings.borderStyle || "solid",
+          borderColor: standardSettings.borderColor || "#cbd5e1",
         }}
       >
         <h2
           className={`w-1/3 ${getCustomFontClass(
             "text-[14px]",
-            settings.fontScaleLevel
+            standardSettings.fontScaleLevel
           )} font-bold text-gray-800`}
-          style={{ color: settings.TextColors?.["h2"] || "#334155" }}
+          style={{ color: standardSettings.TextColors?.["h2"] || "#334155" }}
         >
           PROJECTS
         </h2>
@@ -449,20 +461,22 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
               <div
                 className={`flex gap-2 md:gap-6 w-full ${getCustomFontClass(
                   "text-[12px]",
-                  settings.fontScaleLevel
+                  standardSettings.fontScaleLevel
                 )} ${
-                  settings.descriptionAlign === "center"
+                  standardSettings.descriptionAlign === "center"
                     ? "justify-center"
-                    : settings.descriptionAlign === "right"
+                    : standardSettings.descriptionAlign === "right"
                     ? "justify-end"
-                    : settings.descriptionAlign === "justify"
+                    : standardSettings.descriptionAlign === "justify"
                     ? "justify-between"
                     : "justify-start"
                 }`}
               >
                 <span
                   className="font-bold"
-                  style={{ color: settings.TextColors?.["h3"] || "#475569" }}
+                  style={{
+                    color: standardSettings.TextColors?.["h3"] || "#475569",
+                  }}
                 >
                   {proj.name}
                 </span>
@@ -476,7 +490,9 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="underline "
-                          style={{ color: settings.linkColor || "#2563eb" }}
+                          style={{
+                            color: standardSettings.linkColor || "#2563eb",
+                          }}
                         >
                           Live Demo
                         </a>
@@ -490,7 +506,9 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="underline "
-                          style={{ color: settings.linkColor || "#2563eb" }}
+                          style={{
+                            color: standardSettings.linkColor || "#2563eb",
+                          }}
                         >
                           GitHub
                         </a>
@@ -505,9 +523,11 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
               <div
                 className={`resume-content   ${getCustomFontClass(
                   "text-[12px]",
-                  settings.fontScaleLevel
+                  standardSettings.fontScaleLevel
                 )}`}
-                style={{ color: settings.TextColors?.["h4"] || "#64748b" }}
+                style={{
+                  color: standardSettings.TextColors?.["h4"] || "#64748b",
+                }}
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(proj.description),
                 }}
@@ -521,21 +541,21 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
     experience: (
       <div
         className={`flex gap-4 border-t border-gray-700 ${
-          settings.sectionPaddingY || "py-4"
+          standardSettings.sectionPaddingY || "py-4"
         }`}
         style={{
-          textAlign: settings.descriptionAlign || "left",
-          borderTopWidth: settings.borderTopWidth || "1px",
-          borderTopStyle: settings.borderStyle || "solid",
-          borderColor: settings.borderColor || "#cbd5e1",
+          textAlign: standardSettings.descriptionAlign || "left",
+          borderTopWidth: standardSettings.borderTopWidth || "1px",
+          borderTopStyle: standardSettings.borderStyle || "solid",
+          borderColor: standardSettings.borderColor || "#cbd5e1",
         }}
       >
         <h2
           className={`w-1/3 ${getCustomFontClass(
             "text-[14px]",
-            settings.fontScaleLevel
+            standardSettings.fontScaleLevel
           )} font-bold text-gray-800`}
-          style={{ color: settings.TextColors?.["h2"] || "#334155" }}
+          style={{ color: standardSettings.TextColors?.["h2"] || "#334155" }}
         >
           EXPERIENCE
         </h2>
@@ -546,17 +566,19 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
                 key={i}
                 className={`md:mb-3  ${getCustomFontClass(
                   "text-[12px]",
-                  settings.fontScaleLevel
+                  standardSettings.fontScaleLevel
                 )}`}
               >
                 <div
-                  style={{ color: settings.TextColors?.["h3"] || "#475569" }}
+                  style={{
+                    color: standardSettings.TextColors?.["h3"] || "#475569",
+                  }}
                   className={`flex gap-2 md:gap-6 w-full ${
-                    settings.descriptionAlign === "center"
+                    standardSettings.descriptionAlign === "center"
                       ? "justify-center"
-                      : settings.descriptionAlign === "right"
+                      : standardSettings.descriptionAlign === "right"
                       ? "justify-end"
-                      : settings.descriptionAlign === "justify"
+                      : standardSettings.descriptionAlign === "justify"
                       ? "justify-between"
                       : "justify-start"
                   }`}
@@ -569,7 +591,9 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
                 {a.technologies && a.technologies.trim() !== "" && (
                   <p
                     className="md:my-0.5"
-                    style={{ color: settings.TextColors?.["h4"] || "#64748b" }}
+                    style={{
+                      color: standardSettings.TextColors?.["h4"] || "#64748b",
+                    }}
                   >
                     <span className="font-bold">Technologies:</span>{" "}
                     {a.technologies}
@@ -578,7 +602,9 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
 
                 <div
                   className={`resume-content   `}
-                  style={{ color: settings.TextColors?.["h4"] || "#64748b" }}
+                  style={{
+                    color: standardSettings.TextColors?.["h4"] || "#64748b",
+                  }}
                   dangerouslySetInnerHTML={{
                     __html: DOMPurify.sanitize(a.description),
                   }}
@@ -593,21 +619,21 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
     achievements: (
       <div
         className={`flex gap-4 border-t border-gray-700 ${
-          settings.sectionPaddingY || "py-4"
+          standardSettings.sectionPaddingY || "py-4"
         }`}
         style={{
-          textAlign: settings.descriptionAlign || "left",
-          borderTopWidth: settings.borderTopWidth || "1px",
-          borderTopStyle: settings.borderStyle || "solid",
-          borderColor: settings.borderColor || "#cbd5e1",
+          textAlign: standardSettings.descriptionAlign || "left",
+          borderTopWidth: standardSettings.borderTopWidth || "1px",
+          borderTopStyle: standardSettings.borderStyle || "solid",
+          borderColor: standardSettings.borderColor || "#cbd5e1",
         }}
       >
         <h2
           className={`w-1/3 ${getCustomFontClass(
             "text-[14px]",
-            settings.fontScaleLevel
+            standardSettings.fontScaleLevel
           )} font-bold text-gray-800`}
-          style={{ color: settings.TextColors?.["h2"] || "#334155" }}
+          style={{ color: standardSettings.TextColors?.["h2"] || "#334155" }}
         >
           ACHIEVEMENTS
         </h2>
@@ -618,17 +644,19 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
                 key={i}
                 className={` ${getCustomFontClass(
                   "text-[12px]",
-                  settings.fontScaleLevel
+                  standardSettings.fontScaleLevel
                 )}`}
               >
                 <div
-                  style={{ color: settings.TextColors?.["h3"] || "#475569" }}
+                  style={{
+                    color: standardSettings.TextColors?.["h3"] || "#475569",
+                  }}
                   className={`flex gap-6 w-full ${
-                    settings.descriptionAlign === "center"
+                    standardSettings.descriptionAlign === "center"
                       ? "justify-center"
-                      : settings.descriptionAlign === "right"
+                      : standardSettings.descriptionAlign === "right"
                       ? "justify-end"
-                      : settings.descriptionAlign === "justify"
+                      : standardSettings.descriptionAlign === "justify"
                       ? "justify-between"
                       : "justify-start"
                   }`}
@@ -641,7 +669,9 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
 
                 <div
                   className="resume-content "
-                  style={{ color: settings.TextColors?.["h4"] || "#64748b" }}
+                  style={{
+                    color: standardSettings.TextColors?.["h4"] || "#64748b",
+                  }}
                   dangerouslySetInnerHTML={{
                     __html: DOMPurify.sanitize(a.description),
                   }}
@@ -676,7 +706,8 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
               <span
                 className="hidden md:block absolute w-4 h-4 rounded-full border border-gray-300 right-1 top-1"
                 style={{
-                  backgroundColor: settings.backgroundColor || "#ffffff",
+                  backgroundColor:
+                    standardSettings.backgroundColor || "#ffffff",
                 }}
               ></span>
             </button>
@@ -701,13 +732,13 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
                       <button
                         key={clr}
                         className={`h-4 w-4 md:w-6 md:h-6 rounded-full border transition-all hover:scale-105 ${
-                          clr === settings.backgroundColor
+                          clr === standardSettings.backgroundColor
                             ? "ring-2 ring-offset-1 ring-sky-500"
                             : ""
                         }`}
                         style={{ backgroundColor: clr }}
                         onClick={() =>
-                          onSettingsChange((prev) => ({
+                          setStandardSettings((prev) => ({
                             ...prev,
                             backgroundColor: clr,
                           }))
@@ -725,7 +756,8 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
                     <div
                       className="absolute inset-0 z-0 flex items-center justify-center rounded-full"
                       style={{
-                        backgroundColor: settings.backgroundColor || "#ffffff",
+                        backgroundColor:
+                          standardSettings.backgroundColor || "#ffffff",
                       }}
                     >
                       <FaFillDrip className="text-gray-600/50 text-[10px] md:text-sm drop-shadow group-hover:scale-110 transition" />
@@ -733,9 +765,9 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
 
                     <input
                       type="color"
-                      value={settings.backgroundColor || "#ffffff"}
+                      value={standardSettings.backgroundColor || "#ffffff"}
                       onChange={(e) =>
-                        onSettingsChange((prev) => ({
+                        setStandardSettings((prev) => ({
                           ...prev,
                           backgroundColor: e.target.value,
                         }))
@@ -777,13 +809,13 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
                 <button
                   key={value}
                   onClick={() =>
-                    onSettingsChange((prev) => ({
+                    setStandardSettings((prev) => ({
                       ...prev,
                       descriptionAlign: value,
                     }))
                   }
                   className={`p-1 md:p-2 text-sm md:text-lg md:rounded-md transition ${
-                    settings.descriptionAlign === value
+                    standardSettings.descriptionAlign === value
                       ? "bg-white shadow  "
                       : "hover:bg-white/80"
                   }`}
@@ -846,14 +878,14 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
                     <button
                       key={font}
                       onClick={() => {
-                        onSettingsChange((prev) => ({
+                        setStandardSettings((prev) => ({
                           ...prev,
                           fontFamily: font,
                         }));
                         setOpenDropdown(false);
                       }}
                       className={`text-xs md:text-sm text-left px-2 md:px-3 py-1 rounded hover:bg-gray-100 transition ${
-                        settings.fontFamily === font
+                        standardSettings.fontFamily === font
                           ? "bg-sky-50 text-sky-700 font-medium"
                           : "text-gray-700"
                       }`}
@@ -872,7 +904,7 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
             <button
               title="Decrease Font Size"
               onClick={() =>
-                onSettingsChange((prev) => ({
+                setStandardSettings((prev) => ({
                   ...prev,
                   fontScaleLevel: Math.max(-10, (prev.fontScaleLevel || 0) - 1),
                 }))
@@ -887,7 +919,7 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
             <button
               title="Increase Font Size"
               onClick={() =>
-                onSettingsChange((prev) => ({
+                setStandardSettings((prev) => ({
                   ...prev,
                   fontScaleLevel: Math.min(10, (prev.fontScaleLevel || 0) + 1),
                 }))
@@ -939,14 +971,14 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
                     <li
                       key={option.value}
                       onClick={() => {
-                        onSettingsChange((prev) => ({
+                        setStandardSettings((prev) => ({
                           ...prev,
                           sectionPaddingY: option.value,
                         }));
                         setOpenDropdown(null); // Close dropdown after selection
                       }}
                       className={`px-3 py-1.5 rounded cursor-pointer hover:bg-sky-50 transition ${
-                        settings.sectionPaddingY === option.value
+                        standardSettings.sectionPaddingY === option.value
                           ? "bg-sky-100 text-sky-700 "
                           : ""
                       }`}
@@ -993,14 +1025,14 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
                     <li key={w.value}>
                       <button
                         onClick={() => {
-                          onSettingsChange((prev) => ({
+                          setStandardSettings((prev) => ({
                             ...prev,
                             borderTopWidth: w.value,
                           }));
                           setOpenDropdown(false);
                         }}
                         className={`w-full justify-center h-5 px-1 py-1.5 rounded-xs flex items-center gap-5 hover:bg-sky-50 transition ${
-                          settings.borderTopWidth === w.value
+                          standardSettings.borderTopWidth === w.value
                             ? "bg-sky-100"
                             : "text-gray-800"
                         }`}
@@ -1053,9 +1085,9 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
                     Style
                   </label>
                   <select
-                    value={settings.borderStyle || "solid"}
+                    value={standardSettings.borderStyle || "solid"}
                     onChange={(e) =>
-                      onSettingsChange((prev) => ({
+                      setStandardSettings((prev) => ({
                         ...prev,
                         borderStyle: e.target.value,
                       }))
@@ -1080,9 +1112,9 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
                   </label>
                   <input
                     type="color"
-                    value={settings.borderColor || "#cbd5e1"}
+                    value={standardSettings.borderColor || "#cbd5e1"}
                     onChange={(e) =>
-                      onSettingsChange((prev) => ({
+                      setStandardSettings((prev) => ({
                         ...prev,
                         borderColor: e.target.value,
                       }))
@@ -1121,16 +1153,18 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
                         className="absolute inset-0 z-0 rounded-full"
                         style={{
                           backgroundColor:
-                            settings.TextColors?.[tag] || defaultTextColor(tag),
+                            standardSettings.TextColors?.[tag] ||
+                            defaultTextColor(tag),
                         }}
                       />
                       <input
                         type="color"
                         value={
-                          settings.TextColors?.[tag] || defaultTextColor(tag)
+                          standardSettings.TextColors?.[tag] ||
+                          defaultTextColor(tag)
                         }
                         onChange={(e) =>
-                          onSettingsChange((prev) => ({
+                          setStandardSettings((prev) => ({
                             ...prev,
                             TextColors: {
                               ...prev.TextColors,
@@ -1186,13 +1220,13 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
                         <button
                           key={clr}
                           className={`w-4 h-4 md:w-6 md:h-6 rounded-full border transition-all hover:scale-105 ${
-                            clr === settings.linkColor
+                            clr === standardSettings.linkColor
                               ? "ring-2 ring-offset-1 ring-sky-500"
                               : ""
                           }`}
                           style={{ backgroundColor: clr }}
                           onClick={() =>
-                            onSettingsChange((prev) => ({
+                            setStandardSettings((prev) => ({
                               ...prev,
                               linkColor: clr,
                             }))
@@ -1209,9 +1243,9 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
                     <div className="relative w-4 h-4 md:w-6 md:h-6 rounded-full overflow-hidden border cursor-pointer group">
                       <input
                         type="color"
-                        value={settings.linkColor || "#2563eb"}
+                        value={standardSettings.linkColor || "#2563eb"}
                         onChange={(e) =>
-                          onSettingsChange((prev) => ({
+                          setStandardSettings((prev) => ({
                             ...prev,
                             linkColor: e.target.value,
                           }))
@@ -1222,7 +1256,8 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
                       <div
                         className="absolute inset-0 z-0 rounded-full"
                         style={{
-                          backgroundColor: settings.linkColor || "#2563eb",
+                          backgroundColor:
+                            standardSettings.linkColor || "#2563eb",
                         }}
                       >
                         <MdOutlineColorize className="text-gray-500/50 text-xs md:text-lg drop-shadow absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
@@ -1257,41 +1292,43 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
                   </h3>
 
                   <div className="grid grid-cols-2 gap-1.5 md:gap-2">
-                    {Object.keys(settings.visibleSections).map((key) => {
-                      const isVisible = settings.visibleSections[key];
-                      const label = key
-                        .replace(/([A-Z])/g, " $1")
-                        .replace(/^./, (str) => str.toUpperCase());
+                    {Object.keys(standardSettings.visibleSections).map(
+                      (key) => {
+                        const isVisible = standardSettings.visibleSections[key];
+                        const label = key
+                          .replace(/([A-Z])/g, " $1")
+                          .replace(/^./, (str) => str.toUpperCase());
 
-                      return (
-                        <button
-                          key={key}
-                          onClick={() =>
-                            onSettingsChange((prev) => ({
-                              ...prev,
-                              visibleSections: {
-                                ...prev.visibleSections,
-                                [key]: !isVisible,
-                              },
-                            }))
-                          }
-                          className={`flex items-center justify-between px-1.5 md:px-3 py-1.5 rounded-md border text-[10px] md:text-xs transition-all ${
-                            isVisible
-                              ? "bg-blue-50 text-sky-700 border-sky-300 hover:bg-sky-100"
-                              : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
-                          }`}
-                        >
-                          <span className="truncate w-10 md:w-24 text-left">
-                            {label}
-                          </span>
-                          {isVisible ? (
-                            <FaEye className="text-blue-500 text-sm shrink-0" />
-                          ) : (
-                            <FaEyeSlash className="text-gray-400 text-sm shrink-0" />
-                          )}
-                        </button>
-                      );
-                    })}
+                        return (
+                          <button
+                            key={key}
+                            onClick={() =>
+                              setStandardSettings((prev) => ({
+                                ...prev,
+                                visibleSections: {
+                                  ...prev.visibleSections,
+                                  [key]: !isVisible,
+                                },
+                              }))
+                            }
+                            className={`flex items-center justify-between px-1.5 md:px-3 py-1.5 rounded-md border text-[10px] md:text-xs transition-all ${
+                              isVisible
+                                ? "bg-blue-50 text-sky-700 border-sky-300 hover:bg-sky-100"
+                                : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
+                            }`}
+                          >
+                            <span className="truncate w-10 md:w-24 text-left">
+                              {label}
+                            </span>
+                            {isVisible ? (
+                              <FaEye className="text-blue-500 text-sm shrink-0" />
+                            ) : (
+                              <FaEyeSlash className="text-gray-400 text-sm shrink-0" />
+                            )}
+                          </button>
+                        );
+                      }
+                    )}
                   </div>
                 </div>
               </div>
@@ -1329,26 +1366,30 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
                     onDragEnd={({ active, over }) => {
                       if (!over || active.id === over.id) return;
 
-                      const oldIndex = settings.sectionOrder.indexOf(active.id);
-                      const newIndex = settings.sectionOrder.indexOf(over.id);
+                      const oldIndex = standardSettings.sectionOrder.indexOf(
+                        active.id
+                      );
+                      const newIndex = standardSettings.sectionOrder.indexOf(
+                        over.id
+                      );
                       const newOrder = arrayMove(
-                        settings.sectionOrder,
+                        standardSettings.sectionOrder,
                         oldIndex,
                         newIndex
                       );
 
-                      onSettingsChange((prev) => ({
+                      setStandardSettings((prev) => ({
                         ...prev,
                         sectionOrder: newOrder,
                       }));
                     }}
                   >
                     <SortableContext
-                      items={settings.sectionOrder}
+                      items={standardSettings.sectionOrder}
                       strategy={verticalListSortingStrategy}
                     >
                       <div className="space-y-1.5">
-                        {settings.sectionOrder.map((id) => (
+                        {standardSettings.sectionOrder.map((id) => (
                           <SortableItem key={id} id={id} />
                         ))}
                       </div>
@@ -1365,8 +1406,8 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
       <div
         className="w-full mx-auto p-2 md:p-5 text-sm leading-relaxed space-y-5 border border-gray-200 shadow-md"
         style={{
-          fontFamily: settings.fontFamily || "Inter",
-          backgroundColor: settings.backgroundColor || "#ffffff",
+          fontFamily: standardSettings.fontFamily || "Inter",
+          backgroundColor: standardSettings.backgroundColor || "#ffffff",
         }}
       >
         {/* Inner Resume Container */}
@@ -1374,17 +1415,18 @@ const StandardTemplate = ({ resume, settings, onSettingsChange }) => {
           className={`p-2 md:p-7 flex flex-col `}
           style={{
             border:
-              settings.borderWidth && settings.borderWidth !== "0px"
-                ? `${settings.borderWidth} ${settings.borderStyle || "solid"} ${
-                    settings.borderColor || "#cbd5e1"
-                  }`
+              standardSettings.borderWidth &&
+              standardSettings.borderWidth !== "0px"
+                ? `${standardSettings.borderWidth} ${
+                    standardSettings.borderStyle || "solid"
+                  } ${standardSettings.borderColor || "#cbd5e1"}`
                 : "none",
           }}
         >
-          {Array.isArray(settings?.sectionOrder) &&
-            settings.sectionOrder.map(
+          {Array.isArray(standardSettings?.sectionOrder) &&
+            standardSettings.sectionOrder.map(
               (sectionKey) =>
-                settings.visibleSections?.[sectionKey] && (
+                standardSettings.visibleSections?.[sectionKey] && (
                   <div key={sectionKey}>{sectionMap[sectionKey]}</div>
                 )
             )}

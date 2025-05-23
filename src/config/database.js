@@ -32,6 +32,14 @@ export const createResume = async (resumeData) => {
     "data"
   );
 
+  const standardSettingRef = doc(
+    db,
+    "users",
+    user.uid,
+    "standardSettings",
+    "data"
+  );
+
   const defaultSettings = {}; // Optional: add defaults here if needed
 
   // Save resume
@@ -55,6 +63,15 @@ export const createResume = async (resumeData) => {
   const sidebarSnap = await getDoc(sidebarSettingsRef);
   if (!sidebarSnap.exists()) {
     await setDoc(sidebarSettingsRef, {
+      ...defaultSettings,
+      createdOn: serverTimestamp(),
+    });
+  }
+
+  // Initialize standardTemplate if missing
+  const standardSnap = await getDoc(standardSettingRef);
+  if (!standardSnap.exists()) {
+    await setDoc(standardSettingRef, {
       ...defaultSettings,
       createdOn: serverTimestamp(),
     });
@@ -129,6 +146,31 @@ export const getSidebarSettings = async () => {
   if (!user) throw new Error("User not authenticated");
 
   const settingsRef = doc(db, "users", user.uid, "sidebarSettings", "data");
+  const snapshot = await getDoc(settingsRef);
+
+  if (snapshot.exists()) {
+    return snapshot.data();
+  }
+  return {};
+};
+
+export const editStandardSettings = async (settings) => {
+  const user = auth.currentUser;
+  if (!user) throw new Error("User not authenticated");
+
+  const settingsRef = doc(db, "users", user.uid, "standardSettings", "data");
+
+  await setDoc(settingsRef, {
+    ...settings,
+    updatedOn: serverTimestamp(),
+  });
+};
+
+export const getStandardSettings = async () => {
+  const user = auth.currentUser;
+  if (!user) throw new Error("User not authenticated");
+
+  const settingsRef = doc(db, "users", user.uid, "standardSettings", "data");
   const snapshot = await getDoc(settingsRef);
 
   if (snapshot.exists()) {
