@@ -1,21 +1,28 @@
 // src/Contexts/StandardSettingContext.jsx
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { getStandardSettings, editStandardSettings } from "../config/database";
+import { getStandardSettings } from "../config/database";
 
 const StandardSettingContext = createContext();
 
 export const StandardSettingProvider = ({ children }) => {
-  const [standardSettings, setStandardSettings] = useState({});
+  const LOCAL_KEY = "StandardTemplateSetting";
+
+  const [standardSettings, setStandardSettings] = useState(() => {
+    const stored = localStorage.getItem(LOCAL_KEY);
+    return stored ? JSON.parse(stored) : {};
+  });
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const data = await getStandardSettings();
-        if (data) setStandardSettings(data);
+        const cloudData = await getStandardSettings();
+        if (!localStorage.getItem(LOCAL_KEY) && cloudData) {
+          setStandardSettings(cloudData);
+        }
       } catch (error) {
         console.error("Failed to fetch standard settings:", error.message);
-        setStandardSettings({}); // fallback to empty settings
       } finally {
         setLoading(false);
       }
@@ -24,14 +31,8 @@ export const StandardSettingProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (!loading) {
-      try {
-        editStandardSettings(standardSettings);
-      } catch (err) {
-        console.error("Failed to update standard settings:", err.message);
-      }
-    }
-  }, [standardSettings, loading]);
+    localStorage.setItem(LOCAL_KEY, JSON.stringify(standardSettings));
+  }, [standardSettings]);
 
   return (
     <StandardSettingContext.Provider

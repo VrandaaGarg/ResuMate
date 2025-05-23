@@ -10,7 +10,6 @@ export const EditResumeProvider = ({ children }) => {
   const toggleEditing = () => {
     setIsEditable((prev) => {
       const newState = !prev;
-      if (!newState) showSuccessToast("Changes saved"); // only show when turning off edit mode
       return newState;
     });
   };

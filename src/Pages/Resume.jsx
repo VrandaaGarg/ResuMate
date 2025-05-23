@@ -12,7 +12,14 @@ import { useSidebarSetting } from "../Contexts/SidebarSettingContext";
 import StandardTemplate from "../Components/Templates/StandardTemplate";
 import { useStandardSetting } from "../Contexts/StandardSettingContext";
 import { useModernSetting } from "../Contexts/ModernSettingContext";
-import ModernTemplate from "../Components/Templates/ModernTemplate";
+// import ModernTemplate from "../Components/Templates/ModernTemplate";
+import {
+  editClassicSettings,
+  editSidebarSettings,
+  editStandardSettings,
+  updateResume,
+} from "../config/database";
+import showSuccessToast from "../Components/showSuccessToast";
 
 export default function Resume() {
   const navigate = useNavigate();
@@ -20,7 +27,7 @@ export default function Resume() {
   const { classicSettings, setClassicSettings } = useClassicSetting();
   const { sidebarSettings, setSidebarSettings } = useSidebarSetting();
   const { standardSettings, setStandardSettings } = useStandardSetting();
-  const { modernSettings, setModernSettings } = useModernSetting();
+  // const { modernSettings, setModernSettings } = useModernSetting();
 
   const [selectedTemplate, setSelectedTemplate] = useState(
     () => localStorage.getItem("selectedTemplate") || "classic"
@@ -52,6 +59,23 @@ export default function Resume() {
     education: true,
     achievements: true,
   });
+
+  const handleSaveAllChanges = async () => {
+    try {
+      // Save all settings
+      await Promise.all([
+        showSuccessToast("Changes saved successfully!"),
+        editClassicSettings(classicSettings),
+        editSidebarSettings(sidebarSettings),
+        editStandardSettings(standardSettings),
+        // editModernSettings(modernSettings),
+        updateResume(resume),
+      ]);
+    } catch (error) {
+      toast.error("Failed to save changes.");
+      console.error("Error while saving:", error);
+    }
+  };
 
   if (!resume?.name || resume.name.trim() === "") {
     return (
@@ -106,12 +130,15 @@ export default function Resume() {
                 <option value="classic">Classic</option>
                 <option value="sidebar">Sidebar</option>
                 <option value="standard">Standard</option>
-                <option value="modern">Modern</option>
+                {/* <option value="modern">Modern</option> */}
               </select>
             </div>
             <div className="">
               <button
-                onClick={toggleEditing}
+                onClick={() => {
+                  if (isEditable) handleSaveAllChanges(); // Only save if exiting edit mode
+                  toggleEditing();
+                }}
                 className="px-2 md:px-4 py-1 md:py-1.5 text-xs md:text-sm rounded bg-sky-700 hover:bg-sky-800 text-white font-medium transition"
               >
                 {isEditable ? "Save Changes" : "Edit"}
@@ -155,7 +182,7 @@ export default function Resume() {
             />
           )}
 
-          {selectedTemplate === "modern" && (
+          {/* {selectedTemplate === "modern" && (
             <ModernTemplate
               resume={resume}
               onChange={setResume}
@@ -164,7 +191,7 @@ export default function Resume() {
               settings={modernSettings}
               onSettingsChange={setModernSettings}
             />
-          )}
+          )} */}
         </div>
       </div>
     </div>

@@ -147,7 +147,7 @@ const Home = () => {
   const auth = getAuth();
 
   const handleCreateClick = () => {
-    const user = getAuth().currentUser;
+    const user = auth.currentUser;
     if (user) {
       navigate("/dashboard");
     } else {
