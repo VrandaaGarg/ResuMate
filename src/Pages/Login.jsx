@@ -107,10 +107,18 @@ export default function Login() {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full py-2 bg-sky-700 text-white font-medium rounded hover:bg-sky-800 transition"
+            className="w-full p-2 bg-sky-700 text-white font-medium rounded hover:bg-sky-800 transition"
           >
             Login
           </button>
+          <div className="text-right">
+            <Link
+              to="/forgot-password"
+              className="text-sky-700 text-xs font-medium hover:underline"
+            >
+              Forgot your password?
+            </Link>
+          </div>
         </form>
 
         {/* Link to Signup */}

@@ -10,8 +10,10 @@ import Profile from "./Pages/Profile";
 import ResumeForm from "./Pages/ResumeForm";
 import ProtectedRoute from "./Contexts/ProtectedRoute";
 import Resume from "./Pages/Resume";
+import ResetPassword from "./Pages/ResetPassword";
 
 import Templates from "./Pages/Templates";
+import ForgotPassword from "./Pages/ForgetPassword";
 const App = () => {
   return (
     <Routes>
@@ -20,6 +22,8 @@ const App = () => {
         <Route index element={<Home />} />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
+        <Route path="forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
       </Route>
 
       {/* Protected Routes - no /dashboard prefix */}

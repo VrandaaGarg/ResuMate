@@ -5,18 +5,16 @@ import {
   updateDoc,
   serverTimestamp,
 } from "firebase/firestore";
-import { db } from "../firebase"; // Your firebase config file
+import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
 
 const auth = getAuth();
 
 export const createResume = async (resumeData) => {
   const user = auth.currentUser;
-  if (!user) throw new Error("User not authenticated");
+  if (!user) return;
 
   const resumeRef = doc(db, "users", user.uid, "resume", "data");
-
-  //initialize classicSettings and sidebarSettings
   const classicSettingsRef = doc(
     db,
     "users",
@@ -31,7 +29,6 @@ export const createResume = async (resumeData) => {
     "sidebarSettings",
     "data"
   );
-
   const standardSettingRef = doc(
     db,
     "users",
@@ -40,9 +37,8 @@ export const createResume = async (resumeData) => {
     "data"
   );
 
-  const defaultSettings = {}; // Optional: add defaults here if needed
+  const defaultSettings = {};
 
-  // Save resume
   await setDoc(resumeRef, {
     gmail: user.email,
     createdOn: serverTimestamp(),
@@ -50,8 +46,12 @@ export const createResume = async (resumeData) => {
     ...resumeData,
   });
 
-  // Initialize classicSettings if missing
-  const classicSnap = await getDoc(classicSettingsRef);
+  const [classicSnap, sidebarSnap, standardSnap] = await Promise.all([
+    getDoc(classicSettingsRef),
+    getDoc(sidebarSettingsRef),
+    getDoc(standardSettingRef),
+  ]);
+
   if (!classicSnap.exists()) {
     await setDoc(classicSettingsRef, {
       ...defaultSettings,
@@ -59,8 +59,6 @@ export const createResume = async (resumeData) => {
     });
   }
 
-  // Initialize sidebarSettings if missing
-  const sidebarSnap = await getDoc(sidebarSettingsRef);
   if (!sidebarSnap.exists()) {
     await setDoc(sidebarSettingsRef, {
       ...defaultSettings,
@@ -68,8 +66,6 @@ export const createResume = async (resumeData) => {
     });
   }
 
-  // Initialize standardTemplate if missing
-  const standardSnap = await getDoc(standardSettingRef);
   if (!standardSnap.exists()) {
     await setDoc(standardSettingRef, {
       ...defaultSettings,
@@ -80,10 +76,9 @@ export const createResume = async (resumeData) => {
 
 export const updateResume = async (updatedFields) => {
   const user = auth.currentUser;
-  if (!user) throw new Error("User not authenticated");
+  if (!user) return;
 
   const resumeRef = doc(db, "users", user.uid, "resume", "data");
-
   await updateDoc(resumeRef, {
     ...updatedFields,
     updatedOn: serverTimestamp(),
@@ -92,89 +87,60 @@ export const updateResume = async (updatedFields) => {
 
 export const getResumeData = async () => {
   const user = auth.currentUser;
-  if (!user) throw new Error("User not authenticated");
+  if (!user) return null;
 
   const resumeRef = doc(db, "users", user.uid, "resume", "data");
   const snapshot = await getDoc(resumeRef);
-
-  if (!snapshot.exists()) {
-    return null;
-  }
-
-  return snapshot.data();
+  return snapshot.exists() ? snapshot.data() : null;
 };
 
 export const editClassicSettings = async (settings) => {
   const user = auth.currentUser;
-  if (!user) throw new Error("User not authenticated");
+  if (!user) return;
 
-  const settingsRef = doc(db, "users", user.uid, "classicSettings", "data");
-
-  await setDoc(settingsRef, {
-    ...settings,
-    updatedOn: serverTimestamp(),
-  });
+  const ref = doc(db, "users", user.uid, "classicSettings", "data");
+  await setDoc(ref, { ...settings, updatedOn: serverTimestamp() });
 };
 
 export const getClassicSettings = async () => {
   const user = auth.currentUser;
-  if (!user) throw new Error("User not authenticated");
+  if (!user) return null;
 
-  const settingsRef = doc(db, "users", user.uid, "classicSettings", "data");
-  const snapshot = await getDoc(settingsRef);
-
-  if (snapshot.exists()) {
-    return snapshot.data();
-  }
-  return {};
+  const ref = doc(db, "users", user.uid, "classicSettings", "data");
+  const snapshot = await getDoc(ref);
+  return snapshot.exists() ? snapshot.data() : null;
 };
 
 export const editSidebarSettings = async (settings) => {
   const user = auth.currentUser;
-  if (!user) throw new Error("User not authenticated");
+  if (!user) return;
 
-  const settingsRef = doc(db, "users", user.uid, "sidebarSettings", "data");
-
-  await setDoc(settingsRef, {
-    ...settings,
-    updatedOn: serverTimestamp(),
-  });
+  const ref = doc(db, "users", user.uid, "sidebarSettings", "data");
+  await setDoc(ref, { ...settings, updatedOn: serverTimestamp() });
 };
 
 export const getSidebarSettings = async () => {
   const user = auth.currentUser;
-  if (!user) throw new Error("User not authenticated");
+  if (!user) return null;
 
-  const settingsRef = doc(db, "users", user.uid, "sidebarSettings", "data");
-  const snapshot = await getDoc(settingsRef);
-
-  if (snapshot.exists()) {
-    return snapshot.data();
-  }
-  return {};
+  const ref = doc(db, "users", user.uid, "sidebarSettings", "data");
+  const snapshot = await getDoc(ref);
+  return snapshot.exists() ? snapshot.data() : null;
 };
 
 export const editStandardSettings = async (settings) => {
   const user = auth.currentUser;
-  if (!user) throw new Error("User not authenticated");
+  if (!user) return;
 
-  const settingsRef = doc(db, "users", user.uid, "standardSettings", "data");
-
-  await setDoc(settingsRef, {
-    ...settings,
-    updatedOn: serverTimestamp(),
-  });
+  const ref = doc(db, "users", user.uid, "standardSettings", "data");
+  await setDoc(ref, { ...settings, updatedOn: serverTimestamp() });
 };
 
 export const getStandardSettings = async () => {
   const user = auth.currentUser;
-  if (!user) throw new Error("User not authenticated");
+  if (!user) return null;
 
-  const settingsRef = doc(db, "users", user.uid, "standardSettings", "data");
-  const snapshot = await getDoc(settingsRef);
-
-  if (snapshot.exists()) {
-    return snapshot.data();
-  }
-  return {};
+  const ref = doc(db, "users", user.uid, "standardSettings", "data");
+  const snapshot = await getDoc(ref);
+  return snapshot.exists() ? snapshot.data() : null;
 };

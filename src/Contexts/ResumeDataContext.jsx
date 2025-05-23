@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { getResumeData } from "../config/database";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const ResumeDataContext = createContext();
 
@@ -8,12 +9,24 @@ export const ResumeDataProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchResume = async () => {
-      const data = await getResumeData();
-      if (data) setResume(data);
+    const auth = getAuth();
+
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          const data = await getResumeData();
+          setResume(data || null);
+        } catch (err) {
+          console.error("Failed to fetch resume:", err.message);
+          setResume(null);
+        }
+      } else {
+        setResume(null);
+      }
       setLoading(false);
-    };
-    fetchResume();
+    });
+
+    return () => unsubscribe();
   }, []);
 
   return (

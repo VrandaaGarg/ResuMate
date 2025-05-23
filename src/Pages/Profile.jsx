@@ -31,7 +31,7 @@ const Profile = () => {
         {/* Profile Avatar */}
         <div className="flex items-center justify-center mb-6">
           <div className="w-20 h-20 rounded-full bg-sky-700 text-white flex items-center justify-center text-3xl font-bold uppercase shadow-md">
-            {user?.name?.charAt(0)}
+            {user?.displayName?.charAt(0)}
           </div>
         </div>
 
@@ -50,7 +50,7 @@ const Profile = () => {
               />
             ) : (
               <p className="text-lg font-semibold text-gray-800 mt-1">
-                {user?.name}
+                {user?.displayName || user?.name}
               </p>
             )}
           </div>

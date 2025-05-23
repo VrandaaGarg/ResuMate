@@ -10,16 +10,28 @@ export const StandardSettingProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchSettings = async () => {
-      const data = await getStandardSettings();
-      if (data) setStandardSettings(data);
-      setLoading(false);
+      try {
+        const data = await getStandardSettings();
+        if (data) setStandardSettings(data);
+      } catch (error) {
+        console.error("Failed to fetch standard settings:", error.message);
+        setStandardSettings({}); // fallback to empty settings
+      } finally {
+        setLoading(false);
+      }
     };
     fetchSettings();
   }, []);
 
   useEffect(() => {
-    if (!loading) editStandardSettings(standardSettings);
-  }, [standardSettings]);
+    if (!loading) {
+      try {
+        editStandardSettings(standardSettings);
+      } catch (err) {
+        console.error("Failed to update standard settings:", err.message);
+      }
+    }
+  }, [standardSettings, loading]);
 
   return (
     <StandardSettingContext.Provider

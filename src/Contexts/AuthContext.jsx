@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }) => {
       await signInWithEmailAndPassword(auth, email, password);
       return { success: true };
     } catch (error) {
-      console.error("Firebase login error:", error.code, error.message);
+      console.error("Error:", error.code, error.message);
       return { error: error.message };
     }
   };
