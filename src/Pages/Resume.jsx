@@ -19,6 +19,7 @@ import {
   editStandardSettings,
   updateResume,
 } from "../config/database";
+import showSuccessToast from "../Components/showSuccessToast";
 
 export default function Resume() {
   const navigate = useNavigate();
@@ -63,14 +64,13 @@ export default function Resume() {
     try {
       // Save all settings
       await Promise.all([
+        showSuccessToast("Changes saved successfully!"),
         editClassicSettings(classicSettings),
         editSidebarSettings(sidebarSettings),
         editStandardSettings(standardSettings),
         // editModernSettings(modernSettings),
         updateResume(resume),
       ]);
-
-      toast.success("All changes saved successfully!");
     } catch (error) {
       toast.error("Failed to save changes.");
       console.error("Error while saving:", error);
