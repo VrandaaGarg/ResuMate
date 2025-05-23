@@ -1,26 +1,33 @@
 // src/Contexts/SidebarSettingContext.jsx
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { getSidebarSettings, editSidebarSettings } from "../config/database";
+import { getSidebarSettings } from "../config/database";
 
 const SidebarSettingContext = createContext();
 
 export const SidebarSettingProvider = ({ children }) => {
-  const [sidebarSettings, setSidebarSettings] = useState({});
+  const LOCAL_KEY = "SideBarTemplateSetting";
+
+  const [sidebarSettings, setSidebarSettings] = useState(() => {
+    const stored = localStorage.getItem(LOCAL_KEY);
+    return stored ? JSON.parse(stored) : {};
+  });
+
   const [loading, setLoading] = useState(true);
 
-  // Fetch settings from Firestore on load
   useEffect(() => {
     const fetchSettings = async () => {
-      const data = await getSidebarSettings();
-      if (data) setSidebarSettings(data);
+      const cloudData = await getSidebarSettings();
+      // Use Firestore only if nothing in localStorage
+      if (!localStorage.getItem(LOCAL_KEY) && cloudData) {
+        setSidebarSettings(cloudData);
+      }
       setLoading(false);
     };
     fetchSettings();
   }, []);
 
-  // Sync changes to Firestore
   useEffect(() => {
-    if (!loading) editSidebarSettings(sidebarSettings);
+    localStorage.setItem(LOCAL_KEY, JSON.stringify(sidebarSettings));
   }, [sidebarSettings]);
 
   return (
