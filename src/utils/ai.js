@@ -19,7 +19,7 @@ export async function enhance(text) {
 
 export async function matchJD({ style, jobDescription, resume }) {
   try {
-    const res = await fetch("/api/jd-match", {
+    const res = await fetch(`${API_BASE}/jd-match`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ style, jobDescription, resume }),
@@ -35,7 +35,7 @@ export async function matchJD({ style, jobDescription, resume }) {
 
 export async function atsScore(resume) {
   try {
-    const res = await fetch("/api/ats-score", {
+    const res = await fetch(`${API_BASE}/ats-score`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(resume),
