@@ -15,9 +15,14 @@ const Sidebar = () => {
     },
     { path: "/resume", icon: <FaFileAlt size={18} />, label: "My Resume" },
     {
-      path: "/jod-fit-analyzer",
+      path: "/job-fit-analyzer",
       icon: <FaRobot size={18} />,
       label: "Job Fit Analyzer",
+    },
+    {
+      path: "/ats-checker",
+      icon: <FaRobot size={18} />,
+      label: "ATS Compatibility",
     },
     { path: "/templates", icon: <FaCogs size={18} />, label: "Templates" },
     { path: "/profile", icon: <FaUser size={18} />, label: "Profile" },

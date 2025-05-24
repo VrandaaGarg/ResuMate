@@ -14,6 +14,8 @@ import ResetPassword from "./Pages/ResetPassword";
 
 import Templates from "./Pages/Templates";
 import ForgotPassword from "./Pages/ForgetPassword";
+import JobFitAnalyzer from "./Pages/JobFitAnalyzer";
+import ATSCompatibilityChecker from "./Pages/ATSCompatibilityChecker";
 
 const App = () => {
   return (
@@ -39,6 +41,8 @@ const App = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/resume-form" element={<ResumeForm />} />
         <Route path="/resume" element={<Resume />} />
+        <Route path="/job-fit-analyzer" element={<JobFitAnalyzer />} />
+        <Route path="/ats-checker" element={<ATSCompatibilityChecker />} />
 
         <Route path="/templates" element={<Templates />} />
       </Route>
