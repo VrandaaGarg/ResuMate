@@ -7,4 +7,9 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ["@dnd-kit/core", "@dnd-kit/sortable", "@dnd-kit/utilities"],
   },
+  server: {
+    proxy: {
+      "/api": "http://localhost:5000",
+    },
+  },
 });

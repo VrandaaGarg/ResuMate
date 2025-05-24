@@ -1,6 +1,6 @@
 // src/Contexts/SidebarSettingContext.jsx
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { getSidebarSettings } from "../config/database";
+import { getSidebarSettings } from "../db/database";
 
 const SidebarSettingContext = createContext();
 

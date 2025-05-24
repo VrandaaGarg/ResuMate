@@ -1,6 +1,6 @@
 // src/Contexts/ClassicSettingContext.jsx
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { getClassicSettings } from "../config/database";
+import { getClassicSettings } from "../db/database";
 
 const ClassicSettingContext = createContext();
 

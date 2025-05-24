@@ -14,6 +14,7 @@ import ResetPassword from "./Pages/ResetPassword";
 
 import Templates from "./Pages/Templates";
 import ForgotPassword from "./Pages/ForgetPassword";
+
 const App = () => {
   return (
     <Routes>

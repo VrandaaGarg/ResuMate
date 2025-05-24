@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { getResumeData } from "../config/database";
+import { getResumeData } from "../db/database";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const ResumeDataContext = createContext();

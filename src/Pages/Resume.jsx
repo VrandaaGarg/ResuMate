@@ -18,7 +18,7 @@ import {
   editSidebarSettings,
   editStandardSettings,
   updateResume,
-} from "../config/database";
+} from "../db/database";
 import showSuccessToast from "../Components/showSuccessToast";
 
 export default function Resume() {

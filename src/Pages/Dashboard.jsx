@@ -16,53 +16,42 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-[67lvh]  px-6 md:px-20 py-16 bg-gradient-to-br from-white via-sky-50 to-white">
-      {resumes.length === 0 ? (
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="max-w-xl mx-auto bg-white shadow-lg p-10 rounded-xl text-center"
-        >
-          <h2 className="text-3xl font-bold text-sky-700 mb-2">
-            Welcome to ResuMate 👋
-          </h2>
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-xl mx-auto bg-white shadow-lg p-10 rounded-xl text-center"
+      >
+        <h2 className="text-3xl font-bold text-sky-700 mb-2">
+          Welcome to ResuMate 👋
+        </h2>
 
-          {resume?.name ? (
-            <p className="text-gray-600 mb-6 text-sm">
-              Edit your resume or upload a new one to get started!
-            </p>
-          ) : (
-            <p className="text-gray-600 mb-6 text-sm">
-              You haven't created or uploaded any resumes yet. Let's get
-              started!
-            </p>
-          )}
-
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link
-              to="/resume-form"
-              className="flex items-center justify-center gap-2 px-6 py-2 bg-sky-700 text-white rounded-md hover:bg-sky-800 transition"
-            >
-              {resume?.name ? <FaPen /> : <FaPlus />}
-              {resume?.name ? "Edit Resume" : "Create Resume"}
-            </Link>
-            <Link
-              to="/upload"
-              className="flex items-center justify-center gap-2 px-6 py-2 bg-black text-white rounded-md hover:bg-gray-900 transition"
-            >
-              <FaUpload /> Upload Resume
-            </Link>
-          </div>
-        </motion.div>
-      ) : (
-        <div className="text-center">
-          <h2 className="text-2xl font-semibold text-sky-700">Your Resumes</h2>
-          <p className="text-gray-500 mt-2">
-            {resumes.length} resume(s) found.
+        {resume?.name ? (
+          <p className="text-gray-600 mb-6 text-sm">
+            Edit your resume or upload a new one to get started!
           </p>
-          {/* Add resume cards or list here */}
+        ) : (
+          <p className="text-gray-600 mb-6 text-sm">
+            You haven't created or uploaded any resumes yet. Let's get started!
+          </p>
+        )}
+
+        <div className="flex flex-col sm:flex-row justify-center gap-4">
+          <Link
+            to="/resume-form"
+            className="flex items-center justify-center gap-2 px-6 py-2 bg-sky-700 text-white rounded-md hover:bg-sky-800 transition"
+          >
+            {resume?.name ? <FaPen /> : <FaPlus />}
+            {resume?.name ? "Edit Resume" : "Create Resume"}
+          </Link>
+          <Link
+            to="/upload"
+            className="flex items-center justify-center gap-2 px-6 py-2 bg-black text-white rounded-md hover:bg-gray-900 transition"
+          >
+            <FaUpload /> Upload Resume
+          </Link>
         </div>
-      )}
+      </motion.div>
     </div>
   );
 }
