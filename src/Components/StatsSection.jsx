@@ -10,7 +10,7 @@ const StatsSection = () => {
 
   useEffect(() => {
     if (isInView) {
-      const duration = 5000;
+      const duration = 3001;
       const start = performance.now();
 
       const animateCount = (timestamp) => {
