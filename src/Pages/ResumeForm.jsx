@@ -1275,18 +1275,18 @@ const ResumeForm = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          className="text-center mb-8"
         >
-          <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-white/20 rounded-full px-6 py-2 mb-4 shadow-lg">
+          <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 mb-3 shadow-lg">
             <FaWandMagicSparkles className="text-purple-500" />
-            <span className="text-sm font-medium text-gray-700">Resume Builder</span>
+            <span className="text-xs font-medium text-gray-700">Resume Builder</span>
           </div>
           
-          <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent mb-4 [font-family:'Lilita_One',cursive]">
+          <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent mb-2 [font-family:'Lilita_One',cursive]">
             {steps[step]}
           </h1>
           
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-sm text-gray-600 max-w-2xl mx-auto">
             Step {step + 1} of {steps.length} - Let's build your professional story
           </p>
         </motion.div>
@@ -1296,13 +1296,13 @@ const ResumeForm = () => {
           initial={{ opacity: 0, scaleX: 0 }}
           animate={{ opacity: 1, scaleX: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="mb-12"
+          className="mb-8"
         >
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex justify-between items-center mb-2">
             {steps.map((stepName, index) => (
               <div
                 key={index}
-                className={`flex items-center gap-2 text-sm font-medium ${
+                className={`flex items-center gap-2 text-xs font-medium ${
                   index <= step ? "text-blue-600" : "text-gray-400"
                 }`}
               >
@@ -1310,7 +1310,7 @@ const ResumeForm = () => {
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: index * 0.1 }}
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
+                  className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
                     index < step
                       ? "bg-green-500 text-white"
                       : index === step
@@ -1325,7 +1325,7 @@ const ResumeForm = () => {
             ))}
           </div>
           
-          <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+          <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
             <motion.div
               className="bg-gradient-to-r from-blue-500 to-purple-500 h-full rounded-full"
               initial={{ width: 0 }}
@@ -1342,7 +1342,7 @@ const ResumeForm = () => {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -30 }}
           transition={{ duration: 0.4 }}
-          className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-3xl p-8 md:p-12 shadow-2xl"
+          className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-2xl p-6 md:p-8 shadow-xl"
         >
           {renderStep()}
         </motion.div>
@@ -1352,7 +1352,7 @@ const ResumeForm = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="flex justify-between items-center mt-8"
+          className="flex justify-between items-center mt-6"
         >
           {/* Back Button */}
           <motion.button
@@ -1360,7 +1360,7 @@ const ResumeForm = () => {
             disabled={step === 0}
             whileHover={{ scale: step === 0 ? 1 : 1.05 }}
             whileTap={{ scale: step === 0 ? 1 : 0.95 }}
-            className={`inline-flex items-center gap-3 px-6 py-3 rounded-xl font-semibold shadow-lg transition-all duration-300 ${
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold shadow-md transition-all duration-300 text-xs ${
               step === 0
                 ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                 : "bg-gray-800 hover:bg-gray-700 text-white hover:shadow-xl"
@@ -1386,7 +1386,7 @@ const ResumeForm = () => {
               }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center gap-3 px-8 py-3 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+              className="inline-flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-semibold rounded-lg shadow-md hover:shadow-xl transition-all duration-300 text-xs"
             >
               <FaCheckCircle />
               Build Resume
@@ -1401,7 +1401,7 @@ const ResumeForm = () => {
               }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center gap-3 px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+              className="inline-flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold rounded-lg shadow-md hover:shadow-xl transition-all duration-300 text-xs"
             >
               Next
               <FaArrowRight />
