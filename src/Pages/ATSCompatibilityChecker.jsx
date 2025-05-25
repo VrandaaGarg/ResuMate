@@ -1,151 +1,420 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useResumeData } from "../Contexts/ResumeDataContext";
 import { atsScore } from "../utils/ai";
-import { FaRobot } from "react-icons/fa";
-import { FaArrowRotateRight } from "react-icons/fa6";
-import { motion } from "framer-motion";
+import { FaRobot, FaCheckCircle, FaExclamationTriangle, FaLightbulb, FaSyncAlt, FaFileAlt, FaBullseye, FaChartBar, FaListAlt, FaBrain, FaRocket, FaSearch, FaThumbsUp, FaThumbsDown, FaSpinner } from "react-icons/fa";
+import { FaArrowRotateRight, FaWandMagicSparkles, FaStar } from "react-icons/fa6";
+import { motion, AnimatePresence } from "framer-motion";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Doughnut } from "react-chartjs-2";
+import showErrorToast from "../Components/showErrorToast";
+
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+const FeedbackItem = ({ type, items, index = 0 }) => {
+  if (!items || items.length === 0) return null;
+  const isSuggestion = type === "suggestions";
+  return (
+    <motion.div 
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay: index * 0.1 }}
+      className={`mt-3 p-4 rounded-xl border transition-all duration-300 ${
+        isSuggestion 
+          ? "bg-emerald-50/80 border-emerald-200/60 hover:bg-emerald-100/60" 
+          : "bg-red-50/80 border-red-200/60 hover:bg-red-100/60"
+      }`}
+    >
+      <h5 className={`font-semibold mb-2 flex items-center gap-2 text-md ${
+        isSuggestion ? "text-emerald-700" : "text-red-700"
+      }`}>
+        {isSuggestion ? <FaThumbsUp /> : <FaThumbsDown />}
+        {isSuggestion ? "Our Suggestions" : "Areas to Improve"}
+      </h5>
+      <ul className="list-disc list-inside text-sm space-y-1.5 pl-2">
+        {items.map((item, i) => (
+          <motion.li 
+            key={i} 
+            className={isSuggestion ? "text-emerald-600" : "text-red-600"}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3, delay: (index * 0.1) + (i * 0.05) }}
+          >
+            {item}
+          </motion.li>
+        ))}
+      </ul>
+    </motion.div>
+  );
+};
+
+const LoadingScreen = () => (
+  <motion.div
+    key="loading-ats"
+    initial={{ opacity: 0, y: 30 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -30 }}
+    transition={{ duration: 0.5 }}
+    className="relative z-10 max-w-xl mx-auto bg-white/60 backdrop-blur-md border border-white/40 shadow-xl p-10 md:p-12 rounded-3xl text-center"
+  >
+    <motion.div
+      animate={{ rotate: 360 }}
+      transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+      className="w-20 h-20 mx-auto mb-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center shadow-lg"
+    >
+      <FaRobot className="text-4xl text-white" />
+    </motion.div>
+    <h2 className="text-2xl md:text-3xl font-semibold text-slate-800 mb-4">Checking ATS Compatibility...</h2>
+    <p className="text-slate-600 mb-6">
+      Our AI is analyzing your resume's ATS readiness. This might take a few moments.
+    </p>
+    <div className="w-full bg-slate-200/60 rounded-full h-2.5 overflow-hidden">
+      <motion.div
+        className="bg-gradient-to-r from-blue-500 to-purple-500 h-2.5 rounded-full"
+        initial={{ width: "0%" }}
+        animate={{ width: "100%" }}
+        transition={{ duration: 4, ease: "linear" }}
+      />
+    </div>
+    <p className="text-sm text-slate-500 mt-4">Scanning for optimization opportunities...</p>
+  </motion.div>
+);
 
 export default function ATSCompatibilityChecker() {
   const { resume } = useResumeData();
-  const [loading, setLoading] = useState(false);
+  const [currentStep, setCurrentStep] = useState("intro"); // "intro", "loading", "result"
   const [atsResult, setAtsResult] = useState(() => {
     const saved = localStorage.getItem("atsResult");
-    return saved ? JSON.parse(saved) : null;
+    if (saved) {
+      // If there's a saved result, start at the result step
+      // This might need adjustment if we always want to start at intro
+      // For now, let's assume if 'saved' exists, we show results.
+      // setCurrentStep("result"); // This line causes issues with initial state setting.
+      return JSON.parse(saved);
+    }
+    return null;
   });
 
+  useEffect(() => {
+    if (atsResult) {
+      localStorage.setItem("atsResult", JSON.stringify(atsResult));
+      setCurrentStep("result"); // Transition to result step when atsResult is set
+    }
+  }, [atsResult]);
+  
+  // Ensure currentStep is 'result' if atsResult exists on mount
+  useEffect(() => {
+    if (localStorage.getItem("atsResult")) {
+      setCurrentStep("result");
+    }
+  }, []);
+
+
   const handleCheckATS = async () => {
-    setLoading(true);
-    const result = await atsScore(resume);
-    setAtsResult(result);
-    localStorage.setItem("atsResult", JSON.stringify(result));
-    setLoading(false);
+    if (!resume || !resume.name) {
+      showErrorToast("Please create or upload your resume first.");
+      return;
+    }
+    setCurrentStep("loading");
+    try {
+      // Simulate API call delay for loading screen visibility
+      await new Promise(resolve => setTimeout(resolve, 3000)); 
+      const result = await atsScore(resume);
+      setAtsResult(result);
+      // setCurrentStep will be updated by the useEffect watching atsResult
+    } catch (error) {
+      showErrorToast("Failed to check ATS compatibility. Please try again.");
+      console.error("ATS Check Error:", error);
+      setCurrentStep("intro"); // Go back to intro on error
+    }
   };
 
   const handleReset = () => {
     setAtsResult(null);
     localStorage.removeItem("atsResult");
+    setCurrentStep("intro");
   };
 
+  const getScoreColor = (score) => {
+    if (score >= 80) return "#10b981"; // Green
+    if (score >= 60) return "#f59e0b"; // Yellow
+    return "#ef4444"; // Red
+  };
+  
+  const getScoreTailwindColor = (score) => {
+    if (score >= 80) return "text-green-600";
+    if (score >= 60) return "text-yellow-600";
+    return "text-red-600";
+  };
+
+
   return (
-    <div className="min-h-[70lvh] px-6 md:px-20 py-16 bg-gradient-to-br from-white via-sky-50 to-white">
-      {/* Step 1: Intro */}
-      {!atsResult && (
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="max-w-xl mx-auto bg-white shadow-lg p-10 rounded-xl text-center"
-        >
-          <div className="flex items-center justify-center gap-3 text-sky-700 text-2xl font-bold">
-            <FaRobot className="text-3xl" />
-            ATS Compatibility Checker
-          </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50/80 via-white to-slate-100/60 px-6 md:px-20 py-16 overflow-hidden relative">
+      {/* Subtle Background Elements */}
+      <div className="absolute -top-40 -left-40 w-96 h-96 bg-gradient-to-r from-blue-100/20 to-cyan-100/20 blur-3xl rounded-full z-0" />
+      <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] bg-gradient-to-r from-purple-100/20 to-pink-100/20 blur-3xl rounded-full z-0" />
+      <div className="absolute top-1/2 left-1/4 w-80 h-80 bg-gradient-to-r from-green-100/15 to-emerald-100/15 blur-3xl rounded-full z-0" />
 
-          <p className="text-sm md:text-base text-gray-600 mt-3">
-            ATS (Applicant Tracking System) is used by recruiters to scan
-            resumes. Let’s see how your resume performs and get tips to boost
-            your chances!
-          </p>
+      {/* Grid Pattern */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-30" />
 
-          <button
-            onClick={handleCheckATS}
-            disabled={loading}
-            className="mt-6 px-6 py-2 rounded-full bg-gradient-to-r from-sky-500 to-sky-700 text-white font-semibold shadow hover:scale-105 transition-all duration-300 ease-in-out disabled:opacity-50"
+      <AnimatePresence mode="wait">
+        {currentStep === "intro" && (
+          <motion.div
+            key="intro-ats"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -30 }}
+            transition={{ duration: 0.6 }}
+            className="relative z-10 max-w-2xl mx-auto"
           >
-            {loading ? (
-              <span className="flex items-center gap-2 justify-center">
-                <FaArrowRotateRight className="animate-spin" />
-                Checking...
-              </span>
-            ) : (
-              "Check Now"
-            )}
-          </button>
-        </motion.div>
-      )}
-
-      {/* Step 2: Result */}
-      {atsResult && (
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="max-w-3xl mx-auto bg-white shadow-lg p-10 rounded-xl"
-        >
-          <h2 className="text-2xl font-bold text-sky-700 text-center mb-4">
-            ATS Compatibility Report
-          </h2>
-
-          <div className="text-center mb-6">
-            <p className="text-sm text-gray-500">ATS Score</p>
-            <p className="text-4xl font-bold text-sky-600">
-              {atsResult.atsScore}%
-            </p>
-          </div>
-
-          {/* Section Feedback */}
-          {atsResult.sectionWiseFeedback && (
-            <div className="space-y-4 mb-6">
-              {Object.entries(atsResult.sectionWiseFeedback).map(
-                ([section, feedback]) => (
-                  <div key={section} className="mb-4">
-                    <h4 className="font-semibold text-sky-700 capitalize">
-                      {section}
-                    </h4>
-
-                    {/* Missing items */}
-                    {feedback.missing?.length > 0 && (
-                      <div className="text-sm text-red-600 mb-1">
-                        <strong>Missing:</strong>
-                        <ul className="list-disc list-inside ml-4">
-                          {feedback.missing.map((item, i) => (
-                            <li key={i}>{item}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-
-                    {/* Suggestions */}
-                    {feedback.suggestions?.length > 0 && (
-                      <div className="text-sm text-emerald-700">
-                        <strong>Suggestions:</strong>
-                        <ul className="list-disc list-inside ml-4">
-                          {feedback.suggestions.map((item, i) => (
-                            <li key={i}>{item}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
+            <div className="bg-white/60 backdrop-blur-md border border-white/40 shadow-xl rounded-3xl overflow-hidden">
+              <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 p-8 text-center text-white relative">
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                  className="absolute -top-10 -right-10 w-40 h-40 border border-white/10 rounded-full"
+                />
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                >
+                  <div className="inline-flex items-center justify-center w-20 h-20 bg-white/10 backdrop-blur-sm rounded-full mb-4">
+                    <FaRobot className="text-4xl" />
                   </div>
-                )
-              )}
+                  <h1 className="text-3xl md:text-4xl font-bold mb-2">
+                    ATS Compatibility Checker
+                  </h1>
+                  <p className="text-white/80 text-lg">
+                    Ensure your resume passes through Applicant Tracking Systems
+                  </p>
+                </motion.div>
+              </div>
+              <div className="p-8 md:p-12">
+                <p className="text-slate-700 mb-8 text-center leading-relaxed">
+                  Most companies use ATS to filter resumes. Our AI checker analyzes your resume for ATS-friendliness, helping you identify areas for improvement to increase your chances of getting noticed by recruiters.
+                </p>
+                <motion.button
+                  onClick={handleCheckATS}
+                  disabled={!resume?.name}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full py-4 bg-gradient-to-r from-slate-900 to-slate-700 text-white rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  <FaSearch />
+                  Check My Resume
+                </motion.button>
+                {!resume?.name && (
+                  <p className="text-xs text-red-500 mt-4 text-center">Please create or upload a resume first to use this feature.</p>
+                )}
+              </div>
             </div>
-          )}
+          </motion.div>
+        )}
 
-          {/* General Tips */}
-          {atsResult.generalTips && (
-            <div>
-              <h4 className="font-semibold text-emerald-700 mb-1">
-                📈 General Pro Tips
-              </h4>
-              <ul className="list-disc list-inside text-sm text-gray-800 space-y-1">
-                {atsResult.generalTips.map((tip, i) => (
-                  <li key={i}>{tip}</li>
-                ))}
-              </ul>
-            </div>
-          )}
+        {currentStep === "loading" && <LoadingScreen />}
 
-          <div className="text-right mt-6">
-            <button
-              onClick={handleReset}
-              className="text-sm px-4 py-2 bg-gradient-to-r from-sky-500 to-sky-700 text-white hover:scale-105 transition transform rounded"
+        {currentStep === "result" && atsResult && (
+          <motion.div
+            key="result-ats"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -30 }}
+            transition={{ duration: 0.8 }}
+            className="relative z-10 max-w-7xl mx-auto"
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center mb-12"
             >
-              Recheck
-            </button>
-          </div>
-        </motion.div>
-      )}
+              <div className="inline-flex items-center gap-2 bg-white/60 backdrop-blur-sm border border-white/40 rounded-full px-6 py-3 mb-4 shadow-lg">
+                <FaStar className="text-yellow-500" />
+                <span className="text-sm font-medium text-slate-700">ATS Report Ready</span>
+              </div>
+              <h1 className="text-4xl md:text-6xl font-bold text-slate-900 mb-4">
+                ATS Compatibility Report
+              </h1>
+              <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+                Detailed analysis of your resume's ATS performance
+              </p>
+            </motion.div>
+
+            <div className="grid lg:grid-cols-3 gap-8 items-start">
+              {/* Left Column: Score Panel */}
+              <motion.div 
+                className="lg:col-span-1 bg-white/60 backdrop-blur-md border border-white/40 rounded-3xl p-8 shadow-xl space-y-6 sticky top-24"
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+              >
+                <h2 className="text-2xl font-semibold text-slate-800 text-center mb-6">Overall ATS Score</h2>
+                <div className="relative w-56 h-56 mx-auto mb-6">
+                  <Doughnut
+                    data={{
+                      datasets: [
+                        {
+                          data: [atsResult.atsScore, 100 - atsResult.atsScore],
+                          backgroundColor: [getScoreColor(atsResult.atsScore), "#e2e8f0"],
+                          borderColor: ["#ffffff", "#ffffff"],
+                          borderWidth: 4,
+                          circumference: 270, 
+                          rotation: -135,
+                          cutout: "75%",
+                        },
+                      ],
+                    }}
+                    options={{
+                      cutout: "75%",
+                      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                      aspectRatio: 1, 
+                    }}
+                  />
+                  <div className="absolute inset-0 flex flex-col items-center justify-center">
+                    <motion.span 
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ duration: 0.8, delay: 0.5 }}
+                      className={`text-5xl font-bold ${getScoreTailwindColor(atsResult.atsScore)}`}
+                    >
+                      {atsResult.atsScore}%
+                    </motion.span>
+                     <span className="text-sm text-slate-500 font-medium mt-1">ATS Friendliness</span>
+                  </div>
+                </div>
+                
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.7 }}
+                  className={`p-4 rounded-xl border ${
+                    atsResult.atsScore >= 80 ? 'bg-green-50/80 border-green-200/60' :
+                    atsResult.atsScore >= 60 ? 'bg-yellow-50/80 border-yellow-200/60' :
+                    'bg-red-50/80 border-red-200/60'
+                  }`}
+                >
+                  <p className={`font-semibold ${getScoreTailwindColor(atsResult.atsScore)}`}>
+                    {atsResult.atsScore >= 80 ? '🎉 Excellent ATS Compatibility!' :
+                     atsResult.atsScore >= 60 ? '👍 Good ATS Potential' :
+                     '⚠️ Needs ATS Optimization'}
+                  </p>
+                  <p className="text-sm text-slate-600 mt-1">
+                    {atsResult.atsScore >= 80 ? 'Your resume is well-structured for ATS.' :
+                     atsResult.atsScore >= 60 ? 'Some tweaks can improve ATS parsing.' :
+                     'Consider significant updates for better ATS performance.'}
+                  </p>
+                </motion.div>
+
+                <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={handleReset}
+                    className="w-full mt-6 px-6 py-3 rounded-xl bg-gradient-to-r from-slate-900 to-slate-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2"
+                >
+                    <FaArrowRotateRight /> Recheck Resume
+                </motion.button>
+              </motion.div>
+
+              {/* Right Column: Feedback Details */}
+              <motion.div 
+                className="lg:col-span-2 space-y-8"
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+              >
+                {/* Section-wise Feedback */}
+                {atsResult.sectionWiseFeedback && Object.keys(atsResult.sectionWiseFeedback).length > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 }}
+                    className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300"
+                  >
+                    <div className="bg-gradient-to-r from-blue-50/80 to-cyan-50/80 border border-blue-200/60 rounded-2xl p-6">
+                      <h3 className="text-2xl font-semibold text-blue-700 mb-6 flex items-center gap-3">
+                        <div className="p-2 bg-blue-500 rounded-full">
+                          <FaListAlt className="text-white" />
+                        </div>
+                        Section-wise Breakdown
+                      </h3>
+                      <div className="space-y-6">
+                        {Object.entries(atsResult.sectionWiseFeedback).map(
+                          ([section, feedback], index) => (
+                            <motion.div 
+                              key={section} 
+                              className="p-5 bg-white/80 border border-blue-100/60 rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300"
+                              initial={{ opacity: 0, y: 15 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.4, delay: 0.1 * index }}
+                            >
+                              <h4 className="font-bold text-blue-800 capitalize mb-3 text-xl">
+                                {section.replace(/([A-Z])/g, ' $1').trim()}
+                              </h4>
+                              <FeedbackItem type="missing" items={feedback.missing} index={index} />
+                              <FeedbackItem type="suggestions" items={feedback.suggestions} index={index + 0.5} />
+                              {(!feedback.missing || feedback.missing.length === 0) && (!feedback.suggestions || feedback.suggestions.length === 0) && (
+                                <p className="text-sm text-slate-500 italic mt-2">No specific feedback for this section. Looks good!</p>
+                              )}
+                            </motion.div>
+                          )
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* General Tips */}
+                {atsResult.generalTips && atsResult.generalTips.length > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.6 }}
+                    className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300"
+                  >
+                     <div className="bg-gradient-to-r from-emerald-50/80 to-green-50/80 border border-emerald-200/60 rounded-2xl p-6">
+                      <h3 className="text-2xl font-semibold text-emerald-700 mb-6 flex items-center gap-3">
+                        <div className="p-2 bg-emerald-500 rounded-full">
+                          <FaLightbulb className="text-white" />
+                        </div>
+                        General Pro Tips for ATS
+                      </h3>
+                      <ul className="space-y-3">
+                        {atsResult.generalTips.map((tip, i) => (
+                          <motion.li 
+                            key={i}
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.1 * i }}
+                            className="flex items-start gap-3 text-slate-700 leading-relaxed text-md"
+                          >
+                            <FaCheckCircle className="text-emerald-600 mt-1 flex-shrink-0" />
+                            {tip}
+                          </motion.li>
+                        ))}
+                      </ul>
+                    </div>
+                  </motion.div>
+                )}
+                
+                {(!atsResult.sectionWiseFeedback || Object.keys(atsResult.sectionWiseFeedback).length === 0) && 
+                 (!atsResult.generalTips || atsResult.generalTips.length === 0) && (
+                  <motion.div 
+                    className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-8 shadow-lg text-center"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 }}
+                  >
+                    <FaRobot size={56} className="text-slate-400 mx-auto mb-6" />
+                    <h3 className="text-xl font-semibold text-slate-700 mb-2">All Clear!</h3>
+                    <p className="text-slate-600">No specific feedback or tips available at the moment.</p>
+                    <p className="text-sm text-slate-500 mt-1">Your resume appears to be well-optimized for ATS based on general checks.</p>
+                  </motion.div>
+                )}
+              </motion.div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

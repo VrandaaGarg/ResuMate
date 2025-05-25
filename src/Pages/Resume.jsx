@@ -7,12 +7,11 @@ import { useResumeData } from "../Contexts/ResumeDataContext";
 import { useClassicSetting } from "../Contexts/ClassicSettingContext";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FaUserEdit } from "react-icons/fa";
+import { FaUserEdit, FaFileAlt, FaEdit, FaSave, FaPalette, FaEye, FaCog, FaDownload, FaShare } from "react-icons/fa";
 import { useSidebarSetting } from "../Contexts/SidebarSettingContext";
 import StandardTemplate from "../Components/Templates/StandardTemplate";
 import { useStandardSetting } from "../Contexts/StandardSettingContext";
 import { useModernSetting } from "../Contexts/ModernSettingContext";
-// import ModernTemplate from "../Components/Templates/ModernTemplate";
 import {
   editClassicSettings,
   editSidebarSettings,
@@ -20,6 +19,7 @@ import {
   updateResume,
 } from "../db/database";
 import showSuccessToast from "../Components/showSuccessToast";
+import { FaWandMagicSparkles, FaStar } from "react-icons/fa6";
 
 export default function Resume() {
   const navigate = useNavigate();
@@ -27,7 +27,6 @@ export default function Resume() {
   const { classicSettings, setClassicSettings } = useClassicSetting();
   const { sidebarSettings, setSidebarSettings } = useSidebarSetting();
   const { standardSettings, setStandardSettings } = useStandardSetting();
-  // const { modernSettings, setModernSettings } = useModernSetting();
 
   const [selectedTemplate, setSelectedTemplate] = useState(
     () => localStorage.getItem("selectedTemplate") || "classic"
@@ -37,8 +36,6 @@ export default function Resume() {
   useEffect(() => {
     localStorage.setItem("selectedTemplate", selectedTemplate);
   }, [selectedTemplate]);
-
-  // Load from localStorage
 
   const [sectionOrder, setSectionOrder] = useState([
     "details",
@@ -62,151 +59,314 @@ export default function Resume() {
 
   const handleSaveAllChanges = async () => {
     try {
-      // Save all settings
       await Promise.all([
-        showSuccessToast("Changes saved successfully!"),
         editClassicSettings(classicSettings),
         editSidebarSettings(sidebarSettings),
         editStandardSettings(standardSettings),
-        // editModernSettings(modernSettings),
         updateResume(resume),
       ]);
+      showSuccessToast("Changes saved successfully!");
     } catch (error) {
-      toast.error("Failed to save changes.");
+      showErrorToast("Failed to save changes.");
       console.error("Error while saving:", error);
     }
   };
 
+  const templates = [
+    { value: "classic", label: "Classic", icon: "📄", description: "Traditional and professional" },
+    { value: "sidebar", label: "Sidebar", icon: "📋", description: "Modern sidebar layout" },
+    { value: "standard", label: "Standard", icon: "📝", description: "Clean and minimal" },
+  ];
+
   if (!resume?.name || resume.name.trim() === "") {
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="flex flex-col items-center justify-center min-h-[60vh] text-center p-6  bg-gradient-to-br from-white via-sky-50 to-white"
-      >
-        <FaUserEdit className="text-5xl text-sky-700 mb-4 animate-pulse" />
-        <h2 className="text-2xl font-semibold text-gray-800 mb-2">
-          Resume details missing
-        </h2>
-        <p className="text-gray-600 mb-6">
-          Please fill in your details to get started with your resume.
-        </p>
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => navigate("/resume-form")}
-          className="bg-sky-700 hover:bg-sky-800 text-white px-6 py-2 rounded-full font-medium transition-all duration-300"
+      <div className="min-h-screen bg-gradient-to-br from-slate-50/80 via-white to-slate-100/60 px-6 md:px-20 py-16 overflow-hidden relative">
+        {/* Background Elements */}
+        <div className="absolute -top-40 -left-40 w-96 h-96 bg-gradient-to-r from-blue-100/20 to-cyan-100/20 blur-3xl rounded-full z-0" />
+        <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] bg-gradient-to-r from-purple-100/20 to-pink-100/20 blur-3xl rounded-full z-0" />
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="relative z-10 max-w-2xl mx-auto text-center"
         >
-          Add Details
-        </motion.button>
-      </motion.div>
+          <div className="bg-white/60 backdrop-blur-md border border-white/40 shadow-xl rounded-3xl p-12">
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl"
+            >
+              <FaUserEdit className="text-4xl text-white" />
+            </motion.div>
+            
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">
+              Resume Details Missing
+            </h2>
+            <p className="text-slate-600 mb-8 leading-relaxed">
+              Please fill in your details to get started with creating your professional resume.
+            </p>
+            
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => navigate("/resume-form")}
+              className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-3 mx-auto"
+            >
+              <FaWandMagicSparkles />
+              Create Resume
+            </motion.button>
+          </div>
+        </motion.div>
+      </div>
     );
   }
 
   return (
-    <div className=" p-2.5 md:p-6 bg-gradient-to-br from-white via-sky-50 to-white   ">
-      <div className="max-w-5xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="flex justify-between items-start">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <h1 className="text-sm md:text-2xl font-bold text-sky-800">
-              Your Resume
-            </h1>
-            <p className="text-sm text-gray-500">
-              Mode: {isEditable ? "Edit" : "View"}
-            </p>
-          </motion.div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50/80 via-white to-slate-100/60 px-6 md:px-20 py-16 overflow-hidden relative">
+      {/* Background Elements */}
+      <div className="absolute -top-40 -left-40 w-96 h-96 bg-gradient-to-r from-blue-100/20 to-cyan-100/20 blur-3xl rounded-full z-0" />
+      <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] bg-gradient-to-r from-purple-100/20 to-pink-100/20 blur-3xl rounded-full z-0" />
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="flex gap-2.5"
-          >
-            <div className="flex flex-col md:flex-row items-center gap-1  md:gap-3">
-              <label className="text-xs md:text-sm font-medium text-gray-700">
-                Template:
-              </label>
-              <select
-                value={selectedTemplate}
-                onChange={(e) => setSelectedTemplate(e.target.value)}
-                className="border border-gray-300 rounded px-2 md:px-3 py-1 text-xs md:text-sm"
-              >
-                <option value="classic">Classic</option>
-                <option value="sidebar">Sidebar</option>
-                <option value="standard">Standard</option>
-                {/* <option value="modern">Modern</option> */}
-              </select>
+      {/* Grid Pattern */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-30" />
+
+      <div className="relative z-10 max-w-7xl mx-auto">
+        {/* Enhanced Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12"
+        >
+          <div className="inline-flex items-center gap-2 bg-white/60 backdrop-blur-sm border border-white/40 rounded-full px-6 py-2 mb-4 shadow-lg">
+            <FaStar className="text-yellow-500" />
+            <span className="text-sm font-medium text-slate-700">Resume Builder</span>
+          </div>
+          
+          <h1 className="text-4xl md:text-6xl font-bold text-slate-900 mb-4">
+            Your Professional Resume
+          </h1>
+          
+          <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+            Customize and perfect your resume with our intuitive editor
+          </p>
+        </motion.div>
+
+        {/* Control Panel */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="bg-white/60 backdrop-blur-md border border-white/40 rounded-3xl p-6 md:p-8 shadow-xl mb-8"
+        >
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
+            {/* Template Selection */}
+            <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4 flex-1">
+              <div className="flex items-center gap-2">
+                <FaPalette className="text-purple-600" />
+                <label className="text-lg font-semibold text-slate-700">
+                  Template:
+                </label>
+              </div>
+              
+              <div className="flex flex-wrap gap-3">
+                {templates.map((template) => (
+                  <motion.button
+                    key={template.value}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => setSelectedTemplate(template.value)}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-xl border transition-all duration-300 ${
+                      selectedTemplate === template.value
+                        ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white border-blue-300 shadow-lg"
+                        : "bg-white/80 text-slate-700 border-slate-200 hover:bg-white hover:shadow-md"
+                    }`}
+                  >
+                    <span className="text-lg">{template.icon}</span>
+                    <div className="text-left">
+                      <div className="font-semibold text-sm">{template.label}</div>
+                      <div className={`text-xs ${selectedTemplate === template.value ? 'text-white/80' : 'text-slate-500'}`}>
+                        {template.description}
+                      </div>
+                    </div>
+                  </motion.button>
+                ))}
+              </div>
             </div>
-            <div className="">
-              <button
+
+            {/* Action Buttons */}
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 px-4 py-2 bg-slate-100/80 rounded-xl">
+                <FaEye className={`${isEditable ? 'text-blue-600' : 'text-slate-500'}`} />
+                <span className="text-sm font-medium text-slate-700">
+                  Mode: {isEditable ? "Edit" : "View"}
+                </span>
+              </div>
+              
+              <motion.button
                 onClick={() => {
-                  if (isEditable) handleSaveAllChanges(); // Only save if exiting edit mode
+                  if (isEditable) handleSaveAllChanges();
                   toggleEditing();
                 }}
-                className="px-2 md:px-4 py-1 md:py-1.5 text-xs md:text-sm rounded bg-sky-700 hover:bg-sky-800 text-white font-medium transition"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`px-6 py-3 rounded-xl font-semibold shadow-lg transition-all duration-300 flex items-center gap-2 ${
+                  isEditable
+                    ? "bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white"
+                    : "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+                }`}
               >
-                {isEditable ? "Save Changes" : "Edit"}
-              </button>
+                {isEditable ? (
+                  <>
+                    <FaSave />
+                    Save Changes
+                  </>
+                ) : (
+                  <>
+                    <FaEdit />
+                    Edit Resume
+                  </>
+                )}
+              </motion.button>
             </div>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
 
         {/* Resume Preview */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="bg-white shadow p-2.5 md:p-6 rounded-lg relative"
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="bg-white/60 backdrop-blur-md border border-white/40 shadow-2xl rounded-3xl overflow-hidden"
         >
-          {selectedTemplate === "sidebar" && (
-            <SidebarTemplate
-              resume={resume}
-              onChange={setResume}
-              sectionOrder={sectionOrder}
-              visibleSections={visibleSections}
-              settings={sidebarSettings}
-              onSettingsChange={setSidebarSettings}
-            />
-          )}
+          {/* Preview Header */}
+          <div className="bg-gradient-to-r from-slate-100/80 to-blue-50/80 p-6 border-b border-white/20">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-white/80 rounded-xl shadow-sm">
+                  <FaFileAlt className="text-blue-600" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-slate-900">Resume Preview</h3>
+                  <p className="text-sm text-slate-600">
+                    {resume.name}'s Professional Resume
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="p-2 bg-white/80 hover:bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 text-slate-600 hover:text-blue-600"
+                  title="Download PDF"
+                >
+                  <FaDownload />
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="p-2 bg-white/80 hover:bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 text-slate-600 hover:text-green-600"
+                  title="Share Resume"
+                >
+                  <FaShare />
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="p-2 bg-white/80 hover:bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 text-slate-600 hover:text-purple-600"
+                  title="Settings"
+                >
+                  <FaCog />
+                </motion.button>
+              </div>
+            </div>
+          </div>
 
-          {selectedTemplate === "classic" && (
-            <ClassicTemplate
-              resume={resume}
-              onChange={setResume}
-              sectionOrder={sectionOrder}
-              visibleSections={visibleSections}
-              settings={classicSettings}
-              onSettingsChange={setClassicSettings}
-            />
-          )}
+          {/* Template Content */}
+          <div className="p-6 md:p-8">
+            <motion.div
+              key={selectedTemplate}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+              className="bg-white rounded-2xl shadow-lg border border-slate-200/50 overflow-hidden"
+            >
+              {selectedTemplate === "sidebar" && (
+                <SidebarTemplate
+                  resume={resume}
+                  onChange={setResume}
+                  sectionOrder={sectionOrder}
+                  visibleSections={visibleSections}
+                  settings={sidebarSettings}
+                  onSettingsChange={setSidebarSettings}
+                />
+              )}
 
-          {selectedTemplate === "standard" && (
-            <StandardTemplate
-              resume={resume}
-              onChange={setResume}
-              sectionOrder={sectionOrder}
-              visibleSections={visibleSections}
-              settings={standardSettings}
-              onSettingsChange={setStandardSettings}
-            />
-          )}
+              {selectedTemplate === "classic" && (
+                <ClassicTemplate
+                  resume={resume}
+                  onChange={setResume}
+                  sectionOrder={sectionOrder}
+                  visibleSections={visibleSections}
+                  settings={classicSettings}
+                  onSettingsChange={setClassicSettings}
+                />
+              )}
 
-          {/* {selectedTemplate === "modern" && (
-            <ModernTemplate
-              resume={resume}
-              onChange={setResume}
-              sectionOrder={sectionOrder}
-              visibleSections={visibleSections}
-              settings={modernSettings}
-              onSettingsChange={setModernSettings}
-            />
-          )} */}
+              {selectedTemplate === "standard" && (
+                <StandardTemplate
+                  resume={resume}
+                  onChange={setResume}
+                  sectionOrder={sectionOrder}
+                  visibleSections={visibleSections}
+                  settings={standardSettings}
+                  onSettingsChange={setStandardSettings}
+                />
+              )}
+            </motion.div>
+          </div>
+        </motion.div>
+
+        {/* Quick Actions */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="mt-8 text-center"
+        >
+          <div className="inline-flex items-center gap-4 bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-4 shadow-lg">
+            <span className="text-sm font-medium text-slate-700">Quick Actions:</span>
+            
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => navigate("/job-fit-analyzer")}
+              className="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl text-sm font-medium shadow-md hover:shadow-lg transition-all duration-300"
+            >
+              Analyze Job Fit
+            </motion.button>
+            
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => navigate("/ats-checker")}
+              className="px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-xl text-sm font-medium shadow-md hover:shadow-lg transition-all duration-300"
+            >
+              Check ATS Score
+            </motion.button>
+            
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => navigate("/resume-form")}
+              className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl text-sm font-medium shadow-md hover:shadow-lg transition-all duration-300"
+            >
+              Edit Details
+            </motion.button>
+          </div>
         </motion.div>
       </div>
     </div>
