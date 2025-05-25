@@ -4,13 +4,14 @@ import { useAuth } from "../Contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import showSuccessToast from "../Components/showSuccessToast";
+import { motion } from "framer-motion";
 
 const Profile = () => {
   const { user, logout, updateUser } = useAuth();
   const navigate = useNavigate();
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState({
-    name: user?.name || "",
+    name: user?.displayName || "",
     email: user?.email || "",
   });
 
@@ -27,7 +28,12 @@ const Profile = () => {
 
   return (
     <div className="min-h-[67lvh] flex items-center justify-center px-4 bg-gradient-to-br from-white via-sky-50 to-white">
-      <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-md bg-white p-8 rounded-2xl shadow-xl border border-gray-100"
+      >
         {/* Profile Avatar */}
         <div className="flex items-center justify-center mb-6">
           <div className="w-20 h-20 rounded-full bg-sky-700 text-white flex items-center justify-center text-3xl font-bold uppercase shadow-md">
@@ -62,6 +68,7 @@ const Profile = () => {
             {editing ? (
               <input
                 name="email"
+                disabled
                 value={form.email}
                 onChange={handleChange}
                 className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
@@ -107,7 +114,7 @@ const Profile = () => {
             </button>
           </div>
         )}
-      </div>
+      </motion.div>
     </div>
   );
 };

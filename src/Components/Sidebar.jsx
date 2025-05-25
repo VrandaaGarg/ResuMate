@@ -1,6 +1,7 @@
 import { FaUser, FaFileAlt, FaHome, FaCogs } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import classNames from "classnames";
+import { FaRobot } from "react-icons/fa6";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -13,6 +14,16 @@ const Sidebar = () => {
       label: "Edit Resume",
     },
     { path: "/resume", icon: <FaFileAlt size={18} />, label: "My Resume" },
+    {
+      path: "/job-fit-analyzer",
+      icon: <FaRobot size={18} />,
+      label: "Job Fit Analyzer",
+    },
+    {
+      path: "/ats-checker",
+      icon: <FaRobot size={18} />,
+      label: "ATS Compatibility",
+    },
     { path: "/templates", icon: <FaCogs size={18} />, label: "Templates" },
     { path: "/profile", icon: <FaUser size={18} />, label: "Profile" },
   ];

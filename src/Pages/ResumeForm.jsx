@@ -8,6 +8,8 @@ import RichTextInput from "../Components/RichTextInput";
 import { GoLocation } from "react-icons/go";
 import { GiBookCover } from "react-icons/gi";
 import { GrTechnology } from "react-icons/gr";
+import { FaCopy } from "react-icons/fa";
+import { BsArrowClockwise } from "react-icons/bs";
 import {
   FiUser,
   FiBookOpen,
@@ -33,7 +35,9 @@ import {
 } from "react-icons/fa";
 import { TbWorld } from "react-icons/tb";
 import showSuccessToast from "../Components/showSuccessToast";
-import { createResume } from "../config/database"; // 🔥 Firestore function
+import { createResume } from "../db/database"; // 🔥 Firestore function
+import { enhance } from "../utils/ai";
+import { FaWandMagicSparkles } from "react-icons/fa6"; // AI icon
 
 const steps = [
   "Personal Info",
@@ -47,52 +51,31 @@ const steps = [
 
 const ResumeForm = () => {
   const navigate = useNavigate();
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiSuggestion, setAiSuggestion] = useState("");
+
+  const [aiLoadingField, setAiLoadingField] = useState(null);
+  const [aiSuggestions, setAiSuggestions] = useState({});
+
+  const getNestedValue = (obj, path) => {
+    return path
+      .split(/[\.\[\]]/)
+      .filter(Boolean)
+      .reduce((acc, key) => acc?.[key], obj);
+  };
+
+  const handleEnhanceField = async (fieldKey) => {
+    const value = getNestedValue(formData, fieldKey);
+    if (!value) return;
+
+    setAiLoadingField(fieldKey);
+    const result = await enhance(value);
+
+    setAiSuggestions((prev) => ({ ...prev, [fieldKey]: result }));
+    setAiLoadingField(null);
+  };
 
   const [step, setStep] = useState(0);
-  // const [formData, setFormData] = useState(() => {
-  //   const saved = localStorage.getItem("resumeData");
-  //   return saved
-  //     ? JSON.parse(saved)
-  //     : {
-  //         name: "",
-  //         description: "",
-  //         education: {
-  //           college: "",
-  //           degree: "",
-  //           specialization: "",
-  //           location: "",
-  //           startYear: "",
-  //           endYear: "",
-  //           cgpa: "",
-  //           school: "",
-  //           tenth: "",
-  //           twelfth: "",
-  //         },
-  //         skills: [{ domain: "", languages: [""] }],
-  //         projects: [{ name: "", description: "", github: "", demo: "" }],
-  //         experience: [
-  //           {
-  //             company: "",
-  //             role: "",
-  //             technologies: "",
-  //             years: "",
-  //             description: "",
-  //           },
-  //         ],
-  //         achievements: [{ title: "", description: "", year: "", month: "" }],
-  //         contact: {
-  //           phone: "",
-  //           email: "",
-  //           github: "",
-  //           linkedin: "",
-  //           location: "",
-  //         },
-  //       };
-  // });
-
-  // useEffect(() => {
-  //   localStorage.setItem("resumeData", JSON.stringify(formData));
-  // }, [formData]);
 
   const defaultResumeData = {
     name: "",
@@ -262,13 +245,9 @@ const ResumeForm = () => {
                 className="w-full px-4 py-2 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-sky-600 bg-white text-sm text-gray-800"
               />
             </div>
-
-            {/* Description */}
-            <div className="relative">
-              <label
-                htmlFor="description"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
+            {/* Description Field */}
+            <div className="relative mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Short Description
               </label>
 
@@ -279,6 +258,49 @@ const ResumeForm = () => {
                 }
                 placeholder="A brief personal summary or tagline"
               />
+
+              {/* Enhance Button */}
+              <button
+                type="button"
+                title="Enhance with AI"
+                disabled={aiLoadingField === "description"}
+                onClick={() => handleEnhanceField("description")}
+                className="absolute top-2 right-2 p-2 rounded-full bg-gradient-to-tr from-sky-500 via-sky-600 to-sky-700 hover:from-sky-600 hover:via-sky-700 hover:to-sky-800 text-white shadow-lg transition disabled:opacity-50 disabled:cursor-not-allowed ring-2 ring-offset-2 ring-sky-300"
+              >
+                {aiLoadingField === `description` ? (
+                  <BsArrowClockwise className="text-lg animate-spin" />
+                ) : (
+                  <FaWandMagicSparkles className="text-lg animate-pulse" />
+                )}
+              </button>
+
+              {/* Suggestion (only shown for this field) */}
+              {aiSuggestions["description"] && (
+                <div className="bg-gray-50 border mt-3 rounded p-3 relative">
+                  <p
+                    className="text-sm text-gray-800"
+                    dangerouslySetInnerHTML={{
+                      __html: aiSuggestions["description"],
+                    }}
+                  />
+                  <button
+                    className="absolute top-2 right-2 text-sm px-2 py-2 bg-gray-200 hover:bg-gray-300/30 text-sky-700 rounded-full"
+                    title="Copy AI Suggestion"
+                    onClick={() => {
+                      handleChange(
+                        { target: { value: aiSuggestions["description"] } },
+                        "description"
+                      );
+                      setAiSuggestions((prev) => ({
+                        ...prev,
+                        description: "",
+                      }));
+                    }}
+                  >
+                    <FaCopy />
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         );
@@ -607,7 +629,9 @@ const ResumeForm = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Description
                   </label>
+
                   <div className="relative">
+                    {/* RichTextInput */}
                     <RichTextInput
                       value={project.description}
                       onChange={(html) =>
@@ -618,9 +642,59 @@ const ResumeForm = () => {
                           html
                         )
                       }
-                      placeholder="A brief personal summary or tagline"
+                      placeholder="A brief project description"
                     />
+
+                    {/* AI Button */}
+                    <button
+                      type="button"
+                      title="Enhance with AI"
+                      disabled={
+                        aiLoadingField === `projects[${index}].description`
+                      }
+                      onClick={() =>
+                        handleEnhanceField(`projects[${index}].description`)
+                      }
+                      className="absolute -top-5 right-2 p-2 rounded-full bg-gradient-to-tr from-sky-500 via-sky-600 to-sky-700 hover:from-sky-600 hover:to-sky-800 text-white shadow-lg transition disabled:opacity-50 disabled:cursor-not-allowed ring-2 ring-offset-2 ring-sky-300"
+                    >
+                      {aiLoadingField === `projects[${index}].description` ? (
+                        <BsArrowClockwise className="text-xl animate-spin" />
+                      ) : (
+                        <FaWandMagicSparkles className="text-xl animate-pulse" />
+                      )}
+                    </button>
                   </div>
+
+                  {/* AI Suggestion Output */}
+                  {aiSuggestions[`projects[${index}].description`] && (
+                    <div className="bg-gray-50 border mt-3 rounded p-3 relative">
+                      <p
+                        className="text-sm text-gray-800"
+                        dangerouslySetInnerHTML={{
+                          __html:
+                            aiSuggestions[`projects[${index}].description`],
+                        }}
+                      />
+                      <button
+                        className="absolute top-2 right-2 text-sm px-2 py-2 bg-gray-300/90 hover:bg-gray-300 text-sky-700 rounded-full"
+                        title="Copy AI Suggestion"
+                        onClick={() => {
+                          handleArrayChange(
+                            "projects",
+                            index,
+                            "description",
+                            aiSuggestions[`projects[${index}].description`]
+                          );
+                          setAiSuggestions((prev) => ({
+                            ...prev,
+                            [`projects[${index}].description`]: "",
+                          }));
+                        }}
+                      >
+                        <FaCopy />
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 <div className="mb-3 relative">
@@ -792,18 +866,70 @@ const ResumeForm = () => {
                       Description
                     </label>
 
-                    <RichTextInput
-                      value={exp.description}
-                      onChange={(html) =>
-                        handleArrayChange(
-                          "experience",
-                          index,
-                          "description",
-                          html
-                        )
-                      }
-                      placeholder="e.g., Worked on scalable frontend apps..."
-                    />
+                    <div className="relative">
+                      <RichTextInput
+                        value={exp.description}
+                        onChange={(html) =>
+                          handleArrayChange(
+                            "experience",
+                            index,
+                            "description",
+                            html
+                          )
+                        }
+                        placeholder="e.g., Worked on scalable frontend apps..."
+                      />
+                      {/* AI Button */}
+                      <button
+                        type="button"
+                        title="Enhance with AI"
+                        disabled={
+                          aiLoadingField === `experience[${index}].description`
+                        }
+                        onClick={() =>
+                          handleEnhanceField(`experience[${index}].description`)
+                        }
+                        className="absolute -top-5 right-2 p-2 rounded-full bg-gradient-to-tr from-sky-500 via-sky-600 to-sky-700 hover:from-sky-600 hover:to-sky-800 text-white shadow-lg transition disabled:opacity-50 disabled:cursor-not-allowed ring-2 ring-offset-2 ring-sky-300"
+                      >
+                        {aiLoadingField ===
+                        `experience[${index}].description` ? (
+                          <BsArrowClockwise className="text-lg animate-spin" />
+                        ) : (
+                          <FaWandMagicSparkles className="text-lg animate-pulse" />
+                        )}
+                      </button>
+                    </div>
+
+                    {/* AI Suggestion Output */}
+                    {aiSuggestions[`experience[${index}].description`] && (
+                      <div className="bg-gray-50 border mt-3 rounded p-3 relative">
+                        <p
+                          className="text-sm text-gray-800"
+                          dangerouslySetInnerHTML={{
+                            __html:
+                              aiSuggestions[`experience[${index}].description`],
+                          }}
+                        />
+                        <button
+                          className="absolute top-2 right-2 text-sm px-2 py-2 bg-gray-300/90 hover:bg-gray-300 text-sky-700 rounded-full"
+                          title="Copy AI Suggestion"
+                          onClick={() => {
+                            handleArrayChange(
+                              "experience",
+                              index,
+                              "description",
+                              aiSuggestions[`experience[${index}].description`]
+                            );
+                            setAiSuggestions((prev) => ({
+                              ...prev,
+                              [`experience[${index}].description`]: "",
+                            }));
+                          }}
+                        >
+                          <FaCopy />
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
@@ -867,18 +993,77 @@ const ResumeForm = () => {
                       Description
                     </label>
 
-                    <RichTextInput
-                      value={achieve.description}
-                      onChange={(html) =>
-                        handleArrayChange(
-                          "achievements",
-                          index,
-                          "description",
-                          html
-                        )
-                      }
-                      placeholder="e.g., Secured 1st place among 100+ teams"
-                    />
+                    <div className="relative">
+                      <RichTextInput
+                        value={achieve.description}
+                        onChange={(html) =>
+                          handleArrayChange(
+                            "achievements",
+                            index,
+                            "description",
+                            html
+                          )
+                        }
+                        placeholder="e.g., Secured 1st place among 100+ teams"
+                      />
+                      {/* AI Button */}
+                      <button
+                        type="button"
+                        title="Enhance with AI"
+                        disabled={
+                          aiLoadingField ===
+                          `achievements[${index}].description`
+                        }
+                        onClick={() =>
+                          handleEnhanceField(
+                            `achievements[${index}].description`
+                          )
+                        }
+                        className="absolute -top-5 right-2 p-2 rounded-full bg-gradient-to-tr from-sky-500 via-sky-600 to-sky-700 hover:from-sky-600 hover:to-sky-800 text-white shadow-lg transition disabled:opacity-50 disabled:cursor-not-allowed ring-2 ring-offset-2 ring-sky-300"
+                      >
+                        {aiLoadingField ===
+                        `achievements[${index}].description` ? (
+                          <BsArrowClockwise className="text-lg animate-spin" />
+                        ) : (
+                          <FaWandMagicSparkles className="text-lg animate-pulse" />
+                        )}
+                      </button>
+                    </div>
+
+                    {/* AI Suggestion Output */}
+                    {aiSuggestions[`achievements[${index}].description`] && (
+                      <div className="bg-gray-50 border mt-3 rounded p-3 relative">
+                        <p
+                          className="text-sm text-gray-800"
+                          dangerouslySetInnerHTML={{
+                            __html:
+                              aiSuggestions[
+                                `achievements[${index}].description`
+                              ],
+                          }}
+                        />
+                        <button
+                          className="absolute top-2 right-2 text-sm px-2 py-2 bg-gray-300/90 hover:bg-gray-300 text-sky-700 rounded-full"
+                          title="Copy AI Suggestion"
+                          onClick={() => {
+                            handleArrayChange(
+                              "achievements",
+                              index,
+                              "description",
+                              aiSuggestions[
+                                `achievements[${index}].description`
+                              ]
+                            );
+                            setAiSuggestions((prev) => ({
+                              ...prev,
+                              [`achievements[${index}].description`]: "",
+                            }));
+                          }}
+                        >
+                          <FaCopy />
+                        </button>
+                      </div>
+                    )}
                   </div>
 
                   {/* Month & Year */}

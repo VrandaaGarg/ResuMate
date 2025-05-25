@@ -1,6 +1,6 @@
 // src/Contexts/StandardSettingContext.jsx
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { getStandardSettings } from "../config/database";
+import { getStandardSettings } from "../db/database";
 
 const StandardSettingContext = createContext();
 

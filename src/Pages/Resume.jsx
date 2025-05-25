@@ -18,7 +18,7 @@ import {
   editSidebarSettings,
   editStandardSettings,
   updateResume,
-} from "../config/database";
+} from "../db/database";
 import showSuccessToast from "../Components/showSuccessToast";
 
 export default function Resume() {
@@ -80,8 +80,9 @@ export default function Resume() {
   if (!resume?.name || resume.name.trim() === "") {
     return (
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
         className="flex flex-col items-center justify-center min-h-[60vh] text-center p-6  bg-gradient-to-br from-white via-sky-50 to-white"
       >
         <FaUserEdit className="text-5xl text-sky-700 mb-4 animate-pulse" />
@@ -108,16 +109,25 @@ export default function Resume() {
       <div className="max-w-5xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex justify-between items-start">
-          <div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
             <h1 className="text-sm md:text-2xl font-bold text-sky-800">
               Your Resume
             </h1>
             <p className="text-sm text-gray-500">
               Mode: {isEditable ? "Edit" : "View"}
             </p>
-          </div>
+          </motion.div>
 
-          <div className="flex gap-2.5">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="flex gap-2.5"
+          >
             <div className="flex flex-col md:flex-row items-center gap-1  md:gap-3">
               <label className="text-xs md:text-sm font-medium text-gray-700">
                 Template:
@@ -144,11 +154,16 @@ export default function Resume() {
                 {isEditable ? "Save Changes" : "Edit"}
               </button>
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Resume Preview */}
-        <div className="bg-white shadow p-2.5 md:p-6 rounded-lg relative">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="bg-white shadow p-2.5 md:p-6 rounded-lg relative"
+        >
           {selectedTemplate === "sidebar" && (
             <SidebarTemplate
               resume={resume}
@@ -192,7 +207,7 @@ export default function Resume() {
               onSettingsChange={setModernSettings}
             />
           )} */}
-        </div>
+        </motion.div>
       </div>
     </div>
   );
