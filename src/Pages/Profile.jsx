@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { FiEdit2, FiLogOut, FiUser } from "react-icons/fi";
 import { useAuth } from "../Contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import { FiEdit2, FiLogOut, FiUser, FiMail, FiCheck, FiX, FiSettings, FiStar } from "react-icons/fi";
+import { motion, AnimatePresence } from "framer-motion";
 import showSuccessToast from "../Components/showSuccessToast";
-import { motion } from "framer-motion";
 
 const Profile = () => {
   const { user, logout, updateUser } = useAuth();
@@ -17,104 +16,259 @@ const Profile = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSave = () => {
-    updateUser(form);
-    showSuccessToast("Profile updated successfully!");
-    setEditing(false);
+  const handleSave = async () => {
+    try {
+      await updateUser({ displayName: form.name });
+      setEditing(false);
+      showSuccessToast("Profile updated successfully!");
+    } catch (error) {
+      console.error("Error updating profile:", error);
+    }
+  };
+
+  const handleLogout = () => {
+    logout();
+    showSuccessToast("Logged out successfully!");
+    navigate("/");
   };
 
   return (
-    <div className="min-h-[67lvh] flex items-center justify-center px-4 bg-gradient-to-br from-white via-sky-50 to-white">
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="w-full max-w-md bg-white p-8 rounded-2xl shadow-xl border border-gray-100"
-      >
-        {/* Profile Avatar */}
-        <div className="flex items-center justify-center mb-6">
-          <div className="w-20 h-20 rounded-full bg-sky-700 text-white flex items-center justify-center text-3xl font-bold uppercase shadow-md">
-            {user?.displayName?.charAt(0)}
-          </div>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50/80 via-white to-slate-100/60 px-6 md:px-20 py-16 overflow-hidden relative">
+      {/* Subtle Background Elements */}
+      <div className="absolute -top-40 -left-40 w-96 h-96 bg-gradient-to-r from-blue-100/20 to-cyan-100/20 blur-3xl rounded-full z-0" />
+      <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] bg-gradient-to-r from-purple-100/20 to-pink-100/20 blur-3xl rounded-full z-0" />
+      <div className="absolute top-1/2 left-1/4 w-80 h-80 bg-gradient-to-r from-green-100/15 to-emerald-100/15 blur-3xl rounded-full z-0" />
 
-        {/* Profile Fields */}
-        <div className="space-y-5 mb-6">
-          <div>
-            <label className="text-sm text-gray-500 font-medium">
-              Full Name
-            </label>
-            {editing ? (
-              <input
-                name="name"
-                value={form.name}
-                onChange={handleChange}
-                className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
-              />
-            ) : (
-              <p className="text-lg font-semibold text-gray-800 mt-1">
-                {user?.displayName || user?.name}
+      {/* Grid Pattern */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-30" />
+
+      <div className="relative z-10 max-w-2xl mx-auto">
+        {/* Header Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12"
+        >
+          <div className="inline-flex items-center gap-2 bg-white/60 backdrop-blur-sm border border-white/40 rounded-full px-6 py-2 mb-4 shadow-lg">
+            <FiUser className="text-blue-500" />
+            <span className="text-sm font-medium text-slate-700">User Profile</span>
+          </div>
+          
+          <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
+            Profile Settings
+          </h1>
+          
+          <p className="text-xl text-slate-600">
+            Manage your account information and preferences
+          </p>
+        </motion.div>
+
+        {/* Profile Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="bg-white/60 backdrop-blur-md border border-white/40 rounded-3xl shadow-2xl overflow-hidden"
+        >
+          {/* Card Header */}
+          <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 p-8 text-center text-white relative overflow-hidden">
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              className="absolute -top-10 -right-10 w-40 h-40 border border-white/10 rounded-full"
+            />
+            
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="relative z-10"
+            >
+              {/* Avatar */}
+              <motion.div
+                whileHover={{ scale: 1.1 }}
+                className="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 text-white flex items-center justify-center text-4xl font-bold uppercase shadow-2xl border-4 border-white/20"
+              >
+                {user?.displayName?.charAt(0) || user?.email?.charAt(0) || "U"}
+              </motion.div>
+              
+              <h2 className="text-2xl font-bold mb-1">
+                {user?.displayName || "User"}
+              </h2>
+              <p className="text-white/80">
+                {user?.email}
               </p>
-            )}
+            </motion.div>
           </div>
 
-          <div>
-            <label className="text-sm text-gray-500 font-medium">
-              Email Address
-            </label>
-            {editing ? (
-              <input
-                name="email"
-                disabled
-                value={form.email}
-                onChange={handleChange}
-                className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
-              />
-            ) : (
-              <p className="text-gray-700 mt-1">{user?.email}</p>
-            )}
-          </div>
-        </div>
+          {/* Card Content */}
+          <div className="p-8 md:p-12">
+            <AnimatePresence mode="wait">
+              {editing ? (
+                <motion.div
+                  key="editing"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.4 }}
+                  className="space-y-6"
+                >
+                  {/* Full Name Input */}
+                  <div className="relative group">
+                    <label className="text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
+                      <FiUser className="text-blue-600" />
+                      Full Name
+                    </label>
+                    <div className="relative">
+                      <input
+                        name="name"
+                        value={form.name}
+                        onChange={handleChange}
+                        className="w-full px-4 py-4 pl-12 border-2 border-slate-200/60 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-300 bg-white/80 backdrop-blur-sm text-slate-800 font-medium transition-all duration-300 group-hover:border-slate-300"
+                        placeholder="Enter your full name"
+                      />
+                      <FiUser className="absolute left-4 top-4 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
+                    </div>
+                  </div>
 
-        {/* Buttons */}
-        {editing ? (
-          <div className="flex gap-3">
-            <button
-              onClick={handleSave}
-              className="w-full py-2 bg-sky-700 text-white rounded-lg hover:bg-sky-800 transition font-medium"
-            >
-              Save
-            </button>
-            <button
-              onClick={() => setEditing(false)}
-              className="w-full py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition font-medium"
-            >
-              Cancel
-            </button>
+                  {/* Email Input */}
+                  <div className="relative group">
+                    <label className="text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
+                      <FiMail className="text-blue-600" />
+                      Email Address
+                    </label>
+                    <div className="relative">
+                      <input
+                        name="email"
+                        disabled
+                        value={form.email}
+                        onChange={handleChange}
+                        className="w-full px-4 py-4 pl-12 border-2 border-slate-200/60 rounded-xl bg-slate-100/60 text-slate-600 font-medium cursor-not-allowed"
+                        placeholder="Email cannot be changed"
+                      />
+                      <FiMail className="absolute left-4 top-4 text-slate-400" />
+                    </div>
+                    <p className="text-xs text-slate-500 mt-2">
+                      Email address cannot be modified for security reasons
+                    </p>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex gap-4 pt-4">
+                    <motion.button
+                      onClick={handleSave}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="flex-1 flex items-center justify-center gap-2 py-4 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                    >
+                      <FiCheck size={18} />
+                      Save Changes
+                    </motion.button>
+                    <motion.button
+                      onClick={() => setEditing(false)}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="flex-1 flex items-center justify-center gap-2 py-4 bg-slate-600 hover:bg-slate-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                    >
+                      <FiX size={18} />
+                      Cancel
+                    </motion.button>
+                  </div>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="viewing"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  transition={{ duration: 0.4 }}
+                  className="space-y-6"
+                >
+                  {/* Profile Information */}
+                  <div className="space-y-4">
+                    <div className="p-4 bg-slate-50/80 border border-slate-200/60 rounded-xl">
+                      <label className="block text-sm font-semibold text-slate-600 mb-1">
+                        Full Name
+                      </label>
+                      <p className="text-lg font-semibold text-slate-900">
+                        {user?.displayName || user?.name || "Not provided"}
+                      </p>
+                    </div>
+
+                    <div className="p-4 bg-slate-50/80 border border-slate-200/60 rounded-xl">
+                      <label className="block text-sm font-semibold text-slate-600 mb-1">
+                        Email Address
+                      </label>
+                      <p className="text-lg text-slate-700">
+                        {user?.email}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Account Stats */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="p-4 bg-gradient-to-r from-blue-50/80 to-cyan-50/80 border border-blue-200/60 rounded-xl text-center">
+                      <FiStar className="text-2xl text-blue-600 mx-auto mb-2" />
+                      <p className="text-sm font-medium text-blue-800">Account Status</p>
+                      <p className="text-lg font-bold text-blue-700">Active</p>
+                    </div>
+                    <div className="p-4 bg-gradient-to-r from-green-50/80 to-emerald-50/80 border border-green-200/60 rounded-xl text-center">
+                      <FiSettings className="text-2xl text-green-600 mx-auto mb-2" />
+                      <p className="text-sm font-medium text-green-800">Profile</p>
+                      <p className="text-lg font-bold text-green-700">Complete</p>
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex gap-4 pt-4">
+                    <motion.button
+                      onClick={() => setEditing(true)}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="flex-1 flex items-center justify-center gap-2 py-4 bg-gradient-to-r from-slate-900 to-slate-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                    >
+                      <FiEdit2 size={18} />
+                      Edit Profile
+                    </motion.button>
+                    <motion.button
+                      onClick={handleLogout}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="flex-1 flex items-center justify-center gap-2 py-4 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                    >
+                      <FiLogOut size={18} />
+                      Sign Out
+                    </motion.button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
-        ) : (
-          <div className="flex gap-3 text-sm">
-            <button
-              onClick={() => setEditing(true)}
-              className="w-full flex items-center justify-center gap-2 py-1.5 md:py-2 border border-sky-700 text-sky-700 rounded-lg hover:bg-sky-50 transition font-medium"
-            >
-              <FiEdit2 /> Edit
-            </button>
-            <button
-              onClick={() => {
-                logout();
-                navigate("/");
-              }}
-              className="w-full flex items-center justify-center gap-2 py-1.5 md:py-2 border border-red-600 text-red-600 rounded-lg hover:bg-red-50 transition font-medium"
-            >
-              <FiLogOut /> Logout
-            </button>
+        </motion.div>
+
+        {/* Additional Info Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="mt-8 bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-6 shadow-lg"
+        >
+          <h3 className="text-lg font-semibold text-slate-900 mb-3 flex items-center gap-2">
+            <FiSettings className="text-blue-600" />
+            Account Information
+          </h3>
+          <div className="text-sm text-slate-600 space-y-2">
+            <p>• Your account data is securely stored and encrypted</p>
+            <p>• Email address is used for authentication and cannot be changed</p>
+            <p>• You can update your display name anytime</p>
+            <p>• All changes are automatically saved to the cloud</p>
           </div>
-        )}
-      </motion.div>
+        </motion.div>
+      </div>
     </div>
   );
 };

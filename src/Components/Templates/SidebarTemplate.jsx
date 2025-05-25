@@ -98,13 +98,13 @@ const SidebarTemplate = ({ resume }) => {
   const defaultMainTextColor = (tag) => {
     switch (tag) {
       case "h1":
-        return "#1e293b"; // dark slate
+        return "#000000"; // dark slate
       case "h2":
-        return "#F4F3F3"; // slightly lighter
+        return "#333333"; // slightly lighter
       case "h3":
-        return "#D6D5D5"; // even lighter
+        return "#404040"; // even lighter
       default:
-        return "#000000";
+        return "#404040";
     }
   };
 
@@ -227,7 +227,7 @@ const SidebarTemplate = ({ resume }) => {
             sidebarSettings.fontScaleLevel
           )}`}
           style={{
-            color: sidebarSettings.textColors?.["h3"] || "text-blue-200",
+            color: sidebarSettings.textColors?.["h3"] || "#d9d9d9",
             textAlign: sidebarSettings.descriptionAlign || "left",
           }}
         >
@@ -318,7 +318,7 @@ const SidebarTemplate = ({ resume }) => {
               )} outline-none w-full whitespace-pre-line`}
               style={{
                 textAlign: sidebarSettings.descriptionAlign || "left",
-                color: sidebarSettings.textColors?.["h3"] || "text-blue-200",
+                color: sidebarSettings.textColors?.["h3"] || "#d9d9d9",
               }}
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(resume.description),
@@ -364,8 +364,7 @@ const SidebarTemplate = ({ resume }) => {
                     sidebarSettings.fontScaleLevel
                   )} font-medium`}
                   style={{
-                    color:
-                      sidebarSettings.textColors?.["h3"] || "text-blue-200",
+                    color: sidebarSettings.textColors?.["h3"] || "#d9d9d9",
                     textAlign: sidebarSettings.descriptionAlign || "left",
                   }}
                 >
@@ -378,8 +377,7 @@ const SidebarTemplate = ({ resume }) => {
                     sidebarSettings.fontScaleLevel
                   )}`}
                   style={{
-                    color:
-                      sidebarSettings.textColors?.["h4"] || "text-blue-200",
+                    color: sidebarSettings.textColors?.["h4"] || "#c9c9c9",
                   }}
                 >
                   {skill.languages.join(", ")}
@@ -412,7 +410,7 @@ const SidebarTemplate = ({ resume }) => {
             const width = (skill.languages.length / totalSkills) * 100;
 
             const color =
-              sidebarSettings.skillColors?.[skill.domain] || "#60a5fa";
+              sidebarSettings.skillColors?.[skill.domain] || "#9c9c9c";
 
             return (
               <div
@@ -443,7 +441,7 @@ const SidebarTemplate = ({ resume }) => {
             ).toFixed(1);
 
             const color =
-              sidebarSettings.skillColors?.[skill.domain] || "#60a5fa";
+              sidebarSettings.skillColors?.[skill.domain] || "#9c9c9c";
 
             return (
               <div
@@ -456,8 +454,7 @@ const SidebarTemplate = ({ resume }) => {
                 ></span>
                 <span
                   style={{
-                    color:
-                      sidebarSettings.textColors?.["h3"] || "text-blue-200",
+                    color: sidebarSettings.textColors?.["h3"] || "#d9d9d9",
                   }}
                 >
                   {skill.domain}
@@ -465,8 +462,7 @@ const SidebarTemplate = ({ resume }) => {
                 <span
                   className="ml-auto "
                   style={{
-                    color:
-                      sidebarSettings.textColors?.["h4"] || "text-gray-300",
+                    color: sidebarSettings.textColors?.["h4"] || "#c9c9c9",
                   }}
                 >
                   {percent}%
@@ -948,7 +944,7 @@ const SidebarTemplate = ({ resume }) => {
               <span
                 className="absolute hidden md:block w-4 h-4 rounded-full border border-gray-300 right-1 top-1"
                 style={{
-                  backgroundColor: sidebarSettings.sidebarColor || "#1e3a8a",
+                  backgroundColor: sidebarSettings.sidebarColor || "#212121",
                 }}
               ></span>
             </button>
@@ -1234,7 +1230,7 @@ const SidebarTemplate = ({ resume }) => {
                             style={{
                               backgroundColor:
                                 sidebarSettings.skillColors?.[skill.domain] ||
-                                "#60a5fa",
+                                "#9c9c9c",
                             }}
                           ></div>
                         </label>
@@ -1702,7 +1698,7 @@ const SidebarTemplate = ({ resume }) => {
         <aside
           className="w-full md:w-1/3 text-white p-3 md:p-6 flex flex-col"
           style={{
-            backgroundColor: sidebarSettings.sidebarColor || "#1e3a8a",
+            backgroundColor: sidebarSettings.sidebarColor || "#212121",
             rowGap: `${sidebarSettings.sectionGap ?? 16}px`,
           }}
         >

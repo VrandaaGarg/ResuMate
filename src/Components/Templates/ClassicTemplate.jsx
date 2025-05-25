@@ -348,13 +348,15 @@ const ClassicTemplate = ({ resume }) => {
                 ` (${resume.education.specialization})`}
             </p>
 
-            <p className="italic">
-              {" "}
-              {resume.education.startYear} – {resume.education.endYear}
-            </p>
+            {resume.education.startYear && resume.education.endYear && (
+              <p className="italic">
+                {" "}
+                {resume.education.startYear} – {resume.education.endYear}
+              </p>
+            )}
           </div>
 
-          <p>{resume.education.cgpa} CGPA</p>
+          {resume.education.cgpa && <p>{resume.education.cgpa} CGPA</p>}
         </div>
       </div>
     ),
@@ -519,7 +521,7 @@ const ClassicTemplate = ({ resume }) => {
                 }`}
               >
                 <span className="font-semibold">
-                  {a.company} - {a.role}
+                  {a.company} {a.role && ` - ${a.role}`}
                 </span>
                 <span className="italic">{a.years}</span>
               </div>
