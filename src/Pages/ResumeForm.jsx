@@ -234,7 +234,7 @@ const ResumeForm = () => {
           >
             {/* Full Name */}
             <div className="relative group">
-              <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+              <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
                 <FiUser className="text-blue-600" />
                 Full Name *
               </label>
