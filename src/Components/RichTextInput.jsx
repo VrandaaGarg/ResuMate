@@ -48,6 +48,16 @@ const RichTextInput = ({ value, onChange, placeholder = "Type here..." }) => {
           suppressContentEditableWarning
           spellCheck={false}
           onInput={handleInput}
+          onPaste={(e) => {
+            e.preventDefault();
+            const text = e.clipboardData.getData("text/plain");
+            // Allow only plain text (no styles), then wrap it safely
+            document.execCommand(
+              "insertHTML",
+              false,
+              text.replace(/\n/g, "<br>")
+            );
+          }}
           className="min-h-[100px] border border-gray-300 rounded p-3 focus:outline-none text-sm text-gray-800 bg-white transition"
           style={{ whiteSpace: "pre-wrap" }}
         />
