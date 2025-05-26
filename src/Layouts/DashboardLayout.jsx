@@ -11,7 +11,10 @@ const DashboardLayout = () => {
   return (
     <div className="min-h-screen bg-background text-primary flex flex-col">
       {/* Navbar */}
-      <Navbar toggleSidebar={() => setIsSidebarOpen((prev) => !prev)} />
+      <Navbar
+        toggleSidebar={() => setIsSidebarOpen((prev) => !prev)}
+        isSidebarOpen={isSidebarOpen}
+      />
 
       <div className="flex flex-1 pt-16">
         {/* Sidebar */}
@@ -21,11 +24,15 @@ const DashboardLayout = () => {
         />
 
         {/* Page Content */}
-        <div className="flex-1 sm:ml-64">
+        <div
+          className={`flex-1 transition-all duration-300 ${
+            isSidebarOpen ? "sm:ml-72" : "ml-0"
+          }`}
+        >
           {" "}
           {/* only shift on desktop */}
           <motion.main
-            className="px-4 md:px-6 py-6"
+            className="px-4 md:px-6 py-2.5 overflow-x-hidden"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}

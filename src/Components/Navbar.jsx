@@ -1,5 +1,11 @@
-import { FaBars, FaUserCircle, FaSignOutAlt } from "react-icons/fa";
-import { useState } from "react";
+import {
+  FaBars,
+  FaUserCircle,
+  FaSignOutAlt,
+  FaUser,
+  FaTachometerAlt,
+} from "react-icons/fa";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { SiGoogleforms } from "react-icons/si";
@@ -8,14 +14,26 @@ import { useAuth } from "../Contexts/AuthContext";
 import { useLocation } from "react-router-dom";
 import showSuccessToast from "./showSuccessToast";
 
-const Navbar = () => {
+const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
+  // const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { user, logout } = useAuth();
   const location = useLocation();
   const isHomePage = location.pathname === "/";
 
   const navigate = useNavigate();
+
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      const offset = window.scrollY;
+      setScrolled(offset > 50);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -23,115 +41,191 @@ const Navbar = () => {
     navigate("/");
   };
 
-  const toggleSidebar = () => {
-    const sidebar = document.getElementById("sidebar");
-    if (sidebar) {
-      sidebar.classList.toggle("-translate-x-full");
-      setSidebarOpen(!isSidebarOpen);
-    }
-  };
-
   return (
-    <nav className="fixed  top-0 z-50 w-full bg-white border-b border-gray-200 shadow-sm">
-      <div className="px-4 py-3 flex items-center justify-between max-w-7xl mx-auto">
+    <motion.nav
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className={`fixed top-0 z-50 w-full transition-all duration-300 ${
+        scrolled
+          ? "bg-white/90 backdrop-blur-md border-b border-white/20 shadow-lg"
+          : "bg-white/95 backdrop-blur-sm border-b border-gray-100"
+      }`}
+    >
+      <div className="px-4 md:px-6 lg:px-8 xl:px-12 py-2 md:py-2 flex items-center justify-between w-full">
         {/* Left: Logo + Sidebar Toggle */}
-        <div className="flex items-center gap-2.5 md:gap-4">
+        <div className="flex items-center gap-3 md:gap-4">
           {!isHomePage && (
-            <button
-              className="sm:hidden text-gray-700 hover:text-sky-700 transition"
-              onClick={toggleSidebar}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="p-2 text-gray-700 hover:text-sky-700 hover:bg-sky-50 rounded-lg transition-all duration-200"
+              onClick={toggleSidebar} // ← use the prop here directly
             >
               {isSidebarOpen ? <RxCross2 size={22} /> : <FaBars size={20} />}
-            </button>
+            </motion.button>
           )}
 
-          <Link to="/" className="flex items-center gap-1 md:gap-2 group">
-            <SiGoogleforms className="text-2xl text-sky-700 group-hover:scale-110 transition-transform duration-200" />
-            <span className="text-xl font-bold tracking-wide text-gray-900 group-hover:text-sky-700 transition">
+          <Link to="/" className="flex items-center gap-2 md:gap-3 group">
+            <motion.div
+              whileHover={{ rotate: 5, scale: 1.1 }}
+              transition={{ duration: 0.6 }}
+              className="p-2 bg-gradient-to-r from-sky-500 to-blue-600 rounded-xl shadow-lg"
+            >
+              <SiGoogleforms className="text-xl md:text-2xl text-white" />
+            </motion.div>
+            <motion.span
+              className="text-xl md:text-2xl font-bold bg-gradient-to-r from-sky-700 to-blue-600 bg-clip-text text-transparent tracking-wide"
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.2 }}
+            >
               ResuMate
-            </span>
+            </motion.span>
           </Link>
         </div>
 
         {/* Right: Auth / Dropdown */}
-        <div className="relative flex items-center gap-1.5 md:gap-4">
+        <div className="relative flex items-center gap-3 md:gap-4">
           {!user ? (
-            <>
-              <Link
-                to="/login"
-                className="px-1 md:px-4 py-1 md:py-1.5 bg-white border border-sky-700 text-sky-700 rounded md:rounded-full font-medium hover:bg-sky-50 transition"
+            <div className="flex items-center gap-2 md:gap-3">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                Login
-              </Link>
-              <Link
-                to="/signup"
-                className="px-1 md:px-4 py-1 md:py-1.5 bg-sky-700 text-white rounded md:rounded-full font-medium hover:bg-sky-800 transition"
+                <Link
+                  to="/login"
+                  className="px-4 md:px-6 py-2 md:py-2.5 bg-white/80 backdrop-blur-sm border border-sky-200 text-sky-700 rounded-xl font-medium hover:bg-sky-50 hover:border-sky-300 transition-all duration-300 shadow-sm hover:shadow-md"
+                >
+                  Login
+                </Link>
+              </motion.div>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                Sign Up
-              </Link>
-            </>
+                <Link
+                  to="/signup"
+                  className="px-4 md:px-6 py-2 md:py-2.5 bg-gradient-to-r from-sky-600 to-blue-600 text-white rounded-xl font-medium hover:from-sky-700 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+                >
+                  Sign Up
+                </Link>
+              </motion.div>
+            </div>
           ) : (
             <div className="relative">
-              <button
-                className="flex items-center gap-2 bg-sky-50 text-sky-700 px-2 py-1.5 rounded-full border border-sky-100 hover:shadow transition"
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="flex items-center gap-2 md:gap-3 bg-gradient-to-r from-sky-50 to-blue-50 text-sky-700 px-3 md:px-4 py-2 md:py-2.5 rounded-xl border border-sky-100 hover:shadow-lg hover:border-sky-200 transition-all duration-300 backdrop-blur-sm"
                 onClick={() => setDropdownOpen((prev) => !prev)}
               >
-                <div className="w-8 h-8 rounded-full bg-sky-700 text-white flex items-center justify-center font-semibold text-sm uppercase">
-                  {user?.displayName?.charAt(0).toUpperCase() || "U"}
+                <div className="w-8 h-8 md:w8 md:h-8 rounded-full bg-gradient-to-r from-sky-600 to-blue-600 text-white flex items-center justify-center font-bold text-sm md:text-base uppercase shadow-lg">
+                  {user?.displayName?.charAt(0).toUpperCase() ||
+                    user?.email?.charAt(0).toUpperCase() ||
+                    "U"}
                 </div>
-              </button>
+                <div className="hidden md:block text-left">
+                  <p className="text-sm font-semibold text-gray-900 truncate max-w-24">
+                    {user?.displayName || "User"}
+                  </p>
+                  {/* <p className="text-xs text-gray-500">Welcome back</p> */}
+                </div>
+              </motion.button>
 
               <AnimatePresence>
                 {dropdownOpen && (
-                  <motion.div
-                    key="dropdown"
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute right-0 top-14 w-64 bg-white text-gray-700 border border-gray-200 rounded-xl shadow-xl z-50 overflow-hidden"
-                  >
-                    <div className="px-4 py-3 border-b">
-                      <p className="text-sm font-semibold">{user.name}</p>
-                      <p className="text-xs text-gray-500 truncate">
-                        {user.email}
-                      </p>
-                    </div>
-                    <ul className="text-sm divide-y divide-gray-100">
-                      <li>
-                        <Link
-                          to="/dashboard"
-                          className="block px-4 py-2 hover:bg-sky-50 transition"
+                  <>
+                    {/* Backdrop */}
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="fixed inset-0 z-40"
+                      onClick={() => setDropdownOpen(false)}
+                    />
+
+                    {/* Dropdown */}
+                    <motion.div
+                      key="dropdown"
+                      initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
+                      className="absolute right-0 top-16 w-72 bg-white/95 backdrop-blur-md text-gray-700 border border-white/20 rounded-2xl shadow-2xl z-50 overflow-hidden"
+                    >
+                      {/* Header */}
+                      <div className="px-6 py-4 bg-gradient-to-r from-sky-50 to-blue-50 border-b border-gray-100">
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 rounded-full bg-gradient-to-r from-sky-600 to-blue-600 text-white flex items-center justify-center font-bold uppercase shadow-lg">
+                            {user?.displayName?.charAt(0).toUpperCase() ||
+                              user?.email?.charAt(0).toUpperCase() ||
+                              "U"}
+                          </div>
+                          <div>
+                            <p className="text-base font-bold text-gray-900">
+                              {user?.displayName || "User"}
+                            </p>
+                            <p className="text-sm text-gray-600 truncate max-w-48">
+                              {user?.email}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Menu Items */}
+                      <div className="py-2">
+                        <motion.div
+                          whileHover={{
+                            backgroundColor: "rgba(14, 165, 233, 0.05)",
+                          }}
                         >
-                          Dashboard
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          to="/profile"
-                          className="block px-4 py-2 hover:bg-sky-50 transition"
+                          <Link
+                            to="/dashboard"
+                            className="flex items-center gap-3 px-6 py-3 text-gray-700 hover:text-sky-700 transition-colors duration-200"
+                            onClick={() => setDropdownOpen(false)}
+                          >
+                            <FaTachometerAlt className="text-sky-600" />
+                            <span className="font-medium">Dashboard</span>
+                          </Link>
+                        </motion.div>
+
+                        <motion.div
+                          whileHover={{
+                            backgroundColor: "rgba(14, 165, 233, 0.05)",
+                          }}
                         >
-                          Profile
-                        </Link>
-                      </li>
-                      <li>
-                        <button
-                          onClick={handleLogout}
-                          className="w-full text-left px-4 py-2 hover:bg-red-50 text-red-600 flex items-center gap-2 transition"
-                        >
-                          <FaSignOutAlt className="text-sm" />
-                          Logout
-                        </button>
-                      </li>
-                    </ul>
-                  </motion.div>
+                          <Link
+                            to="/profile"
+                            className="flex items-center gap-3 px-6 py-3 text-gray-700 hover:text-sky-700 transition-colors duration-200"
+                            onClick={() => setDropdownOpen(false)}
+                          >
+                            <FaUser className="text-sky-600" />
+                            <span className="font-medium">Profile</span>
+                          </Link>
+                        </motion.div>
+
+                        <div className="border-t border-gray-100 mt-2 pt-2">
+                          <motion.button
+                            whileHover={{
+                              backgroundColor: "rgba(239, 68, 68, 0.05)",
+                            }}
+                            onClick={handleLogout}
+                            className="w-full flex items-center gap-3 px-6 py-3 text-red-600 hover:text-red-700 transition-colors duration-200"
+                          >
+                            <FaSignOutAlt />
+                            <span className="font-medium">Sign Out</span>
+                          </motion.button>
+                        </div>
+                      </div>
+                    </motion.div>
+                  </>
                 )}
               </AnimatePresence>
             </div>
           )}
         </div>
       </div>
-    </nav>
+    </motion.nav>
   );
 };
 
