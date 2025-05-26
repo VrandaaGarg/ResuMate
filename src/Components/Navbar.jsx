@@ -68,7 +68,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
 
           <Link to="/" className="flex items-center gap-2 md:gap-3 group">
             <motion.div
-              whileHover={{ rotate: 360, scale: 1.1 }}
+              whileHover={{ rotate: 5, scale: 1.1 }}
               transition={{ duration: 0.6 }}
               className="p-2 bg-gradient-to-r from-sky-500 to-blue-600 rounded-xl shadow-lg"
             >

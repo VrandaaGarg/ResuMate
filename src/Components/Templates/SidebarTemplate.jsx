@@ -1476,7 +1476,7 @@ const SidebarTemplate = ({ resume }) => {
                     { label: "None", value: 0 },
                     { label: "Extra Small", value: 4 },
                     { label: "Small", value: 8 },
-                    { label: "Normal", value: 12 },
+                    { label: "normal", value: 12 },
                     { label: "Medium", value: 16 },
                     { label: "Large", value: 20 },
                     { label: "Extra Large", value: 16 },
