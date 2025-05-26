@@ -58,7 +58,7 @@ const RichTextInput = ({ value, onChange, placeholder = "Type here..." }) => {
               text.replace(/\n/g, "<br>")
             );
           }}
-          className="min-h-[100px] border border-gray-300 rounded p-3 focus:outline-none text-sm text-gray-800 bg-white transition"
+          className="min-h-[180px] border border-gray-300 rounded p-3 focus:outline-none text-sm text-gray-800 bg-white transition"
           style={{ whiteSpace: "pre-wrap" }}
         />
       </div>

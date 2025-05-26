@@ -47,7 +47,7 @@
 /* Scrollbar Styling (works in Webkit browsers like Chrome, Edge) */
 ::-webkit-scrollbar {
   width: 11px;
-  height: 25px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -55,7 +55,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #005e91; /* slate-400 */
+  background-color: #f0e7f6; /* slate-400 */
   border-radius: 8px;
   border: 2px solid transparent;
   background-clip: content-box;

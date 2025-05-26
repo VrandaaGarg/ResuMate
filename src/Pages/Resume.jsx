@@ -7,7 +7,17 @@ import { useResumeData } from "../Contexts/ResumeDataContext";
 import { useClassicSetting } from "../Contexts/ClassicSettingContext";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FaUserEdit, FaFileAlt, FaEdit, FaSave, FaPalette, FaEye, FaCog, FaDownload, FaShare } from "react-icons/fa";
+import {
+  FaUserEdit,
+  FaFileAlt,
+  FaEdit,
+  FaSave,
+  FaPalette,
+  FaEye,
+  FaCog,
+  FaDownload,
+  FaShare,
+} from "react-icons/fa";
 import { useSidebarSetting } from "../Contexts/SidebarSettingContext";
 import StandardTemplate from "../Components/Templates/StandardTemplate";
 import { useStandardSetting } from "../Contexts/StandardSettingContext";
@@ -73,9 +83,24 @@ export default function Resume() {
   };
 
   const templates = [
-    { value: "classic", label: "Classic", icon: "📄", description: "Traditional and professional" },
-    { value: "sidebar", label: "Sidebar", icon: "📋", description: "Modern sidebar layout" },
-    { value: "standard", label: "Standard", icon: "📝", description: "Clean and minimal" },
+    {
+      value: "classic",
+      label: "Classic",
+      icon: "📄",
+      description: "Traditional and professional",
+    },
+    {
+      value: "sidebar",
+      label: "Sidebar",
+      icon: "📋",
+      description: "Modern sidebar layout",
+    },
+    {
+      value: "standard",
+      label: "Standard",
+      icon: "📝",
+      description: "Clean and minimal",
+    },
   ];
 
   if (!resume?.name || resume.name.trim() === "") {
@@ -100,14 +125,15 @@ export default function Resume() {
             >
               <FaUserEdit className="text-2xl text-white" />
             </motion.div>
-            
+
             <h2 className="text-2xl font-bold text-slate-900 mb-3">
               Resume Details Missing
             </h2>
             <p className="text-sm text-slate-600 mb-6 leading-relaxed">
-              Please fill in your details to get started with creating your professional resume.
+              Please fill in your details to get started with creating your
+              professional resume.
             </p>
-            
+
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -142,13 +168,15 @@ export default function Resume() {
         >
           <div className="inline-flex items-center gap-2 bg-white/60 backdrop-blur-sm border border-white/40 rounded-full px-4 py-1.5 mb-3 shadow-lg">
             <FaStar className="text-yellow-500 text-xs" />
-            <span className="text-xs font-medium text-slate-700">Resume Builder</span>
+            <span className="text-xs font-medium text-slate-700">
+              Resume Builder
+            </span>
           </div>
-          
+
           <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">
             Your Professional Resume
           </h1>
-          
+
           <p className="text-sm text-slate-600 max-w-2xl mx-auto">
             Customize and perfect your resume with our intuitive editor
           </p>
@@ -170,7 +198,7 @@ export default function Resume() {
                   Template:
                 </label>
               </div>
-              
+
               <div className="flex flex-wrap gap-2">
                 {templates.map((template) => (
                   <motion.button
@@ -186,8 +214,16 @@ export default function Resume() {
                   >
                     <span className="text-base">{template.icon}</span>
                     <div className="text-left">
-                      <div className="font-semibold text-xs">{template.label}</div>
-                      <div className={`text-xs ${selectedTemplate === template.value ? 'text-white/80' : 'text-slate-500'}`}>
+                      <div className="font-semibold text-xs">
+                        {template.label}
+                      </div>
+                      <div
+                        className={`text-xs ${
+                          selectedTemplate === template.value
+                            ? "text-white/80"
+                            : "text-slate-500"
+                        }`}
+                      >
                         {template.description}
                       </div>
                     </div>
@@ -199,12 +235,16 @@ export default function Resume() {
             {/* Action Buttons */}
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100/80 rounded-lg">
-                <FaEye className={`text-xs ${isEditable ? 'text-blue-600' : 'text-slate-500'}`} />
+                <FaEye
+                  className={`text-xs ${
+                    isEditable ? "text-blue-600" : "text-slate-500"
+                  }`}
+                />
                 <span className="text-xs font-medium text-slate-700">
                   Mode: {isEditable ? "Edit" : "View"}
                 </span>
               </div>
-              
+
               <motion.button
                 onClick={() => {
                   if (isEditable) handleSaveAllChanges();
@@ -249,13 +289,15 @@ export default function Resume() {
                   <FaFileAlt className="text-blue-600 text-xs" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold text-slate-900">Resume Preview</h3>
+                  <h3 className="text-sm font-semibold text-slate-900">
+                    Resume Preview
+                  </h3>
                   <p className="text-xs text-slate-600">
                     {resume.name}'s Professional Resume
                   </p>
                 </div>
               </div>
-              
+
               <div className="flex items-center gap-1.5">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -337,9 +379,11 @@ export default function Resume() {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="mt-6 text-center"
         >
-          <div className="inline-flex items-center gap-3 bg-white/60 backdrop-blur-md border border-white/40 rounded-xl p-3 shadow-lg">
-            <span className="text-xs font-medium text-slate-700">Quick Actions:</span>
-            
+          <div className="inline-flex flex-wrap justify-center items-center gap-3 bg-white/60 backdrop-blur-md border border-white/40 rounded-xl p-3 shadow-lg">
+            <span className="text-xs font-medium text-slate-700">
+              Quick Actions:
+            </span>
+
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -348,7 +392,7 @@ export default function Resume() {
             >
               Analyze Job Fit
             </motion.button>
-            
+
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -357,7 +401,7 @@ export default function Resume() {
             >
               Check ATS Score
             </motion.button>
-            
+
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}

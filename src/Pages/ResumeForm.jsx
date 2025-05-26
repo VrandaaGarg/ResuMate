@@ -1264,12 +1264,12 @@ const ResumeForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 px-6 md:px-20 py-16 overflow-hidden">
+    <div className="min-h-screen relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 px-6 md:px-20 py-7 md:py-16 overflow-hidden">
       {/* Background Elements */}
       <div className="absolute -top-20 -left-20 w-80 h-80 bg-gradient-to-r from-blue-300 to-cyan-200 opacity-15 blur-3xl rounded-full z-0" />
       <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-gradient-to-r from-purple-300 to-pink-200 opacity-10 blur-3xl rounded-full z-0" />
-      
-      <div className="relative z-10 max-w-4xl mx-auto">
+
+      <div className="relative z-10 max-w-3xl mx-auto">
         {/* Header Section */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -1279,15 +1279,18 @@ const ResumeForm = () => {
         >
           <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 mb-3 shadow-lg">
             <FaWandMagicSparkles className="text-purple-500" />
-            <span className="text-xs font-medium text-gray-700">Resume Builder</span>
+            <span className="text-xs font-medium text-gray-700">
+              Resume Builder
+            </span>
           </div>
-          
+
           <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent mb-2 [font-family:'Lilita_One',cursive]">
             {steps[step]}
           </h1>
-          
+
           <p className="text-sm text-gray-600 max-w-2xl mx-auto">
-            Step {step + 1} of {steps.length} - Let's build your professional story
+            Step {step + 1} of {steps.length} - Let's build your professional
+            story
           </p>
         </motion.div>
 
@@ -1324,7 +1327,7 @@ const ResumeForm = () => {
               </div>
             ))}
           </div>
-          
+
           <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
             <motion.div
               className="bg-gradient-to-r from-blue-500 to-purple-500 h-full rounded-full"

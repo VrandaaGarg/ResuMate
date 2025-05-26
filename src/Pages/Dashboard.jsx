@@ -1,7 +1,16 @@
 // src/pages/Dashboard.jsx
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FaPlus, FaUpload, FaPen, FaFileAlt, FaRocket, FaStar, FaChartLine, FaClock } from "react-icons/fa";
+import {
+  FaPlus,
+  FaUpload,
+  FaPen,
+  FaFileAlt,
+  FaRocket,
+  FaStar,
+  FaChartLine,
+  FaClock,
+} from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useResumeData } from "../Contexts/ResumeDataContext";
 
@@ -63,7 +72,7 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 px-4 md:px-12 py-10 overflow-hidden">
+    <div className="min-h-screen relative overflow-x-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 px-4 md:px-12 py-10 overflow-hidden">
       {/* Background Elements */}
       <div className="absolute -top-20 -left-20 w-80 h-80 bg-gradient-to-r from-blue-300 to-cyan-200 opacity-15 blur-3xl rounded-full z-0" />
       <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-gradient-to-r from-purple-300 to-pink-200 opacity-10 blur-3xl rounded-full z-0" />
@@ -78,18 +87,19 @@ export default function Dashboard() {
         >
           <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 mb-3 shadow-lg">
             <FaRocket className="text-blue-500 text-xs" />
-            <span className="text-xs font-medium text-gray-700">Welcome to your Dashboard</span>
+            <span className="text-xs font-medium text-gray-700">
+              Welcome to your Dashboard
+            </span>
           </div>
-          
+
           <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent mb-2 [font-family:'Lilita_One',cursive]">
             Welcome Back! 👋
           </h1>
-          
+
           <p className="text-base text-gray-600 max-w-2xl mx-auto">
-            {resume?.name 
+            {resume?.name
               ? "Continue building your professional story with ResuMate"
-              : "Ready to create your first resume? Let's get started!"
-            }
+              : "Ready to create your first resume? Let's get started!"}
           </p>
         </motion.div>
 
@@ -110,10 +120,12 @@ export default function Dashboard() {
               className="group"
             >
               <Link to={action.link} className="block">
-                <div className="relative bg-white/80 backdrop-blur-sm border border-white/20 rounded-xl p-5 shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden">
+                <div className="relative bg-white/80  backdrop-blur-sm border border-white/20 rounded-xl p-5 shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden">
                   {/* Gradient Background */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${action.bgColor} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl`} />
-                  
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-br ${action.bgColor} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl`}
+                  />
+
                   {/* Icon */}
                   <motion.div
                     whileHover={{ rotate: 12, scale: 1.1 }}
@@ -122,7 +134,7 @@ export default function Dashboard() {
                   >
                     <action.icon size={20} />
                   </motion.div>
-                  
+
                   <div className="relative z-10">
                     <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-gray-800 transition-colors">
                       {action.title}
@@ -152,16 +164,19 @@ export default function Dashboard() {
               </div>
               <h2 className="text-xl font-bold text-gray-900">Resume Status</h2>
             </div>
-            
+
             {resume?.name ? (
               <div className="space-y-3">
                 <div className="p-3 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg">
-                  <h3 className="font-semibold text-green-800 mb-1 text-sm">✅ Resume Ready</h3>
+                  <h3 className="font-semibold text-green-800 mb-1 text-sm">
+                    ✅ Resume Ready
+                  </h3>
                   <p className="text-xs text-green-700">
-                    Your resume "{resume.name}" is ready to go! You can continue editing or download it.
+                    Your resume "{resume.name}" is ready to go! You can continue
+                    editing or download it.
                   </p>
                 </div>
-                
+
                 <div className="flex gap-2">
                   <Link
                     to="/resume-form"
@@ -184,9 +199,12 @@ export default function Dashboard() {
                 <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <FaFileAlt className="text-gray-400" size={32} />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-700 mb-2">No Resume Yet</h3>
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                  No Resume Yet
+                </h3>
                 <p className="text-gray-500 text-sm mb-4">
-                  Get started by creating your first resume or uploading an existing one.
+                  Get started by creating your first resume or uploading an
+                  existing one.
                 </p>
                 <Link
                   to="/resume-form"
@@ -210,9 +228,11 @@ export default function Dashboard() {
               <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-400 rounded-lg text-white shadow-lg">
                 <FaClock size={18} />
               </div>
-              <h2 className="text-xl font-bold text-gray-900">Recent Activity</h2>
+              <h2 className="text-xl font-bold text-gray-900">
+                Recent Activity
+              </h2>
             </div>
-            
+
             <div className="space-y-3">
               {recentActivity.map((activity, index) => (
                 <motion.div
@@ -222,16 +242,20 @@ export default function Dashboard() {
                   transition={{ duration: 0.4, delay: 0.8 + index * 0.1 }}
                   className="flex items-center gap-3 p-3 bg-gray-50/80 rounded-lg hover:bg-gray-100/80 transition-colors duration-200"
                 >
-                  <div className={`p-1.5 ${activity.color} bg-white rounded-md shadow-sm`}>
+                  <div
+                    className={`p-1.5 ${activity.color} bg-white rounded-md shadow-sm`}
+                  >
                     <activity.icon size={14} />
                   </div>
                   <div className="flex-1">
-                    <p className="font-medium text-gray-900 text-sm">{activity.action}</p>
+                    <p className="font-medium text-gray-900 text-sm">
+                      {activity.action}
+                    </p>
                     <p className="text-xs text-gray-500">{activity.time}</p>
                   </div>
                 </motion.div>
               ))}
-              
+
               {recentActivity.length === 0 && (
                 <div className="text-center py-8">
                   <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">

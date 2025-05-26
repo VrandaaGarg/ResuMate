@@ -231,7 +231,7 @@ const Home = () => {
         {/* Enhanced Gradient Background */}
         <div className="absolute -top-40 -left-40 w-96 h-96 bg-gradient-to-r from-blue-400 to-cyan-300 opacity-20 rounded-full blur-3xl z-0 animate-pulse" />
         <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] bg-gradient-to-r from-purple-400 to-pink-300 opacity-15 rounded-full blur-3xl z-0 animate-pulse" />
-        <div className="absolute top-1/3 left-1/3 w-80 h-80 bg-gradient-to-r from-green-400 to-emerald-300 opacity-10 blur-3xl rounded-full z-0 animate-pulse" />
+        {/* <div className="absolute top-1/3 left-1/3 w-80 h-80 bg-gradient-to-r from-green-400 to-emerald-300 opacity-10 blur-3xl rounded-full z-0 animate-pulse" /> */}
 
         {/* Floating Elements */}
         <motion.div
@@ -278,8 +278,8 @@ const Home = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.6 }}
           >
-            AI-powered platform that helps users build, optimize, and perfect their
-            resumes to stand out in today's competitive job market. Create
+            AI-powered platform that helps users build, optimize, and perfect
+            their resumes to stand out in today's competitive job market. Create
             professional, ATS-friendly resumes with real-time feedback.
           </motion.p>
 
@@ -445,7 +445,9 @@ const Home = () => {
                 {/* Card */}
                 <div className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 group-hover:bg-white">
                   <div className="flex items-center justify-center mb-3">
-                    <IconComponent className={`text-2xl bg-gradient-to-r ${step.color} bg-clip-text text-transparent`} />
+                    <IconComponent
+                      className={`text-2xl bg-gradient-to-r ${step.color} bg-clip-text text-transparent`}
+                    />
                   </div>
                   <h3 className="text-lg font-bold text-gray-900 mb-2 text-center">
                     {step.heading}
@@ -473,8 +475,9 @@ const Home = () => {
             Popular Templates
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Choose from beautifully crafted templates designed for maximum impact.
-            Each template is fully customizable with modern design principles.
+            Choose from beautifully crafted templates designed for maximum
+            impact. Each template is fully customizable with modern design
+            principles.
           </p>
         </motion.div>
 
@@ -525,9 +528,9 @@ const Home = () => {
 
       {/* Demo Video Section */}
       <div className="relative py-20">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 opacity-10" />
+        <div className="absolute inset-0 bg-gradient-to-r " />
 
-        <section className="relative z-10 bg-gradient-to-r from-blue-600 to-purple-600 mx-4 md:mx-20 rounded-3xl py-16 px-8 md:px-20 shadow-2xl">
+        <section className="relative z-10 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-cyan-600/20 mx-4 md:mx-20 rounded-3xl py-16 px-8 md:px-20 shadow-2xl">
           <FaQuoteLeft className="absolute -top-4 left-8 text-white/20 text-6xl" />
           <FaQuoteRight className="absolute -bottom-4 right-8 text-white/20 text-6xl" />
 
@@ -554,17 +557,18 @@ const Home = () => {
               </motion.div>
             </div>
 
-            <div className="w-full lg:w-2/5 text-white">
+            <div className="w-full lg:w-2/5 text-black">
               <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
                 <FaStar className="text-yellow-300" />
-                <span className="text-sm font-medium">Watch Demo</span>
+                <span className="text-sm ">Watch Demo</span>
               </div>
               <h2 className="text-3xl md:text-5xl font-bold mb-6 [font-family:'Lilita_One',cursive]">
                 Watch How It Works
               </h2>
-              <p className="text-white/90 text-lg leading-relaxed">
-                See how ResuMate helps you create, edit, and optimize your resume
-                step-by-step with our intuitive editor and AI-powered enhancements.
+              <p className="text-black/90 text-lg leading-relaxed">
+                See how ResuMate helps you create, edit, and optimize your
+                resume step-by-step with our intuitive editor and AI-powered
+                enhancements.
               </p>
             </div>
           </motion.div>
@@ -610,7 +614,11 @@ const Home = () => {
               {/* Rating Stars */}
               <div className="flex gap-1 mb-4">
                 {[...Array(user.rating)].map((_, index) => (
-                  <FiStar key={index} className="text-yellow-400 fill-current" size={16} />
+                  <FiStar
+                    key={index}
+                    className="text-yellow-400 fill-current"
+                    size={16}
+                  />
                 ))}
               </div>
 
@@ -629,7 +637,9 @@ const Home = () => {
                 </div>
                 <div>
                   <p className="font-bold text-gray-900 text-lg">{user.name}</p>
-                  <p className="text-sm text-blue-600 font-medium">{user.role}</p>
+                  <p className="text-sm text-blue-600 font-medium">
+                    {user.role}
+                  </p>
                   <p className="text-xs text-gray-500">{user.company}</p>
                 </div>
               </div>
