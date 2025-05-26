@@ -158,7 +158,7 @@ export default function Resume() {
       {/* Grid Pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-30" />
 
-      <div className="relative z-10 max-w-6xl mx-auto">
+      <div className="relative z-10 max-w-6xl flex flex-col justify-center items-center mx-auto">
         {/* Enhanced Header - smaller text and spacing */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -168,16 +168,16 @@ export default function Resume() {
         >
           <div className="inline-flex items-center gap-2 bg-white/60 backdrop-blur-sm border border-white/40 rounded-full px-4 py-1.5 mb-3 shadow-lg">
             <FaStar className="text-yellow-500 text-xs" />
-            <span className="text-xs font-medium text-slate-700">
+            <span className="text-[10px] md:text-xs font-medium text-slate-700">
               Resume Builder
             </span>
           </div>
 
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">
+          <h1 className="text-2xl md:text-4xl font-bold text-slate-900 mb-2">
             Your Professional Resume
           </h1>
 
-          <p className="text-sm text-slate-600 max-w-2xl mx-auto">
+          <p className="text-[14px] md:text-sm text-slate-600 max-w-2xl mx-auto">
             Customize and perfect your resume with our intuitive editor
           </p>
         </motion.div>
@@ -189,12 +189,12 @@ export default function Resume() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="bg-white/60 backdrop-blur-md border border-white/40 rounded-xl p-4 md:p-5 shadow-xl mb-6"
         >
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-4 lg:gap-9">
             {/* Template Selection */}
-            <div className="flex flex-col lg:flex-row items-start lg:items-center gap-3 flex-1">
-              <div className="flex items-center gap-1.5">
+            <div className="flex flex-col items-start  gap-3 flex-1">
+              <div className="flex gap-1.5">
                 <FaPalette className="text-purple-600 text-sm" />
-                <label className="text-sm font-semibold text-slate-700">
+                <label className="text-sm text-left font-semibold text-slate-700">
                   Template:
                 </label>
               </div>
@@ -212,13 +212,15 @@ export default function Resume() {
                         : "bg-white/80 text-slate-700 border-slate-200 hover:bg-white hover:shadow-sm"
                     }`}
                   >
-                    <span className="text-base">{template.icon}</span>
+                    <span className="text-xs md:text-base">
+                      {template.icon}
+                    </span>
                     <div className="text-left">
-                      <div className="font-semibold text-xs">
+                      <div className="font-semibold  md:text-xs text-[14px]">
                         {template.label}
                       </div>
                       <div
-                        className={`text-xs ${
+                        className={`md:text-xs text-[14px] ${
                           selectedTemplate === template.value
                             ? "text-white/80"
                             : "text-slate-500"
@@ -234,13 +236,13 @@ export default function Resume() {
 
             {/* Action Buttons */}
             <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100/80 rounded-lg">
+              <div className="flex  items-center gap-1.5 px-3 py-1.5 bg-slate-100/80 rounded-lg">
                 <FaEye
-                  className={`text-xs ${
+                  className={`text-xs md:text-sm ${
                     isEditable ? "text-blue-600" : "text-slate-500"
                   }`}
                 />
-                <span className="text-xs font-medium text-slate-700">
+                <span className="text-xs md:text-sm font-medium text-slate-700">
                   Mode: {isEditable ? "Edit" : "View"}
                 </span>
               </div>
@@ -252,7 +254,7 @@ export default function Resume() {
                 }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={`px-4 py-2 rounded-lg font-semibold shadow-md transition-all duration-300 flex items-center gap-1.5 text-sm ${
+                className={`px-4 py-2 rounded-lg font-semibold shadow-md transition-all duration-300 flex items-center gap-1.5 text-[14px] md:text-sm ${
                   isEditable
                     ? "bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white"
                     : "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
@@ -279,7 +281,7 @@ export default function Resume() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="bg-white/60 backdrop-blur-md border border-white/40 shadow-xl rounded-xl overflow-hidden"
+          className="bg-white/60 backdrop-blur-md max-w-4xl border border-white/40 shadow-xl rounded-xl overflow-hidden"
         >
           {/* Preview Header - more compact */}
           <div className="bg-gradient-to-r from-slate-100/80 to-blue-50/80 p-4 border-b border-white/20">
@@ -289,10 +291,10 @@ export default function Resume() {
                   <FaFileAlt className="text-blue-600 text-xs" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold text-slate-900">
+                  <h3 className="text-[14px] md:text-sm font-semibold text-slate-900">
                     Resume Preview
                   </h3>
-                  <p className="text-xs text-slate-600">
+                  <p className="text-[10px] md:text-xs text-slate-600">
                     {resume.name}'s Professional Resume
                   </p>
                 </div>
@@ -380,7 +382,7 @@ export default function Resume() {
           className="mt-6 text-center"
         >
           <div className="inline-flex flex-wrap justify-center items-center gap-3 bg-white/60 backdrop-blur-md border border-white/40 rounded-xl p-3 shadow-lg">
-            <span className="text-xs font-medium text-slate-700">
+            <span className="text-xs md:text-base font-medium text-slate-700">
               Quick Actions:
             </span>
 
@@ -388,7 +390,7 @@ export default function Resume() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate("/job-fit-analyzer")}
-              className="px-3 py-1.5 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg text-xs font-medium shadow-md hover:shadow-lg transition-all duration-300"
+              className="px-3 md:px-3.5 py-1.5 md:py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg text-xs md:text-lg font-medium shadow-md hover:shadow-lg transition-all duration-300"
             >
               Analyze Job Fit
             </motion.button>
@@ -397,7 +399,7 @@ export default function Resume() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate("/ats-checker")}
-              className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-lg text-xs font-medium shadow-md hover:shadow-lg transition-all duration-300"
+              className="px-3 md:px-3.5 py-1.5 md:py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-lg text-xs md:text-lg font-medium shadow-md hover:shadow-lg transition-all duration-300"
             >
               Check ATS Score
             </motion.button>
@@ -406,7 +408,7 @@ export default function Resume() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate("/resume-form")}
-              className="px-3 py-1.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg text-xs font-medium shadow-md hover:shadow-lg transition-all duration-300"
+              className="px-3 md:px-3.5 py-1.5 md:py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg text-xs md:text-lg font-medium shadow-md hover:shadow-lg transition-all duration-300"
             >
               Edit Details
             </motion.button>

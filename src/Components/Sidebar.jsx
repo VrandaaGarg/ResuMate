@@ -77,7 +77,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -240, opacity: 0 }}
             transition={{ type: "spring", stiffness: 200, damping: 22 }}
-            className="fixed top-16 left-0 z-40 w-72 h-[calc(100vh-4rem)] pt-12 pb-5 px-4 bg-white/95 backdrop-blur-md border-r border-white/20 shadow-xl overflow-y-auto overflow-x-hidden"
+            className="fixed top-16 left-0 z-40 w-72 h-[calc(100vh-4rem)] pt-8 md:pt-12 pb-5 px-4 bg-white/95 backdrop-blur-md border-r border-white/20 shadow-xl overflow-y-auto overflow-x-hidden"
           >
             {/* Background Gradient Blobs */}
             <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/30 pointer-events-none" />
@@ -88,7 +88,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="relative z-10 mb-8 text-center"
+              className="hidden md:block relative z-10 mb-8 text-center"
             >
               <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent font-bold text-lg mb-2">
                 <span>🚀</span>

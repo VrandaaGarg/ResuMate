@@ -877,7 +877,7 @@ const ClassicTemplate = ({ resume }) => {
                     { label: "None", value: 0 },
                     { label: "Extra Small", value: 4 },
                     { label: "Small", value: 8 },
-                    { label: "Medium", value: 12 },
+                    { label: "Normal", value: 12 },
                     { label: "Medium", value: 16 },
                     { label: "Large", value: 20 },
                     { label: "Extra Large", value: 24 },

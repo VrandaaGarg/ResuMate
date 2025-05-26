@@ -87,7 +87,7 @@ export default function Dashboard() {
         >
           <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 mb-3 shadow-lg">
             <FaRocket className="text-blue-500 text-xs" />
-            <span className="text-xs font-medium text-gray-700">
+            <span className="text-[10px] md:text-xs md:font-medium text-gray-700">
               Welcome to your Dashboard
             </span>
           </div>
@@ -96,7 +96,7 @@ export default function Dashboard() {
             Welcome Back! 👋
           </h1>
 
-          <p className="text-base text-gray-600 max-w-2xl mx-auto">
+          <p className="text-sm md:text-base text-gray-600 max-w-2xl mx-auto">
             {resume?.name
               ? "Continue building your professional story with ResuMate"
               : "Ready to create your first resume? Let's get started!"}
@@ -120,7 +120,7 @@ export default function Dashboard() {
               className="group"
             >
               <Link to={action.link} className="block">
-                <div className="relative bg-white/80  backdrop-blur-sm border border-white/20 rounded-xl p-5 shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden">
+                <div className="relative bg-white/80  backdrop-blur-sm border border-white/20 rounded-xl p-2.5 md:p-5 shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden">
                   {/* Gradient Background */}
                   <div
                     className={`absolute inset-0 bg-gradient-to-br ${action.bgColor} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl`}
@@ -130,16 +130,16 @@ export default function Dashboard() {
                   <motion.div
                     whileHover={{ rotate: 12, scale: 1.1 }}
                     transition={{ duration: 0.3 }}
-                    className={`relative z-10 w-12 h-12 bg-gradient-to-r ${action.color} rounded-xl text-white flex items-center justify-center mb-4 shadow-lg group-hover:shadow-xl transition-shadow duration-300`}
+                    className={`relative z-10 md:w-12 md:h-12 w-7 h-7 bg-gradient-to-r ${action.color} rounded md:rounded-xl text-white flex items-center justify-center mb-1.5 md:mb-4 shadow-lg group-hover:shadow-xl transition-shadow duration-300`}
                   >
                     <action.icon size={20} />
                   </motion.div>
 
                   <div className="relative z-10">
-                    <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-gray-800 transition-colors">
+                    <h3 className="text-sm md:text-lg font-bold text-gray-900 mb-2 group-hover:text-gray-800 transition-colors">
                       {action.title}
                     </h3>
-                    <p className="text-sm text-gray-600 group-hover:text-gray-700 transition-colors leading-relaxed">
+                    <p className="text-xs md:text-sm text-gray-600 group-hover:text-gray-700 transition-colors leading-relaxed">
                       {action.description}
                     </p>
                   </div>
@@ -150,44 +150,46 @@ export default function Dashboard() {
         </motion.div>
 
         {/* Current Resume Status & Recent Activity */}
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 gap-6 md:gap-6">
           {/* Current Resume Status */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-xl p-6 shadow-lg"
+            className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-xl p-3 md:p-6 shadow-lg"
           >
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg text-white shadow-lg">
-                <FaFileAlt size={18} />
+            <div className="flex items-center gap-3 mb-1.5 md:mb-4">
+              <div className="p-1 md:p-2 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg text-white shadow-lg">
+                <FaFileAlt className="text-xs md:text-xl " />
               </div>
-              <h2 className="text-xl font-bold text-gray-900">Resume Status</h2>
+              <h2 className="text-sm md:text-xl font-bold text-gray-900">
+                Resume Status
+              </h2>
             </div>
 
             {resume?.name ? (
               <div className="space-y-3">
                 <div className="p-3 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg">
-                  <h3 className="font-semibold text-green-800 mb-1 text-sm">
+                  <h3 className="font-semibold text-green-800 mb-1 text-[16px] md:text-sm">
                     ✅ Resume Ready
                   </h3>
-                  <p className="text-xs text-green-700">
+                  <p className="text-[12px] md:text-xs text-green-700">
                     Your resume "{resume.name}" is ready to go! You can continue
                     editing or download it.
                   </p>
                 </div>
 
-                <div className="flex gap-2">
+                <div className="flex gap-2 text-[12px] md:text-sm">
                   <Link
                     to="/resume-form"
-                    className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs font-medium"
+                    className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors  font-medium"
                   >
                     <FaPen size={12} />
                     Edit Resume
                   </Link>
                   <Link
                     to="/resume"
-                    className="flex items-center gap-1 px-3 py-1.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-xs font-medium"
+                    className="flex items-center gap-1 px-3 py-1.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors  font-medium"
                   >
                     <FaFileAlt size={12} />
                     View Resume
@@ -222,13 +224,13 @@ export default function Dashboard() {
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-xl p-6 shadow-lg"
+            className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-xl p-3 md:p-6 shadow-lg"
           >
-            <div className="flex items-center gap-3 mb-4">
+            <div className="flex items-center gap-3 mb-2 md:mb-4">
               <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-400 rounded-lg text-white shadow-lg">
-                <FaClock size={18} />
+                <FaClock className="text-[12px] text-xl" />
               </div>
-              <h2 className="text-xl font-bold text-gray-900">
+              <h2 className="text-sm md:text-xl font-bold text-gray-900">
                 Recent Activity
               </h2>
             </div>
@@ -240,7 +242,7 @@ export default function Dashboard() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: 0.8 + index * 0.1 }}
-                  className="flex items-center gap-3 p-3 bg-gray-50/80 rounded-lg hover:bg-gray-100/80 transition-colors duration-200"
+                  className="flex items-center gap-3 p-1.5 md:p-3 bg-gray-50/80 rounded-lg hover:bg-gray-100/80 transition-colors duration-200"
                 >
                   <div
                     className={`p-1.5 ${activity.color} bg-white rounded-md shadow-sm`}
@@ -248,10 +250,12 @@ export default function Dashboard() {
                     <activity.icon size={14} />
                   </div>
                   <div className="flex-1">
-                    <p className="font-medium text-gray-900 text-sm">
+                    <p className="font-medium text-gray-900 text-[16px] md:text-sm">
                       {activity.action}
                     </p>
-                    <p className="text-xs text-gray-500">{activity.time}</p>
+                    <p className="text-[12px] md:text-xs text-gray-500">
+                      {activity.time}
+                    </p>
                   </div>
                 </motion.div>
               ))}

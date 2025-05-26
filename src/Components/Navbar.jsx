@@ -52,7 +52,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
           : "bg-white/95 backdrop-blur-sm border-b border-gray-100"
       }`}
     >
-      <div className="px-4 md:px-6 lg:px-8 xl:px-12 py-3 md:py-2 flex items-center justify-between w-full">
+      <div className="px-4 md:px-6 lg:px-8 xl:px-12 py-2 md:py-2 flex items-center justify-between w-full">
         {/* Left: Logo + Sidebar Toggle */}
         <div className="flex items-center gap-3 md:gap-4">
           {!isHomePage && (
