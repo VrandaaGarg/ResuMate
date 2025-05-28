@@ -1039,18 +1039,18 @@ const ClassicTemplate = ({ resume }) => {
                 <ul className="flex flex-col gap-1 max-h-60 pr-1">
                   {[
                     { label: "None", value: "0px" },
-                    { label: "Extra Small", value: "10px" },
-                    { label: "Small", value: "15px" },
-                    { label: "Normal", value: "20px" },
-                    { label: "Medium", value: "30px" },
-                    { label: "Large", value: "40px" },
-                    { label: "Extra Large", value: "50px" },
-                    { label: "Huge", value: "60px" },
-                    { label: "Massive", value: "70px" },
-                    { label: "Giant", value: "80px" },
-                    { label: "Colossal", value: "90px" },
-                    { label: "Titanic", value: "100px" },
-                    { label: "Epic", value: "120px" },
+                    { label: "Extra Small", value: "3px" },
+                    { label: "Small", value: "6px" },
+                    { label: "Normal", value: "10px" },
+                    { label: "Medium", value: "15px" },
+                    { label: "Large", value: "20px" },
+                    { label: "Extra Large", value: "28px" },
+                    { label: "Huge", value: "36px" },
+                    { label: "Massive", value: "44px" },
+                    { label: "Giant", value: "56px" },
+                    { label: "Colossal", value: "62px" },
+                    { label: "Titanic", value: "70px" },
+                    { label: "Epic", value: "86px" },
                   ].map((p) => (
                     <li key={p.value}>
                       <button
