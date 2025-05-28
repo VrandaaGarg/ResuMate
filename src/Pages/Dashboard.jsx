@@ -13,15 +13,19 @@ import {
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useResumeData } from "../Contexts/ResumeDataContext";
+import { useAuth } from "../Contexts/AuthContext";
 
 export default function Dashboard() {
-  const [resumes, setResumes] = useState([]);
   const { resume, setResume } = useResumeData();
-
-  useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("resumes")) || [];
-    setResumes(stored);
-  }, []);
+  const { user } = useAuth();
+  // Format the creation date
+  const memberSince = user.metadata?.creationTime
+    ? new Date(user.metadata.creationTime).toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })
+    : "Unknown";
 
   const quickActions = [
     {
@@ -50,24 +54,34 @@ export default function Dashboard() {
     },
   ];
 
+  const formatDate = (date) => {
+    if (!date) return "No resume created";
+    if (typeof date === "object" && date.seconds)
+      date = new Date(date.seconds * 1000);
+    else date = new Date(date);
+    return date.toLocaleString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
   const recentActivity = [
     {
       action: "Resume Created",
-      time: "2 hours ago",
+      time: resume?.createdOn
+        ? formatDate(resume.createdOn)
+        : "No resume created",
       icon: FaFileAlt,
       color: "text-blue-600",
     },
     {
-      action: "ATS Check Completed",
-      time: "1 day ago",
+      action: "Member since",
+      time: `${memberSince}`,
       icon: FaStar,
       color: "text-green-600",
-    },
-    {
-      action: "Template Applied",
-      time: "3 days ago",
-      icon: FaRocket,
-      color: "text-purple-600",
     },
   ];
 

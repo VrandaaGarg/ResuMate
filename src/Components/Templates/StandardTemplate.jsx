@@ -284,7 +284,7 @@ const StandardTemplate = ({ resume }) => {
           )}
 
           {resume.contact.github && resume.contact.linkedin && (
-            <span className="text-gray-700 mx-1 hidden sm:inline">|</span>
+            <span className="text-gray-700 mx-1 inline">|</span>
           )}
 
           {resume.contact.linkedin && (
@@ -1098,13 +1098,13 @@ const StandardTemplate = ({ resume }) => {
             </button>
 
             {openDropdown === "gap" && (
-              <div className="absolute max-h-48 overflow-auto left-1/2 -translate-x-1/2 mt-2 z-50 w-56 bg-white border border-gray-200 rounded-lg shadow-lg p-3">
-                <h3 className="text-sm font-semibold text-gray-800 mb-2 flex items-center gap-2">
+              <div className="absolute max-h-48 overflow-auto left-1/2 -translate-x-1/2 mt-2 z-50 w-24 md:w-56 bg-white border border-gray-200 rounded-lg shadow-lg p-3">
+                <h3 className="text-[14px] md:text-sm font-semibold text-gray-800 mb-2 flex items-center gap-2">
                   <CgSpaceBetweenV className="text-sky-700" />
                   Section Spacing
                 </h3>
 
-                <ul className="space-y-1 text-sm text-gray-600">
+                <ul className="space-y-1 text-[14px] md:text-sm text-gray-600">
                   {[
                     { label: "None", value: "py-0" },
                     { label: "Extra Small", value: "py-1" },
@@ -1128,7 +1128,7 @@ const StandardTemplate = ({ resume }) => {
                         }));
                         setOpenDropdown(null); // Close dropdown after selection
                       }}
-                      className={`px-3 py-1.5 rounded cursor-pointer hover:bg-sky-50 transition ${
+                      className={`px-1 md:px-3 py-1.5 rounded cursor-pointer hover:bg-sky-50 transition ${
                         standardSettings.sectionPaddingY === option.value
                           ? "bg-sky-100 text-sky-700 "
                           : ""

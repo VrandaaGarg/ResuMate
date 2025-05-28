@@ -273,12 +273,12 @@ const ResumeForm = () => {
                   onClick={() => handleEnhanceField("description")}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="absolute -top-3 right-3 p-3 rounded-full bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-500 hover:from-purple-600 hover:via-blue-600 hover:to-cyan-600 text-white shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="absolute -top-5 right-2 p-2 rounded-full bg-gradient-to-tr from-sky-500 via-sky-600 to-sky-700 hover:from-sky-600 hover:to-sky-800 text-white shadow-lg transition disabled:opacity-50 disabled:cursor-not-allowed ring-2 ring-offset-2 ring-sky-300"
                 >
                   {aiLoadingField === "description" ? (
                     <BsArrowClockwise className="text-lg animate-spin" />
                   ) : (
-                    <FaWandMagicSparkles className="text-lg" />
+                    <FaWandMagicSparkles className="text-lg animate-pulse" />
                   )}
                 </motion.button>
               </div>
@@ -486,7 +486,7 @@ const ResumeForm = () => {
                   htmlFor="tenth"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  10th Percentage
+                  10th %
                 </label>
                 <FiBarChart2 className="absolute top-9 left-3 text-gray-500 text-sm" />
                 <input
@@ -505,7 +505,7 @@ const ResumeForm = () => {
                   htmlFor="twelfth"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  12th Percentage
+                  12th %
                 </label>
                 <FiBarChart2 className="absolute top-9 left-3 text-gray-500 text-sm" />
                 <input

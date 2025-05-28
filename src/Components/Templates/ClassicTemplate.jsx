@@ -1017,13 +1017,13 @@ const ClassicTemplate = ({ resume }) => {
             </button>
 
             {openDropdown === "gap" && (
-              <div className="absolute max-h-48 overflow-auto left-1/2 -translate-x-1/2 mt-2 z-50 w-56 bg-white border border-gray-200 rounded-lg shadow-lg p-3">
-                <h3 className="text-sm font-semibold text-gray-800 mb-2 flex items-center gap-2">
+              <div className="absolute max-h-48 overflow-auto left-0 mt-2 z-50 w-32 md:w-56 bg-white border border-gray-200 rounded-lg shadow-lg p-3">
+                <h3 className="text-[16px] md:text-sm font-semibold text-gray-800 mb-2 flex items-center gap-2">
                   <CgSpaceBetweenV className="text-sky-700" />
                   Section Spacing
                 </h3>
 
-                <ul className="space-y-1  text-sm text-gray-600">
+                <ul className="space-y-1 text-[14px] md:text-sm text-gray-600">
                   {[
                     { label: "None", value: 0 },
                     { label: "Extra Small", value: 4 },
@@ -1047,7 +1047,7 @@ const ClassicTemplate = ({ resume }) => {
                           sectionGap: option.value,
                         }))
                       }
-                      className={`px-3 gap- py-1.5 rounded cursor-pointer hover:bg-sky-50 transition ${
+                      className={`px-1 md:px-3 py-0.5 md:py-1.5 rounded cursor-pointer hover:bg-sky-50 transition ${
                         classicSettings.sectionGap === option.value
                           ? "bg-sky-100 text-sky-700 font-semibold"
                           : ""
@@ -1396,7 +1396,7 @@ const ClassicTemplate = ({ resume }) => {
 
               {/* Picker Panel */}
               {openDropdown === "linkColor" && (
-                <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl p-2.5 md:p-4 w-fit right-0">
+                <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl p-2.5 md:p-4 w-fit left-1/2 -translate-x-1/2">
                   <p className="text-xs md:text-sm font-semibold text-gray-700 mb-3">
                     Project Link Color
                   </p>
@@ -1477,7 +1477,7 @@ const ClassicTemplate = ({ resume }) => {
             </button>
 
             {openDropdown === "toggle" && (
-              <div className="absolute right-0 mt-2 z-50 w-48 md:w-72 max-h-72 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg">
+              <div className="absolute left-1/2 -translate-x-1/2 md:right-0 mt-2 z-50 w-48 md:w-48 max-h-72 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg">
                 <div className="p-4">
                   <h3 className="text-[12px] md:text-sm font-semibold text-gray-800 mb-1.5 md:mb-3 flex items-center gap-1 md:gap-2">
                     <FaEye className="text-sky-700" />
@@ -1595,13 +1595,13 @@ const ClassicTemplate = ({ resume }) => {
       {/* Resume Preview */}
       <div
         style={{
-          aspectRatio: "7/10", // A4 ratio (width:height = 7:10, which is close to actual A4 ratio)
+          aspectRatio: "7/8.89", // A4 ratio (width:height = 7:10, which is close to actual A4 ratio)
           display: "flex",
         }}
       >
         <div
           ref={contentRef}
-          className="w-full max-w-4xl mx-auto p-2.5 md:p-5 text-sm leading-relaxed border border-gray-200 shadow-md"
+          className="w-full max-w-4xl mx-auto p-2.5 md:p-5 text-sm leading-relaxed  "
           style={{
             fontFamily: classicSettings.fontFamily || "Inter",
             backgroundColor: classicSettings.backgroundColor || "#ffffff",
