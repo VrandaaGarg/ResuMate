@@ -14,10 +14,12 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../Contexts/AuthContext";
 import showSuccessToast from "../Components/showSuccessToast";
 import showErrorToast from "../Components/showErrorToast";
+import { AnimatePresence } from "framer-motion";
 
 const Signup = () => {
   const { signup } = useAuth();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false); // at the top in your component
 
   const [form, setForm] = useState({
     name: "",
@@ -50,17 +52,24 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    const allValid = Object.values(passwordValid).every(Boolean);
-    if (!allValid) return toast.error("Password doesn't meet all criteria.");
-    if (form.password !== form.confirmPassword)
+    if (!form.password) {
+      setLoading(false);
+      return toast.error("Password cannot be empty.");
+    }
+    if (form.password !== form.confirmPassword) {
+      setLoading(false);
       return toast.error("Passwords do not match.");
+    }
 
     const result = await signup({
       name: form.name,
       email: form.email,
       password: form.password,
     });
+
+    setLoading(false);
 
     if (result.success) {
       showSuccessToast("Signup successful!");
@@ -239,9 +248,40 @@ const Signup = () => {
           {/* Submit */}
           <button
             type="submit"
-            className="w-full py-2 bg-sky-700 text-white font-medium rounded hover:bg-sky-800 transition"
+            className={`w-full py-2 bg-sky-700 text-white font-medium rounded transition flex items-center justify-center relative ${
+              loading ? "opacity-80 cursor-not-allowed" : "hover:bg-sky-800"
+            }`}
+            disabled={loading}
           >
-            Sign Up
+            <AnimatePresence mode="wait" initial={false}>
+              {loading ? (
+                <motion.span
+                  key="loading"
+                  initial={{ opacity: 0.2 }}
+                  animate={{
+                    opacity: [0.2, 1, 0.2],
+                  }}
+                  exit={{ opacity: 0 }}
+                  transition={{
+                    duration: 1.1,
+                    repeat: Infinity,
+                  }}
+                  className="flex items-center gap-2"
+                >
+                  <span className="animate-pulse">Loading...</span>
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="signup"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  Sign Up
+                </motion.span>
+              )}
+            </AnimatePresence>
           </button>
           <p className="text-sm text-center text-gray-500">
             Already have an account?{" "}

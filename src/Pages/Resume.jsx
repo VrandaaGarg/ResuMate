@@ -30,6 +30,7 @@ import {
 } from "../db/database";
 import showSuccessToast from "../Components/showSuccessToast";
 import { FaWandMagicSparkles, FaStar } from "react-icons/fa6";
+import { FaLightbulb, FaFont, FaThList } from "react-icons/fa";
 
 export default function Resume() {
   const navigate = useNavigate();
@@ -283,52 +284,6 @@ export default function Resume() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="bg-white/60 backdrop-blur-md max-w-4xl border border-white/40 shadow-xl rounded-xl overflow-hidden"
         >
-          {/* Preview Header - more compact */}
-          <div className="bg-gradient-to-r from-slate-100/80 to-blue-50/80 p-4 border-b border-white/20">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="p-1.5 bg-white/80 rounded-lg shadow-sm">
-                  <FaFileAlt className="text-blue-600 text-xs" />
-                </div>
-                <div>
-                  <h3 className="text-[14px] md:text-sm font-semibold text-slate-900">
-                    Resume Preview
-                  </h3>
-                  <p className="text-[10px] md:text-xs text-slate-600">
-                    {resume.name}'s Professional Resume
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-1.5">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="p-1.5 bg-white/80 hover:bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 text-slate-600 hover:text-blue-600"
-                  title="Download PDF"
-                >
-                  <FaDownload size={12} />
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="p-1.5 bg-white/80 hover:bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 text-slate-600 hover:text-green-600"
-                  title="Share Resume"
-                >
-                  <FaShare size={12} />
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="p-1.5 bg-white/80 hover:bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 text-slate-600 hover:text-purple-600"
-                  title="Settings"
-                >
-                  <FaCog size={12} />
-                </motion.button>
-              </div>
-            </div>
-          </div>
-
           {/* Template Content */}
           <div className="p-4 md:p-6">
             <motion.div
@@ -374,46 +329,110 @@ export default function Resume() {
           </div>
         </motion.div>
 
-        {/* Quick Actions */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="mt-6 text-center"
-        >
-          <div className="inline-flex flex-wrap justify-center items-center gap-3 bg-white/60 backdrop-blur-md border border-white/40 rounded-xl p-3 shadow-lg">
-            <span className="text-xs md:text-base font-medium text-slate-700">
-              Quick Actions:
-            </span>
+        <div className="flex flex-col md:flex-row items-center w-full  md:gap-8 justify-center mt-8">
+          <motion.div
+            className="bg-yellow-50 border h-full border-yellow-200 rounded-xl px-2 md:px-5 py-2 md:py-4 shadow-md mt-6 mb-4 max-w-xl"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            <div className="flex text items-center gap-2 md:mb-2">
+              <FaLightbulb className="text-yellow-400 text-lg md:text-xl animate-pulse" />
+              <h1 className="text-lg md:text-xl font-bold text-yellow-900">
+                Tips
+              </h1>
+            </div>
+            <ul className="space-y-2 text-xs md:text-sm pl-1">
+              <motion.li
+                initial={{ x: -20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: 0.2 }}
+                className="flex items-start gap-2 text-yellow-900"
+              >
+                <FaLightbulb className="text-yellow-500 mt-1" />
+                <span>
+                  <strong>For best alignment and editing:</strong> Use your
+                  resume editor on a laptop or desktop for better control of
+                  layout and visual consistency.
+                </span>
+              </motion.li>
+              <motion.li
+                initial={{ x: -20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: 0.4 }}
+                className="flex items-start gap-2 text-yellow-900"
+              >
+                <FaFont className="text-yellow-500 mt-1" />
+                <span>
+                  <strong>Adjust font size:</strong> Try increasing or
+                  decreasing the font size to easily distinguish between
+                  sections and improve overall readability.
+                </span>
+              </motion.li>
+              <motion.li
+                initial={{ x: -20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: 0.4 }}
+                className="flex items-start gap-2 text-yellow-900"
+              >
+                <FaThList className="text-yellow-500 mt-1 " />
+                <span>
+                  <strong>Balance your content:</strong> If your sections are
+                  looking <b>too long</b>, try to{" "}
+                  <span className="font-semibold">
+                    summarize or break up details
+                  </span>{" "}
+                  for clarity. If your sections are <b>too short</b>, consider{" "}
+                  <span className="font-semibold">
+                    adding achievements, specifics, or a brief explanation
+                  </span>
+                  to better highlight your strengths.
+                </span>
+              </motion.li>
+            </ul>
+          </motion.div>
 
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => navigate("/job-fit-analyzer")}
-              className="px-3 md:px-3.5 py-1.5 md:py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg text-xs md:text-lg font-medium shadow-md hover:shadow-lg transition-all duration-300"
-            >
-              Analyze Job Fit
-            </motion.button>
+          {/* Quick Actions */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            className="mt-6  text-center"
+          >
+            <div className="flex w-full h-full flex-wrap flex-row md:flex-col justify-center items-center gap-3 bg-white/60 backdrop-blur-md border border-white/40 rounded-xl p-3 shadow-lg">
+              <span className="text-xs md:text-base font-medium text-slate-700">
+                Quick Actions:
+              </span>
 
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => navigate("/ats-checker")}
-              className="px-3 md:px-3.5 py-1.5 md:py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-lg text-xs md:text-lg font-medium shadow-md hover:shadow-lg transition-all duration-300"
-            >
-              Check ATS Score
-            </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => navigate("/job-fit-analyzer")}
+                className="px-3 md:px-3.5 md:w-full py-1.5 md:py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg text-xs md:text-lg font-medium shadow-md hover:shadow-lg transition-all duration-300"
+              >
+                Analyze Job Fit
+              </motion.button>
 
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => navigate("/resume-form")}
-              className="px-3 md:px-3.5 py-1.5 md:py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg text-xs md:text-lg font-medium shadow-md hover:shadow-lg transition-all duration-300"
-            >
-              Edit Details
-            </motion.button>
-          </div>
-        </motion.div>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => navigate("/ats-checker")}
+                className="px-3 md:px-3.5 py-1.5 md:w-full md:py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-lg text-xs md:text-lg font-medium shadow-md hover:shadow-lg transition-all duration-300"
+              >
+                Check ATS Score
+              </motion.button>
+
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => navigate("/resume-form")}
+                className="px-3 md:px-3.5 py-1.5 md:w-full md:py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg text-xs md:text-lg font-medium shadow-md hover:shadow-lg transition-all duration-300"
+              >
+                Edit Details
+              </motion.button>
+            </div>
+          </motion.div>
+        </div>
       </div>
     </div>
   );

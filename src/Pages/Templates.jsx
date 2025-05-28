@@ -1,32 +1,113 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FaRegClock } from "react-icons/fa";
+import { FaRegClock, FaStar } from "react-icons/fa";
+import { WiStars } from "react-icons/wi";
 
 export default function Templates() {
   const navigate = useNavigate();
+
+  const Template = [
+    {
+      id: 1,
+      name: "Sidebar Template",
+      image: "/sidebar.jpg",
+      description: "A clean and modern template for a professional look.",
+      badge: "Popular",
+      badgeColor: "bg-gradient-to-r from-blue-500 to-cyan-400",
+    },
+    {
+      id: 2,
+      name: "Classic Template",
+      image: "/classic.jpg",
+      description: "A classic design that is timeless and effective.",
+      badge: "Timeless",
+      badgeColor: "bg-gradient-to-r from-green-500 to-emerald-400",
+    },
+    {
+      id: 3,
+      name: "Standard Template",
+      image: "/standard.jpg",
+      description: "A Standard layout that stands out from the crowd.",
+      badge: "Standard",
+      badgeColor: "bg-gradient-to-r from-purple-500 to-pink-400",
+    },
+  ];
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="flex flex-col items-center justify-center min-h-[60vh] text-center p-6 bg-gradient-to-br from-white via-sky-50 to-white "
+      className="flex flex-col py-5 pb-14 md:py-10 md:pb-32 items-center justify-center min-h-[60vh] text-center p-6 bg-gradient-to-br from-white via-sky-50 to-white "
     >
-      <FaRegClock className="text-5xl text-sky-700 mb-4 animate-pulse" />
-      <h2 className="text-2xl font-semibold text-gray-800 mb-2">
-        Templates Coming Soon
-      </h2>
-      <p className="text-gray-600 mb-6">
-        We’re designing beautiful resume templates just for you. Hang tight!
-      </p>
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => navigate("/dashboard")}
-        className="bg-sky-700 hover:bg-sky-800 text-white px-6 py-2 rounded-full font-medium transition-all duration-300"
-      >
-        Back to Dashboard
-      </motion.button>
+      <div className="py-7">
+        <div className="inline-flex items-center gap-2 bg-white/60 backdrop-blur-sm border border-white/40 rounded-full px-4 py-1.5 mb-3 shadow-lg">
+          <FaStar className="text-yellow-500 text-xs" />
+          <span className="text-[10px] md:text-xs font-medium text-slate-700">
+            Resume Templates
+          </span>
+        </div>
+
+        <h1 className="text-2xl  md:text-4xl font-bold text-gray-800 mb-4">
+          Choose Your Perfect Resume Template
+        </h1>
+      </div>
+
+      <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-8 md:px-20">
+        {Template.map((temp, index) => (
+          <motion.div
+            key={temp.id}
+            whileHover={{ scale: 1.03, y: -10 }}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: index * 0.1 }}
+            viewport={{ once: true }}
+            className="group relative bg-white/80 backdrop-blur-sm border border-white/20 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
+          >
+            {/* Badge */}
+            <div
+              className={`absolute top-4 right-4 ${temp.badgeColor} text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg z-10`}
+            >
+              {temp.badge}
+            </div>
+
+            {/* Template Image */}
+            <div className="relative overflow-hidden rounded-xl mb-4 group-hover:transform group-hover:scale-105 transition-transform duration-500">
+              {" "}
+              <img
+                src={temp.image}
+                alt={temp.name}
+                className="w-full h-72 md:h-96 relative object-cover"
+                loading="lazy"
+              />
+              <motion.button
+                type="button"
+                aria-label={`Try the ${temp.name} template`}
+                onClick={() => navigate("/resume")}
+                whileHover={{ scale: 1.07, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                className="absolute top-1/2 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 px-2 md:px-5 py-2 md:py-2.5 rounded-full bg-gradient-to-r from-blue-500 to-sky-700 shadow-lg hover:shadow-xl text-white font-semibold text-base transition-all duration-300 cursor-pointer"
+              >
+                <WiStars className="text-sm md:text-xl" />
+                <span className="text-sm md:text-base">Try This</span>
+              </motion.button>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />{" "}
+            </div>
+
+            <div className="space-y-2">
+              <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+                {temp.name}
+              </h3>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                {temp.description}
+              </p>
+            </div>
+
+            {/* Decorative Elements */}
+            <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
+          </motion.div>
+        ))}
+      </div>
     </motion.div>
   );
 }

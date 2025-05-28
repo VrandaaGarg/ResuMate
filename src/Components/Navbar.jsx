@@ -21,6 +21,8 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
   const { user, logout } = useAuth();
   const location = useLocation();
   const isHomePage = location.pathname === "/";
+  const isloginPage = location.pathname === "/login";
+  const isSignupPage = location.pathname === "/signup";
 
   const navigate = useNavigate();
 
@@ -55,7 +57,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
       <div className="px-4 md:px-6 lg:px-8 xl:px-12 py-2 md:py-2 flex items-center justify-between w-full">
         {/* Left: Logo + Sidebar Toggle */}
         <div className="flex items-center gap-3 md:gap-4">
-          {!isHomePage && (
+          {!isHomePage && !isSignupPage && !isloginPage && (
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -105,7 +107,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
               >
                 <Link
                   to="/signup"
-                  className="px-4 md:px-6 py-2 md:py-2.5 bg-gradient-to-r from-sky-600 to-blue-600 text-white rounded-xl font-medium hover:from-sky-700 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+                  className="px-2 md:px-6 py-2 md:py-2.5 bg-gradient-to-r from-sky-600 to-blue-600 text-white rounded-xl font-medium hover:from-sky-700 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl"
                 >
                   Sign Up
                 </Link>

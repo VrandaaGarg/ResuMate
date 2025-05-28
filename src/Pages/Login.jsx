@@ -5,12 +5,14 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../Contexts/AuthContext";
 import showSuccessToast from "../Components/showSuccessToast";
 import showErrorToast from "../Components/showErrorToast";
+import { AnimatePresence } from "framer-motion"; // Import AnimatePresence
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
+  const [loading, setLoading] = useState(false); // <--- Loading state
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,11 +21,14 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // <-- start loading
 
     const result = await login({
       email: form.email,
       password: form.password,
     });
+
+    setLoading(false); // <-- stop loading
 
     if (result.success) {
       showSuccessToast("Login successful!");
@@ -105,11 +110,43 @@ export default function Login() {
           </div>
 
           {/* Submit Button */}
+          {/* Submit Button */}
           <button
             type="submit"
-            className="w-full p-2 bg-sky-700 text-white font-medium rounded hover:bg-sky-800 transition"
+            className={`w-full p-2 bg-sky-700 text-white font-medium rounded transition flex items-center justify-center relative ${
+              loading ? "opacity-80 cursor-not-allowed" : "hover:bg-sky-800"
+            }`}
+            disabled={loading}
           >
-            Login
+            <AnimatePresence mode="wait" initial={false}>
+              {loading ? (
+                <motion.span
+                  key="loading"
+                  initial={{ opacity: 0.2 }}
+                  animate={{
+                    opacity: [0.2, 1, 0.2],
+                  }}
+                  exit={{ opacity: 0 }}
+                  transition={{
+                    duration: 1.1,
+                    repeat: Infinity,
+                  }}
+                  className="flex items-center gap-2"
+                >
+                  <span className="animate-pulse">Loading...</span>
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="login"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  Login
+                </motion.span>
+              )}
+            </AnimatePresence>
           </button>
           <div className="text-right">
             <Link

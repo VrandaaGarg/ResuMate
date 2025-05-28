@@ -9,6 +9,8 @@ import { IoReorderThreeSharp } from "react-icons/io5";
 import DOMPurify from "dompurify";
 import { CgSpaceBetweenV } from "react-icons/cg";
 import { useClassicSetting } from "../../Contexts/ClassicSettingContext";
+import { motion } from "framer-motion";
+import { FaFileAlt, FaDownload, FaShare, FaCog } from "react-icons/fa";
 import {
   MdFormatAlignLeft,
   MdFormatAlignCenter,
@@ -35,10 +37,15 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import { useReactToPrint } from "react-to-print";
+import { useRef } from "react";
+import { FaExpand } from "react-icons/fa";
 
 const ClassicTemplate = ({ resume }) => {
   const { classicSettings, setClassicSettings } = useClassicSetting();
   const { isEditable } = useEditResume();
+  const contentRef = useRef(null);
+  const reactToPrintFn = useReactToPrint({ contentRef });
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -76,6 +83,17 @@ const ClassicTemplate = ({ resume }) => {
       Math.min(pixelSizes.length - 1, index + level)
     );
     return `text-[${pixelSizes[newIndex]}px]`;
+  };
+
+  const getFontPxValue = (basePx, level = 0) => {
+    const base = parseInt(basePx.replace(/\D/g, ""), 10);
+    const index = pixelSizes.indexOf(base);
+    if (index === -1) return base; // fallback
+    const newIndex = Math.max(
+      0,
+      Math.min(pixelSizes.length - 1, index + level)
+    );
+    return pixelSizes[newIndex];
   };
 
   const defaultTextColor = (tag) => {
@@ -177,11 +195,17 @@ const ClassicTemplate = ({ resume }) => {
     name: (
       <div className="text-center">
         <h1
-          className={`${getCustomFontClass(
+          className={`resume-h1 ${getCustomFontClass(
             "text-[36px]",
             classicSettings.fontScaleLevel
           )} font-bold w-full inline-block`}
-          style={{ color: classicSettings.TextColors?.["h1"] || "black" }}
+          style={{
+            color: classicSettings.TextColors?.["h1"] || "black",
+            "--resume-h1-user": `${getFontPxValue(
+              "36",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           {resume.name}
         </h1>
@@ -192,10 +216,16 @@ const ClassicTemplate = ({ resume }) => {
       <div className="text-center ">
         {/* Contact Line */}
         <p
-          className={`${getCustomFontClass(
+          className={`resume-h3 ${getCustomFontClass(
             "text-[14px]",
             classicSettings.fontScaleLevel
-          )} text-gray-700`}
+          )} `}
+          style={{
+            "--resume-h3-user": `${getFontPxValue(
+              "14",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           {[
             resume.contact.phone && (
@@ -233,11 +263,17 @@ const ClassicTemplate = ({ resume }) => {
         </p>
         {/* Links */}
         <div
-          className={`${getCustomFontClass(
+          className={`resume-h3 ${getCustomFontClass(
             "text-[14px]",
             classicSettings.fontScaleLevel
           )} break-words whitespace-normal flex flex-wrap justify-center gap-x-2 `}
-          style={{ color: classicSettings.linkColor || "#2563eb" }}
+          style={{
+            color: classicSettings.linkColor || "#2563eb",
+            "--resume-h3-user": `${getFontPxValue(
+              "14",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           {resume.contact.github && (
             <a
@@ -271,20 +307,32 @@ const ClassicTemplate = ({ resume }) => {
     description: (
       <div style={{ textAlign: classicSettings.descriptionAlign || "left" }}>
         <h2
-          className={`${getCustomFontClass(
+          className={`resume-h2 ${getCustomFontClass(
             "text-[16px]",
             classicSettings.fontScaleLevel
-          )} font-bold text-gray-800`}
-          style={{ color: classicSettings.TextColors?.["h2"] || "#334155" }}
+          )} font-bold `}
+          style={{
+            color: classicSettings.TextColors?.["h2"] || "#334155",
+            "--resume-h2-user": `${getFontPxValue(
+              "16",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           PROFILE
         </h2>
         <div
-          className={`resume-content text-gray-700 ${getCustomFontClass(
+          className={`resume-content resume-h3 ${getCustomFontClass(
             "text-[14px]",
             classicSettings.fontScaleLevel
           )}`}
-          style={{ color: classicSettings.TextColors?.["h3"] || "#475569" }}
+          style={{
+            color: classicSettings.TextColors?.["h3"] || "#475569",
+            "--resume-h3-user": `${getFontPxValue(
+              "14",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
           dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(resume.description),
           }}
@@ -295,17 +343,29 @@ const ClassicTemplate = ({ resume }) => {
     education: (
       <div style={{ textAlign: classicSettings.descriptionAlign || "left" }}>
         <h2
-          className={`${getCustomFontClass(
+          className={`resume-h2 ${getCustomFontClass(
             "text-[16px]",
             classicSettings.fontScaleLevel
-          )} font-bold text-gray-800`}
-          style={{ color: classicSettings.TextColors?.["h2"] || "#334155" }}
+          )} font-bold `}
+          style={{
+            color: classicSettings.TextColors?.["h2"] || "#334155",
+            "--resume-h2-user": `${getFontPxValue(
+              "16",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           EDUCATION
         </h2>
         <div
-          style={{ color: classicSettings.TextColors?.["h3"] || "#475569" }}
-          className={`flex gap-6 w-full ${getCustomFontClass(
+          style={{
+            color: classicSettings.TextColors?.["h3"] || "#475569",
+            "--resume-h3-user": `${getFontPxValue(
+              "14",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
+          className={`flex resume-h3 gap-6 w-full ${getCustomFontClass(
             "text-[14px]",
             classicSettings.fontScaleLevel
           )} ${
@@ -322,14 +382,20 @@ const ClassicTemplate = ({ resume }) => {
           <p className="italic"> {resume.education.location}</p>
         </div>
         <div
-          className={` ${getCustomFontClass(
+          className={`resume-h3 ${getCustomFontClass(
             "text-[14px]",
             classicSettings.fontScaleLevel
           )}`}
-          style={{ color: classicSettings.TextColors?.["h3"] || "#475569" }}
+          style={{
+            color: classicSettings.TextColors?.["h3"] || "#475569",
+            "--resume-h3-user": `${getFontPxValue(
+              "14",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           <div
-            className={`flex gap-6 w-full ${getCustomFontClass(
+            className={`flex resume-h3 gap-6 w-full ${getCustomFontClass(
               "text-[14px]",
               classicSettings.fontScaleLevel
             )} ${
@@ -341,6 +407,12 @@ const ClassicTemplate = ({ resume }) => {
                 ? "justify-between"
                 : "justify-start"
             }`}
+            style={{
+              "--resume-h3-user": `${getFontPxValue(
+                "14",
+                classicSettings.fontScaleLevel
+              )}px`,
+            }}
           >
             <p>
               {resume.education.degree}
@@ -364,21 +436,33 @@ const ClassicTemplate = ({ resume }) => {
     skills: (
       <div style={{ textAlign: classicSettings.descriptionAlign || "left" }}>
         <h2
-          className={`${getCustomFontClass(
+          className={`resume-h2 ${getCustomFontClass(
             "text-[16px]",
             classicSettings.fontScaleLevel
-          )} font-bold text-gray-800`}
-          style={{ color: classicSettings.TextColors?.["h2"] || "#334155" }}
+          )} font-bold `}
+          style={{
+            color: classicSettings.TextColors?.["h2"] || "#334155",
+            "--resume-h2-user": `${getFontPxValue(
+              "16",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           SKILLS
         </h2>
         {resume.skills.map((skill, i) => (
           <div
             key={i}
-            className={`${getCustomFontClass(
+            className={`resume-h3 ${getCustomFontClass(
               "text-[14px]",
               classicSettings.fontScaleLevel
             )}`}
+            style={{
+              "--resume-h3-user": `${getFontPxValue(
+                "14",
+                classicSettings.fontScaleLevel
+              )}px`,
+            }}
           >
             <span
               className="font-semibold mr-2"
@@ -399,18 +483,24 @@ const ClassicTemplate = ({ resume }) => {
     projects: (
       <div style={{ textAlign: classicSettings.descriptionAlign || "left" }}>
         <h2
-          className={`${getCustomFontClass(
+          className={`resume-h2  ${getCustomFontClass(
             "text-[16px]",
             classicSettings.fontScaleLevel
-          )} font-bold text-gray-800`}
-          style={{ color: classicSettings.TextColors?.["h2"] || "#334155" }}
+          )} font-bold `}
+          style={{
+            color: classicSettings.TextColors?.["h2"] || "#334155",
+            "--resume-h2-user": `${getFontPxValue(
+              "16",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           PROJECTS
         </h2>
         {resume.projects.map((proj, i) => (
           <div key={i} className="md:mb-3">
             <div
-              className={`flex gap-2 md:gap-6 w-full ${getCustomFontClass(
+              className={`resume-h2 flex gap-2 md:gap-6 w-full ${getCustomFontClass(
                 "text-[14px]",
                 classicSettings.fontScaleLevel
               )} ${
@@ -422,6 +512,12 @@ const ClassicTemplate = ({ resume }) => {
                   ? "justify-between"
                   : "justify-start"
               }`}
+              style={{
+                "--resume-h3-user": `${getFontPxValue(
+                  "14",
+                  classicSettings.fontScaleLevel
+                )}px`,
+              }}
             >
               <span
                 className="font-bold"
@@ -472,7 +568,7 @@ const ClassicTemplate = ({ resume }) => {
 
             {/* Description */}
             <div
-              className={`resume-content   ${getCustomFontClass(
+              className={`resume-content resume-h3  ${getCustomFontClass(
                 "text-[14px]",
                 classicSettings.fontScaleLevel
               )}`}
@@ -489,11 +585,17 @@ const ClassicTemplate = ({ resume }) => {
     experience: (
       <div style={{ textAlign: classicSettings.descriptionAlign || "left" }}>
         <h2
-          className={` ${getCustomFontClass(
+          className={`resume-h2 ${getCustomFontClass(
             "text-[16px]",
             classicSettings.fontScaleLevel
           )} font-bold text-gray-800`}
-          style={{ color: classicSettings.TextColors?.["h2"] || "#334155" }}
+          style={{
+            color: classicSettings.TextColors?.["h2"] || "#334155",
+            "--resume-h2-user": `${getFontPxValue(
+              "16",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           EXPERIENCE
         </h2>
@@ -501,10 +603,16 @@ const ClassicTemplate = ({ resume }) => {
           {resume.experience.map((a, i) => (
             <li
               key={i}
-              className={`md:mb-3  ${getCustomFontClass(
+              className={`md:mb-3 resume-h3  ${getCustomFontClass(
                 "text-[14px]",
                 classicSettings.fontScaleLevel
               )}`}
+              style={{
+                "--resume-h3-user": `${getFontPxValue(
+                  "14",
+                  classicSettings.fontScaleLevel
+                )}px`,
+              }}
             >
               <div
                 style={{
@@ -555,11 +663,17 @@ const ClassicTemplate = ({ resume }) => {
     achievements: (
       <div style={{ textAlign: classicSettings.descriptionAlign || "left" }}>
         <h2
-          className={` ${getCustomFontClass(
+          className={`resume-h2 ${getCustomFontClass(
             "text-[16px]",
             classicSettings.fontScaleLevel
-          )} font-bold text-gray-800`}
-          style={{ color: classicSettings.TextColors?.["h2"] || "#334155" }}
+          )} font-bold `}
+          style={{
+            color: classicSettings.TextColors?.["h2"] || "#334155",
+            "--resume-h2-user": `${getFontPxValue(
+              "16",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           ACHIEVEMENTS
         </h2>
@@ -567,10 +681,16 @@ const ClassicTemplate = ({ resume }) => {
           {resume.achievements.map((a, i) => (
             <li
               key={i}
-              className={` ${getCustomFontClass(
+              className={`resume-h3 ${getCustomFontClass(
                 "text-[14px]",
                 classicSettings.fontScaleLevel
               )}`}
+              style={{
+                "--resume-h3-user": `${getFontPxValue(
+                  "14",
+                  classicSettings.fontScaleLevel
+                )}px`,
+              }}
             >
               <div
                 style={{
@@ -610,6 +730,37 @@ const ClassicTemplate = ({ resume }) => {
 
   return (
     <div className="">
+      {/* Preview Header - more compact */}
+      <div className="bg-gradient-to-r from-slate-100/80 to-blue-50/80 p-4 border-b border-white/20">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 bg-white/80 rounded-lg shadow-sm">
+              <FaFileAlt className="text-blue-600 text-xs" />
+            </div>
+            <div>
+              <h3 className="text-[14px] md:text-sm font-semibold text-slate-900">
+                Resume Preview
+              </h3>
+              <p className="text-[10px] md:text-xs text-slate-600">
+                {resume.name}'s Professional Resume
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1.5">
+            <motion.button
+              onClick={reactToPrintFn}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="p-1.5 bg-white/80 flex hover:bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 text-slate-600 hover:text-blue-600"
+              title="Download PDF"
+            >
+              <FaDownload size={12} />
+            </motion.button>
+          </div>
+        </div>
+      </div>
+
       {isEditable && (
         <div className="w-full bg-white justify-center border border-gray-200 shadow-sm rounded-md px-2.5 md:px-6 py-2.5 md:py-3 mb-2.5 md:mb-6 flex flex-wrap items-center gap-3">
           {/* Resume Background Color */}
@@ -866,13 +1017,13 @@ const ClassicTemplate = ({ resume }) => {
             </button>
 
             {openDropdown === "gap" && (
-              <div className="absolute max-h-48 overflow-auto left-1/2 -translate-x-1/2 mt-2 z-50 w-56 bg-white border border-gray-200 rounded-lg shadow-lg p-3">
-                <h3 className="text-sm font-semibold text-gray-800 mb-2 flex items-center gap-2">
+              <div className="absolute max-h-48 overflow-auto left-0 mt-2 z-50 w-32 md:w-56 bg-white border border-gray-200 rounded-lg shadow-lg p-3">
+                <h3 className="text-[16px] md:text-sm font-semibold text-gray-800 mb-2 flex items-center gap-2">
                   <CgSpaceBetweenV className="text-sky-700" />
                   Section Spacing
                 </h3>
 
-                <ul className="space-y-1  text-sm text-gray-600">
+                <ul className="space-y-1 text-[14px] md:text-sm text-gray-600">
                   {[
                     { label: "None", value: 0 },
                     { label: "Extra Small", value: 4 },
@@ -896,7 +1047,7 @@ const ClassicTemplate = ({ resume }) => {
                           sectionGap: option.value,
                         }))
                       }
-                      className={`px-3 gap- py-1.5 rounded cursor-pointer hover:bg-sky-50 transition ${
+                      className={`px-1 md:px-3 py-0.5 md:py-1.5 rounded cursor-pointer hover:bg-sky-50 transition ${
                         classicSettings.sectionGap === option.value
                           ? "bg-sky-100 text-sky-700 font-semibold"
                           : ""
@@ -974,6 +1125,70 @@ const ClassicTemplate = ({ resume }) => {
               </div>
             )}
           </div>
+
+          {/* Padding Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() =>
+                setOpenDropdown((prev) =>
+                  prev === "padding" ? null : "padding"
+                )
+              }
+              title="Margin"
+              className={`md:p-2 rounded-md text-center align-middle hover:bg-gray-100 transition ${
+                openDropdown === "padding" ? "bg-gray-100" : ""
+              }`}
+            >
+              {/* Any padding or spacing icon, e.g., FaExpandArrowsAlt */}
+              <FaExpand className="text-gray-700 text-sm md:text-lg" />
+            </button>
+
+            {openDropdown === "padding" && (
+              <div className="absolute max-h-48 overflow-auto left-1/2 -translate-x-1/2 mt-2 z-50 w-56 bg-white border border-gray-200 rounded-lg shadow-lg p-3">
+                <p className="text-xs md:text-sm font-semibold text-gray-700 mb-1.5 md:mb-3 text-center">
+                  Select Padding
+                </p>
+
+                <ul className="flex flex-col gap-1 max-h-60 pr-1">
+                  {[
+                    { label: "None", value: "0px" },
+                    { label: "Extra Small", value: "3px" },
+                    { label: "Small", value: "6px" },
+                    { label: "Normal", value: "10px" },
+                    { label: "Medium", value: "15px" },
+                    { label: "Large", value: "20px" },
+                    { label: "Extra Large", value: "28px" },
+                    { label: "Huge", value: "36px" },
+                    { label: "Massive", value: "44px" },
+                    { label: "Giant", value: "56px" },
+                    { label: "Colossal", value: "62px" },
+                    { label: "Titanic", value: "70px" },
+                    { label: "Epic", value: "86px" },
+                  ].map((p) => (
+                    <li key={p.value}>
+                      <button
+                        onClick={() => {
+                          setClassicSettings((prev) => ({
+                            ...prev,
+                            padding: p.value,
+                          }));
+                          setOpenDropdown(false);
+                        }}
+                        className={`px-3 gap- py-1.5 text-left w-full rounded cursor-pointer hover:bg-sky-50 transition ${
+                          classicSettings.padding === p.value
+                            ? "bg-sky-100 text-sky-700 font-semibold"
+                            : ""
+                        }`}
+                      >
+                        {p.label}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+
           {/*border style and color*/}
           <div className="relative">
             <button
@@ -1181,7 +1396,7 @@ const ClassicTemplate = ({ resume }) => {
 
               {/* Picker Panel */}
               {openDropdown === "linkColor" && (
-                <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl p-2.5 md:p-4 w-fit right-0">
+                <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl p-2.5 md:p-4 w-fit left-1/2 -translate-x-1/2">
                   <p className="text-xs md:text-sm font-semibold text-gray-700 mb-3">
                     Project Link Color
                   </p>
@@ -1262,7 +1477,7 @@ const ClassicTemplate = ({ resume }) => {
             </button>
 
             {openDropdown === "toggle" && (
-              <div className="absolute right-0 mt-2 z-50 w-48 md:w-72 max-h-72 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg">
+              <div className="absolute left-1/2 -translate-x-1/2 md:right-0 mt-2 z-50 w-48 md:w-48 max-h-72 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg">
                 <div className="p-4">
                   <h3 className="text-[12px] md:text-sm font-semibold text-gray-800 mb-1.5 md:mb-3 flex items-center gap-1 md:gap-2">
                     <FaEye className="text-sky-700" />
@@ -1379,34 +1594,52 @@ const ClassicTemplate = ({ resume }) => {
 
       {/* Resume Preview */}
       <div
-        className="w-full mx-auto p-2 md:p-5 text-sm leading-relaxed space-y-5 border border-gray-200 shadow-md"
         style={{
-          fontFamily: classicSettings.fontFamily || "Inter",
-          backgroundColor: classicSettings.backgroundColor || "#ffffff",
+          aspectRatio: "7/8.89", // A4 ratio (width:height = 7:10, which is close to actual A4 ratio)
+          display: "flex",
         }}
       >
-        {/* Inner Resume Container */}
         <div
-          className="p-2 md:p-7 flex flex-col"
+          ref={contentRef}
+          className="w-full max-w-4xl mx-auto p-2.5 md:p-5 text-sm leading-relaxed  "
           style={{
-            border:
-              classicSettings.borderWidth &&
-              classicSettings.borderWidth !== "0px"
-                ? `${classicSettings.borderWidth} ${
-                    classicSettings.borderStyle || "solid"
-                  } ${classicSettings.borderColor || "#cbd5e1"}`
-                : "none",
-            borderRadius: classicSettings.borderRadius || "0px",
-            rowGap: `${classicSettings.sectionGap ?? 16}px`,
+            fontFamily: classicSettings.fontFamily || "Inter",
+            backgroundColor: classicSettings.backgroundColor || "#ffffff",
+            aspectRatio: "7/9.89", // A4 ratio (width:height = 7:10, which is close to actual A4 ratio)
+            display: "flex",
+            flexDirection: "column",
           }}
         >
-          {Array.isArray(classicSettings?.sectionOrder) &&
-            classicSettings.sectionOrder.map(
-              (sectionKey) =>
-                classicSettings.visibleSections?.[sectionKey] && (
-                  <div key={sectionKey}>{sectionMap[sectionKey]}</div>
-                )
-            )}
+          {/* Inner Resume Container */}
+          <div
+            className=" flex flex-col flex-1 overflow-hidden"
+            style={{
+              padding: classicSettings.padding || "40px",
+              border:
+                classicSettings.borderWidth &&
+                classicSettings.borderWidth !== "0px"
+                  ? `${classicSettings.borderWidth} ${
+                      classicSettings.borderStyle || "solid"
+                    } ${classicSettings.borderColor || "#cbd5e1"}`
+                  : "none",
+              borderRadius: classicSettings.borderRadius || "0px",
+              rowGap: `${classicSettings.sectionGap ?? 16}px`,
+            }}
+          >
+            {Array.isArray(classicSettings?.sectionOrder) &&
+              classicSettings.sectionOrder.map(
+                (sectionKey) =>
+                  classicSettings.visibleSections?.[sectionKey] && (
+                    <div
+                      key={sectionKey}
+                      className="break-inside-avoid" // Prevents breaking within sections
+                      style={{ pageBreakInside: "avoid" }} // For print
+                    >
+                      {sectionMap[sectionKey]}
+                    </div>
+                  )
+              )}
+          </div>
         </div>
       </div>
     </div>

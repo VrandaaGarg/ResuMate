@@ -65,3 +65,32 @@
 ::-webkit-scrollbar-thumb:hover {
   background-color: #64748b; /* slate-500 */
 }
+
+/* src/index.css or in your pageStyle string for react-to-print */
+
+@media print {
+  .print-a4 {
+    width: 210mm !important;
+    height: 297mm !important;
+    min-height: 297mm !important;
+    max-height: 297mm !important;
+    overflow: hidden !important;
+    page-break-after: avoid !important;
+    page-break-before: avoid !important;
+    page-break-inside: avoid !important;
+  }
+}
+@media print {
+  .resume-h1 {
+    font-size: clamp(30px, var(--resume-h1-user, 30px), 96px) !important;
+  }
+  .resume-h2 {
+    font-size: clamp(16px, var(--resume-h2-user, 16px), 80px) !important;
+  }
+  .resume-h3 {
+    font-size: clamp(14px, var(--resume-h3-user, 14px), 35px) !important;
+  }
+  .resume-h4 {
+    font-size: clamp(12px, var(--resume-h4-user, 12px), 25px) !important;
+  }
+}

@@ -133,8 +133,8 @@ const steps = [
 const Template = [
   {
     id: 1,
-    name: "Modern Template",
-    image: "/resume.png",
+    name: "Sidebar Template",
+    image: "/sidebar.jpg",
     description: "A clean and modern template for a professional look.",
     badge: "Popular",
     badgeColor: "bg-gradient-to-r from-blue-500 to-cyan-400",
@@ -142,17 +142,17 @@ const Template = [
   {
     id: 2,
     name: "Classic Template",
-    image: "/resume.png",
+    image: "/classic.jpg",
     description: "A classic design that is timeless and effective.",
     badge: "Timeless",
     badgeColor: "bg-gradient-to-r from-green-500 to-emerald-400",
   },
   {
     id: 3,
-    name: "Creative Template",
-    image: "/resume.png",
-    description: "A creative layout that stands out from the crowd.",
-    badge: "Creative",
+    name: "Standard Template",
+    image: "/standard.jpg",
+    description: "A Standard layout that stands out from the crowd.",
+    badge: "Standard",
     badgeColor: "bg-gradient-to-r from-purple-500 to-pink-400",
   },
 ];
@@ -504,7 +504,7 @@ const Home = () => {
                 <img
                   src={temp.image}
                   alt={temp.name}
-                  className="w-full h-80 object-cover"
+                  className="w-full h-96 object-cover"
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
