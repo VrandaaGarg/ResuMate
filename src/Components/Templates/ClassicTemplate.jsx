@@ -382,7 +382,7 @@ const ClassicTemplate = ({ resume }) => {
         {resume.skills.map((skill, i) => (
           <div
             key={i}
-            className={`${getCustomFontClass(
+            className={`resume-h3 ${getCustomFontClass(
               "text-[14px]",
               classicSettings.fontScaleLevel
             )}`}

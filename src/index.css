@@ -82,15 +82,15 @@
 }
 @media print {
   .resume-h1 {
-    font-size: 40px !important;
+    font-size: 30px !important;
   }
   .resume-h2 {
-    font-size: 18px !important;
-  }
-  .resume-h3 {
     font-size: 16px !important;
   }
-  .resume-h4 {
+  .resume-h3 {
     font-size: 14px !important;
+  }
+  .resume-h4 {
+    font-size: 12px !important;
   }
 }
