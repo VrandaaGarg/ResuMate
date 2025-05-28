@@ -184,10 +184,10 @@ const ClassicTemplate = ({ resume }) => {
     name: (
       <div className="text-center">
         <h1
-          className={`${getCustomFontClass(
+          className={`resume-h1 ${getCustomFontClass(
             "text-[36px]",
             classicSettings.fontScaleLevel
-          )} font-bold w-full inline-block resume-h1`}
+          )} font-bold w-full inline-block`}
           style={{ color: classicSettings.TextColors?.["h1"] || "black" }}
         >
           {resume.name}
