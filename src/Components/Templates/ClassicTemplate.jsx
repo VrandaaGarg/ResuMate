@@ -85,6 +85,17 @@ const ClassicTemplate = ({ resume }) => {
     return `text-[${pixelSizes[newIndex]}px]`;
   };
 
+  const getFontPxValue = (basePx, level = 0) => {
+    const base = parseInt(basePx.replace(/\D/g, ""), 10);
+    const index = pixelSizes.indexOf(base);
+    if (index === -1) return base; // fallback
+    const newIndex = Math.max(
+      0,
+      Math.min(pixelSizes.length - 1, index + level)
+    );
+    return pixelSizes[newIndex];
+  };
+
   const defaultTextColor = (tag) => {
     switch (tag) {
       case "h1":
@@ -180,11 +191,6 @@ const ClassicTemplate = ({ resume }) => {
     resume.contact?.github ||
     resume.projects?.some((proj) => proj.demo || proj.github);
 
-  const getFontSizeFromScale = (base, level = 0) => {
-    // Increase or decrease font by 2px per scale step, or adjust as needed
-    return base + (level || 0) * 2;
-  };
-
   const sectionMap = {
     name: (
       <div className="text-center">
@@ -195,8 +201,8 @@ const ClassicTemplate = ({ resume }) => {
           )} font-bold w-full inline-block`}
           style={{
             color: classicSettings.TextColors?.["h1"] || "black",
-            "--resume-h1-user": `${getFontSizeFromScale(
-              36,
+            "--resume-h1-user": `${getFontPxValue(
+              "36",
               classicSettings.fontScaleLevel
             )}px`,
           }}
@@ -214,6 +220,12 @@ const ClassicTemplate = ({ resume }) => {
             "text-[14px]",
             classicSettings.fontScaleLevel
           )} `}
+          style={{
+            "--resume-h3-user": `${getFontPxValue(
+              "14",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           {[
             resume.contact.phone && (
@@ -255,7 +267,13 @@ const ClassicTemplate = ({ resume }) => {
             "text-[14px]",
             classicSettings.fontScaleLevel
           )} break-words whitespace-normal flex flex-wrap justify-center gap-x-2 `}
-          style={{ color: classicSettings.linkColor || "#2563eb" }}
+          style={{
+            color: classicSettings.linkColor || "#2563eb",
+            "--resume-h3-user": `${getFontPxValue(
+              "14",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           {resume.contact.github && (
             <a
@@ -293,7 +311,13 @@ const ClassicTemplate = ({ resume }) => {
             "text-[16px]",
             classicSettings.fontScaleLevel
           )} font-bold `}
-          style={{ color: classicSettings.TextColors?.["h2"] || "#334155" }}
+          style={{
+            color: classicSettings.TextColors?.["h2"] || "#334155",
+            "--resume-h2-user": `${getFontPxValue(
+              "16",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           PROFILE
         </h2>
@@ -302,7 +326,13 @@ const ClassicTemplate = ({ resume }) => {
             "text-[14px]",
             classicSettings.fontScaleLevel
           )}`}
-          style={{ color: classicSettings.TextColors?.["h3"] || "#475569" }}
+          style={{
+            color: classicSettings.TextColors?.["h3"] || "#475569",
+            "--resume-h3-user": `${getFontPxValue(
+              "14",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
           dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(resume.description),
           }}
@@ -317,12 +347,24 @@ const ClassicTemplate = ({ resume }) => {
             "text-[16px]",
             classicSettings.fontScaleLevel
           )} font-bold `}
-          style={{ color: classicSettings.TextColors?.["h2"] || "#334155" }}
+          style={{
+            color: classicSettings.TextColors?.["h2"] || "#334155",
+            "--resume-h2-user": `${getFontPxValue(
+              "16",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           EDUCATION
         </h2>
         <div
-          style={{ color: classicSettings.TextColors?.["h3"] || "#475569" }}
+          style={{
+            color: classicSettings.TextColors?.["h3"] || "#475569",
+            "--resume-h3-user": `${getFontPxValue(
+              "14",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
           className={`flex resume-h3 gap-6 w-full ${getCustomFontClass(
             "text-[14px]",
             classicSettings.fontScaleLevel
@@ -344,7 +386,13 @@ const ClassicTemplate = ({ resume }) => {
             "text-[14px]",
             classicSettings.fontScaleLevel
           )}`}
-          style={{ color: classicSettings.TextColors?.["h3"] || "#475569" }}
+          style={{
+            color: classicSettings.TextColors?.["h3"] || "#475569",
+            "--resume-h3-user": `${getFontPxValue(
+              "14",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           <div
             className={`flex resume-h3 gap-6 w-full ${getCustomFontClass(
@@ -359,6 +407,12 @@ const ClassicTemplate = ({ resume }) => {
                 ? "justify-between"
                 : "justify-start"
             }`}
+            style={{
+              "--resume-h3-user": `${getFontPxValue(
+                "14",
+                classicSettings.fontScaleLevel
+              )}px`,
+            }}
           >
             <p>
               {resume.education.degree}
@@ -386,7 +440,13 @@ const ClassicTemplate = ({ resume }) => {
             "text-[16px]",
             classicSettings.fontScaleLevel
           )} font-bold `}
-          style={{ color: classicSettings.TextColors?.["h2"] || "#334155" }}
+          style={{
+            color: classicSettings.TextColors?.["h2"] || "#334155",
+            "--resume-h2-user": `${getFontPxValue(
+              "16",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           SKILLS
         </h2>
@@ -397,6 +457,12 @@ const ClassicTemplate = ({ resume }) => {
               "text-[14px]",
               classicSettings.fontScaleLevel
             )}`}
+            style={{
+              "--resume-h3-user": `${getFontPxValue(
+                "14",
+                classicSettings.fontScaleLevel
+              )}px`,
+            }}
           >
             <span
               className="font-semibold mr-2"
@@ -421,7 +487,13 @@ const ClassicTemplate = ({ resume }) => {
             "text-[16px]",
             classicSettings.fontScaleLevel
           )} font-bold `}
-          style={{ color: classicSettings.TextColors?.["h2"] || "#334155" }}
+          style={{
+            color: classicSettings.TextColors?.["h2"] || "#334155",
+            "--resume-h2-user": `${getFontPxValue(
+              "16",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           PROJECTS
         </h2>
@@ -440,6 +512,12 @@ const ClassicTemplate = ({ resume }) => {
                   ? "justify-between"
                   : "justify-start"
               }`}
+              style={{
+                "--resume-h3-user": `${getFontPxValue(
+                  "14",
+                  classicSettings.fontScaleLevel
+                )}px`,
+              }}
             >
               <span
                 className="font-bold"
@@ -511,7 +589,13 @@ const ClassicTemplate = ({ resume }) => {
             "text-[16px]",
             classicSettings.fontScaleLevel
           )} font-bold text-gray-800`}
-          style={{ color: classicSettings.TextColors?.["h2"] || "#334155" }}
+          style={{
+            color: classicSettings.TextColors?.["h2"] || "#334155",
+            "--resume-h2-user": `${getFontPxValue(
+              "16",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           EXPERIENCE
         </h2>
@@ -523,6 +607,12 @@ const ClassicTemplate = ({ resume }) => {
                 "text-[14px]",
                 classicSettings.fontScaleLevel
               )}`}
+              style={{
+                "--resume-h3-user": `${getFontPxValue(
+                  "14",
+                  classicSettings.fontScaleLevel
+                )}px`,
+              }}
             >
               <div
                 style={{
@@ -577,7 +667,13 @@ const ClassicTemplate = ({ resume }) => {
             "text-[16px]",
             classicSettings.fontScaleLevel
           )} font-bold `}
-          style={{ color: classicSettings.TextColors?.["h2"] || "#334155" }}
+          style={{
+            color: classicSettings.TextColors?.["h2"] || "#334155",
+            "--resume-h2-user": `${getFontPxValue(
+              "16",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           ACHIEVEMENTS
         </h2>
@@ -589,6 +685,12 @@ const ClassicTemplate = ({ resume }) => {
                 "text-[14px]",
                 classicSettings.fontScaleLevel
               )}`}
+              style={{
+                "--resume-h3-user": `${getFontPxValue(
+                  "14",
+                  classicSettings.fontScaleLevel
+                )}px`,
+              }}
             >
               <div
                 style={{
@@ -1493,7 +1595,7 @@ const ClassicTemplate = ({ resume }) => {
       {/* Resume Preview */}
       <div
         style={{
-          aspectRatio: "7/8", // A4 ratio (width:height = 7:10, which is close to actual A4 ratio)
+          aspectRatio: "7/10", // A4 ratio (width:height = 7:10, which is close to actual A4 ratio)
           display: "flex",
         }}
       >

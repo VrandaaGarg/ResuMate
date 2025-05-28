@@ -82,7 +82,7 @@
 }
 @media print {
   .resume-h1 {
-    font-size: clamp(20px, var(--resume-h1-user, 20px), 50px) !important;
+    font-size: clamp(30px, var(--resume-h1-user, 30px), 96px) !important;
   }
   .resume-h2 {
     font-size: 16px !important;
