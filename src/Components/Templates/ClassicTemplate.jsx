@@ -35,10 +35,15 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import { useReactToPrint } from "react-to-print";
+import { useRef } from "react";
+import { FaExpand } from "react-icons/fa";
 
 const ClassicTemplate = ({ resume }) => {
   const { classicSettings, setClassicSettings } = useClassicSetting();
   const { isEditable } = useEditResume();
+  const contentRef = useRef(null);
+  const reactToPrintFn = useReactToPrint({ contentRef });
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -195,7 +200,7 @@ const ClassicTemplate = ({ resume }) => {
           className={`${getCustomFontClass(
             "text-[14px]",
             classicSettings.fontScaleLevel
-          )} text-gray-700`}
+          )} `}
         >
           {[
             resume.contact.phone && (
@@ -274,13 +279,13 @@ const ClassicTemplate = ({ resume }) => {
           className={`${getCustomFontClass(
             "text-[16px]",
             classicSettings.fontScaleLevel
-          )} font-bold text-gray-800`}
+          )} font-bold `}
           style={{ color: classicSettings.TextColors?.["h2"] || "#334155" }}
         >
           PROFILE
         </h2>
         <div
-          className={`resume-content text-gray-700 ${getCustomFontClass(
+          className={`resume-content ${getCustomFontClass(
             "text-[14px]",
             classicSettings.fontScaleLevel
           )}`}
@@ -298,7 +303,7 @@ const ClassicTemplate = ({ resume }) => {
           className={`${getCustomFontClass(
             "text-[16px]",
             classicSettings.fontScaleLevel
-          )} font-bold text-gray-800`}
+          )} font-bold `}
           style={{ color: classicSettings.TextColors?.["h2"] || "#334155" }}
         >
           EDUCATION
@@ -367,7 +372,7 @@ const ClassicTemplate = ({ resume }) => {
           className={`${getCustomFontClass(
             "text-[16px]",
             classicSettings.fontScaleLevel
-          )} font-bold text-gray-800`}
+          )} font-bold `}
           style={{ color: classicSettings.TextColors?.["h2"] || "#334155" }}
         >
           SKILLS
@@ -402,7 +407,7 @@ const ClassicTemplate = ({ resume }) => {
           className={`${getCustomFontClass(
             "text-[16px]",
             classicSettings.fontScaleLevel
-          )} font-bold text-gray-800`}
+          )} font-bold `}
           style={{ color: classicSettings.TextColors?.["h2"] || "#334155" }}
         >
           PROJECTS
@@ -558,7 +563,7 @@ const ClassicTemplate = ({ resume }) => {
           className={` ${getCustomFontClass(
             "text-[16px]",
             classicSettings.fontScaleLevel
-          )} font-bold text-gray-800`}
+          )} font-bold `}
           style={{ color: classicSettings.TextColors?.["h2"] || "#334155" }}
         >
           ACHIEVEMENTS
@@ -974,6 +979,70 @@ const ClassicTemplate = ({ resume }) => {
               </div>
             )}
           </div>
+
+          {/* Padding Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() =>
+                setOpenDropdown((prev) =>
+                  prev === "padding" ? null : "padding"
+                )
+              }
+              title="Margin"
+              className={`md:p-2 rounded-md text-center align-middle hover:bg-gray-100 transition ${
+                openDropdown === "padding" ? "bg-gray-100" : ""
+              }`}
+            >
+              {/* Any padding or spacing icon, e.g., FaExpandArrowsAlt */}
+              <FaExpand className="text-gray-700 text-sm md:text-lg" />
+            </button>
+
+            {openDropdown === "padding" && (
+              <div className="absolute max-h-48 overflow-auto left-1/2 -translate-x-1/2 mt-2 z-50 w-56 bg-white border border-gray-200 rounded-lg shadow-lg p-3">
+                <p className="text-xs md:text-sm font-semibold text-gray-700 mb-1.5 md:mb-3 text-center">
+                  Select Padding
+                </p>
+
+                <ul className="flex flex-col gap-1 max-h-60 pr-1">
+                  {[
+                    { label: "None", value: "0px" },
+                    { label: "Extra Small", value: "10px" },
+                    { label: "Small", value: "15px" },
+                    { label: "Normal", value: "20px" },
+                    { label: "Medium", value: "30px" },
+                    { label: "Large", value: "40px" },
+                    { label: "Extra Large", value: "50px" },
+                    { label: "Huge", value: "60px" },
+                    { label: "Massive", value: "70px" },
+                    { label: "Giant", value: "80px" },
+                    { label: "Colossal", value: "90px" },
+                    { label: "Titanic", value: "100px" },
+                    { label: "Epic", value: "120px" },
+                  ].map((p) => (
+                    <li key={p.value}>
+                      <button
+                        onClick={() => {
+                          setClassicSettings((prev) => ({
+                            ...prev,
+                            padding: p.value,
+                          }));
+                          setOpenDropdown(false);
+                        }}
+                        className={`px-3 gap- py-1.5 text-left w-full rounded cursor-pointer hover:bg-sky-50 transition ${
+                          classicSettings.padding === p.value
+                            ? "bg-sky-100 text-sky-700 font-semibold"
+                            : ""
+                        }`}
+                      >
+                        {p.label}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+
           {/*border style and color*/}
           <div className="relative">
             <button
@@ -1377,36 +1446,56 @@ const ClassicTemplate = ({ resume }) => {
         </div>
       )}
 
+      <button onClick={reactToPrintFn}>Print</button>
+
       {/* Resume Preview */}
       <div
-        className="w-full mx-auto p-2 md:p-5 text-sm leading-relaxed space-y-5 border border-gray-200 shadow-md"
         style={{
-          fontFamily: classicSettings.fontFamily || "Inter",
-          backgroundColor: classicSettings.backgroundColor || "#ffffff",
+          aspectRatio: "7/8", // A4 ratio (width:height = 7:10, which is close to actual A4 ratio)
+          display: "flex",
         }}
       >
-        {/* Inner Resume Container */}
         <div
-          className="p-2 md:p-7 flex flex-col"
+          ref={contentRef}
+          className="w-full max-w-4xl mx-auto text-sm leading-relaxed border border-gray-200 shadow-md"
           style={{
-            border:
-              classicSettings.borderWidth &&
-              classicSettings.borderWidth !== "0px"
-                ? `${classicSettings.borderWidth} ${
-                    classicSettings.borderStyle || "solid"
-                  } ${classicSettings.borderColor || "#cbd5e1"}`
-                : "none",
-            borderRadius: classicSettings.borderRadius || "0px",
-            rowGap: `${classicSettings.sectionGap ?? 16}px`,
+            fontFamily: classicSettings.fontFamily || "Inter",
+            backgroundColor: classicSettings.backgroundColor || "#ffffff",
+            aspectRatio: "7/9.89", // A4 ratio (width:height = 7:10, which is close to actual A4 ratio)
+            display: "flex",
+            flexDirection: "column",
           }}
         >
-          {Array.isArray(classicSettings?.sectionOrder) &&
-            classicSettings.sectionOrder.map(
-              (sectionKey) =>
-                classicSettings.visibleSections?.[sectionKey] && (
-                  <div key={sectionKey}>{sectionMap[sectionKey]}</div>
-                )
-            )}
+          {/* Inner Resume Container */}
+          <div
+            className=" flex flex-col flex-1 overflow-hidden"
+            style={{
+              padding: classicSettings.padding || "40px",
+              border:
+                classicSettings.borderWidth &&
+                classicSettings.borderWidth !== "0px"
+                  ? `${classicSettings.borderWidth} ${
+                      classicSettings.borderStyle || "solid"
+                    } ${classicSettings.borderColor || "#cbd5e1"}`
+                  : "none",
+              borderRadius: classicSettings.borderRadius || "0px",
+              rowGap: `${classicSettings.sectionGap ?? 16}px`,
+            }}
+          >
+            {Array.isArray(classicSettings?.sectionOrder) &&
+              classicSettings.sectionOrder.map(
+                (sectionKey) =>
+                  classicSettings.visibleSections?.[sectionKey] && (
+                    <div
+                      key={sectionKey}
+                      className="break-inside-avoid" // Prevents breaking within sections
+                      style={{ pageBreakInside: "avoid" }} // For print
+                    >
+                      {sectionMap[sectionKey]}
+                    </div>
+                  )
+              )}
+          </div>
         </div>
       </div>
     </div>
