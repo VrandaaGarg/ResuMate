@@ -180,6 +180,11 @@ const ClassicTemplate = ({ resume }) => {
     resume.contact?.github ||
     resume.projects?.some((proj) => proj.demo || proj.github);
 
+  const getFontSizeFromScale = (base, level = 0) => {
+    // Increase or decrease font by 2px per scale step, or adjust as needed
+    return base + (level || 0) * 2;
+  };
+
   const sectionMap = {
     name: (
       <div className="text-center">
@@ -188,7 +193,13 @@ const ClassicTemplate = ({ resume }) => {
             "text-[36px]",
             classicSettings.fontScaleLevel
           )} font-bold w-full inline-block`}
-          style={{ color: classicSettings.TextColors?.["h1"] || "black" }}
+          style={{
+            color: classicSettings.TextColors?.["h1"] || "black",
+            "--resume-h1-user": `${getFontSizeFromScale(
+              36,
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           {resume.name}
         </h1>
