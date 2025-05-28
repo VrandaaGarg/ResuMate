@@ -301,7 +301,7 @@ const Home = () => {
               <FaRocket className="group-hover:rotate-12 transition-transform duration-300" />
               Create Resume
             </motion.button>
-            <motion.button
+            {/* <motion.button
               whileHover={{
                 scale: 1.05,
                 boxShadow: "0 20px 40px rgba(0, 0, 0, 0.2)",
@@ -312,7 +312,7 @@ const Home = () => {
             >
               <FaUpload className="group-hover:translate-y-[-2px] transition-transform duration-300" />
               Upload Resume
-            </motion.button>
+            </motion.button> */}
           </motion.div>
         </motion.div>
       </section>
