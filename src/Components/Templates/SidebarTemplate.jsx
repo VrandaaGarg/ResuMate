@@ -85,6 +85,17 @@ const SidebarTemplate = ({ resume }) => {
     return `text-[${pixelSizes[newIndex]}px]`;
   };
 
+  const getFontPxValue = (basePx, level = 0) => {
+    const base = parseInt(basePx.replace(/\D/g, ""), 10);
+    const index = pixelSizes.indexOf(base);
+    if (index === -1) return base; // fallback
+    const newIndex = Math.max(
+      0,
+      Math.min(pixelSizes.length - 1, index + level)
+    );
+    return pixelSizes[newIndex];
+  };
+
   const defaultTextColor = (tag) => {
     switch (tag) {
       case "h1":
@@ -202,11 +213,17 @@ const SidebarTemplate = ({ resume }) => {
     name: (
       <div className="text-center">
         <h1
-          className={`${getCustomFontClass(
+          className={`resume-h1 ${getCustomFontClass(
             "text-[30px]",
             sidebarSettings.fontScaleLevel
           )} font-bold bg-transparent w-full text-center outline-none`}
-          style={{ color: sidebarSettings.textColors?.["h1"] || "white" }}
+          style={{
+            color: sidebarSettings.textColors?.["h1"] || "white",
+            "--resume-h1-user": `${getFontPxValue(
+              "36",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           {resume.name || "Your Name"}
         </h1>
@@ -215,25 +232,33 @@ const SidebarTemplate = ({ resume }) => {
     details: (
       <div className="mb-1 md:mb-2">
         <h2
-          className={`font-semibold uppercase tracking-wide mb-1  md:mb-2 ${getCustomFontClass(
+          className={`font-semibold uppercase resume-h2 tracking-wide mb-1  md:mb-2 ${getCustomFontClass(
             "text-16px]",
             sidebarSettings.fontScaleLevel
           )}`}
           style={{
             color: sidebarSettings.textColors?.["h2"] || "#F4F3F3",
             textAlign: sidebarSettings.descriptionAlign || "left",
+            "--resume-h2-user": `${getFontPxValue(
+              "16",
+              classicSettings.fontScaleLevel
+            )}px`,
           }}
         >
           Details
         </h2>
         <div
-          className={`flex break-words whitespace-normal flex-col space-y-0.5 md:space-y-2 ${getCustomFontClass(
+          className={`flex break-words resume-h3 whitespace-normal flex-col space-y-0.5 md:space-y-2 ${getCustomFontClass(
             "text-[14px]",
             sidebarSettings.fontScaleLevel
           )}`}
           style={{
             color: sidebarSettings.textColors?.["h3"] || "#d9d9d9",
             textAlign: sidebarSettings.descriptionAlign || "left",
+            "--resume-h3-user": `${getFontPxValue(
+              "14",
+              classicSettings.fontScaleLevel
+            )}px`,
           }}
         >
           {resume.contact.location && (
@@ -304,26 +329,34 @@ const SidebarTemplate = ({ resume }) => {
         {resume.description && (
           <div>
             <h2
-              className={`font-semibold break-all uppercase tracking-wide mb-1 md:mb-2 ${getCustomFontClass(
+              className={`font-semibold break-all resume-h2 uppercase tracking-wide mb-1 md:mb-2 ${getCustomFontClass(
                 "text-[16px]",
                 sidebarSettings.fontScaleLevel
               )}`}
               style={{
                 color: sidebarSettings.textColors?.["h2"] || "text-blue-300",
                 textAlign: sidebarSettings.descriptionAlign || "left",
+                "--resume-h2-user": `${getFontPxValue(
+                  "16",
+                  classicSettings.fontScaleLevel
+                )}px`,
               }}
             >
               Description
             </h2>
 
             <div
-              className={`bg-transparent resume-content ${getCustomFontClass(
+              className={`bg-transparent resume-h3 resume-content ${getCustomFontClass(
                 "text-[14px]",
                 sidebarSettings.fontScaleLevel
               )} outline-none w-full whitespace-pre-line`}
               style={{
                 textAlign: sidebarSettings.descriptionAlign || "left",
                 color: sidebarSettings.textColors?.["h3"] || "#d9d9d9",
+                "--resume-h3-user": `${getFontPxValue(
+                  "14",
+                  classicSettings.fontScaleLevel
+                )}px`,
               }}
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(resume.description),
@@ -340,13 +373,17 @@ const SidebarTemplate = ({ resume }) => {
         className="mb-1 md:mb-2"
       >
         <h2
-          className={`font-semibold  uppercase tracking-wide md:mb-2 ${getCustomFontClass(
+          className={`font-semibold resume-h2 uppercase tracking-wide md:mb-2 ${getCustomFontClass(
             "text-[16px]",
             sidebarSettings.fontScaleLevel
           )}`}
           style={{
             color: sidebarSettings.textColors?.["h2"] || "text-blue-300",
             textAlign: sidebarSettings.descriptionAlign || "left",
+            "--resume-h2-user": `${getFontPxValue(
+              "16",
+              classicSettings.fontScaleLevel
+            )}px`,
           }}
         >
           Skills Overview
@@ -364,25 +401,33 @@ const SidebarTemplate = ({ resume }) => {
             return (
               <div key={i}>
                 <span
-                  className={`${getCustomFontClass(
+                  className={`resume-h3 ${getCustomFontClass(
                     "text-[14px]",
                     sidebarSettings.fontScaleLevel
                   )} font-medium`}
                   style={{
                     color: sidebarSettings.textColors?.["h3"] || "#d9d9d9",
                     textAlign: sidebarSettings.descriptionAlign || "left",
+                    "--resume-h3-user": `${getFontPxValue(
+                      "14",
+                      classicSettings.fontScaleLevel
+                    )}px`,
                   }}
                 >
                   {skill.domain}
                 </span>
 
                 <p
-                  className={`${getCustomFontClass(
+                  className={`resume-h3 ${getCustomFontClass(
                     "text-[14px]",
                     sidebarSettings.fontScaleLevel
                   )}`}
                   style={{
                     color: sidebarSettings.textColors?.["h4"] || "#c9c9c9",
+                    "--resume-h3-user": `${getFontPxValue(
+                      "14",
+                      classicSettings.fontScaleLevel
+                    )}px`,
                   }}
                 >
                   {skill.languages.join(", ")}
@@ -393,12 +438,16 @@ const SidebarTemplate = ({ resume }) => {
         </div>
 
         <p
-          className={`font-semibold ${getCustomFontClass(
+          className={`font-semibold resume-h2 ${getCustomFontClass(
             "text-[16px]",
             sidebarSettings.fontScaleLevel
           )} uppercase tracking-wide my-1 md:my-3`}
           style={{
             color: sidebarSettings.textColors?.["h2"] || "text-blue-300",
+            "--resume-h2-user": `${getFontPxValue(
+              "16",
+              classicSettings.fontScaleLevel
+            )}px`,
           }}
         >
           Skills Distribution
@@ -430,10 +479,16 @@ const SidebarTemplate = ({ resume }) => {
 
         {/* Legend */}
         <div
-          className={`${getCustomFontClass(
+          className={`resume-h3 ${getCustomFontClass(
             "text-[14px]",
             sidebarSettings.fontScaleLevel
           )} space-y-1`}
+          style={{
+            "--resume-h3-user": `${getFontPxValue(
+              "14",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           {resume.skills.map((skill, i) => {
             const totalSkills = resume.skills.reduce(
@@ -484,7 +539,7 @@ const SidebarTemplate = ({ resume }) => {
         style={{ textAlign: sidebarSettings.descriptionAlign || "left" }}
       >
         <h2
-          className={`${getCustomFontClass(
+          className={`resume-h2 ${getCustomFontClass(
             "text-[16px]",
             sidebarSettings.fontScaleLevel
           )} font-bold mb-1 md:mb-2`}
@@ -492,6 +547,10 @@ const SidebarTemplate = ({ resume }) => {
             color:
               sidebarSettings.mainTextColors?.["h1"] ||
               defaultMainTextColor("h1"),
+            "--resume-h2-user": `${getFontPxValue(
+              "16",
+              classicSettings.fontScaleLevel
+            )}px`,
           }}
         >
           EXPERIENCE
@@ -499,10 +558,16 @@ const SidebarTemplate = ({ resume }) => {
         {resume.experience.map((exp, i) => (
           <div
             key={i}
-            className={`mb-4 ${getCustomFontClass(
+            className={`mb-4 resume-h3 ${getCustomFontClass(
               "text-[14px]",
               sidebarSettings.fontScaleLevel
             )}`}
+            style={{
+              "--resume-h3-user": `${getFontPxValue(
+                "14",
+                classicSettings.fontScaleLevel
+              )}px`,
+            }}
           >
             <div
               className={`flex gap-6 break-all w-full ${
@@ -574,7 +639,7 @@ const SidebarTemplate = ({ resume }) => {
         style={{ textAlign: sidebarSettings.descriptionAlign || "left" }}
       >
         <h2
-          className={`${getCustomFontClass(
+          className={`resume-h2 ${getCustomFontClass(
             "text-[16px]",
             sidebarSettings.fontScaleLevel
           )} font-bold mb-1 md:mb-2`}
@@ -582,6 +647,10 @@ const SidebarTemplate = ({ resume }) => {
             color:
               sidebarSettings.mainTextColors?.["h1"] ||
               defaultMainTextColor("h1"),
+            "--resume-h2-user": `${getFontPxValue(
+              "16",
+              classicSettings.fontScaleLevel
+            )}px`,
           }}
         >
           PROJECTS
@@ -590,10 +659,16 @@ const SidebarTemplate = ({ resume }) => {
         {resume.projects.map((proj, i) => (
           <div
             key={i}
-            className={`mb-4 ${getCustomFontClass(
+            className={`mb-4 resume-h3 ${getCustomFontClass(
               "text-[14px]",
               sidebarSettings.fontScaleLevel
             )}`}
+            style={{
+              "--resume-h3-user": `${getFontPxValue(
+                "14",
+                classicSettings.fontScaleLevel
+              )}px`,
+            }}
           >
             <div
               className={`flex gap-6 w-full ${
@@ -618,10 +693,16 @@ const SidebarTemplate = ({ resume }) => {
               </p>
 
               <div
-                className={`break-all ${getCustomFontClass(
+                className={`break-all resume-h3 ${getCustomFontClass(
                   "text-[14px]",
                   sidebarSettings.fontScaleLevel
                 )}`}
+                style={{
+                  "--resume-h3-user": `${getFontPxValue(
+                    "14",
+                    classicSettings.fontScaleLevel
+                  )}px`,
+                }}
               >
                 {(proj.demo || proj.github) && (
                   <span>
@@ -662,10 +743,16 @@ const SidebarTemplate = ({ resume }) => {
             </div>
 
             <div
-              className={`mt-1 ${getCustomFontClass(
+              className={`mt-1 resume-h3 ${getCustomFontClass(
                 "text-[14px]",
                 sidebarSettings.fontScaleLevel
               )} text-gray-700 whitespace-pre-line`}
+              style={{
+                "--resume-h3-user": `${getFontPxValue(
+                  "14",
+                  classicSettings.fontScaleLevel
+                )}px`,
+              }}
             >
               <div
                 className="mb-1 resume-content"
@@ -690,7 +777,7 @@ const SidebarTemplate = ({ resume }) => {
         style={{ textAlign: sidebarSettings.descriptionAlign || "left" }}
       >
         <h2
-          className={`${getCustomFontClass(
+          className={`resume-h2 ${getCustomFontClass(
             "text-[16px]",
             sidebarSettings.fontScaleLevel
           )} font-bold mb-2`}
@@ -698,13 +785,17 @@ const SidebarTemplate = ({ resume }) => {
             color:
               sidebarSettings.mainTextColors?.["h1"] ||
               defaultMainTextColor("h1"),
+            "--resume-h2-user": `${getFontPxValue(
+              "16",
+              classicSettings.fontScaleLevel
+            )}px`,
           }}
         >
           EDUCATION
         </h2>
 
         <div
-          className={`flex gap-6 break-all w-full ${
+          className={`flex resume-h3 gap-6 break-all w-full ${
             sidebarSettings.descriptionAlign === "center"
               ? "justify-center"
               : sidebarSettings.descriptionAlign === "right"
@@ -716,6 +807,12 @@ const SidebarTemplate = ({ resume }) => {
             "text-[14px]",
             sidebarSettings.fontScaleLevel
           )}`}
+          style={{
+            "--resume-h3-user": `${getFontPxValue(
+              "14",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           <p
             className="font-semibold"
@@ -741,7 +838,7 @@ const SidebarTemplate = ({ resume }) => {
         </div>
 
         <div
-          className={`flex break-all gap-6 w-full ${
+          className={`flex resume-h3 break-all gap-6 w-full ${
             sidebarSettings.descriptionAlign === "center"
               ? "justify-center"
               : sidebarSettings.descriptionAlign === "right"
@@ -753,6 +850,12 @@ const SidebarTemplate = ({ resume }) => {
             "text-[14px]",
             sidebarSettings.fontScaleLevel
           )}`}
+          style={{
+            "--resume-h3-user": `${getFontPxValue(
+              "14",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           <p>
             {resume.education.degree}
@@ -773,7 +876,7 @@ const SidebarTemplate = ({ resume }) => {
         </div>
 
         <p
-          className={`${getCustomFontClass(
+          className={`resume-h3 ${getCustomFontClass(
             "text-[14px]",
             sidebarSettings.fontScaleLevel
           )}`}
@@ -781,6 +884,10 @@ const SidebarTemplate = ({ resume }) => {
             color:
               sidebarSettings.mainTextColors?.["h3"] ||
               defaultMainTextColor("h3"),
+            "--resume-h3-user": `${getFontPxValue(
+              "14",
+              classicSettings.fontScaleLevel
+            )}px`,
           }}
         >
           CGPA: {resume.education.cgpa}
@@ -793,7 +900,7 @@ const SidebarTemplate = ({ resume }) => {
         style={{ textAlign: sidebarSettings.descriptionAlign || "left" }}
       >
         <h2
-          className={`${getCustomFontClass(
+          className={`resume-h2 ${getCustomFontClass(
             "text-[16px]",
             sidebarSettings.fontScaleLevel
           )} font-bold mb-1 md:mb-2`}
@@ -801,15 +908,25 @@ const SidebarTemplate = ({ resume }) => {
             color:
               sidebarSettings.mainTextColors?.["h1"] ||
               defaultMainTextColor("h1"),
+            "--resume-h2-user": `${getFontPxValue(
+              "16",
+              classicSettings.fontScaleLevel
+            )}px`,
           }}
         >
           ACHIEVEMENTS
         </h2>
         <ul
-          className={`list-disc ${getCustomFontClass(
+          className={`list-disc resume-h3 ${getCustomFontClass(
             "text-[14px]",
             sidebarSettings.fontScaleLevel
           )} pl-5 space-y-2 text-gray-800`}
+          style={{
+            "--resume-h3-user": `${getFontPxValue(
+              "14",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           {resume.achievements.map((ach, i) => (
             <li

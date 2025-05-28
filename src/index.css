@@ -85,12 +85,12 @@
     font-size: clamp(30px, var(--resume-h1-user, 30px), 96px) !important;
   }
   .resume-h2 {
-    font-size: 16px !important;
+    font-size: clamp(16px, var(--resume-h2-user, 16px), 80px) !important;
   }
   .resume-h3 {
-    font-size: 14px !important;
+    font-size: clamp(14px, var(--resume-h3-user, 14px), 45px) !important;
   }
   .resume-h4 {
-    font-size: 12px !important;
+    font-size: clamp(12px, var(--resume-h4-user, 12px), 40px) !important;
   }
 }

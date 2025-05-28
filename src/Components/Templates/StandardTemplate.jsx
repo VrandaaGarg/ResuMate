@@ -77,6 +77,17 @@ const StandardTemplate = ({ resume }) => {
     return `text-[${pixelSizes[newIndex]}px]`;
   };
 
+  const getFontPxValue = (basePx, level = 0) => {
+    const base = parseInt(basePx.replace(/\D/g, ""), 10);
+    const index = pixelSizes.indexOf(base);
+    if (index === -1) return base; // fallback
+    const newIndex = Math.max(
+      0,
+      Math.min(pixelSizes.length - 1, index + level)
+    );
+    return pixelSizes[newIndex];
+  };
+
   const defaultTextColor = (tag) => {
     switch (tag) {
       case "h1":
@@ -176,13 +187,17 @@ const StandardTemplate = ({ resume }) => {
     name: (
       <div className="">
         <h1
-          className={`${getCustomFontClass(
+          className={`resume-h1 ${getCustomFontClass(
             "text-[36px]",
             standardSettings.fontScaleLevel
           )} font-bold w-full inline-block`}
           style={{
             color: standardSettings.TextColors?.["h1"] || "black",
             textAlign: standardSettings.descriptionAlign || "left",
+            "--resume-h1-user": `${getFontPxValue(
+              "36",
+              classicSettings.fontScaleLevel
+            )}px`,
           }}
         >
           {resume.name}
@@ -197,10 +212,16 @@ const StandardTemplate = ({ resume }) => {
       >
         {/* Contact Line */}
         <p
-          className={`${getCustomFontClass(
+          className={`resume-h4 ${getCustomFontClass(
             "text-[12px]",
             standardSettings.fontScaleLevel
           )} text-gray-700`}
+          style={{
+            "--resume-h4-user": `${getFontPxValue(
+              "14",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           {[
             resume.contact.phone && (
@@ -238,13 +259,17 @@ const StandardTemplate = ({ resume }) => {
         </p>
         {/* Links */}
         <div
-          className={`${getCustomFontClass(
+          className={`resume-h4 ${getCustomFontClass(
             "text-[12px]",
             standardSettings.fontScaleLevel
           )} break-words whitespace-normal flex-wrap gap-x-2 `}
           style={{
             color: standardSettings.linkColor || "black",
             textAlign: standardSettings.descriptionAlign || "left",
+            "--resume-h4-user": `${getFontPxValue(
+              "12",
+              classicSettings.fontScaleLevel
+            )}px`,
           }}
         >
           {resume.contact.github && (
@@ -289,20 +314,32 @@ const StandardTemplate = ({ resume }) => {
         }}
       >
         <h2
-          className={`w-1/3 ${getCustomFontClass(
+          className={`w-1/3 resume-h3 ${getCustomFontClass(
             "text-[14px]",
             standardSettings.fontScaleLevel
           )} font-bold text-gray-800`}
-          style={{ color: standardSettings.TextColors?.["h2"] || "#334155" }}
+          style={{
+            color: standardSettings.TextColors?.["h2"] || "#334155",
+            "--resume-h3-user": `${getFontPxValue(
+              "14",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           PERSONAL SUMMARY
         </h2>
         <div
-          className={`w-2/3 resume-content text-gray-700 ${getCustomFontClass(
+          className={`w-2/3 resume-h4 resume-content text-gray-700 ${getCustomFontClass(
             "text-[12px]",
             standardSettings.fontScaleLevel
           )}`}
-          style={{ color: standardSettings.TextColors?.["h3"] || "#475569" }}
+          style={{
+            color: standardSettings.TextColors?.["h3"] || "#475569",
+            "--resume-h4-user": `${getFontPxValue(
+              "12",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
           dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(resume.description),
           }}
@@ -323,18 +360,30 @@ const StandardTemplate = ({ resume }) => {
         }}
       >
         <h2
-          className={`w-1/3 ${getCustomFontClass(
+          className={`w-1/3 resume-h3 ${getCustomFontClass(
             "text-[14px]",
             standardSettings.fontScaleLevel
           )} font-bold text-gray-800`}
-          style={{ color: standardSettings.TextColors?.["h2"] || "#334155" }}
+          style={{
+            color: standardSettings.TextColors?.["h2"] || "#334155",
+            "--resume-h3-user": `${getFontPxValue(
+              "14",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           EDUCATION
         </h2>
         <div className="w-2/3">
           <div
-            style={{ color: standardSettings.TextColors?.["h3"] || "#475569" }}
-            className={`flex gap-6 w-full ${getCustomFontClass(
+            style={{
+              color: standardSettings.TextColors?.["h3"] || "#475569",
+              "--resume-h4-user": `${getFontPxValue(
+                "12",
+                classicSettings.fontScaleLevel
+              )}px`,
+            }}
+            className={`flex resume-h4 gap-6 w-full ${getCustomFontClass(
               "text-[12px]",
               standardSettings.fontScaleLevel
             )} ${
@@ -351,14 +400,20 @@ const StandardTemplate = ({ resume }) => {
             <p className="italic"> {resume.education.location}</p>
           </div>
           <div
-            className={` ${getCustomFontClass(
+            className={`resume-h4 ${getCustomFontClass(
               "text-[12px]",
               standardSettings.fontScaleLevel
             )}`}
-            style={{ color: standardSettings.TextColors?.["h3"] || "#475569" }}
+            style={{
+              color: standardSettings.TextColors?.["h3"] || "#475569",
+              "--resume-h4-user": `${getFontPxValue(
+                "12",
+                classicSettings.fontScaleLevel
+              )}px`,
+            }}
           >
             <div
-              className={`flex gap-6 w-full ${getCustomFontClass(
+              className={`resume-h4 flex gap-6 w-full ${getCustomFontClass(
                 "text-[12px]",
                 standardSettings.fontScaleLevel
               )} ${
@@ -370,6 +425,12 @@ const StandardTemplate = ({ resume }) => {
                   ? "justify-between"
                   : "justify-start"
               }`}
+              style={{
+                "--resume-h4-user": `${getFontPxValue(
+                  "12",
+                  classicSettings.fontScaleLevel
+                )}px`,
+              }}
             >
               <p>
                 {resume.education.degree}
@@ -402,11 +463,17 @@ const StandardTemplate = ({ resume }) => {
         }}
       >
         <h2
-          className={`w-1/3 ${getCustomFontClass(
+          className={`w-1/3 resume-h3 ${getCustomFontClass(
             "text-[14px]",
             standardSettings.fontScaleLevel
           )} font-bold text-gray-800`}
-          style={{ color: standardSettings.TextColors?.["h2"] || "#334155" }}
+          style={{
+            color: standardSettings.TextColors?.["h3"] || "#334155",
+            "--resume-h3-user": `${getFontPxValue(
+              "14",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           SKILLS
         </h2>
@@ -414,10 +481,16 @@ const StandardTemplate = ({ resume }) => {
           {resume.skills.map((skill, i) => (
             <div
               key={i}
-              className={` ${getCustomFontClass(
+              className={`resume-h4 ${getCustomFontClass(
                 "text-[12px]",
                 standardSettings.fontScaleLevel
               )}`}
+              style={{
+                "--resume-h4-user": `${getFontPxValue(
+                  "12",
+                  classicSettings.fontScaleLevel
+                )}px`,
+              }}
             >
               <span
                 className="font-semibold mr-2"
@@ -453,11 +526,17 @@ const StandardTemplate = ({ resume }) => {
         }}
       >
         <h2
-          className={`w-1/3 ${getCustomFontClass(
+          className={`w-1/3 resume-h3 ${getCustomFontClass(
             "text-[14px]",
             standardSettings.fontScaleLevel
           )} font-bold text-gray-800`}
-          style={{ color: standardSettings.TextColors?.["h2"] || "#334155" }}
+          style={{
+            color: standardSettings.TextColors?.["h2"] || "#334155",
+            "--resume-h3-user": `${getFontPxValue(
+              "14",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           PROJECTS
         </h2>
@@ -465,7 +544,13 @@ const StandardTemplate = ({ resume }) => {
           {resume.projects.map((proj, i) => (
             <div key={i} className="md:mb-3">
               <div
-                className={`flex gap-2 md:gap-6 w-full ${getCustomFontClass(
+                style={{
+                  "--resume-h4-user": `${getFontPxValue(
+                    "12",
+                    classicSettings.fontScaleLevel
+                  )}px`,
+                }}
+                className={`flex resume-h4 gap-2 md:gap-6 w-full ${getCustomFontClass(
                   "text-[12px]",
                   standardSettings.fontScaleLevel
                 )} ${
@@ -527,12 +612,16 @@ const StandardTemplate = ({ resume }) => {
 
               {/* Description */}
               <div
-                className={`resume-content   ${getCustomFontClass(
+                className={`resume-content resume-h4  ${getCustomFontClass(
                   "text-[12px]",
                   standardSettings.fontScaleLevel
                 )}`}
                 style={{
                   color: standardSettings.TextColors?.["h4"] || "#64748b",
+                  "--resume-h4-user": `${getFontPxValue(
+                    "12",
+                    classicSettings.fontScaleLevel
+                  )}px`,
                 }}
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(proj.description),
@@ -557,11 +646,17 @@ const StandardTemplate = ({ resume }) => {
         }}
       >
         <h2
-          className={`w-1/3 ${getCustomFontClass(
+          className={`w-1/3 resume-h3 ${getCustomFontClass(
             "text-[14px]",
             standardSettings.fontScaleLevel
           )} font-bold text-gray-800`}
-          style={{ color: standardSettings.TextColors?.["h2"] || "#334155" }}
+          style={{
+            color: standardSettings.TextColors?.["h2"] || "#334155",
+            "--resume-h3-user": `${getFontPxValue(
+              "14",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           EXPERIENCE
         </h2>
@@ -570,10 +665,16 @@ const StandardTemplate = ({ resume }) => {
             {resume.experience.map((a, i) => (
               <li
                 key={i}
-                className={`md:mb-3  ${getCustomFontClass(
+                className={`md:mb-3 resume-h4  ${getCustomFontClass(
                   "text-[12px]",
                   standardSettings.fontScaleLevel
                 )}`}
+                style={{
+                  "--resume-h4-user": `${getFontPxValue(
+                    "12",
+                    classicSettings.fontScaleLevel
+                  )}px`,
+                }}
               >
                 <div
                   style={{
@@ -635,11 +736,17 @@ const StandardTemplate = ({ resume }) => {
         }}
       >
         <h2
-          className={`w-1/3 ${getCustomFontClass(
+          className={`w-1/3 resume-h3 ${getCustomFontClass(
             "text-[14px]",
             standardSettings.fontScaleLevel
           )} font-bold text-gray-800`}
-          style={{ color: standardSettings.TextColors?.["h2"] || "#334155" }}
+          style={{
+            color: standardSettings.TextColors?.["h2"] || "#334155",
+            "--resume-h3-user": `${getFontPxValue(
+              "14",
+              classicSettings.fontScaleLevel
+            )}px`,
+          }}
         >
           ACHIEVEMENTS
         </h2>
@@ -648,10 +755,16 @@ const StandardTemplate = ({ resume }) => {
             {resume.achievements.map((a, i) => (
               <li
                 key={i}
-                className={` ${getCustomFontClass(
+                className={`resume-h4 ${getCustomFontClass(
                   "text-[12px]",
                   standardSettings.fontScaleLevel
                 )}`}
+                style={{
+                  "--resume-h4-user": `${getFontPxValue(
+                    "12",
+                    classicSettings.fontScaleLevel
+                  )}px`,
+                }}
               >
                 <div
                   style={{
