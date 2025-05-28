@@ -10,6 +10,7 @@ import {
   FaStar,
   FaChartLine,
   FaClock,
+  FaRobot,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useResumeData } from "../Contexts/ResumeDataContext";
@@ -37,10 +38,10 @@ export default function Dashboard() {
       bgColor: "from-blue-50 to-cyan-50",
     },
     {
-      title: "Upload Resume",
-      description: "Upload and enhance your existing resume with AI",
-      icon: FaUpload,
-      link: "/upload",
+      title: "ATS Compatibility Check",
+      description: "Ensure your resume passes ATS filters",
+      icon: FaRobot,
+      link: "/ats-check",
       color: "from-purple-500 to-pink-400",
       bgColor: "from-purple-50 to-pink-50",
     },

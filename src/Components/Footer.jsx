@@ -135,19 +135,19 @@ export default function Footer() {
 
               <div className="flex items-center gap-4">
                 <Link
-                  to="/privacy"
+                  to="#"
                   className="hover:text-sky-600 transition-colors duration-200"
                 >
                   Privacy
                 </Link>
                 <Link
-                  to="/terms"
+                  to="#"
                   className="hover:text-sky-600 transition-colors duration-200"
                 >
                   Terms
                 </Link>
                 <Link
-                  to="/contact"
+                  to="#"
                   className="hover:text-sky-600 transition-colors duration-200"
                 >
                   Contact
