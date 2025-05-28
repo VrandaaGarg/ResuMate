@@ -406,8 +406,8 @@ const ClassicTemplate = ({ resume }) => {
     projects: (
       <div style={{ textAlign: classicSettings.descriptionAlign || "left" }}>
         <h2
-          className={`${getCustomFontClass(
-            "resume-h2 text-[16px]",
+          className={`resume-h2  ${getCustomFontClass(
+            "text-[16px]",
             classicSettings.fontScaleLevel
           )} font-bold `}
           style={{ color: classicSettings.TextColors?.["h2"] || "#334155" }}
