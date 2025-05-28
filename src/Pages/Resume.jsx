@@ -283,52 +283,6 @@ export default function Resume() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="bg-white/60 backdrop-blur-md max-w-4xl border border-white/40 shadow-xl rounded-xl overflow-hidden"
         >
-          {/* Preview Header - more compact */}
-          <div className="bg-gradient-to-r from-slate-100/80 to-blue-50/80 p-4 border-b border-white/20">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="p-1.5 bg-white/80 rounded-lg shadow-sm">
-                  <FaFileAlt className="text-blue-600 text-xs" />
-                </div>
-                <div>
-                  <h3 className="text-[14px] md:text-sm font-semibold text-slate-900">
-                    Resume Preview
-                  </h3>
-                  <p className="text-[10px] md:text-xs text-slate-600">
-                    {resume.name}'s Professional Resume
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-1.5">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="p-1.5 bg-white/80 hover:bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 text-slate-600 hover:text-blue-600"
-                  title="Download PDF"
-                >
-                  <FaDownload size={12} />
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="p-1.5 bg-white/80 hover:bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 text-slate-600 hover:text-green-600"
-                  title="Share Resume"
-                >
-                  <FaShare size={12} />
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="p-1.5 bg-white/80 hover:bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 text-slate-600 hover:text-purple-600"
-                  title="Settings"
-                >
-                  <FaCog size={12} />
-                </motion.button>
-              </div>
-            </div>
-          </div>
-
           {/* Template Content */}
           <div className="p-4 md:p-6">
             <motion.div

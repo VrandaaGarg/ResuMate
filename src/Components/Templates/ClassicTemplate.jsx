@@ -9,6 +9,8 @@ import { IoReorderThreeSharp } from "react-icons/io5";
 import DOMPurify from "dompurify";
 import { CgSpaceBetweenV } from "react-icons/cg";
 import { useClassicSetting } from "../../Contexts/ClassicSettingContext";
+import { motion } from "framer-motion";
+import { FaFileAlt, FaDownload, FaShare, FaCog } from "react-icons/fa";
 import {
   MdFormatAlignLeft,
   MdFormatAlignCenter,
@@ -615,6 +617,37 @@ const ClassicTemplate = ({ resume }) => {
 
   return (
     <div className="">
+      {/* Preview Header - more compact */}
+      <div className="bg-gradient-to-r from-slate-100/80 to-blue-50/80 p-4 border-b border-white/20">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 bg-white/80 rounded-lg shadow-sm">
+              <FaFileAlt className="text-blue-600 text-xs" />
+            </div>
+            <div>
+              <h3 className="text-[14px] md:text-sm font-semibold text-slate-900">
+                Resume Preview
+              </h3>
+              <p className="text-[10px] md:text-xs text-slate-600">
+                {resume.name}'s Professional Resume
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1.5">
+            <motion.button
+              onClick={reactToPrintFn}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="p-1.5 bg-white/80 flex hover:bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 text-slate-600 hover:text-blue-600"
+              title="Download PDF"
+            >
+              <FaDownload size={12} />
+            </motion.button>
+          </div>
+        </div>
+      </div>
+
       {isEditable && (
         <div className="w-full bg-white justify-center border border-gray-200 shadow-sm rounded-md px-2.5 md:px-6 py-2.5 md:py-3 mb-2.5 md:mb-6 flex flex-wrap items-center gap-3">
           {/* Resume Background Color */}
@@ -1446,8 +1479,6 @@ const ClassicTemplate = ({ resume }) => {
         </div>
       )}
 
-      <button onClick={reactToPrintFn}>Print</button>
-
       {/* Resume Preview */}
       <div
         style={{
@@ -1457,7 +1488,7 @@ const ClassicTemplate = ({ resume }) => {
       >
         <div
           ref={contentRef}
-          className="w-full max-w-4xl mx-auto text-sm leading-relaxed border border-gray-200 shadow-md"
+          className="w-full max-w-4xl mx-auto p-2.5 md:p-5 text-sm leading-relaxed border border-gray-200 shadow-md"
           style={{
             fontFamily: classicSettings.fontFamily || "Inter",
             backgroundColor: classicSettings.backgroundColor || "#ffffff",

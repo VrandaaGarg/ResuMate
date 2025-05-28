@@ -65,3 +65,18 @@
 ::-webkit-scrollbar-thumb:hover {
   background-color: #64748b; /* slate-500 */
 }
+
+/* src/index.css or in your pageStyle string for react-to-print */
+
+@media print {
+  .print-a4 {
+    width: 210mm !important;
+    height: 297mm !important;
+    min-height: 297mm !important;
+    max-height: 297mm !important;
+    overflow: hidden !important;
+    page-break-after: avoid !important;
+    page-break-before: avoid !important;
+    page-break-inside: avoid !important;
+  }
+}

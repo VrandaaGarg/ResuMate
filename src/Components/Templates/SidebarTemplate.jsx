@@ -46,11 +46,16 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import DOMPurify from "dompurify";
 import { useSidebarSetting } from "../../Contexts/SidebarSettingContext";
+import { useReactToPrint } from "react-to-print";
+import { motion } from "framer-motion";
+import { FaFileAlt, FaDownload } from "react-icons/fa";
+import { useRef } from "react";
 
 const SidebarTemplate = ({ resume }) => {
   const { isEditable } = useEditResume();
   const { sidebarSettings, setSidebarSettings } = useSidebarSetting();
-
+  const contentRef = useRef(null);
+  const reactToPrintFn = useReactToPrint({ contentRef });
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(TouchSensor, {
@@ -832,6 +837,37 @@ const SidebarTemplate = ({ resume }) => {
 
   return (
     <div className="">
+      {/* Preview Header - more compact */}
+      <div className="bg-gradient-to-r from-slate-100/80 to-blue-50/80 p-4 border-b border-white/20">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 bg-white/80 rounded-lg shadow-sm">
+              <FaFileAlt className="text-blue-600 text-xs" />
+            </div>
+            <div>
+              <h3 className="text-[14px] md:text-sm font-semibold text-slate-900">
+                Resume Preview
+              </h3>
+              <p className="text-[10px] md:text-xs text-slate-600">
+                {resume.name}'s Professional Resume
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1.5">
+            <motion.button
+              onClick={reactToPrintFn}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="p-1.5 bg-white/80 flex hover:bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 text-slate-600 hover:text-blue-600"
+              title="Download PDF"
+            >
+              <FaDownload size={12} />
+            </motion.button>
+          </div>
+        </div>
+      </div>
+
       {/* Toolbar */}
       {isEditable && (
         <div className="w-full bg-white justify-center border border-gray-200 shadow-sm rounded-md px-2.5 md:px-6 py-2.5 md:py-3 mb-2.5 md:mb-6 flex flex-wrap items-center gap-3">
@@ -1688,15 +1724,19 @@ const SidebarTemplate = ({ resume }) => {
 
       {/* Resume Preview */}
       <div
-        className=" border border-gray-400 p-2 md:p-4 flex"
+        ref={contentRef}
+        className="border print-a4 border-gray-400 p-2 md:p-4 flex"
         style={{
           backgroundColor: sidebarSettings.bgColor || "#ffffff",
           fontFamily: sidebarSettings.fontFamily || "Inter",
+          aspectRatio: "7/8", // A4 ratio (width:height = 7:10, which is close to actual A4 ratio)
+          display: "flex",
+          flexDirection: "row",
         }}
       >
         {/* Sidebar */}
         <aside
-          className="w-full md:w-1/3 text-white p-3 md:p-6 flex flex-col"
+          className=" w-1/3 print:w-[32%] text-white p-3 md:p-6 flex flex-col"
           style={{
             backgroundColor: sidebarSettings.sidebarColor || "#212121",
             rowGap: `${sidebarSettings.sectionGap ?? 16}px`,
@@ -1715,7 +1755,7 @@ const SidebarTemplate = ({ resume }) => {
 
         {/* Mainbar */}
         <main
-          className="w-full md:w-2/3 p-2 md:p-8 flex flex-col"
+          className=" w-2/3 print:w-[68%] p-2 md:p-6 flex flex-col"
           style={{
             rowGap: `${sidebarSettings.sectionGap ?? 16}px`,
           }}

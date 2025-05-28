@@ -8,6 +8,8 @@ import { FaEye, FaEyeSlash, FaFillDrip, FaFont, FaLink } from "react-icons/fa";
 import { IoReorderThreeSharp } from "react-icons/io5";
 import DOMPurify from "dompurify";
 import { CgSpaceBetweenV } from "react-icons/cg";
+import { motion } from "framer-motion";
+import { FaDownload, FaFileAlt } from "react-icons/fa";
 import {
   MdFormatAlignLeft,
   MdFormatAlignCenter,
@@ -35,10 +37,14 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { useStandardSetting } from "../../Contexts/StandardSettingContext";
+import { useReactToPrint } from "react-to-print";
+import { useRef } from "react";
 
 const StandardTemplate = ({ resume }) => {
   const { isEditable } = useEditResume();
   const { standardSettings, setStandardSettings } = useStandardSetting();
+  const contentRef = useRef(null);
+  const reactToPrintFn = useReactToPrint({ contentRef });
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -686,6 +692,38 @@ const StandardTemplate = ({ resume }) => {
 
   return (
     <div className="">
+      {/* Preview Header - more compact */}
+      <div className="bg-gradient-to-r from-slate-100/80 to-blue-50/80 p-4 border-b border-white/20">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 bg-white/80 rounded-lg shadow-sm">
+              <FaFileAlt className="text-blue-600 text-xs" />
+            </div>
+            <div>
+              <h3 className="text-[14px] md:text-sm font-semibold text-slate-900">
+                Resume Preview
+              </h3>
+              <p className="text-[10px] md:text-xs text-slate-600">
+                {resume.name}'s Professional Resume
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1.5">
+            <motion.button
+              onClick={reactToPrintFn}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="p-1.5 bg-white/80 flex hover:bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 text-slate-600 hover:text-blue-600"
+              title="Download PDF"
+            >
+              <FaDownload size={12} />
+            </motion.button>
+          </div>
+        </div>
+      </div>
+
+      {/* Toolbar */}
       {isEditable && (
         <div className="w-full bg-white justify-center border border-gray-200 shadow-sm rounded-md px-2.5 md:px-6 py-2.5 md:py-3 mb-2.5 md:mb-6 flex flex-wrap items-center gap-3">
           {/* Resume Background Color */}
@@ -1404,10 +1442,14 @@ const StandardTemplate = ({ resume }) => {
 
       {/* Resume Preview */}
       <div
-        className="w-full mx-auto p-2 md:p-5 text-sm leading-relaxed space-y-5 border border-gray-200 shadow-md"
+        ref={contentRef}
+        className="w-full mx-auto print-a4 p-2 md:p-6 text-sm leading-relaxed py-5 "
         style={{
           fontFamily: standardSettings.fontFamily || "Inter",
           backgroundColor: standardSettings.backgroundColor || "#ffffff",
+          aspectRatio: "7/7.8", // A4 ratio (width:height = 7:10, which is close to actual A4 ratio)
+          display: "flex",
+          flexDirection: "column",
         }}
       >
         {/* Inner Resume Container */}
