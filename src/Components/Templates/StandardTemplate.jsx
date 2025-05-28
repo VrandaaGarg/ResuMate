@@ -1442,36 +1442,44 @@ const StandardTemplate = ({ resume }) => {
 
       {/* Resume Preview */}
       <div
-        ref={contentRef}
-        className="w-full mx-auto print-a4 p-2 md:p-6 text-sm leading-relaxed py-5 "
+        className=""
         style={{
-          fontFamily: standardSettings.fontFamily || "Inter",
-          backgroundColor: standardSettings.backgroundColor || "#ffffff",
           aspectRatio: "7/7.8", // A4 ratio (width:height = 7:10, which is close to actual A4 ratio)
           display: "flex",
-          flexDirection: "column",
         }}
       >
-        {/* Inner Resume Container */}
         <div
-          className={`p-2 md:p-7 flex flex-col `}
+          ref={contentRef}
+          className="w-full mx-auto print-a4 p-2 md:p-6 text-sm leading-relaxed"
           style={{
-            border:
-              standardSettings.borderWidth &&
-              standardSettings.borderWidth !== "0px"
-                ? `${standardSettings.borderWidth} ${
-                    standardSettings.borderStyle || "solid"
-                  } ${standardSettings.borderColor || "#cbd5e1"}`
-                : "none",
+            fontFamily: standardSettings.fontFamily || "Inter",
+            backgroundColor: standardSettings.backgroundColor || "#ffffff",
+            aspectRatio: "7/7.8", // A4 ratio (width:height = 7:10, which is close to actual A4 ratio)
+            display: "flex",
+            flexDirection: "column",
           }}
         >
-          {Array.isArray(standardSettings?.sectionOrder) &&
-            standardSettings.sectionOrder.map(
-              (sectionKey) =>
-                standardSettings.visibleSections?.[sectionKey] && (
-                  <div key={sectionKey}>{sectionMap[sectionKey]}</div>
-                )
-            )}
+          {/* Inner Resume Container */}
+          <div
+            className={`p-2 md:p-5 flex flex-col `}
+            style={{
+              border:
+                standardSettings.borderWidth &&
+                standardSettings.borderWidth !== "0px"
+                  ? `${standardSettings.borderWidth} ${
+                      standardSettings.borderStyle || "solid"
+                    } ${standardSettings.borderColor || "#cbd5e1"}`
+                  : "none",
+            }}
+          >
+            {Array.isArray(standardSettings?.sectionOrder) &&
+              standardSettings.sectionOrder.map(
+                (sectionKey) =>
+                  standardSettings.visibleSections?.[sectionKey] && (
+                    <div key={sectionKey}>{sectionMap[sectionKey]}</div>
+                  )
+              )}
+          </div>
         </div>
       </div>
     </div>
