@@ -80,3 +80,17 @@
     page-break-inside: avoid !important;
   }
 }
+@media print {
+  .resume-h1 {
+    font-size: 22px !important;
+  }
+  .resume-h2 {
+    font-size: 18px !important;
+  }
+  .resume-h3 {
+    font-size: 16px !important;
+  }
+  .resume-h4 {
+    font-size: 14px !important;
+  }
+}
