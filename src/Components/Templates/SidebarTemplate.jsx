@@ -221,7 +221,7 @@ const SidebarTemplate = ({ resume }) => {
             color: sidebarSettings.textColors?.["h1"] || "white",
             "--resume-h1-user": `${getFontPxValue(
               "36",
-              classicSettings.fontScaleLevel
+              sidebarSettings.fontScaleLevel
             )}px`,
           }}
         >
@@ -241,7 +241,7 @@ const SidebarTemplate = ({ resume }) => {
             textAlign: sidebarSettings.descriptionAlign || "left",
             "--resume-h2-user": `${getFontPxValue(
               "16",
-              classicSettings.fontScaleLevel
+              sidebarSettings.fontScaleLevel
             )}px`,
           }}
         >
@@ -257,7 +257,7 @@ const SidebarTemplate = ({ resume }) => {
             textAlign: sidebarSettings.descriptionAlign || "left",
             "--resume-h3-user": `${getFontPxValue(
               "14",
-              classicSettings.fontScaleLevel
+              sidebarSettings.fontScaleLevel
             )}px`,
           }}
         >
@@ -338,7 +338,7 @@ const SidebarTemplate = ({ resume }) => {
                 textAlign: sidebarSettings.descriptionAlign || "left",
                 "--resume-h2-user": `${getFontPxValue(
                   "16",
-                  classicSettings.fontScaleLevel
+                  sidebarSettings.fontScaleLevel
                 )}px`,
               }}
             >
@@ -355,7 +355,7 @@ const SidebarTemplate = ({ resume }) => {
                 color: sidebarSettings.textColors?.["h3"] || "#d9d9d9",
                 "--resume-h3-user": `${getFontPxValue(
                   "14",
-                  classicSettings.fontScaleLevel
+                  sidebarSettings.fontScaleLevel
                 )}px`,
               }}
               dangerouslySetInnerHTML={{
@@ -382,7 +382,7 @@ const SidebarTemplate = ({ resume }) => {
             textAlign: sidebarSettings.descriptionAlign || "left",
             "--resume-h2-user": `${getFontPxValue(
               "16",
-              classicSettings.fontScaleLevel
+              sidebarSettings.fontScaleLevel
             )}px`,
           }}
         >
@@ -410,7 +410,7 @@ const SidebarTemplate = ({ resume }) => {
                     textAlign: sidebarSettings.descriptionAlign || "left",
                     "--resume-h3-user": `${getFontPxValue(
                       "14",
-                      classicSettings.fontScaleLevel
+                      sidebarSettings.fontScaleLevel
                     )}px`,
                   }}
                 >
@@ -426,7 +426,7 @@ const SidebarTemplate = ({ resume }) => {
                     color: sidebarSettings.textColors?.["h4"] || "#c9c9c9",
                     "--resume-h3-user": `${getFontPxValue(
                       "14",
-                      classicSettings.fontScaleLevel
+                      sidebarSettings.fontScaleLevel
                     )}px`,
                   }}
                 >
@@ -446,7 +446,7 @@ const SidebarTemplate = ({ resume }) => {
             color: sidebarSettings.textColors?.["h2"] || "text-blue-300",
             "--resume-h2-user": `${getFontPxValue(
               "16",
-              classicSettings.fontScaleLevel
+              sidebarSettings.fontScaleLevel
             )}px`,
           }}
         >
@@ -486,7 +486,7 @@ const SidebarTemplate = ({ resume }) => {
           style={{
             "--resume-h3-user": `${getFontPxValue(
               "14",
-              classicSettings.fontScaleLevel
+              sidebarSettings.fontScaleLevel
             )}px`,
           }}
         >
@@ -549,7 +549,7 @@ const SidebarTemplate = ({ resume }) => {
               defaultMainTextColor("h1"),
             "--resume-h2-user": `${getFontPxValue(
               "16",
-              classicSettings.fontScaleLevel
+              sidebarSettings.fontScaleLevel
             )}px`,
           }}
         >
@@ -565,7 +565,7 @@ const SidebarTemplate = ({ resume }) => {
             style={{
               "--resume-h3-user": `${getFontPxValue(
                 "14",
-                classicSettings.fontScaleLevel
+                sidebarSettings.fontScaleLevel
               )}px`,
             }}
           >
@@ -649,7 +649,7 @@ const SidebarTemplate = ({ resume }) => {
               defaultMainTextColor("h1"),
             "--resume-h2-user": `${getFontPxValue(
               "16",
-              classicSettings.fontScaleLevel
+              sidebarSettings.fontScaleLevel
             )}px`,
           }}
         >
@@ -666,7 +666,7 @@ const SidebarTemplate = ({ resume }) => {
             style={{
               "--resume-h3-user": `${getFontPxValue(
                 "14",
-                classicSettings.fontScaleLevel
+                sidebarSettings.fontScaleLevel
               )}px`,
             }}
           >
@@ -700,7 +700,7 @@ const SidebarTemplate = ({ resume }) => {
                 style={{
                   "--resume-h3-user": `${getFontPxValue(
                     "14",
-                    classicSettings.fontScaleLevel
+                    sidebarSettings.fontScaleLevel
                   )}px`,
                 }}
               >
@@ -750,7 +750,7 @@ const SidebarTemplate = ({ resume }) => {
               style={{
                 "--resume-h3-user": `${getFontPxValue(
                   "14",
-                  classicSettings.fontScaleLevel
+                  sidebarSettings.fontScaleLevel
                 )}px`,
               }}
             >
@@ -787,7 +787,7 @@ const SidebarTemplate = ({ resume }) => {
               defaultMainTextColor("h1"),
             "--resume-h2-user": `${getFontPxValue(
               "16",
-              classicSettings.fontScaleLevel
+              sidebarSettings.fontScaleLevel
             )}px`,
           }}
         >
@@ -810,7 +810,7 @@ const SidebarTemplate = ({ resume }) => {
           style={{
             "--resume-h3-user": `${getFontPxValue(
               "14",
-              classicSettings.fontScaleLevel
+              sidebarSettings.fontScaleLevel
             )}px`,
           }}
         >
@@ -853,7 +853,7 @@ const SidebarTemplate = ({ resume }) => {
           style={{
             "--resume-h3-user": `${getFontPxValue(
               "14",
-              classicSettings.fontScaleLevel
+              sidebarSettings.fontScaleLevel
             )}px`,
           }}
         >
@@ -886,7 +886,7 @@ const SidebarTemplate = ({ resume }) => {
               defaultMainTextColor("h3"),
             "--resume-h3-user": `${getFontPxValue(
               "14",
-              classicSettings.fontScaleLevel
+              sidebarSettings.fontScaleLevel
             )}px`,
           }}
         >
@@ -910,7 +910,7 @@ const SidebarTemplate = ({ resume }) => {
               defaultMainTextColor("h1"),
             "--resume-h2-user": `${getFontPxValue(
               "16",
-              classicSettings.fontScaleLevel
+              sidebarSettings.fontScaleLevel
             )}px`,
           }}
         >
@@ -924,7 +924,7 @@ const SidebarTemplate = ({ resume }) => {
           style={{
             "--resume-h3-user": `${getFontPxValue(
               "14",
-              classicSettings.fontScaleLevel
+              sidebarSettings.fontScaleLevel
             )}px`,
           }}
         >
@@ -984,7 +984,6 @@ const SidebarTemplate = ({ resume }) => {
           </div>
         </div>
       </div>
-
       {/* Toolbar */}
       {isEditable && (
         <div className="w-full bg-white justify-center border border-gray-200 shadow-sm rounded-md px-2.5 md:px-6 py-2.5 md:py-3 mb-2.5 md:mb-6 flex flex-wrap items-center gap-3">
@@ -1838,56 +1837,63 @@ const SidebarTemplate = ({ resume }) => {
           </div>
         </div>
       )}
-
       {/* Resume Preview */}
       <div
-        ref={contentRef}
-        className="border print-a4 border-gray-400 p-2 md:p-4 flex"
+        className=""
         style={{
-          backgroundColor: sidebarSettings.bgColor || "#ffffff",
-          fontFamily: sidebarSettings.fontFamily || "Inter",
+          overflow: "hidden",
           aspectRatio: "7/8", // A4 ratio (width:height = 7:10, which is close to actual A4 ratio)
           display: "flex",
-          flexDirection: "row",
         }}
       >
-        {/* Sidebar */}
-        <aside
-          className=" w-1/3 print:w-[32%] text-white p-3 md:p-6 flex flex-col"
+        <div
+          ref={contentRef}
+          className="border print-a4 border-gray-400 p-2 md:p-4 flex"
           style={{
-            backgroundColor: sidebarSettings.sidebarColor || "#212121",
-            rowGap: `${sidebarSettings.sectionGap ?? 16}px`,
-          }}
-        >
-          {(sidebarSettings.sectionOrder || [])
-            .filter(
-              (key) =>
-                sidebarSettings.visibleSections?.[key] &&
-                sidebarSections.includes(key)
-            )
-            .map((key) => (
-              <React.Fragment key={key}>{sectionMap[key]}</React.Fragment>
-            ))}
-        </aside>
+            backgroundColor: sidebarSettings.bgColor || "#ffffff",
+            fontFamily: sidebarSettings.fontFamily || "Inter",
 
-        {/* Mainbar */}
-        <main
-          className=" w-2/3 print:w-[68%] p-2 md:p-6 flex flex-col"
-          style={{
-            rowGap: `${sidebarSettings.sectionGap ?? 16}px`,
+            flexDirection: "row",
           }}
         >
-          {(sidebarSettings.sectionOrder || [])
-            .filter(
-              (key) =>
-                sidebarSettings.visibleSections?.[key] &&
-                mainSections.includes(key)
-            )
-            .map((key) => (
-              <React.Fragment key={key}>{sectionMap[key]}</React.Fragment>
-            ))}
-        </main>
-      </div>
+          {/* Sidebar */}
+          <aside
+            className=" w-1/3 print:w-[32%] text-white p-3 md:p-6 flex flex-col"
+            style={{
+              backgroundColor: sidebarSettings.sidebarColor || "#212121",
+              rowGap: `${sidebarSettings.sectionGap ?? 16}px`,
+            }}
+          >
+            {(sidebarSettings.sectionOrder || [])
+              .filter(
+                (key) =>
+                  sidebarSettings.visibleSections?.[key] &&
+                  sidebarSections.includes(key)
+              )
+              .map((key) => (
+                <React.Fragment key={key}>{sectionMap[key]}</React.Fragment>
+              ))}
+          </aside>
+
+          {/* Mainbar */}
+          <main
+            className=" w-2/3 print:w-[68%] p-2 md:p-6 flex flex-col"
+            style={{
+              rowGap: `${sidebarSettings.sectionGap ?? 16}px`,
+            }}
+          >
+            {(sidebarSettings.sectionOrder || [])
+              .filter(
+                (key) =>
+                  sidebarSettings.visibleSections?.[key] &&
+                  mainSections.includes(key)
+              )
+              .map((key) => (
+                <React.Fragment key={key}>{sectionMap[key]}</React.Fragment>
+              ))}
+          </main>
+        </div>
+      </div>{" "}
     </div>
   );
 };

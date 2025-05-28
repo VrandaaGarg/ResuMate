@@ -196,7 +196,7 @@ const StandardTemplate = ({ resume }) => {
             textAlign: standardSettings.descriptionAlign || "left",
             "--resume-h1-user": `${getFontPxValue(
               "36",
-              classicSettings.fontScaleLevel
+              standardSettings.fontScaleLevel
             )}px`,
           }}
         >
@@ -219,7 +219,7 @@ const StandardTemplate = ({ resume }) => {
           style={{
             "--resume-h4-user": `${getFontPxValue(
               "14",
-              classicSettings.fontScaleLevel
+              standardSettings.fontScaleLevel
             )}px`,
           }}
         >
@@ -268,7 +268,7 @@ const StandardTemplate = ({ resume }) => {
             textAlign: standardSettings.descriptionAlign || "left",
             "--resume-h4-user": `${getFontPxValue(
               "12",
-              classicSettings.fontScaleLevel
+              standardSettings.fontScaleLevel
             )}px`,
           }}
         >
@@ -322,7 +322,7 @@ const StandardTemplate = ({ resume }) => {
             color: standardSettings.TextColors?.["h2"] || "#334155",
             "--resume-h3-user": `${getFontPxValue(
               "14",
-              classicSettings.fontScaleLevel
+              standardSettings.fontScaleLevel
             )}px`,
           }}
         >
@@ -337,7 +337,7 @@ const StandardTemplate = ({ resume }) => {
             color: standardSettings.TextColors?.["h3"] || "#475569",
             "--resume-h4-user": `${getFontPxValue(
               "12",
-              classicSettings.fontScaleLevel
+              standardSettings.fontScaleLevel
             )}px`,
           }}
           dangerouslySetInnerHTML={{
@@ -368,7 +368,7 @@ const StandardTemplate = ({ resume }) => {
             color: standardSettings.TextColors?.["h2"] || "#334155",
             "--resume-h3-user": `${getFontPxValue(
               "14",
-              classicSettings.fontScaleLevel
+              standardSettings.fontScaleLevel
             )}px`,
           }}
         >
@@ -380,7 +380,7 @@ const StandardTemplate = ({ resume }) => {
               color: standardSettings.TextColors?.["h3"] || "#475569",
               "--resume-h4-user": `${getFontPxValue(
                 "12",
-                classicSettings.fontScaleLevel
+                standardSettings.fontScaleLevel
               )}px`,
             }}
             className={`flex resume-h4 gap-6 w-full ${getCustomFontClass(
@@ -408,7 +408,7 @@ const StandardTemplate = ({ resume }) => {
               color: standardSettings.TextColors?.["h3"] || "#475569",
               "--resume-h4-user": `${getFontPxValue(
                 "12",
-                classicSettings.fontScaleLevel
+                standardSettings.fontScaleLevel
               )}px`,
             }}
           >
@@ -428,7 +428,7 @@ const StandardTemplate = ({ resume }) => {
               style={{
                 "--resume-h4-user": `${getFontPxValue(
                   "12",
-                  classicSettings.fontScaleLevel
+                  standardSettings.fontScaleLevel
                 )}px`,
               }}
             >
@@ -471,7 +471,7 @@ const StandardTemplate = ({ resume }) => {
             color: standardSettings.TextColors?.["h3"] || "#334155",
             "--resume-h3-user": `${getFontPxValue(
               "14",
-              classicSettings.fontScaleLevel
+              standardSettings.fontScaleLevel
             )}px`,
           }}
         >
@@ -488,7 +488,7 @@ const StandardTemplate = ({ resume }) => {
               style={{
                 "--resume-h4-user": `${getFontPxValue(
                   "12",
-                  classicSettings.fontScaleLevel
+                  standardSettings.fontScaleLevel
                 )}px`,
               }}
             >
@@ -534,7 +534,7 @@ const StandardTemplate = ({ resume }) => {
             color: standardSettings.TextColors?.["h2"] || "#334155",
             "--resume-h3-user": `${getFontPxValue(
               "14",
-              classicSettings.fontScaleLevel
+              standardSettings.fontScaleLevel
             )}px`,
           }}
         >
@@ -547,7 +547,7 @@ const StandardTemplate = ({ resume }) => {
                 style={{
                   "--resume-h4-user": `${getFontPxValue(
                     "12",
-                    classicSettings.fontScaleLevel
+                    standardSettings.fontScaleLevel
                   )}px`,
                 }}
                 className={`flex resume-h4 gap-2 md:gap-6 w-full ${getCustomFontClass(
@@ -620,7 +620,7 @@ const StandardTemplate = ({ resume }) => {
                   color: standardSettings.TextColors?.["h4"] || "#64748b",
                   "--resume-h4-user": `${getFontPxValue(
                     "12",
-                    classicSettings.fontScaleLevel
+                    standardSettings.fontScaleLevel
                   )}px`,
                 }}
                 dangerouslySetInnerHTML={{
@@ -654,7 +654,7 @@ const StandardTemplate = ({ resume }) => {
             color: standardSettings.TextColors?.["h2"] || "#334155",
             "--resume-h3-user": `${getFontPxValue(
               "14",
-              classicSettings.fontScaleLevel
+              standardSettings.fontScaleLevel
             )}px`,
           }}
         >
@@ -672,7 +672,7 @@ const StandardTemplate = ({ resume }) => {
                 style={{
                   "--resume-h4-user": `${getFontPxValue(
                     "12",
-                    classicSettings.fontScaleLevel
+                    standardSettings.fontScaleLevel
                   )}px`,
                 }}
               >
@@ -744,7 +744,7 @@ const StandardTemplate = ({ resume }) => {
             color: standardSettings.TextColors?.["h2"] || "#334155",
             "--resume-h3-user": `${getFontPxValue(
               "14",
-              classicSettings.fontScaleLevel
+              standardSettings.fontScaleLevel
             )}px`,
           }}
         >
@@ -762,7 +762,7 @@ const StandardTemplate = ({ resume }) => {
                 style={{
                   "--resume-h4-user": `${getFontPxValue(
                     "12",
-                    classicSettings.fontScaleLevel
+                    standardSettings.fontScaleLevel
                   )}px`,
                 }}
               >
@@ -1557,7 +1557,7 @@ const StandardTemplate = ({ resume }) => {
       <div
         className=""
         style={{
-          aspectRatio: "7/7.8", // A4 ratio (width:height = 7:10, which is close to actual A4 ratio)
+          aspectRatio: "7/7.7", // A4 ratio (width:height = 7:10, which is close to actual A4 ratio)
           display: "flex",
         }}
       >
@@ -1567,8 +1567,7 @@ const StandardTemplate = ({ resume }) => {
           style={{
             fontFamily: standardSettings.fontFamily || "Inter",
             backgroundColor: standardSettings.backgroundColor || "#ffffff",
-            aspectRatio: "7/7.8", // A4 ratio (width:height = 7:10, which is close to actual A4 ratio)
-            display: "flex",
+
             flexDirection: "column",
           }}
         >
