@@ -1554,10 +1554,10 @@ const StandardTemplate = ({ resume }) => {
       )}
 
       {/* Resume Preview */}
-      <div className="aspect-[7/8] md:flex">
+      <div className="aspect-[7/10.4] md:flex">
         <div
           ref={contentRef}
-          className="w-full mx-auto print-a4 p-2 md:p-3 text-sm leading-relaxed"
+          className="w-full mx-auto print-a4  text-sm leading-relaxed"
           style={{
             fontFamily: standardSettings.fontFamily || "Inter",
             backgroundColor: standardSettings.backgroundColor || "#ffffff",
@@ -1567,7 +1567,7 @@ const StandardTemplate = ({ resume }) => {
         >
           {/* Inner Resume Container */}
           <div
-            className={`p-2 md:p-5 flex flex-col `}
+            className={`p-2 flex flex-col `}
             style={{
               border:
                 standardSettings.borderWidth &&
