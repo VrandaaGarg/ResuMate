@@ -41,7 +41,7 @@ export default function Dashboard() {
       title: "ATS Compatibility Check",
       description: "Ensure your resume passes ATS filters",
       icon: FaRobot,
-      link: "/ats-check",
+      link: "/ats-checker",
       color: "from-purple-500 to-pink-400",
       bgColor: "from-purple-50 to-pink-50",
     },

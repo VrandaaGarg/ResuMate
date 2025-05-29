@@ -23,6 +23,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
   const isHomePage = location.pathname === "/";
   const isloginPage = location.pathname === "/login";
   const isSignupPage = location.pathname === "/signup";
+  const isForgotPasswordPage = location.pathname === "/forgot-password";
 
   const navigate = useNavigate();
 
@@ -57,16 +58,19 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
       <div className="px-4 md:px-6 lg:px-8 xl:px-12 py-2 md:py-2 flex items-center justify-between w-full">
         {/* Left: Logo + Sidebar Toggle */}
         <div className="flex items-center gap-3 md:gap-4">
-          {!isHomePage && !isSignupPage && !isloginPage && (
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="p-2 text-gray-700 hover:text-sky-700 hover:bg-sky-50 rounded-lg transition-all duration-200"
-              onClick={toggleSidebar} // ← use the prop here directly
-            >
-              {isSidebarOpen ? <RxCross2 size={22} /> : <FaBars size={20} />}
-            </motion.button>
-          )}
+          {!isHomePage &&
+            !isSignupPage &&
+            !isloginPage &&
+            !isForgotPasswordPage && (
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="p-2 text-gray-700 hover:text-sky-700 hover:bg-sky-50 rounded-lg transition-all duration-200"
+                onClick={toggleSidebar} // ← use the prop here directly
+              >
+                {isSidebarOpen ? <RxCross2 size={22} /> : <FaBars size={20} />}
+              </motion.button>
+            )}
 
           <Link to="/" className="flex items-center gap-2 md:gap-3 group">
             <motion.div
@@ -96,7 +100,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
               >
                 <Link
                   to="/login"
-                  className="px-4 md:px-6 py-2 md:py-2.5 bg-white/80 backdrop-blur-sm border border-sky-200 text-sky-700 rounded-xl font-medium hover:bg-sky-50 hover:border-sky-300 transition-all duration-300 shadow-sm hover:shadow-md"
+                  className="px-2 md:px-6 py-2 md:py-2.5 bg-white/80 backdrop-blur-sm border border-sky-200 text-sky-700 rounded-xl font-medium hover:bg-sky-50 hover:border-sky-300 transition-all duration-300 shadow-sm hover:shadow-md"
                 >
                   Login
                 </Link>

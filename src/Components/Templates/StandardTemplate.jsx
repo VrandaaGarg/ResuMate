@@ -1554,16 +1554,10 @@ const StandardTemplate = ({ resume }) => {
       )}
 
       {/* Resume Preview */}
-      <div
-        className=""
-        style={{
-          aspectRatio: "7/7.7", // A4 ratio (width:height = 7:10, which is close to actual A4 ratio)
-          display: "flex",
-        }}
-      >
+      <div className="aspect-[7/8] md:flex">
         <div
           ref={contentRef}
-          className="w-full mx-auto print-a4 p-2 md:p-6 text-sm leading-relaxed"
+          className="w-full mx-auto print-a4 p-2 md:p-3 text-sm leading-relaxed"
           style={{
             fontFamily: standardSettings.fontFamily || "Inter",
             backgroundColor: standardSettings.backgroundColor || "#ffffff",
