@@ -1838,7 +1838,7 @@ const SidebarTemplate = ({ resume }) => {
         </div>
       )}
       {/* Resume Preview */}
-      <div className="overflow-hidden md:aspect-[7/8] md:flex">
+      <div className="overflow-hidden md:aspect-[7/10.4] md:flex">
         <div
           ref={contentRef}
           className="border print-a4 border-gray-400 p-2 md:p-4 flex"

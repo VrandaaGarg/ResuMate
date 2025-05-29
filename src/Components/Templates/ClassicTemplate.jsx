@@ -1593,10 +1593,10 @@ const ClassicTemplate = ({ resume }) => {
       )}
 
       {/* Resume Preview */}
-      <div className="aspect-[7/7.89] md:flex">
+      <div className="">
         <div
           ref={contentRef}
-          className="w-full aspect-[7/9.89] flexs max-w-4xl mx-auto p-2.5 md:p-5 text-sm leading-relaxed  "
+          className="w-full aspect-[7/9.89] flexs mx-auto p-2.5 md:p-5 text-sm leading-relaxed  "
           style={{
             fontFamily: classicSettings.fontFamily || "Inter",
             backgroundColor: classicSettings.backgroundColor || "#ffffff",
@@ -1606,9 +1606,8 @@ const ClassicTemplate = ({ resume }) => {
         >
           {/* Inner Resume Container */}
           <div
-            className=" flex flex-col flex-1 overflow-hidden"
+            className="h-full overflow-hidden flex flex-col"
             style={{
-              padding: classicSettings.padding || "40px",
               border:
                 classicSettings.borderWidth &&
                 classicSettings.borderWidth !== "0px"
@@ -1617,22 +1616,30 @@ const ClassicTemplate = ({ resume }) => {
                     } ${classicSettings.borderColor || "#cbd5e1"}`
                   : "none",
               borderRadius: classicSettings.borderRadius || "0px",
-              rowGap: `${classicSettings.sectionGap ?? 16}px`,
             }}
           >
-            {Array.isArray(classicSettings?.sectionOrder) &&
-              classicSettings.sectionOrder.map(
-                (sectionKey) =>
-                  classicSettings.visibleSections?.[sectionKey] && (
-                    <div
-                      key={sectionKey}
-                      className="break-inside-avoid" // Prevents breaking within sections
-                      style={{ pageBreakInside: "avoid" }} // For print
-                    >
-                      {sectionMap[sectionKey]}
-                    </div>
-                  )
-              )}
+            <div
+              className="flex flex-col flex-1  overflow-hidden"
+              style={{
+                padding: classicSettings.padding || "40px",
+
+                rowGap: `${classicSettings.sectionGap ?? 16}px`,
+              }}
+            >
+              {Array.isArray(classicSettings?.sectionOrder) &&
+                classicSettings.sectionOrder.map(
+                  (sectionKey) =>
+                    classicSettings.visibleSections?.[sectionKey] && (
+                      <div
+                        key={sectionKey}
+                        className="break-inside-avoid" // Prevents breaking within sections
+                        style={{ pageBreakInside: "avoid" }} // For print
+                      >
+                        {sectionMap[sectionKey]}
+                      </div>
+                    )
+                )}
+            </div>
           </div>
         </div>
       </div>

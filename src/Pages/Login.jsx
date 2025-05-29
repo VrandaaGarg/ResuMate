@@ -6,6 +6,7 @@ import { useAuth } from "../Contexts/AuthContext";
 import showSuccessToast from "../Components/showSuccessToast";
 import showErrorToast from "../Components/showErrorToast";
 import { AnimatePresence } from "framer-motion"; // Import AnimatePresence
+import { toast } from "react-hot-toast";
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -21,20 +22,22 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // <-- start loading
-
-    const result = await login({
-      email: form.email,
-      password: form.password,
-    });
-
-    setLoading(false); // <-- stop loading
-
-    if (result.success) {
-      showSuccessToast("Login successful!");
-      navigate("/dashboard");
-    } else {
-      showErrorToast(result.error || "Login failed");
+    const toastId = toast.loading("Logging in...");
+    try {
+      const result = await login({
+        email: form.email,
+        password: form.password,
+      });
+      toast.dismiss(toastId);
+      if (result.success) {
+        showSuccessToast("Login successful!");
+        navigate("/dashboard");
+      } else {
+        toast.error(result.error || "Login failed");
+      }
+    } catch (err) {
+      toast.dismiss(toastId);
+      showErrorToast(err.message || "Login failed. Please try again.");
     }
   };
 
@@ -129,40 +132,14 @@ export default function Login() {
           </div>
 
           {/* Submit Button */}
-          <motion.button
+          <button
             type="submit"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className={`w-full flex items-center justify-center gap-2 py-3 sm:py-4 bg-gradient-to-r from-sky-500 to-blue-700 hover:from-sky-700 hover:to-blue-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 text-base sm:text-lg ${
-              loading ? "opacity-80 cursor-not-allowed" : ""
-            }`}
-            disabled={loading}
+            className={`w-full flex items-center justify-center gap-2 py-3 sm:py-4 bg-gradient-to-r from-sky-500 to-blue-700 hover:from-sky-700 hover:to-blue-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 text-base sm:text-lg `}
           >
-            <AnimatePresence mode="wait" initial={false}>
-              {loading ? (
-                <motion.span
-                  key="loading"
-                  initial={{ opacity: 0.2 }}
-                  animate={{ opacity: [0.2, 1, 0.2] }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 1.1, repeat: Infinity }}
-                  className="flex items-center gap-2"
-                >
-                  <span className="animate-pulse">Loading...</span>
-                </motion.span>
-              ) : (
-                <motion.span
-                  key="login"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.15 }}
-                >
-                  Login
-                </motion.span>
-              )}
-            </AnimatePresence>
-          </motion.button>
+            Login
+          </button>
 
           <div className="text-right">
             <Link
