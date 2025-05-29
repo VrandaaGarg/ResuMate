@@ -1593,20 +1593,14 @@ const ClassicTemplate = ({ resume }) => {
       )}
 
       {/* Resume Preview */}
-      <div
-        style={{
-          aspectRatio: "7/8.89", // A4 ratio (width:height = 7:10, which is close to actual A4 ratio)
-          display: "flex",
-        }}
-      >
+      <div className="aspect-[7/7.89] md:flex">
         <div
           ref={contentRef}
-          className="w-full max-w-4xl mx-auto p-2.5 md:p-5 text-sm leading-relaxed  "
+          className="w-full aspect-[7/9.89] flexs max-w-4xl mx-auto p-2.5 md:p-5 text-sm leading-relaxed  "
           style={{
             fontFamily: classicSettings.fontFamily || "Inter",
             backgroundColor: classicSettings.backgroundColor || "#ffffff",
-            aspectRatio: "7/9.89", // A4 ratio (width:height = 7:10, which is close to actual A4 ratio)
-            display: "flex",
+
             flexDirection: "column",
           }}
         >

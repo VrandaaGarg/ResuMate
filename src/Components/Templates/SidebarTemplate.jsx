@@ -1838,14 +1838,7 @@ const SidebarTemplate = ({ resume }) => {
         </div>
       )}
       {/* Resume Preview */}
-      <div
-        className=""
-        style={{
-          overflow: "hidden",
-          aspectRatio: "7/8", // A4 ratio (width:height = 7:10, which is close to actual A4 ratio)
-          display: "flex",
-        }}
-      >
+      <div className="overflow-hidden md:aspect-[7/8] md:flex">
         <div
           ref={contentRef}
           className="border print-a4 border-gray-400 p-2 md:p-4 flex"
