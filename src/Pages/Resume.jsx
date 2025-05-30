@@ -282,7 +282,7 @@ export default function Resume() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="bg-white/60 backdrop-blur-md max-w-2xl border border-white/40 shadow-xl rounded-xl overflow-hidden"
+          className="bg-white/60 backdrop-blur-md max-w-2xl border border-white/40 shadow-xl rounded-xl "
         >
           {/* Template Content */}
           <div className="p-4 md:p-6">
@@ -291,7 +291,7 @@ export default function Resume() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
-              className="bg-white rounded-lg shadow-md border border-slate-200/50 overflow-hidden"
+              className="bg-white rounded-lg shadow-md border border-slate-200/50"
             >
               {selectedTemplate === "sidebar" && (
                 <SidebarTemplate

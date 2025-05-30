@@ -1851,7 +1851,7 @@ const SidebarTemplate = ({ resume }) => {
         >
           {/* Sidebar */}
           <aside
-            className=" w-1/3 print:w-[32%] text-white p-3 md:p-6 flex flex-col"
+            className=" w-1/3 print:w-[32%] text-white overflow-hidden p-3 md:p-6 flex flex-col"
             style={{
               backgroundColor: sidebarSettings.sidebarColor || "#212121",
               rowGap: `${sidebarSettings.sectionGap ?? 16}px`,

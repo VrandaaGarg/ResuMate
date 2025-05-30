@@ -1174,7 +1174,7 @@ const ClassicTemplate = ({ resume }) => {
                           }));
                           setOpenDropdown(false);
                         }}
-                        className={`px-3 gap- py-1.5 text-left w-full rounded cursor-pointer hover:bg-sky-50 transition ${
+                        className={`px-3 py-1.5 text-left w-full rounded cursor-pointer hover:bg-sky-50 transition ${
                           classicSettings.padding === p.value
                             ? "bg-sky-100 text-sky-700 font-semibold"
                             : ""
@@ -1596,7 +1596,7 @@ const ClassicTemplate = ({ resume }) => {
       <div className="">
         <div
           ref={contentRef}
-          className="w-full aspect-[7/9.89] flexs mx-auto p-2.5 md:p-5 text-sm leading-relaxed  "
+          className="w-full  flexs mx-auto p-2.5 md:p-5 text-sm leading-relaxed  "
           style={{
             fontFamily: classicSettings.fontFamily || "Inter",
             backgroundColor: classicSettings.backgroundColor || "#ffffff",
@@ -1606,7 +1606,7 @@ const ClassicTemplate = ({ resume }) => {
         >
           {/* Inner Resume Container */}
           <div
-            className="h-full overflow-hidden flex flex-col"
+            className="h-full md:aspect-[7/9.89] flex flex-col"
             style={{
               border:
                 classicSettings.borderWidth &&
