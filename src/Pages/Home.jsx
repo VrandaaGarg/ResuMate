@@ -55,24 +55,14 @@ const features = [
     gradient: "from-orange-500 to-red-400",
     bgGradient: "from-orange-50 to-red-50",
   },
-  {
-    title: "Resume Upload & Review",
-    desc: "Upload existing resumes for AI-powered analysis of structure, content quality, and improvement suggestions.",
-    gradient: "from-indigo-500 to-blue-400",
-    bgGradient: "from-indigo-50 to-blue-50",
-  },
+
   {
     title: "ATS Compatibility & Job Match Scoring",
     desc: "Check how your resume performs with ATS and get match scores against job descriptions with improvement tips.",
     gradient: "from-teal-500 to-green-400",
     bgGradient: "from-teal-50 to-green-50",
   },
-  {
-    title: "Version History & Feedback Reports",
-    desc: "Track resume changes over time and receive concise feedback reports highlighting strengths and areas to improve.",
-    gradient: "from-pink-500 to-rose-400",
-    bgGradient: "from-pink-50 to-rose-50",
-  },
+
   {
     title: "Secure Profiles & PDF Export",
     desc: "Your data is securely stored, and you can download polished, hyperlink-enabled PDFs anytime.",
