@@ -48,7 +48,7 @@ import DOMPurify from "dompurify";
 import { useSidebarSetting } from "../../Contexts/SidebarSettingContext";
 import { useReactToPrint } from "react-to-print";
 import { motion } from "framer-motion";
-import { FaFileAlt, FaDownload } from "react-icons/fa";
+import { FaFileAlt, FaDownload, FaGlobe } from "react-icons/fa";
 import { useRef } from "react";
 
 const SidebarTemplate = ({ resume }) => {
@@ -276,6 +276,20 @@ const SidebarTemplate = ({ resume }) => {
               <p className="bg-transparent outline-none w-full break-all">
                 {resume.contact.phone}
               </p>
+            </div>
+          )}
+
+          {resume.contact.websiteURL && (
+            <div className="flex items-start  gap-2">
+              <FaGlobe className="flex-shrink-0  mt-1" />
+              <a
+                href={resume.contact.websiteURL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-transparent outline-none w-full break-all"
+              >
+                {resume.contact.websiteURL}
+              </a>
             </div>
           )}
 

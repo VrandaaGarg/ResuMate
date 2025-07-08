@@ -275,6 +275,20 @@ const ClassicTemplate = ({ resume }) => {
             )}px`,
           }}
         >
+          {resume.contact.websiteURL && (
+            <a
+              href={resume.contact.websiteURL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline break-all"
+            >
+              {resume.contact.websiteURL}
+            </a>
+          )}
+
+          {resume.contact.websiteURL && resume.contact.linkedin && (
+            <span className="text-gray-700 hidden sm:inline">|</span>
+          )}
           {resume.contact.github && (
             <a
               href={resume.contact.github}

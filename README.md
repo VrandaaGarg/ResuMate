@@ -105,3 +105,5 @@ cd resumate
 npm install
 npm run dev
 ```
+
+<!-- /////////////resumate is done -->
