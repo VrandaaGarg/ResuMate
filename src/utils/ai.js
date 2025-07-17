@@ -53,3 +53,92 @@ export async function atsScore(resume) {
     return { error: err.message || "ATS scoring failed" };
   }
 }
+
+// Parse resume from uploaded file URL
+export async function parseResumeFromUpload(fileUrl) {
+  try {
+    console.log("Parsing resume from URL:", fileUrl); // Debug log
+
+    const res = await fetch(`${API_BASE}/parse-resume`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ fileUrl }),
+    });
+
+    console.log("API Response status:", res.status); // Debug log
+
+    const data = await res.json();
+    console.log("API Response data:", data); // Debug log
+
+    if (!res.ok) {
+      throw new Error(data.error || `HTTP ${res.status}: ${res.statusText}`);
+    }
+
+    if (!data.success) {
+      throw new Error(data.error || data.details || "Failed to parse resume");
+    }
+
+    return data.data;
+  } catch (err) {
+    console.error("Resume Parsing Error:", err);
+    throw err;
+  }
+}
+
+// Check ATS compatibility from uploaded file URL
+export async function checkATSFromUpload(fileUrl) {
+  try {
+    console.log("Checking ATS compatibility from URL:", fileUrl); // Debug log
+
+    const res = await fetch(`${API_BASE}/ats-check-file`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ fileUrl }),
+    });
+
+    console.log("ATS Check API Response status:", res.status); // Debug log
+
+    const data = await res.json();
+    console.log("ATS Check API Response data:", data); // Debug log
+
+    if (!res.ok) {
+      throw new Error(data.error || `HTTP ${res.status}: ${res.statusText}`);
+    }
+
+    if (!data.success) {
+      throw new Error(data.error || "Failed to check ATS compatibility");
+    }
+
+    return data.data;
+  } catch (err) {
+    console.error("ATS Check Error:", err);
+    throw err;
+  }
+}
+
+// Match job description from uploaded file URL
+export async function matchJDFromFile(fileUrl, jobDescription, style) {
+  try {
+    console.log("Matching JD from URL:", fileUrl); // Debug log
+
+    const res = await fetch(`${API_BASE}/jd-match-file`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ fileUrl, jobDescription, style }),
+    });
+
+    console.log("JD Match API Response status:", res.status); // Debug log
+
+    const data = await res.json();
+    console.log("JD Match API Response data:", data); // Debug log
+
+    if (!res.ok) {
+      throw new Error(data.error || `HTTP ${res.status}: ${res.statusText}`);
+    }
+
+    return data;
+  } catch (err) {
+    console.error("JD Match Error:", err);
+    throw err;
+  }
+}

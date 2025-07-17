@@ -11,14 +11,34 @@ import {
   FaChartLine,
   FaClock,
   FaRobot,
+  FaTrash,
+  FaEye,
+  FaDownload,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useResumeData } from "../Contexts/ResumeDataContext";
 import { useAuth } from "../Contexts/AuthContext";
+import { getUserUploadedResumes, deleteUploadedResume } from "../db/database";
+import ResumeUploadModal from "../Components/ResumeUploadModal";
+import DeleteConfirmModal from "../Components/DeleteConfirmModal";
+import PdfActionsModal from "../Components/PdfActionsModal";
+import toast from "react-hot-toast";
 
 export default function Dashboard() {
   const { resume, setResume } = useResumeData();
   const { user } = useAuth();
+  const [uploadedResumes, setUploadedResumes] = useState([]);
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [deleteModal, setDeleteModal] = useState({
+    isOpen: false,
+    resume: null,
+  });
+  const [pdfActionsModal, setPdfActionsModal] = useState({
+    isOpen: false,
+    resume: null,
+  });
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [loadingResumes, setLoadingResumes] = useState(true);
   // Format the creation date
   const memberSince = user.metadata?.creationTime
     ? new Date(user.metadata.creationTime).toLocaleDateString("en-IN", {
@@ -28,6 +48,118 @@ export default function Dashboard() {
       })
     : "Unknown";
 
+  // Load uploaded resumes
+  useEffect(() => {
+    const loadUploadedResumes = async () => {
+      try {
+        setLoadingResumes(true);
+        const resumes = await getUserUploadedResumes();
+        // Sort by upload date (newest first) and take only latest 5
+        const sortedResumes = resumes
+          .sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt))
+          .slice(0, 5);
+        setUploadedResumes(sortedResumes);
+      } catch (error) {
+        console.error("Error loading uploaded resumes:", error);
+        toast.error("Failed to load uploaded resumes");
+      } finally {
+        setLoadingResumes(false);
+      }
+    };
+
+    if (user) {
+      loadUploadedResumes();
+    }
+  }, [user]);
+
+  // Handle upload success
+  const handleUploadSuccess = (uploadedFile) => {
+    // Refresh uploaded resumes list
+    const loadUploadedResumes = async () => {
+      try {
+        const resumes = await getUserUploadedResumes();
+        const sortedResumes = resumes
+          .sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt))
+          .slice(0, 5);
+        setUploadedResumes(sortedResumes);
+      } catch (error) {
+        console.error("Error refreshing uploaded resumes:", error);
+      }
+    };
+    loadUploadedResumes();
+  };
+
+  // Handle delete resume - open confirmation modal
+  const handleDeleteResume = (resume) => {
+    setDeleteModal({ isOpen: true, resume });
+  };
+
+  // Confirm delete resume
+  const confirmDeleteResume = async () => {
+    if (!deleteModal.resume) return;
+
+    setIsDeleting(true);
+    try {
+      await deleteUploadedResume(deleteModal.resume.id);
+      setUploadedResumes((prev) =>
+        prev.filter((r) => r.id !== deleteModal.resume.id)
+      );
+      toast.success("Resume deleted successfully!");
+      setDeleteModal({ isOpen: false, resume: null });
+    } catch (error) {
+      console.error("Error deleting resume:", error);
+      toast.error("Failed to delete resume");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  // Close delete modal
+  const closeDeleteModal = () => {
+    if (!isDeleting) {
+      setDeleteModal({ isOpen: false, resume: null });
+    }
+  };
+
+  // Handle PDF actions - open modal
+  const handlePdfActions = (resume) => {
+    setPdfActionsModal({ isOpen: true, resume });
+  };
+
+  // Close PDF actions modal
+  const closePdfActionsModal = () => {
+    setPdfActionsModal({ isOpen: false, resume: null });
+  };
+
+  // Handle view PDF
+  const handleViewPdf = (resume) => {
+    if (resume.fileUrl) {
+      window.open(resume.fileUrl, "_blank");
+    } else {
+      toast.error("File URL not available");
+    }
+  };
+
+  // Handle download PDF
+  const handleDownloadPdf = async (resume) => {
+    try {
+      const response = await fetch(resume.fileUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = resume.fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      toast.success("Download started!");
+    } catch (error) {
+      console.error("Download error:", error);
+      toast.error("Failed to download file");
+    }
+  };
+
   const quickActions = [
     {
       title: "Create New Resume",
@@ -36,6 +168,14 @@ export default function Dashboard() {
       link: "/resume-form",
       color: "from-blue-500 to-cyan-400",
       bgColor: "from-blue-50 to-cyan-50",
+    },
+    {
+      title: "Upload Existing Resume",
+      description: "Upload your existing resume and enhance it with AI",
+      icon: FaUpload,
+      action: () => setIsUploadModalOpen(true),
+      color: "from-yellow-500 to-orange-400",
+      bgColor: "from-yellow-50 to-orange-50",
     },
     {
       title: "ATS Compatibility Check",
@@ -77,14 +217,29 @@ export default function Dashboard() {
         : "No resume created",
       icon: FaFileAlt,
       color: "text-blue-600",
+      date: resume?.createdOn
+        ? new Date(resume.createdOn.seconds * 1000)
+        : new Date(0),
     },
     {
       action: "Member since",
       time: `${memberSince}`,
       icon: FaStar,
       color: "text-green-600",
+      date: user.metadata?.creationTime
+        ? new Date(user.metadata.creationTime)
+        : new Date(0),
     },
-  ];
+    ...uploadedResumes.map((r) => ({
+      action: "Resume Uploaded",
+      time: formatDate(r.uploadedAt),
+      icon: FaUpload,
+      color: "text-yellow-600",
+      date: new Date(r.uploadedAt),
+    })),
+  ]
+    .sort((a, b) => b.date - a.date)
+    .slice(0, 4);
 
   return (
     <div className="min-h-screen relative overflow-x-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 px-4 md:px-12 py-10 overflow-hidden">
@@ -123,7 +278,7 @@ export default function Dashboard() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="grid md:grid-cols-3 gap-4 mb-8"
+          className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
         >
           {quickActions.map((action, index) => (
             <motion.div
@@ -134,34 +289,76 @@ export default function Dashboard() {
               transition={{ duration: 0.6, delay: index * 0.1 }}
               className="group"
             >
-              <Link to={action.link} className="block">
-                <div className="relative bg-white/80  backdrop-blur-sm border border-white/20 rounded-xl p-2.5 md:p-5 shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden">
-                  {/* Gradient Background */}
-                  <div
-                    className={`absolute inset-0 bg-gradient-to-br ${action.bgColor} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl`}
-                  />
-
-                  {/* Icon */}
-                  <motion.div
-                    whileHover={{ rotate: 12, scale: 1.1 }}
-                    transition={{ duration: 0.3 }}
-                    className={`relative z-10 md:w-12 md:h-12 w-7 h-7 bg-gradient-to-r ${action.color} rounded md:rounded-xl text-white flex items-center justify-center mb-1.5 md:mb-4 shadow-lg group-hover:shadow-xl transition-shadow duration-300`}
-                  >
-                    <action.icon size={20} />
-                  </motion.div>
-
-                  <div className="relative z-10">
-                    <h3 className="text-sm md:text-lg font-bold text-gray-900 mb-2 group-hover:text-gray-800 transition-colors">
-                      {action.title}
-                    </h3>
-                    <p className="text-xs md:text-sm text-gray-600 group-hover:text-gray-700 transition-colors leading-relaxed">
-                      {action.description}
-                    </p>
-                  </div>
-                </div>
-              </Link>
+              {action.link ? (
+                <Link to={action.link} className="block">
+                  <ActionCard action={action} />
+                </Link>
+              ) : (
+                <button
+                  onClick={action.action}
+                  className="block w-full text-left"
+                >
+                  <ActionCard action={action} />
+                </button>
+              )}
             </motion.div>
           ))}
+        </motion.div>
+
+        {/* Uploaded Resumes Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="mb-8"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-semibold text-gray-800">
+              Recent Uploads
+            </h2>
+            {uploadedResumes.length > 5 && (
+              <Link
+                to="/profile"
+                className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+              >
+                View All
+              </Link>
+            )}
+          </div>
+
+          <div className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-xl p-4 shadow-lg">
+            {loadingResumes ? (
+              <div className="flex items-center justify-center py-8">
+                <FaClock className="animate-spin text-gray-400 mr-2" />
+                <span className="text-gray-500">Loading resumes...</span>
+              </div>
+            ) : uploadedResumes.length === 0 ? (
+              <div className="text-center py-8">
+                <FaFileAlt className="text-4xl text-gray-300 mx-auto mb-3" />
+                <p className="text-gray-500 mb-4">No resumes uploaded yet</p>
+                <button
+                  onClick={() => setIsUploadModalOpen(true)}
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-xl hover:shadow-lg transition-all duration-300 font-medium"
+                >
+                  Upload Resume
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {uploadedResumes.map((resume, index) => (
+                  <ResumeItem
+                    key={resume.id}
+                    resume={resume}
+                    onDelete={handleDeleteResume}
+                    onPdfActions={handlePdfActions}
+                    onView={handleViewPdf}
+                    onDownload={handleDownloadPdf}
+                    index={index}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
         </motion.div>
 
         {/* Current Resume Status & Recent Activity */}
@@ -223,13 +420,15 @@ export default function Dashboard() {
                   Get started by creating your first resume or uploading an
                   existing one.
                 </p>
-                <Link
-                  to="/resume-form"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-xl hover:shadow-lg transition-all duration-300 font-medium"
-                >
-                  <FaPlus size={16} />
-                  Create Resume
-                </Link>
+                <div className="flex flex-wrap gap-3 justify-center">
+                  <Link
+                    to="/resume-form"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-xl hover:shadow-lg transition-all duration-300 font-medium"
+                  >
+                    <FaPlus size={16} />
+                    Create Resume
+                  </Link>
+                </div>
               </div>
             )}
           </motion.div>
@@ -287,6 +486,148 @@ export default function Dashboard() {
           </motion.div>
         </div>
       </div>
+
+      {/* Upload Modal */}
+      <ResumeUploadModal
+        isOpen={isUploadModalOpen}
+        onClose={() => setIsUploadModalOpen(false)}
+        onUploadSuccess={handleUploadSuccess}
+      />
+
+      {/* Delete Confirmation Modal */}
+      <DeleteConfirmModal
+        isOpen={deleteModal.isOpen}
+        onClose={closeDeleteModal}
+        onConfirm={confirmDeleteResume}
+        fileName={deleteModal.resume?.fileName}
+        isDeleting={isDeleting}
+      />
+
+      {/* PDF Actions Modal */}
+      <PdfActionsModal
+        isOpen={pdfActionsModal.isOpen}
+        onClose={closePdfActionsModal}
+        selectedResume={pdfActionsModal.resume}
+      />
     </div>
   );
 }
+
+// ActionCard Component
+const ActionCard = ({ action }) => (
+  <div className="relative bg-white/80 backdrop-blur-sm border border-white/20 rounded-xl p-2.5 md:p-5 shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden">
+    {/* Gradient Background */}
+    <div
+      className={`absolute inset-0 bg-gradient-to-br ${action.bgColor} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl`}
+    />
+
+    {/* Icon */}
+    <motion.div
+      whileHover={{ rotate: 12, scale: 1.1 }}
+      transition={{ duration: 0.3 }}
+      className={`relative z-10 md:w-12 md:h-12 w-7 h-7 bg-gradient-to-r ${action.color} rounded md:rounded-xl text-white flex items-center justify-center mb-1.5 md:mb-4 shadow-lg group-hover:shadow-xl transition-shadow duration-300`}
+    >
+      <action.icon size={20} />
+    </motion.div>
+
+    <div className="relative z-10">
+      <h3 className="text-sm md:text-lg font-bold text-gray-900 mb-2 group-hover:text-gray-800 transition-colors">
+        {action.title}
+      </h3>
+      <p className="text-xs md:text-sm text-gray-600 group-hover:text-gray-700 transition-colors leading-relaxed">
+        {action.description}
+      </p>
+    </div>
+  </div>
+);
+
+// ResumeItem Component
+const ResumeItem = ({
+  resume,
+  onDelete,
+  onPdfActions,
+  onView,
+  onDownload,
+  index,
+}) => {
+  const formatFileSize = (bytes) => {
+    if (bytes === 0) return "0 Bytes";
+    const k = 1024;
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay: index * 0.1 }}
+      className="flex items-center justify-between p-1 md:p-3 bg-gray-50/50 rounded-lg hover:bg-gray-100/50 transition-colors"
+    >
+      <div
+        className="flex items-center gap-3 flex-1 cursor-pointer"
+        onClick={() => onPdfActions(resume)}
+        title="Click to process this resume"
+      >
+        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+          <FaFileAlt className="text-blue-600" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <h4 className="font-medium text-gray-900 break-all text-sm">
+            {resume.fileName}
+          </h4>
+          <p className="text-sm text-gray-500">
+            {formatFileSize(resume.fileSize)} • {formatDate(resume.uploadedAt)}
+          </p>
+        </div>
+      </div>
+
+      <div className="flex items-center md:gap-2">
+        {/* View Button */}
+        <button
+          title="View Resume"
+          onClick={(e) => {
+            e.stopPropagation();
+            onView(resume);
+          }}
+          className="p-2 text-gray-400 hover:text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+        >
+          <FaEye size={16} />
+        </button>
+
+        {/* Download Button */}
+        <button
+          title="Download Resume"
+          onClick={(e) => {
+            e.stopPropagation();
+            onDownload(resume);
+          }}
+          className="p-2 text-gray-400 hover:text-green-600 rounded-lg hover:bg-green-50 transition-colors"
+        >
+          <FaDownload size={16} />
+        </button>
+
+        {/* Delete Button */}
+        <button
+          title="Delete Resume"
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete(resume);
+          }}
+          className="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors"
+        >
+          <FaTrash size={16} />
+        </button>
+      </div>
+    </motion.div>
+  );
+};
