@@ -714,3 +714,178 @@ IMPORTANT:
     throw new Error(`Failed to analyze ATS compatibility: ${error.message}`);
   }
 }
+
+// Function to perform job matching directly from an uploaded file
+export async function jobMatchingFromFile(fileUrl, jobDescription, style) {
+  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+  try {
+    console.log("🔍 Starting Job Fit analysis from uploaded file...");
+
+    // Step 1: Download the file from the URL
+    const fileResponse = await fetch(fileUrl);
+    if (!fileResponse.ok) {
+      throw new Error(`Failed to fetch file: ${fileResponse.statusText}`);
+    }
+
+    // Step 2: Get file content as buffer
+    const fileBuffer = await fileResponse.arrayBuffer();
+
+    // Step 3: Extract filename and ensure it has proper extension
+    let fileName = fileUrl.split("/").pop() || "resume.pdf";
+    const contentType =
+      fileResponse.headers.get("content-type") || "application/pdf";
+
+    // Ensure filename has proper extension based on content type
+    if (!fileName.includes(".")) {
+      if (contentType.includes("pdf")) {
+        fileName += ".pdf";
+      } else if (contentType.includes("msword")) {
+        fileName += ".doc";
+      } else if (contentType.includes("wordprocessingml")) {
+        fileName += ".docx";
+      } else if (contentType.includes("text/plain")) {
+        fileName += ".txt";
+      } else {
+        fileName += ".pdf"; // default fallback
+      }
+    }
+
+    console.log("📄 Processing file for Job Fit analysis:", fileName);
+
+    // Step 4: Create a File object from the buffer
+    const file = new File([fileBuffer], fileName, {
+      type: contentType,
+    });
+
+    // Step 5: Upload file to OpenAI for user_data purpose
+    const uploadedFile = await openai.files.create({
+      file: file,
+      purpose: "user_data",
+    });
+
+    console.log(
+      "✅ File uploaded to OpenAI for Job Fit analysis:",
+      uploadedFile.id
+    );
+
+    const sanitize = (s) =>
+    typeof s === "string"
+      ? s
+          .replace(/[\n\r]+/g, " ")
+          .replace(/\s+/g, " ")
+          .trim()
+      : "";
+
+    // Step 6: Job matching prompt
+    const jobFitPrompt = `You are an expert resume evaluator.\n\nYour task is to critically evaluate how well the given resume (from the attached file) aligns with the provided job description. Return a match score and structured feedback to help the candidate optimize their resume and career alignment.\n\n🧠 Response Expectations:\n- Be **highly specific** to the actual content in the resume and job description.\n- DO NOT fabricate skills or numbers not mentioned in the resume.\n- DO NOT output anything outside the JSON block.\n- DO NOT use markdown, HTML, or any formatting.\n- Highlight if any point in resume lacks **quantifiable impact** or **measurable achievements** (e.g., % growth, revenue impact, user growth).\n- Include **examples** in each section (strengths, weaknesses, suggestions) to make your feedback practical and relatable.\n-Add only the matched skills from the job description which genuinely are needed in the job not all skills in the resume.\n-Also be straightforward about missing skills that are essential for the job.\n-In the end give notes in a friendly manner to encourage user and tell him his strong points and what to focus on next\n\n🎯 Your tone must be:\n${
+  sanitize(style) === "elaborative"
+    ? "Highly elaborative, well-reasoned, descriptive, and backed by examples for clarity."
+    : "Professional and descriptive. Avoid over-summarizing."
+}\n\n📦 Return ONLY a valid raw JSON object with the following structure:\n{\n  "score": 85,\n  "strengths": [\n    "Strong React-based frontend project: 'SmartShelf' demonstrates modern UI skills.",\n    "Clear achievement: 'Improved API response time by 40% using caching'."\n  ],\n  "weaknesses": [\n    "Lacks quantifiable metrics in most achievements (e.g., % increase, revenue impact).",\n    "No mention of CI/CD or deployment tools which are expected in the job description."
+  ],\n  "suggestionsToAlignBetter": [\n    "Add concrete metrics in projects and experience (e.g., user count, performance gain).",\n    "Mention cloud tools or backend APIs if you’ve used them even slightly."
+  ],\n  "skillGapAnalysis": {\n    "matchedSkills": ["React", "Tailwind", "Git"],\n    "missingSkills": [\n      "Docker and Kubernetes",\n      "Unit testing frameworks like Jest or Mocha"
+    ],\n    "recommendations": [\n      "Start with basic Docker usage in personal projects.",\n      "Take a short course on automated testing and integrate with one project.",\n      "Explore cloud deployment using Vercel, Netlify, or AWS for hands-on experience."
+    ]\n  },\n  "notes":[\n    "you have a solid foundation in React and frontend development.",\n    "Focus on enhancing backend and deployment skills to match the job requirements.",\n    "Consider contributing to open source to gain experience with CI/CD tools."
+  ]\n}\n\n---\n\n📝 Job Description:\n${sanitize(jobDescription)}\n\n---\nThe user's resume is in the attached file. Analyze it and provide the job fit analysis.`;
+
+    // Step 7: Make request to /v1/responses endpoint
+    console.log("🤖 Analyzing resume for Job Fit...");
+
+    const response = await fetch("https://api.openai.com/v1/responses", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4.1",
+        input: [
+          {
+            role: "user",
+            content: [
+              {
+                type: "input_file",
+                file_id: uploadedFile.id,
+              },
+              {
+                type: "input_text",
+                text: jobFitPrompt,
+              },
+            ],
+          },
+        ],
+      }),
+    });
+
+    console.log(
+      "📡 Job Fit Analysis response status:",
+      response.status,
+      response.statusText
+    );
+
+    if (!response.ok) {
+      console.log("❌ OpenAI API Error - Status:", response.status);
+      const errorData = await response.json();
+      console.log("❌ Error details:", errorData);
+      throw new Error(
+        `OpenAI API Error: ${errorData.error?.message || response.statusText}`
+      );
+    }
+
+    console.log("✅ Received Job Fit analysis from OpenAI");
+
+    const responseData = await response.json();
+
+    // Extract text from the /v1/responses format
+    const responseText =
+      responseData.output?.[0]?.content?.[0]?.text?.trim() || "";
+
+    console.log("📝 Job Fit analysis response length:", responseText.length);
+    console.log("📄 Job Fit analysis response:", responseText);
+
+    if (!responseText || responseText.length === 0) {
+      console.log("❌ Empty Job Fit analysis response from OpenAI");
+      throw new Error("Empty Job Fit analysis response from OpenAI API");
+    }
+
+    // Clean up the response
+    console.log("🧹 Cleaning Job Fit analysis response format...");
+    let cleanedResponse = responseText;
+    if (cleanedResponse.startsWith("```json")) {
+      console.log("🔍 Detected markdown code block, removing...");
+      cleanedResponse = cleanedResponse
+        .replace(/```json\n?/, "")
+        .replace(/\n?```$/, "");
+    }
+
+    console.log("🔄 Parsing Job Fit analysis JSON response...");
+
+    try {
+      const jobFitData = JSON.parse(cleanedResponse);
+      console.log("✅ Successfully parsed Job Fit analysis JSON response");
+      console.log("📊 Job Fit Score:", jobFitData.score);
+
+      // Cleanup: Delete the uploaded file
+      console.log("🧹 Cleaning up - deleting uploaded file:", uploadedFile.id);
+      await openai.files.del(uploadedFile.id);
+      console.log("✅ File deleted successfully");
+
+      console.log("🎉 Job Fit analysis complete!");
+      return jobFitData;
+    } catch (parseError) {
+      console.error(
+        "❌ Failed to parse Job Fit analysis JSON response:",
+        parseError
+      );
+      console.log(
+        "📄 Raw response that failed parsing:",
+        cleanedResponse.substring(0, 500) + "..."
+      );
+      throw new Error("Invalid JSON response from Job Fit analysis");
+    }
+  } catch (error) {
+    console.error("❌ Job Fit analysis error:", error);
+    throw new Error(`Failed to analyze Job Fit compatibility: ${error.message}`);
+  }
+}

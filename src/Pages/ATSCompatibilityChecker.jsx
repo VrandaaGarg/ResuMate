@@ -283,7 +283,7 @@ export default function ATSCompatibilityChecker() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-center mb-6"
+                className="text-center mb-2"
               >
                 <div className="inline-flex items-center gap-2 bg-blue-50/80 backdrop-blur-sm border border-blue-200/60 rounded-full px-4 py-2 mb-3 shadow-lg">
                   <FaFileAlt className="text-blue-600" />

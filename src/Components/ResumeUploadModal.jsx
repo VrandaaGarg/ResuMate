@@ -14,7 +14,11 @@ import { useNavigate } from "react-router-dom";
 
 import { uploadFile, validateResumeFile } from "../services/fileStorage";
 import { saveUploadedFile, createResume } from "../db/database";
-import { parseResumeFromUpload, checkATSFromUpload } from "../utils/ai";
+import {
+  parseResumeFromUpload,
+  checkATSFromUpload,
+  matchJDFromFile,
+} from "../utils/ai";
 import { useResumeData } from "../Contexts/ResumeDataContext";
 
 // Transform OpenAI parsed data to match the expected resume structure
@@ -85,6 +89,7 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
     checkATS: false,
     jobMatching: false,
   });
+  const [jobDescription, setJobDescription] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [processingStep, setProcessingStep] = useState("");
 
@@ -188,6 +193,11 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
       return;
     }
 
+    if (selectedOptions.jobMatching && !jobDescription.trim()) {
+      toast.error("Please paste the job description");
+      return;
+    }
+
     setIsProcessing(true);
 
     try {
@@ -214,9 +224,15 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
 
       // Process Job Matching
       if (selectedOptions.jobMatching) {
-        setProcessingStep("Preparing job matching...");
+        setProcessingStep("Analyzing job fit...");
+        const jobFitResult = await matchJDFromFile(
+          uploadedFile.fileUrl,
+          jobDescription,
+          "concise"
+        );
+        toast.success("Job fit analysis complete!");
         navigate("/job-fit-analyzer", {
-          state: { uploadedFile },
+          state: { aiResult: jobFitResult, uploadedFile },
         });
       }
 
@@ -239,6 +255,7 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
       checkATS: false,
       jobMatching: false,
     });
+    setJobDescription("");
     setIsProcessing(false);
     setProcessingStep("");
     onClose();
@@ -382,6 +399,27 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
                 description="Match with job descriptions"
                 checked={selectedOptions.jobMatching}
                 onChange={() => handleOptionToggle("jobMatching")}
+              />
+            </motion.div>
+          )}
+
+          {/* Job Description Input */}
+          {selectedOptions.jobMatching && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="mb-6"
+            >
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Paste Job Description
+              </label>
+              <textarea
+                value={jobDescription}
+                onChange={(e) => setJobDescription(e.target.value)}
+                rows={4}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-300 bg-white/80 backdrop-blur-sm text-gray-800 transition-all duration-300 resize-none placeholder-gray-400 text-sm"
+                placeholder="Paste the job description here..."
               />
             </motion.div>
           )}
