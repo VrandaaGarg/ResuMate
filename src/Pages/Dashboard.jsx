@@ -21,6 +21,7 @@ import { useAuth } from "../Contexts/AuthContext";
 import { getUserUploadedResumes, deleteUploadedResume } from "../db/database";
 import ResumeUploadModal from "../Components/ResumeUploadModal";
 import DeleteConfirmModal from "../Components/DeleteConfirmModal";
+import PdfActionsModal from "../Components/PdfActionsModal";
 import toast from "react-hot-toast";
 
 export default function Dashboard() {
@@ -29,6 +30,10 @@ export default function Dashboard() {
   const [uploadedResumes, setUploadedResumes] = useState([]);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [deleteModal, setDeleteModal] = useState({
+    isOpen: false,
+    resume: null,
+  });
+  const [pdfActionsModal, setPdfActionsModal] = useState({
     isOpen: false,
     resume: null,
   });
@@ -116,6 +121,45 @@ export default function Dashboard() {
     }
   };
 
+  // Handle PDF actions - open modal
+  const handlePdfActions = (resume) => {
+    setPdfActionsModal({ isOpen: true, resume });
+  };
+
+  // Close PDF actions modal
+  const closePdfActionsModal = () => {
+    setPdfActionsModal({ isOpen: false, resume: null });
+  };
+
+  // Handle view PDF
+  const handleViewPdf = (resume) => {
+    if (resume.fileUrl) {
+      window.open(resume.fileUrl, "_blank");
+    } else {
+      toast.error("File URL not available");
+    }
+  };
+
+  // Handle download PDF
+  const handleDownloadPdf = async (resume) => {
+    try {
+      const response = await fetch(resume.fileUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = resume.fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      toast.success("Download started!");
+    } catch (error) {
+      console.error("Download error:", error);
+      toast.error("Failed to download file");
+    }
+  };
+
   const quickActions = [
     {
       title: "Create New Resume",
@@ -173,23 +217,29 @@ export default function Dashboard() {
         : "No resume created",
       icon: FaFileAlt,
       color: "text-blue-600",
-      date: resume?.createdOn ? new Date(resume.createdOn.seconds * 1000) : new Date(0),
+      date: resume?.createdOn
+        ? new Date(resume.createdOn.seconds * 1000)
+        : new Date(0),
     },
     {
       action: "Member since",
       time: `${memberSince}`,
       icon: FaStar,
       color: "text-green-600",
-      date: user.metadata?.creationTime ? new Date(user.metadata.creationTime) : new Date(0),
+      date: user.metadata?.creationTime
+        ? new Date(user.metadata.creationTime)
+        : new Date(0),
     },
-    ...uploadedResumes.map(r => ({
+    ...uploadedResumes.map((r) => ({
       action: "Resume Uploaded",
       time: formatDate(r.uploadedAt),
       icon: FaUpload,
       color: "text-yellow-600",
-      date: new Date(r.uploadedAt)
-    }))
-  ].sort((a, b) => b.date - a.date).slice(0, 4);
+      date: new Date(r.uploadedAt),
+    })),
+  ]
+    .sort((a, b) => b.date - a.date)
+    .slice(0, 4);
 
   return (
     <div className="min-h-screen relative overflow-x-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 px-4 md:px-12 py-10 overflow-hidden">
@@ -300,6 +350,9 @@ export default function Dashboard() {
                     key={resume.id}
                     resume={resume}
                     onDelete={handleDeleteResume}
+                    onPdfActions={handlePdfActions}
+                    onView={handleViewPdf}
+                    onDownload={handleDownloadPdf}
                     index={index}
                   />
                 ))}
@@ -449,6 +502,13 @@ export default function Dashboard() {
         fileName={deleteModal.resume?.fileName}
         isDeleting={isDeleting}
       />
+
+      {/* PDF Actions Modal */}
+      <PdfActionsModal
+        isOpen={pdfActionsModal.isOpen}
+        onClose={closePdfActionsModal}
+        selectedResume={pdfActionsModal.resume}
+      />
     </div>
   );
 }
@@ -482,7 +542,14 @@ const ActionCard = ({ action }) => (
 );
 
 // ResumeItem Component
-const ResumeItem = ({ resume, onDelete, index }) => {
+const ResumeItem = ({
+  resume,
+  onDelete,
+  onPdfActions,
+  onView,
+  onDownload,
+  index,
+}) => {
   const formatFileSize = (bytes) => {
     if (bytes === 0) return "0 Bytes";
     const k = 1024;
@@ -504,9 +571,13 @@ const ResumeItem = ({ resume, onDelete, index }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: index * 0.1 }}
-      className="flex items-center  justify-between p-1 md:p-3 bg-gray-50/50 rounded-lg hover:bg-gray-100/50 transition-colors"
+      className="flex items-center justify-between p-1 md:p-3 bg-gray-50/50 rounded-lg hover:bg-gray-100/50 transition-colors"
     >
-      <div className="flex items-center gap-3 flex-1">
+      <div
+        className="flex items-center gap-3 flex-1 cursor-pointer"
+        onClick={() => onPdfActions(resume)}
+        title="Click to process this resume"
+      >
         <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
           <FaFileAlt className="text-blue-600" />
         </div>
@@ -524,6 +595,10 @@ const ResumeItem = ({ resume, onDelete, index }) => {
         {/* View Button */}
         <button
           title="View Resume"
+          onClick={(e) => {
+            e.stopPropagation();
+            onView(resume);
+          }}
           className="p-2 text-gray-400 hover:text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
         >
           <FaEye size={16} />
@@ -532,6 +607,10 @@ const ResumeItem = ({ resume, onDelete, index }) => {
         {/* Download Button */}
         <button
           title="Download Resume"
+          onClick={(e) => {
+            e.stopPropagation();
+            onDownload(resume);
+          }}
           className="p-2 text-gray-400 hover:text-green-600 rounded-lg hover:bg-green-50 transition-colors"
         >
           <FaDownload size={16} />
@@ -540,7 +619,10 @@ const ResumeItem = ({ resume, onDelete, index }) => {
         {/* Delete Button */}
         <button
           title="Delete Resume"
-          onClick={() => onDelete(resume)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete(resume);
+          }}
           className="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors"
         >
           <FaTrash size={16} />
