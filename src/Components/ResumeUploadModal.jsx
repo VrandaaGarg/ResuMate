@@ -14,7 +14,11 @@ import { useNavigate } from "react-router-dom";
 
 import { uploadFile, validateResumeFile } from "../services/fileStorage";
 import { saveUploadedFile, createResume } from "../db/database";
-import { parseResumeFromUpload, checkATSFromUpload } from "../utils/ai";
+import {
+  parseResumeFromUpload,
+  checkATSFromUpload,
+  matchJDFromFile,
+} from "../utils/ai";
 import { useResumeData } from "../Contexts/ResumeDataContext";
 
 // Transform OpenAI parsed data to match the expected resume structure
@@ -85,6 +89,7 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
     checkATS: false,
     jobMatching: false,
   });
+  const [jobDescription, setJobDescription] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [processingStep, setProcessingStep] = useState("");
 
@@ -167,12 +172,14 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
     }
   };
 
-  // Handle option selection
+  // Handle option selection - only allow one option at a time
   const handleOptionToggle = (option) => {
-    setSelectedOptions((prev) => ({
-      ...prev,
-      [option]: !prev[option],
-    }));
+    setSelectedOptions({
+      createResume: false,
+      checkATS: false,
+      jobMatching: false,
+      [option]: true, // Only the selected option will be true
+    });
   };
 
   // Process selected options
@@ -184,7 +191,12 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
 
     const selectedCount = Object.values(selectedOptions).filter(Boolean).length;
     if (selectedCount === 0) {
-      toast.error("Please select at least one option");
+      toast.error("Please select an option");
+      return;
+    }
+
+    if (selectedOptions.jobMatching && !jobDescription.trim()) {
+      toast.error("Please paste the job description");
       return;
     }
 
@@ -195,33 +207,57 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
       if (selectedOptions.createResume) {
         setProcessingStep("Creating resume...");
         const parsedData = await parseResumeFromUpload(uploadedFile.fileUrl);
+        console.log("Parsed data from AI:", parsedData);
+
         const transformedData = transformParsedDataToResumeFormat(parsedData);
+        console.log("Transformed data:", transformedData);
+
+        // Ensure we have a name, use a fallback if needed
+        if (!transformedData.name || transformedData.name.trim() === "") {
+          transformedData.name = "User";
+        }
+
         await createResume(transformedData);
+
+        // Update the context with the new resume data
+        setResume(transformedData);
+
         toast.success("Resume created successfully!");
+
+        // Close modal and navigate to resume page
+        onClose();
+        navigate("/resume");
       }
 
       // Process ATS Check
-      if (selectedOptions.checkATS) {
+      else if (selectedOptions.checkATS) {
         setProcessingStep("Checking ATS compatibility...");
         const atsData = await checkATSFromUpload(uploadedFile.fileUrl);
         toast.success(`ATS Score: ${atsData.atsScore}/100`);
 
-        // Navigate to ATS checker with results
+        // Close modal and navigate to ATS checker with results
+        onClose();
         navigate("/ats-checker", {
           state: { atsResult: atsData, uploadedFile },
         });
       }
 
       // Process Job Matching
-      if (selectedOptions.jobMatching) {
-        setProcessingStep("Preparing job matching...");
+      else if (selectedOptions.jobMatching) {
+        setProcessingStep("Analyzing job fit...");
+        const jobFitResult = await matchJDFromFile(
+          uploadedFile.fileUrl,
+          jobDescription,
+          "concise"
+        );
+        toast.success("Job fit analysis complete!");
+
+        // Close modal and navigate to job fit analyzer
+        onClose();
         navigate("/job-fit-analyzer", {
-          state: { uploadedFile },
+          state: { aiResult: jobFitResult, uploadedFile },
         });
       }
-
-      // Close modal after processing
-      onClose();
     } catch (error) {
       console.error("Processing error:", error);
       toast.error("Failed to process resume. Please try again.");
@@ -239,6 +275,7 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
       checkATS: false,
       jobMatching: false,
     });
+    setJobDescription("");
     setIsProcessing(false);
     setProcessingStep("");
     onClose();
@@ -260,7 +297,7 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.9, opacity: 0, y: 20 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
-          className="bg-white/90 backdrop-blur-md rounded-2xl p-6 sm:p-8 max-w-md w-full mx-auto border border-white/20 shadow-2xl relative overflow-hidden"
+          className="bg-white/90 backdrop-blur-md max-h-[90vh] overflow-y-auto rounded-2xl p-6 sm:p-8 max-w-md w-full mx-auto border border-white/20 shadow-2xl relative overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Background gradient */}
@@ -269,10 +306,10 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
           {/* Header */}
           <div className="relative z-10 flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg">
+              <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg">
                 <FaUpload className="text-white text-lg" />
               </div>
-              <h2 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <h2 className="text-lg md:text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 Upload Resume
               </h2>
             </div>
@@ -286,7 +323,7 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
 
           {/* Upload Area */}
           <div
-            className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 mb-6 bg-white/40 backdrop-blur-sm ${
+            className={`relative border-2 border-dashed rounded-xl p-4 md:p-8 text-center transition-all duration-300 mb-6 bg-white/40 backdrop-blur-sm ${
               dragActive
                 ? "border-blue-400 bg-blue-50/50 shadow-lg scale-[1.02]"
                 : "border-gray-300 hover:border-blue-300 hover:bg-blue-50/30"
@@ -309,7 +346,7 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
 
             {isUploading ? (
               <div className="flex flex-col items-center">
-                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mb-4 shadow-lg">
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mb-4 shadow-lg">
                   <FaSpinner className="animate-spin text-white text-xl" />
                 </div>
                 <p className="text-gray-700 font-medium">
@@ -319,28 +356,28 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
               </div>
             ) : uploadedFile ? (
               <div className="flex flex-col items-center">
-                <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mb-4 shadow-lg">
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mb-4 shadow-lg">
                   <FaCheckCircle className="text-white text-xl" />
                 </div>
-                <p className="text-gray-800 font-semibold text-lg mb-1">
+                <p className="text-gray-800 font-semibold text-sm md:text-lg mb-1">
                   {uploadedFile.fileName}
                 </p>
-                <p className="text-green-600 text-sm font-medium">
+                <p className="text-green-600 text-xs md:text-sm font-medium">
                   ✓ Upload successful
                 </p>
               </div>
             ) : (
               <div className="flex flex-col items-center">
-                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mb-4 shadow-lg">
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mb-4 shadow-lg">
                   <FaUpload className="text-white text-xl" />
                 </div>
-                <p className="text-gray-800 font-semibold text-lg mb-2">
+                <p className="text-gray-800 font-semibold text-sm md:text-lg mb-2">
                   Drop your resume here
                 </p>
                 <p className="text-gray-600 text-sm mb-3">
                   or click to browse files
                 </p>
-                <div className="inline-flex items-center gap-2 bg-gray-100/80 rounded-full px-3 py-1">
+                <div className="inline-flex items-center gap-2 bg-gray-100/80 rounded-lg md:rounded-full px-3 py-1">
                   <span className="text-xs text-gray-500">
                     PDF, DOC, DOCX, TXT
                   </span>
@@ -357,9 +394,9 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: 0.1 }}
-              className="space-y-3 mb-6"
+              className="space-y-2 md:space-y-3 mb-6"
             >
-              <div className="text-sm font-medium text-gray-700 mb-3">
+              <div className="text-xs md:text-sm font-medium text-gray-700 mb-3">
                 What would you like to do with your resume?
               </div>
               <OptionCheckbox
@@ -386,6 +423,27 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
             </motion.div>
           )}
 
+          {/* Job Description Input */}
+          {selectedOptions.jobMatching && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="mb-6"
+            >
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Paste Job Description
+              </label>
+              <textarea
+                value={jobDescription}
+                onChange={(e) => setJobDescription(e.target.value)}
+                rows={4}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-300 bg-white/80 backdrop-blur-sm text-gray-800 transition-all duration-300 resize-none placeholder-gray-400 text-sm"
+                placeholder="Paste the job description here..."
+              />
+            </motion.div>
+          )}
+
           {/* Done Button */}
           {uploadedFile && (
             <motion.button
@@ -396,12 +454,12 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
               disabled={
                 isProcessing || Object.values(selectedOptions).every((v) => !v)
               }
-              className="relative w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg hover:shadow-xl disabled:hover:shadow-lg overflow-hidden group"
+              className="relative w-full py-2 md:py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg hover:shadow-xl disabled:hover:shadow-lg overflow-hidden group"
             >
               {/* Button background effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-purple-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-              <div className="relative z-10 flex items-center gap-2">
+              <div className="relative z-10 flex items-center gap-1 md:gap-2">
                 {isProcessing ? (
                   <>
                     <FaSpinner className="animate-spin" />
@@ -409,10 +467,7 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
                   </>
                 ) : (
                   <>
-                    <span>Get Started</span>
-                    <div className="w-5 h-5 bg-white/20 rounded-full flex items-center justify-center">
-                      <span className="text-xs">→</span>
-                    </div>
+                    <span className="text-xs md:text-sm">Get Started</span>
                   </>
                 )}
               </div>
@@ -430,7 +485,7 @@ const OptionCheckbox = ({ icon, label, description, checked, onChange }) => (
     whileHover={{ scale: 1.02 }}
     whileTap={{ scale: 0.98 }}
     onClick={onChange}
-    className={`relative flex items-center gap-4 p-4 rounded-xl cursor-pointer transition-all duration-300 border-2 ${
+    className={`relative flex items-center gap-2 md:gap-4 p-2 md:p-4 rounded-xl cursor-pointer transition-all duration-300 border-2 ${
       checked
         ? "border-blue-300 bg-blue-50/50 shadow-md"
         : "border-gray-200 bg-white/50 hover:border-blue-200 hover:bg-blue-50/30"
@@ -438,7 +493,7 @@ const OptionCheckbox = ({ icon, label, description, checked, onChange }) => (
   >
     {/* Checkbox */}
     <div
-      className={`w-5 h-5 border-2 rounded-md flex items-center justify-center transition-all duration-200 ${
+      className={`w-4 h-4 md:w-5 md:h-5 border-2 rounded-md flex items-center justify-center transition-all duration-200 ${
         checked
           ? "bg-gradient-to-r from-blue-500 to-purple-500 border-transparent"
           : "border-gray-300 bg-white"
@@ -455,7 +510,7 @@ const OptionCheckbox = ({ icon, label, description, checked, onChange }) => (
 
     {/* Icon */}
     <div
-      className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-200 ${
+      className={`w-8 h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center transition-all duration-200 ${
         checked
           ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg"
           : "bg-gray-100 text-gray-600"
@@ -467,13 +522,15 @@ const OptionCheckbox = ({ icon, label, description, checked, onChange }) => (
     {/* Content */}
     <div className="flex-1">
       <div
-        className={`font-semibold transition-colors ${
+        className={`font-semibold text-xs md:text-sm transition-colors ${
           checked ? "text-blue-700" : "text-gray-800"
         }`}
       >
         {label}
       </div>
-      <div className="text-sm text-gray-600 mt-0.5">{description}</div>
+      <div className="text-xs md:text-sm text-gray-600 mt-0.5">
+        {description}
+      </div>
     </div>
 
     {/* Selection indicator */}
@@ -481,9 +538,9 @@ const OptionCheckbox = ({ icon, label, description, checked, onChange }) => (
       <motion.div
         initial={{ scale: 0, rotate: -180 }}
         animate={{ scale: 1, rotate: 0 }}
-        className="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center"
+        className="w-4 h-4 md:w-6 md:h-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center"
       >
-        <FaCheckCircle className="text-white text-sm" />
+        <FaCheckCircle className="text-white text-xs md:text-sm" />
       </motion.div>
     )}
   </motion.div>

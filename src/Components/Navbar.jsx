@@ -72,7 +72,10 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
               </motion.button>
             )}
 
-          <Link to="/" className="flex items-center gap-2 md:gap-3 group">
+          <Link
+            to={user ? "/dashboard" : "/"}
+            className="flex items-center gap-2 md:gap-3 group"
+          >
             <motion.div
               whileHover={{ rotate: 5, scale: 1.1 }}
               transition={{ duration: 0.6 }}

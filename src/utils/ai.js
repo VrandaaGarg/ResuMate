@@ -115,3 +115,30 @@ export async function checkATSFromUpload(fileUrl) {
     throw err;
   }
 }
+
+// Match job description from uploaded file URL
+export async function matchJDFromFile(fileUrl, jobDescription, style) {
+  try {
+    console.log("Matching JD from URL:", fileUrl); // Debug log
+
+    const res = await fetch(`${API_BASE}/jd-match-file`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ fileUrl, jobDescription, style }),
+    });
+
+    console.log("JD Match API Response status:", res.status); // Debug log
+
+    const data = await res.json();
+    console.log("JD Match API Response data:", data); // Debug log
+
+    if (!res.ok) {
+      throw new Error(data.error || `HTTP ${res.status}: ${res.statusText}`);
+    }
+
+    return data;
+  } catch (err) {
+    console.error("JD Match Error:", err);
+    throw err;
+  }
+}

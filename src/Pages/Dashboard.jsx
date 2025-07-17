@@ -173,14 +173,23 @@ export default function Dashboard() {
         : "No resume created",
       icon: FaFileAlt,
       color: "text-blue-600",
+      date: resume?.createdOn ? new Date(resume.createdOn.seconds * 1000) : new Date(0),
     },
     {
       action: "Member since",
       time: `${memberSince}`,
       icon: FaStar,
       color: "text-green-600",
+      date: user.metadata?.creationTime ? new Date(user.metadata.creationTime) : new Date(0),
     },
-  ];
+    ...uploadedResumes.map(r => ({
+      action: "Resume Uploaded",
+      time: formatDate(r.uploadedAt),
+      icon: FaUpload,
+      color: "text-yellow-600",
+      date: new Date(r.uploadedAt)
+    }))
+  ].sort((a, b) => b.date - a.date).slice(0, 4);
 
   return (
     <div className="min-h-screen relative overflow-x-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 px-4 md:px-12 py-10 overflow-hidden">
@@ -257,12 +266,14 @@ export default function Dashboard() {
             <h2 className="text-xl font-semibold text-gray-800">
               Recent Uploads
             </h2>
-            <Link
-              to="/profile"
-              className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-            >
-              View All
-            </Link>
+            {uploadedResumes.length > 5 && (
+              <Link
+                to="/profile"
+                className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+              >
+                View All
+              </Link>
+            )}
           </div>
 
           <div className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-xl p-4 shadow-lg">
@@ -277,9 +288,9 @@ export default function Dashboard() {
                 <p className="text-gray-500 mb-4">No resumes uploaded yet</p>
                 <button
                   onClick={() => setIsUploadModalOpen(true)}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-xl hover:shadow-lg transition-all duration-300 font-medium"
                 >
-                  Upload Your First Resume
+                  Upload Resume
                 </button>
               </div>
             ) : (
@@ -364,14 +375,6 @@ export default function Dashboard() {
                     <FaPlus size={16} />
                     Create Resume
                   </Link>
-
-                  <button
-                    onClick={() => setIsUploadModalOpen(true)}
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-xl hover:shadow-lg transition-all duration-300 font-medium"
-                  >
-                    <FaUpload size={16} />
-                    Upload Resume
-                  </button>
                 </div>
               </div>
             )}
@@ -508,7 +511,7 @@ const ResumeItem = ({ resume, onDelete, index }) => {
           <FaFileAlt className="text-blue-600" />
         </div>
         <div className="flex-1 min-w-0">
-          <h4 className="font-medium text-gray-900 truncate">
+          <h4 className="font-medium text-gray-900 break-all text-sm">
             {resume.fileName}
           </h4>
           <p className="text-sm text-gray-500">

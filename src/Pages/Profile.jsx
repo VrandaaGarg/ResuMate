@@ -374,13 +374,6 @@ const Profile = () => {
               <FaFileAlt className="text-blue-600" />
               Uploaded Resumes
             </h3>
-            <button
-              onClick={() => setIsUploadModalOpen(true)}
-              className="flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
-            >
-              <FaUpload size={14} />
-              Upload New
-            </button>
           </div>
 
           {loadingResumes ? (
@@ -389,18 +382,12 @@ const Profile = () => {
               <span className="text-gray-500">Loading resumes...</span>
             </div>
           ) : uploadedResumes.length === 0 ? (
-            <div className="text-center py-8">
+            <div className="text-center py-8 ">
               <FaFileAlt className="text-4xl text-gray-300 mx-auto mb-3" />
               <p className="text-gray-500 mb-4">No resumes uploaded yet</p>
-              <button
-                onClick={() => setIsUploadModalOpen(true)}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                Upload Your First Resume
-              </button>
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-3 max-h-[500px] overflow-y-auto">
               {uploadedResumes.map((resume, index) => (
                 <ProfileResumeItem
                   key={resume.id}
@@ -479,48 +466,54 @@ const ProfileResumeItem = ({ resume, onDelete, index }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: index * 0.1 }}
-      className="flex items-center justify-between p-4 bg-gray-50/50 rounded-lg hover:bg-gray-100/50 transition-colors border border-gray-200/50"
+      className=" p-4 bg-gray-50/50 rounded-lg hover:bg-gray-100/50 transition-colors border border-gray-200/50"
     >
-      <div className="flex items-center gap-4 flex-1">
-        <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-          <FaFileAlt className="text-blue-600 text-lg" />
+      <div className="flex items-center justify-between w-full">
+        <div className="flex items-center gap-2 md:gap-4 flex-1">
+          <div className="w-10 h-10 md:w-12 md:h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+            <FaFileAlt className="text-blue-600 text-lg" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <h4 className="font-semibold text-gray-900 break-all text-sm sm:text-base">
+              {resume.fileName}
+            </h4>
+          </div>
         </div>
-        <div className="flex-1 min-w-0">
-          <h4 className="font-semibold text-gray-900 truncate text-sm sm:text-base">
-            {resume.fileName}
-          </h4>
-          <p className="text-xs sm:text-sm text-gray-500">
-            {formatFileSize(resume.fileSize)} • Uploaded{" "}
-            {formatDate(resume.uploadedAt)}
-          </p>
+
+        <div className="flex items-center md:gap-2">
+          {/* View Button */}
+          <button
+            title="View Resume"
+            className="p-2 text-gray-400 hover:text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+          >
+            <FaEye size={16} />
+          </button>
+
+          {/* Download Button */}
+          <button
+            title="Download Resume"
+            className="p-2 text-gray-400 hover:text-green-600 rounded-lg hover:bg-green-50 transition-colors"
+          >
+            <FaDownload size={16} />
+          </button>
+
+          {/* Delete Button */}
+          <button
+            title="Delete Resume"
+            onClick={() => onDelete(resume)}
+            className="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors"
+          >
+            <FaTrash size={16} />
+          </button>
         </div>
       </div>
-
-      <div className="flex items-center gap-2">
-        {/* View Button */}
-        <button
-          title="View Resume"
-          className="p-2 text-gray-400 hover:text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
-        >
-          <FaEye size={16} />
-        </button>
-
-        {/* Download Button */}
-        <button
-          title="Download Resume"
-          className="p-2 text-gray-400 hover:text-green-600 rounded-lg hover:bg-green-50 transition-colors"
-        >
-          <FaDownload size={16} />
-        </button>
-
-        {/* Delete Button */}
-        <button
-          title="Delete Resume"
-          onClick={() => onDelete(resume)}
-          className="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors"
-        >
-          <FaTrash size={16} />
-        </button>
+      <div className="flex items-center mt-2 justify-between gap-2">
+        <p className="text-xs flex justify-start sm:text-sm text-gray-500">
+          {formatFileSize(resume.fileSize)}
+        </p>
+        <p className="text-xs sm:text-sm text-gray-500">
+          {formatDate(resume.uploadedAt)}
+        </p>
       </div>
     </motion.div>
   );

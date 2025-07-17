@@ -1,26 +1,69 @@
 import React, { useState, useEffect } from "react";
-import { FaRobot, FaCheckCircle, FaExclamationTriangle, FaLightbulb, FaSyncAlt, FaFileAlt, FaBullseye, FaChartBar, FaListAlt, FaBrain, FaDownload, FaShare, FaTrophy, FaEye, FaThumbsUp, FaThumbsDown, FaRocket, FaEyeSlash } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
+import {
+  FaRobot,
+  FaCheckCircle,
+  FaExclamationTriangle,
+  FaLightbulb,
+  FaSyncAlt,
+  FaFileAlt,
+  FaBullseye,
+  FaChartBar,
+  FaListAlt,
+  FaBrain,
+  FaDownload,
+  FaShare,
+  FaTrophy,
+  FaEye,
+  FaThumbsUp,
+  FaThumbsDown,
+  FaRocket,
+  FaEyeSlash,
+} from "react-icons/fa";
 import { useResumeData } from "../Contexts/ResumeDataContext";
 import { matchJD } from "../utils/ai";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title } from "chart.js";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+} from "chart.js";
 import { Doughnut, Bar } from "react-chartjs-2";
 import showErrorToast from "../Components/showErrorToast";
-import { FaArrowRotateRight, FaWandMagicSparkles, FaStar } from "react-icons/fa6";
+import {
+  FaArrowRotateRight,
+  FaWandMagicSparkles,
+  FaStar,
+} from "react-icons/fa6";
 import { motion, AnimatePresence } from "framer-motion";
 import { ImCross } from "react-icons/im";
 import { FaSmileBeam } from "react-icons/fa";
 import { ImSad2 } from "react-icons/im";
 
-ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title
+);
 
 const ScoreCriteria = ({ label, score, delay = 0 }) => (
-  <motion.div 
+  <motion.div
     initial={{ opacity: 0, x: -20 }}
     animate={{ opacity: 1, x: 0 }}
     transition={{ duration: 0.5, delay }}
     className="flex items-center justify-between py-2 group hover:bg-white/30 px-2 rounded-md transition-all duration-300"
   >
-    <span className="text-xs font-medium text-slate-700 group-hover:text-slate-900 transition-colors">{label}</span>
+    <span className="text-xs font-medium text-slate-700 group-hover:text-slate-900 transition-colors">
+      {label}
+    </span>
     <div className="flex items-center gap-2">
       <div className="w-16 h-1.5 bg-slate-200/60 rounded-full overflow-hidden">
         <motion.div
@@ -30,7 +73,7 @@ const ScoreCriteria = ({ label, score, delay = 0 }) => (
           transition={{ duration: 1.2, delay: delay + 0.3, ease: "easeOut" }}
         />
       </div>
-      <motion.span 
+      <motion.span
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: delay + 0.5 }}
@@ -49,32 +92,42 @@ const LoadingStep = ({ step, isActive, isComplete }) => (
     animate={{ opacity: 1, x: 0 }}
     transition={{ duration: 0.5 }}
     className={`flex items-center gap-3 p-3 rounded-lg transition-all duration-500 border ${
-      isActive ? 'bg-blue-50/80 border-blue-200/60 shadow-sm' : 
-      isComplete ? 'bg-green-50/80 border-green-200/60 shadow-sm' : 
-      'bg-white/40 border-slate-200/50'
+      isActive
+        ? "bg-blue-50/80 border-blue-200/60 shadow-sm"
+        : isComplete
+        ? "bg-green-50/80 border-green-200/60 shadow-sm"
+        : "bg-white/40 border-slate-200/50"
     }`}
   >
     <motion.div
       animate={isActive ? { rotate: 360 } : {}}
-      transition={isActive ? { duration: 2, repeat: Infinity, ease: "linear" } : {}}
+      transition={
+        isActive ? { duration: 2, repeat: Infinity, ease: "linear" } : {}
+      }
       className={`p-1.5 rounded-full transition-colors ${
-        isActive ? 'bg-blue-500 text-white' :
-        isComplete ? 'bg-green-500 text-white' :
-        'bg-slate-300 text-slate-500'
+        isActive
+          ? "bg-blue-500 text-white"
+          : isComplete
+          ? "bg-green-500 text-white"
+          : "bg-slate-300 text-slate-500"
       }`}
     >
       {isComplete ? <FaCheckCircle size={12} /> : <step.icon size={12} />}
     </motion.div>
     <div>
-      <p className={`text-sm font-medium transition-colors ${
-        isActive ? 'text-blue-700' :
-        isComplete ? 'text-green-700' :
-        'text-slate-500'
-      }`}>
+      <p
+        className={`text-sm font-medium transition-colors ${
+          isActive
+            ? "text-blue-700"
+            : isComplete
+            ? "text-green-700"
+            : "text-slate-500"
+        }`}
+      >
         {step.text}
       </p>
       {isActive && (
-        <motion.p 
+        <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           className="text-xs text-blue-600"
@@ -94,44 +147,46 @@ const SkillTag = ({ skill, type, index }) => (
     transition={{ duration: 0.3, delay: index * 0.1 }}
     whileHover={{ scale: 1.05, y: -2 }}
     className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium border transition-all duration-300 ${
-      type === 'matched' 
-        ? 'bg-green-50/80 text-green-700 border-green-200/60 hover:bg-green-100/80' 
-        : 'bg-red-50/80 text-red-700 border-red-200/60 hover:bg-red-100/80'
+      type === "matched"
+        ? "bg-green-50/80 text-green-700 border-green-200/60 hover:bg-green-100/80"
+        : "bg-red-50/80 text-red-700 border-red-200/60 hover:bg-red-100/80"
     }`}
   >
-    {type === 'matched' ? <FaThumbsUp size={10} /> : <FaThumbsDown size={10} />}
+    {type === "matched" ? <FaThumbsUp size={10} /> : <FaThumbsDown size={10} />}
     {skill}
   </motion.span>
 );
 
 export default function JobFitAnalyzer() {
   const { resume } = useResumeData();
+  const location = useLocation();
   const [step, setStep] = useState("intro");
   const [jobDesc, setJobDesc] = useState("");
   const [style, setStyle] = useState("concise");
   const [loading, setLoading] = useState(false);
   const [currentLoadingStep, setCurrentLoadingStep] = useState(0);
   const [showFullReport, setShowFullReport] = useState(false);
-  const [aiResult, setAiResult] = useState(() => {
-    const saved = localStorage.getItem("jobFitResult");
-    return saved ? JSON.parse(saved) : null;
-  });
+  const [aiResult, setAiResult] = useState(null);
+  const [uploadedFile, setUploadedFile] = useState(null);
 
   useEffect(() => {
-    if (aiResult) {
-      localStorage.setItem("jobFitResult", JSON.stringify(aiResult));
+    if (location.state?.aiResult) {
+      setAiResult(location.state.aiResult);
       setStep("result");
     }
-  }, [aiResult]);
+    if (location.state?.uploadedFile) {
+      setUploadedFile(location.state.uploadedFile);
+    }
+  }, [location.state]);
 
   const handleAskAI = async () => {
     if (!jobDesc) {
-        showErrorToast("Please paste the job description first.");
-        return;
+      showErrorToast("Please paste the job description first.");
+      return;
     }
     if (!resume || !resume.name) {
-        showErrorToast("Please create or upload your resume first.");
-        return;
+      showErrorToast("Please create or upload your resume first.");
+      return;
     }
 
     const relevantResume = {
@@ -152,38 +207,41 @@ export default function JobFitAnalyzer() {
     // Simulate loading steps
     const stepDurations = [2000, 1500, 2000, 1000];
     for (let i = 0; i < stepDurations.length; i++) {
-      setTimeout(() => setCurrentLoadingStep(i), stepDurations.slice(0, i).reduce((a, b) => a + b, 0));
+      setTimeout(
+        () => setCurrentLoadingStep(i),
+        stepDurations.slice(0, i).reduce((a, b) => a + b, 0)
+      );
     }
 
     try {
-        const result = await matchJD({
-            style,
-            jobDescription: jobDesc,
-            resume: relevantResume,
-        });
-        
-        // Add some delay for better UX
-        setTimeout(() => {
-          setAiResult(result);
-          setStep("result");
-          setLoading(false);
-        }, 7000); // Total simulated loading time, adjust if needed
-    } catch (error) {
-        showErrorToast("Failed to analyze. Please try again.");
-        console.error("AI Analysis Error:", error);
-        setStep("input");
+      const result = await matchJD({
+        style,
+        jobDescription: jobDesc,
+        resume: relevantResume,
+      });
+
+      // Add some delay for better UX
+      setTimeout(() => {
+        setAiResult(result);
+        setStep("result");
         setLoading(false);
+      }, 7000); // Total simulated loading time, adjust if needed
+    } catch (error) {
+      showErrorToast("Failed to analyze. Please try again.");
+      console.error("AI Analysis Error:", error);
+      setStep("input");
+      setLoading(false);
     }
   };
 
   const handleAskAgain = () => {
-    localStorage.removeItem("jobFitResult");
     setAiResult(null);
     setJobDesc("");
     setStep("intro");
     setShowFullReport(false);
+    setUploadedFile(null);
   };
-  
+
   const analysisSteps = [
     { text: "Parsing your resume", icon: FaFileAlt },
     { text: "Analyzing job description", icon: FaChartBar },
@@ -191,13 +249,24 @@ export default function JobFitAnalyzer() {
     { text: "Generating recommendations", icon: FaBrain },
   ];
 
-  const criteriaScores = aiResult ? [
-    { label: "Keywords Match", score: aiResult.score > 30 ? Math.min(95, aiResult.score + 15) : 40 },
-    { label: "Experience Relevance", score: aiResult.score > 40 ? Math.min(90, aiResult.score + 10) : 50 },
-    { label: "Skills Coverage", score: aiResult.score > 50 ? Math.min(92, aiResult.score + 20) : 60 },
-    { label: "ATS Friendliness", score: 75 },
-    { label: "Overall Clarity", score: 80 },
-  ] : [];
+  const criteriaScores = aiResult
+    ? [
+        {
+          label: "Keywords Match",
+          score: aiResult.score > 30 ? Math.min(95, aiResult.score + 15) : 40,
+        },
+        {
+          label: "Experience Relevance",
+          score: aiResult.score > 40 ? Math.min(90, aiResult.score + 10) : 50,
+        },
+        {
+          label: "Skills Coverage",
+          score: aiResult.score > 50 ? Math.min(92, aiResult.score + 20) : 60,
+        },
+        { label: "ATS Friendliness", score: 75 },
+        { label: "Overall Clarity", score: 80 },
+      ]
+    : [];
 
   const getScoreColor = (score) => {
     if (score >= 80) return "#10b981"; // Green
@@ -243,10 +312,14 @@ export default function JobFitAnalyzer() {
               <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 p-6 text-center text-white relative overflow-hidden">
                 <motion.div
                   animate={{ rotate: 360 }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                  transition={{
+                    duration: 20,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
                   className="absolute -top-10 -right-10 w-40 h-40 border border-white/10 rounded-full"
                 />
-                
+
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
@@ -281,9 +354,9 @@ export default function JobFitAnalyzer() {
                     <ul className="space-y-2 text-slate-700 text-sm">
                       {[
                         "Detailed compatibility score",
-                        "Skill gap identification", 
+                        "Skill gap identification",
                         "ATS optimization tips",
-                        "Personalized recommendations"
+                        "Personalized recommendations",
                       ].map((item, index) => (
                         <motion.li
                           key={index}
@@ -307,16 +380,21 @@ export default function JobFitAnalyzer() {
                   >
                     <div className="flex items-center gap-2 mb-3">
                       <FaTrophy className="text-lg text-yellow-500" />
-                      <h3 className="text-base font-semibold text-slate-900">Success Stories</h3>
+                      <h3 className="text-base font-semibold text-slate-900">
+                        Success Stories
+                      </h3>
                     </div>
                     <p className="text-slate-700 text-xs leading-relaxed">
-                      "Increased my interview rate by 300% after optimizing my resume with these insights!"
+                      "Increased my interview rate by 300% after optimizing my
+                      resume with these insights!"
                     </p>
                     <div className="flex items-center gap-2 mt-2">
                       <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
                         P
                       </div>
-                      <span className="text-xs font-medium text-slate-600">Priya S., Software Engineer</span>
+                      <span className="text-xs font-medium text-slate-600">
+                        Priya S., Software Engineer
+                      </span>
                     </div>
                   </motion.div>
                 </div>
@@ -326,7 +404,9 @@ export default function JobFitAnalyzer() {
                   whileTap={{ scale: 0.98 }}
                   onClick={() => {
                     if (!resume?.name) {
-                      showErrorToast("Please complete your resume details first.");
+                      showErrorToast(
+                        "Please complete your resume details first."
+                      );
                       return;
                     }
                     setStep("input");
@@ -413,7 +493,9 @@ We are looking for a skilled React Developer to join our team. The ideal candida
                       className="w-full p-3 border border-slate-200/60 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-300 bg-white/80 backdrop-blur-sm text-slate-800 transition-all duration-300 text-xs"
                     >
                       <option value="concise">🎯 Concise & Focused</option>
-                      <option value="elaborative">📋 Detailed & Comprehensive</option>
+                      <option value="elaborative">
+                        📋 Detailed & Comprehensive
+                      </option>
                     </select>
                   </div>
 
@@ -452,16 +534,25 @@ We are looking for a skilled React Developer to join our team. The ideal candida
                     Pro Tips for Better Results
                   </h3>
                   <ul className="text-xs text-slate-700 space-y-1">
-                    <li>• Include the complete job description with requirements and responsibilities</li>
-                    <li>• Make sure your resume is up-to-date with your latest experience</li>
-                    <li>• The more detailed the job description, the better the analysis</li>
+                    <li>
+                      • Include the complete job description with requirements
+                      and responsibilities
+                    </li>
+                    <li>
+                      • Make sure your resume is up-to-date with your latest
+                      experience
+                    </li>
+                    <li>
+                      • The more detailed the job description, the better the
+                      analysis
+                    </li>
                   </ul>
                 </motion.div>
               </div>
             </div>
           </motion.div>
         )}
-        
+
         {/* Step 2.5: Loading State - smaller size */}
         {step === "loading" && (
           <motion.div
@@ -479,15 +570,17 @@ We are looking for a skilled React Developer to join our team. The ideal candida
             >
               <FaRobot className="text-2xl text-white" />
             </motion.div>
-            <h2 className="text-xl md:text-2xl font-semibold text-slate-800 mb-3">Analyzing Your Fit...</h2>
+            <h2 className="text-xl md:text-2xl font-semibold text-slate-800 mb-3">
+              Analyzing Your Fit...
+            </h2>
             <p className="text-slate-600 mb-5 text-sm">
               Our AI is examining your resume against the job requirements
             </p>
             <div className="space-y-2">
               {analysisSteps.map((analysisStep, index) => (
-                <LoadingStep 
-                  key={index} 
-                  step={analysisStep} 
+                <LoadingStep
+                  key={index}
+                  step={analysisStep}
                   isActive={currentLoadingStep === index}
                   isComplete={currentLoadingStep > index}
                 />
@@ -512,13 +605,30 @@ We are looking for a skilled React Developer to join our team. The ideal candida
               animate={{ opacity: 1, y: 0 }}
               className="text-center mb-8"
             >
+              {uploadedFile && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-center mb-2"
+                >
+                  <div className="inline-flex items-center gap-2 bg-blue-50/80 backdrop-blur-sm border border-blue-200/60 rounded-full px-4 py-2 mb-3 shadow-lg">
+                    <FaFileAlt className="text-blue-600" />
+                    <span className="text-blue-800 font-medium text-sm">
+                      Analysis from uploaded file: {uploadedFile.fileName}
+                    </span>
+                  </div>
+                </motion.div>
+              )}
               <div className="inline-flex items-center gap-1.5 bg-white/60 backdrop-blur-sm border border-white/40 rounded-full px-4 py-2 mb-3 shadow-lg">
                 <FaStar className="text-yellow-500 text-xs" />
-                <span className="text-xs font-medium text-slate-700">Analysis Complete</span>
+                <span className="text-xs font-medium text-slate-700">
+                  Analysis Complete
+                </span>
               </div>
               <h1 className="text-2xl md:text-4xl font-bold text-slate-900 mb-2">
                 Your Job Fit Report
               </h1>
+
               <p className="text-sm text-slate-600 max-w-2xl mx-auto">
                 Detailed analysis of your resume's compatibility with this role
               </p>
@@ -526,23 +636,28 @@ We are looking for a skilled React Developer to join our team. The ideal candida
 
             <div className="grid lg:grid-cols-3 gap-6 items-start">
               {/* Left Column: Score Panel - reduced size */}
-              <motion.div 
+              <motion.div
                 className="lg:col-span-1 bg-white/60 backdrop-blur-md border border-white/40 rounded-xl p-6 shadow-xl space-y-4 sticky top-24"
                 initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
               >
-                <h2 className="text-xl font-semibold text-slate-800 text-center mb-4">Overall Score</h2>
+                <h2 className="text-xl font-semibold text-slate-800 text-center mb-4">
+                  Overall Score
+                </h2>
                 <div className="relative w-40 h-40 mx-auto mb-4">
                   <Doughnut
                     data={{
                       datasets: [
                         {
                           data: [aiResult.score, 100 - aiResult.score],
-                          backgroundColor: [getScoreColor(aiResult.score), "#e2e8f0"],
+                          backgroundColor: [
+                            getScoreColor(aiResult.score),
+                            "#e2e8f0",
+                          ],
                           borderColor: ["#ffffff", "#ffffff"],
                           borderWidth: 3,
-                          circumference: 270, 
+                          circumference: 270,
                           rotation: -135,
                           cutout: "75%",
                         },
@@ -550,26 +665,38 @@ We are looking for a skilled React Developer to join our team. The ideal candida
                     }}
                     options={{
                       cutout: "75%",
-                      plugins: { legend: { display: false }, tooltip: { enabled: false } },
-                      aspectRatio: 1, 
+                      plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: false },
+                      },
+                      aspectRatio: 1,
                     }}
                   />
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <motion.span 
+                    <motion.span
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       transition={{ duration: 0.8, delay: 0.5 }}
-                      className={`text-3xl font-bold ${getScoreTailwindColor(aiResult.score)}`}
+                      className={`text-3xl font-bold ${getScoreTailwindColor(
+                        aiResult.score
+                      )}`}
                     >
                       {aiResult.score}%
                     </motion.span>
-                     <span className="text-xs text-slate-500 font-medium">Match Score</span>
+                    <span className="text-xs text-slate-500 font-medium">
+                      Match Score
+                    </span>
                   </div>
                 </div>
-                
+
                 <div className="space-y-0.5">
                   {criteriaScores.map((criterion, index) => (
-                    <ScoreCriteria key={criterion.label} label={criterion.label} score={criterion.score} delay={index * 0.1} />
+                    <ScoreCriteria
+                      key={criterion.label}
+                      label={criterion.label}
+                      score={criterion.score}
+                      delay={index * 0.1}
+                    />
                   ))}
                 </div>
 
@@ -584,7 +711,7 @@ We are looking for a skilled React Developer to join our team. The ideal candida
               </motion.div>
 
               {/* Right Column: Analysis Details - reduced size */}
-              <motion.div 
+              <motion.div
                 className="lg:col-span-2 space-y-6"
                 initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -602,17 +729,24 @@ We are looking for a skilled React Developer to join our team. The ideal candida
                     >
                       <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-xl p-4 shadow-md">
                         <h3 className="text-base font-semibold text-slate-800 mb-2 flex items-center gap-2">
-                          <FaLightbulb className="text-yellow-500 text-sm" /> 
+                          <FaLightbulb className="text-yellow-500 text-sm" />
                           Quick Overview
                         </h3>
                         <p className="text-sm text-slate-700 leading-relaxed">
-                          Your overall match score is <strong className={getScoreColor(aiResult.score)}>{aiResult.score}%</strong>. 
-                          {aiResult.score >= 80 ? " This indicates an excellent alignment with the job requirements!" : 
-                           aiResult.score >= 60 ? " This shows good potential for the role." : 
-                           " There are several areas to improve for a better fit."}
+                          Your overall match score is{" "}
+                          <strong className={getScoreColor(aiResult.score)}>
+                            {aiResult.score}%
+                          </strong>
+                          .
+                          {aiResult.score >= 80
+                            ? " This indicates an excellent alignment with the job requirements!"
+                            : aiResult.score >= 60
+                            ? " This shows good potential for the role."
+                            : " There are several areas to improve for a better fit."}
                         </p>
                         <p className="text-xs text-slate-600 mt-1.5">
-                          Below are some key highlights. Click "Show Full Report" for detailed analysis.
+                          Below are some key highlights. Click "Show Full
+                          Report" for detailed analysis.
                         </p>
                       </div>
 
@@ -622,8 +756,14 @@ We are looking for a skilled React Developer to join our team. The ideal candida
                             <FaCheckCircle size={12} /> Top Strengths
                           </h3>
                           <ul className="list-disc list-inside text-xs text-slate-700 space-y-1 pl-1">
-                            {aiResult.strengths.slice(0, 2).map((s, i) => <li key={i}>{s}</li>)}
-                            {aiResult.strengths.length > 2 && <li className="italic text-slate-500">... and {aiResult.strengths.length - 2} more</li>}
+                            {aiResult.strengths.slice(0, 2).map((s, i) => (
+                              <li key={i}>{s}</li>
+                            ))}
+                            {aiResult.strengths.length > 2 && (
+                              <li className="italic text-slate-500">
+                                ... and {aiResult.strengths.length - 2} more
+                              </li>
+                            )}
                           </ul>
                         </div>
                       )}
@@ -631,11 +771,18 @@ We are looking for a skilled React Developer to join our team. The ideal candida
                       {aiResult.weaknesses?.length > 0 && (
                         <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-xl p-4 shadow-md">
                           <h3 className="text-sm font-semibold text-red-700 mb-1.5 flex items-center gap-1.5">
-                            <FaExclamationTriangle size={12} /> Key Areas for Improvement
+                            <FaExclamationTriangle size={12} /> Key Areas for
+                            Improvement
                           </h3>
                           <ul className="list-disc list-inside text-xs text-slate-700 space-y-1 pl-1">
-                            {aiResult.weaknesses.slice(0, 2).map((w, i) => <li key={i}>{w}</li>)}
-                            {aiResult.weaknesses.length > 2 && <li className="italic text-slate-500">... and {aiResult.weaknesses.length - 2} more</li>}
+                            {aiResult.weaknesses.slice(0, 2).map((w, i) => (
+                              <li key={i}>{w}</li>
+                            ))}
+                            {aiResult.weaknesses.length > 2 && (
+                              <li className="italic text-slate-500">
+                                ... and {aiResult.weaknesses.length - 2} more
+                              </li>
+                            )}
                           </ul>
                         </div>
                       )}
@@ -661,7 +808,7 @@ We are looking for a skilled React Developer to join our team. The ideal candida
                       className="space-y-6"
                     >
                       {/* Strengths - smaller layout */}
-                      <motion.div 
+                      <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
@@ -676,7 +823,7 @@ We are looking for a skilled React Developer to join our team. The ideal candida
                           </h3>
                           <ul className="space-y-2">
                             {aiResult.strengths?.map((strength, i) => (
-                              <motion.li 
+                              <motion.li
                                 key={i}
                                 initial={{ opacity: 0, x: -10 }}
                                 animate={{ opacity: 1, x: 0 }}
@@ -692,7 +839,7 @@ We are looking for a skilled React Developer to join our team. The ideal candida
                       </motion.div>
 
                       {/* Areas for Improvement */}
-                      <motion.div 
+                      <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
@@ -707,7 +854,7 @@ We are looking for a skilled React Developer to join our team. The ideal candida
                           </h3>
                           <ul className="space-y-2">
                             {aiResult.weaknesses?.map((weakness, i) => (
-                              <motion.li 
+                              <motion.li
                                 key={i}
                                 initial={{ opacity: 0, x: -10 }}
                                 animate={{ opacity: 1, x: 0 }}
@@ -723,7 +870,7 @@ We are looking for a skilled React Developer to join our team. The ideal candida
                       </motion.div>
 
                       {/* AI Recommendations */}
-                      <motion.div 
+                      <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3 }}
@@ -737,25 +884,27 @@ We are looking for a skilled React Developer to join our team. The ideal candida
                             AI Recommendations
                           </h3>
                           <ul className="space-y-2">
-                            {aiResult.suggestionsToAlignBetter?.map((suggestion, i) => (
-                              <motion.li 
-                                key={i}
-                                initial={{ opacity: 0, x: -10 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.3 + i * 0.05 }}
-                                className="flex items-start gap-2 text-gray-700 leading-relaxed text-xs"
-                              >
-                                <FaWandMagicSparkles className="text-blue-600 mt-0.5 flex-shrink-0 text-xs" />
-                                {suggestion}
-                              </motion.li>
-                            ))}
+                            {aiResult.suggestionsToAlignBetter?.map(
+                              (suggestion, i) => (
+                                <motion.li
+                                  key={i}
+                                  initial={{ opacity: 0, x: -10 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  transition={{ delay: 0.3 + i * 0.05 }}
+                                  className="flex items-start gap-2 text-gray-700 leading-relaxed text-xs"
+                                >
+                                  <FaWandMagicSparkles className="text-blue-600 mt-0.5 flex-shrink-0 text-xs" />
+                                  {suggestion}
+                                </motion.li>
+                              )
+                            )}
                           </ul>
                         </div>
                       </motion.div>
-                      
+
                       {/* Enhanced Skill Gap Analysis */}
                       {aiResult.skillGapAnalysis && (
-                        <motion.div 
+                        <motion.div
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.4 }}
@@ -768,55 +917,86 @@ We are looking for a skilled React Developer to join our team. The ideal candida
                               </div>
                               Skill Gap Analysis
                             </h3>
-                            
+
                             <div className="grid md:grid-cols-2 gap-8 mb-4">
                               <div>
                                 <h4 className="font-semibold text-green-600 mb-3 flex items-center gap-2 text-sm">
-                                  <FaSmileBeam size={14} /> Matched Skills ({aiResult.skillGapAnalysis.matchedSkills?.length || 0})
+                                  <FaSmileBeam size={14} /> Matched Skills (
+                                  {aiResult.skillGapAnalysis.matchedSkills
+                                    ?.length || 0}
+                                  )
                                 </h4>
                                 <div className="flex flex-wrap gap-2">
-                                  {aiResult.skillGapAnalysis.matchedSkills?.length > 0 ?
-                                    aiResult.skillGapAnalysis.matchedSkills.map((skill, idx) => (
-                                      <SkillTag key={idx} skill={skill} type="matched" index={idx} />
-                                    )) : 
-                                    <p className="text-xs text-gray-500 italic">No explicitly matched skills found.</p>
-                                  }
+                                  {aiResult.skillGapAnalysis.matchedSkills
+                                    ?.length > 0 ? (
+                                    aiResult.skillGapAnalysis.matchedSkills.map(
+                                      (skill, idx) => (
+                                        <SkillTag
+                                          key={idx}
+                                          skill={skill}
+                                          type="matched"
+                                          index={idx}
+                                        />
+                                      )
+                                    )
+                                  ) : (
+                                    <p className="text-xs text-gray-500 italic">
+                                      No explicitly matched skills found.
+                                    </p>
+                                  )}
                                 </div>
                               </div>
-                              
+
                               <div>
                                 <h4 className="font-semibold text-red-600 mb-3 flex items-center gap-2 text-sm">
-                                  <ImSad2 size={14} /> Missing Skills ({aiResult.skillGapAnalysis.missingSkills?.length || 0})
+                                  <ImSad2 size={14} /> Missing Skills (
+                                  {aiResult.skillGapAnalysis.missingSkills
+                                    ?.length || 0}
+                                  )
                                 </h4>
                                 <div className="flex flex-wrap gap-2">
-                                  {aiResult.skillGapAnalysis.missingSkills?.length > 0 ?
-                                    aiResult.skillGapAnalysis.missingSkills.map((skill, idx) => (
-                                      <SkillTag key={idx} skill={skill} type="missing" index={idx} />
-                                    )) : 
-                                    <p className="text-xs text-gray-500 italic">No critical skills missing.</p>
-                                  }
+                                  {aiResult.skillGapAnalysis.missingSkills
+                                    ?.length > 0 ? (
+                                    aiResult.skillGapAnalysis.missingSkills.map(
+                                      (skill, idx) => (
+                                        <SkillTag
+                                          key={idx}
+                                          skill={skill}
+                                          type="missing"
+                                          index={idx}
+                                        />
+                                      )
+                                    )
+                                  ) : (
+                                    <p className="text-xs text-gray-500 italic">
+                                      No critical skills missing.
+                                    </p>
+                                  )}
                                 </div>
                               </div>
                             </div>
-                            
-                            {aiResult.skillGapAnalysis.recommendations?.length > 0 && (
+
+                            {aiResult.skillGapAnalysis.recommendations?.length >
+                              0 && (
                               <div className="border-t border-purple-200 pt-4">
                                 <h4 className="font-semibold text-indigo-600 mb-2 flex items-center gap-2 text-sm">
                                   <FaRocket size={14} /> Priority Actions
                                 </h4>
                                 <ul className="space-y-2">
-                                  {aiResult.skillGapAnalysis.recommendations.map((rec, idx) => (
-                                    <motion.li 
-                                      key={idx}
-                                      initial={{ opacity: 0, x: -10 }}
-                                      animate={{ opacity: 1, x: 0 }}
-                                      transition={{ delay: 0.4 + idx * 0.05 }}
-                                      className="flex items-start gap-2 text-gray-700 leading-relaxed text-xs"
-                                    >
-                                      <FaCheckCircle className="text-indigo-600 mt-0.5 flex-shrink-0 text-xs" />
-                                      {rec}
-                                    </motion.li>
-                                  ))}
+                                  {aiResult.skillGapAnalysis.recommendations.map(
+                                    (rec, idx) => (
+                                      <motion.li
+                                        key={idx}
+                                        initial={{ opacity: 0, x: -10 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{ delay: 0.4 + idx * 0.05 }}
+                                        className="flex items-start gap-2 text-gray-700 leading-relaxed text-xs"
+                                      >
+                                        <FaCheckCircle className="text-indigo-600 mt-0.5 flex-shrink-0 text-xs" />
+                                        {rec}
+                                      </motion.li>
+                                    )
+                                  )}
                                 </ul>
                               </div>
                             )}
@@ -826,7 +1006,7 @@ We are looking for a skilled React Developer to join our team. The ideal candida
 
                       {/* Additional Notes */}
                       {aiResult.notes?.length > 0 && (
-                        <motion.div 
+                        <motion.div
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.5 }}
@@ -839,7 +1019,7 @@ We are looking for a skilled React Developer to join our team. The ideal candida
                             </h3>
                             <ul className="space-y-2">
                               {aiResult.notes.map((note, i) => (
-                                <motion.li 
+                                <motion.li
                                   key={i}
                                   initial={{ opacity: 0, x: -10 }}
                                   animate={{ opacity: 1, x: 0 }}
@@ -871,7 +1051,10 @@ We are looking for a skilled React Developer to join our team. The ideal candida
                 <div className="text-center mt-6 border-t border-gray-200/70 pt-6">
                   <motion.button
                     onClick={handleAskAgain}
-                    whileHover={{ scale: 1.05, boxShadow: "0 6px 15px rgba(59, 130, 246, 0.2)" }}
+                    whileHover={{
+                      scale: 1.05,
+                      boxShadow: "0 6px 15px rgba(59, 130, 246, 0.2)",
+                    }}
                     whileTap={{ scale: 0.95 }}
                     className="px-6 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-1.5 text-sm mx-auto"
                   >

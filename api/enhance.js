@@ -5,6 +5,7 @@ import { jobMatching } from "../config/openai.js";
 import { checkATSCompatibility } from "../config/openai.js";
 import { parseResumeFromFile } from "../config/openai.js";
 import { checkATSFromFile } from "../config/openai.js";
+import { jobMatchingFromFile } from "../config/openai.js";
 
 const router = express.Router();
 
@@ -39,6 +40,27 @@ router.post("/jd-match", async (req, res) => {
   } catch (error) {
     console.error("AI JD Match Error:", error.message);
     res.status(500).json({ error: "AI matching failed" });
+  }
+});
+
+router.post("/jd-match-file", async (req, res) => {
+  const { fileUrl, jobDescription, style } = req.body;
+
+  if (!fileUrl || !jobDescription) {
+    return res.status(400).json({ error: "File URL and Job Description are required" });
+  }
+
+  try {
+    const result = await jobMatchingFromFile(
+      fileUrl,
+      jobDescription,
+      style || "concise"
+    );
+
+    res.json(result);
+  } catch (error) {
+    console.error("AI JD Match from File Error:", error.message);
+    res.status(500).json({ error: "AI matching from file failed" });
   }
 });
 
