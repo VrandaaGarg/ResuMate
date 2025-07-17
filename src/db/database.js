@@ -4,9 +4,8 @@ import {
   getDoc,
   updateDoc,
   serverTimestamp,
-  collection,
-  getDocs,
-  deleteDoc,
+  arrayUnion,
+  arrayRemove,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
@@ -153,35 +152,91 @@ export const saveUploadedFile = async (fileData) => {
   const user = auth.currentUser;
   if (!user) return;
 
-  const fileRef = doc(db, "users", user.uid, "uploadedFiles", fileData.fileId);
-  await setDoc(fileRef, {
-    ...fileData,
-    createdOn: serverTimestamp(),
-  });
+  // Only store in user document uploadedResumes array (no subcollection)
+  const userRef = doc(db, "users", user.uid);
+
+  // Check if user document exists, if not create it
+  const userDoc = await getDoc(userRef);
+  if (!userDoc.exists()) {
+    // Create user document with initial data
+    await setDoc(userRef, {
+      uploadedResumes: [
+        {
+          id: fileData.fileId,
+          fileName: fileData.fileName,
+          fileUrl: fileData.fileUrl,
+          uploadedAt: new Date().toISOString(),
+          fileSize: fileData.fileSize,
+          fileType: fileData.fileType,
+          userId: user.uid,
+        },
+      ],
+      createdAt: serverTimestamp(),
+    });
+  } else {
+    // Update existing user document
+    await updateDoc(userRef, {
+      uploadedResumes: arrayUnion({
+        id: fileData.fileId,
+        fileName: fileData.fileName,
+        fileUrl: fileData.fileUrl,
+        uploadedAt: new Date().toISOString(),
+        fileSize: fileData.fileSize,
+        fileType: fileData.fileType,
+        userId: user.uid,
+      }),
+    });
+  }
 };
 
-export const getUserUploadedFiles = async () => {
+// These functions are no longer needed since we're using only the uploadedResumes array
+
+// Get user's uploaded resumes from user document
+export const getUserUploadedResumes = async () => {
   const user = auth.currentUser;
   if (!user) return [];
 
-  const filesRef = collection(db, "users", user.uid, "uploadedFiles");
-  const snapshot = await getDocs(filesRef);
-  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  try {
+    const userRef = doc(db, "users", user.uid);
+    const userDoc = await getDoc(userRef);
+
+    if (userDoc.exists()) {
+      const userData = userDoc.data();
+      return userData.uploadedResumes || [];
+    }
+    return [];
+  } catch (error) {
+    console.error("Error getting uploaded resumes:", error);
+    return [];
+  }
 };
 
-export const deleteUploadedFile = async (fileId) => {
+// Delete uploaded resume
+export const deleteUploadedResume = async (resumeId) => {
   const user = auth.currentUser;
   if (!user) return;
 
-  const fileRef = doc(db, "users", user.uid, "uploadedFiles", fileId);
-  await deleteDoc(fileRef);
-};
+  try {
+    // Get current user data
+    const userRef = doc(db, "users", user.uid);
+    const userDoc = await getDoc(userRef);
 
-export const getUploadedFile = async (fileId) => {
-  const user = auth.currentUser;
-  if (!user) return null;
+    if (userDoc.exists()) {
+      const userData = userDoc.data();
+      const uploadedResumes = userData.uploadedResumes || [];
 
-  const fileRef = doc(db, "users", user.uid, "uploadedFiles", fileId);
-  const snapshot = await getDoc(fileRef);
-  return snapshot.exists() ? snapshot.data() : null;
+      // Find and remove the resume
+      const resumeToDelete = uploadedResumes.find(
+        (resume) => resume.id === resumeId
+      );
+      if (resumeToDelete) {
+        await updateDoc(userRef, {
+          uploadedResumes: arrayRemove(resumeToDelete),
+        });
+      }
+    }
+  } catch (error) {
+    console.error("Error deleting uploaded resume:", error);
+    throw error;
+  }
 };

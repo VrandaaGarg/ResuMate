@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../Contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import {
@@ -11,8 +11,20 @@ import {
   FiSettings,
   FiStar,
 } from "react-icons/fi";
+import {
+  FaFileAlt,
+  FaEye,
+  FaDownload,
+  FaTrash,
+  FaUpload,
+  FaClock,
+} from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import showSuccessToast from "../Components/showSuccessToast";
+import { getUserUploadedResumes, deleteUploadedResume } from "../db/database";
+import ResumeUploadModal from "../Components/ResumeUploadModal";
+import DeleteConfirmModal from "../Components/DeleteConfirmModal";
+import toast from "react-hot-toast";
 
 const Profile = () => {
   const { user, logout, updateUser } = useAuth();
@@ -22,10 +34,91 @@ const Profile = () => {
     name: user?.displayName || "",
     email: user?.email || "",
   });
+  const [uploadedResumes, setUploadedResumes] = useState([]);
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [loadingResumes, setLoadingResumes] = useState(true);
+  const [deleteModal, setDeleteModal] = useState({
+    isOpen: false,
+    resume: null,
+  });
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Load uploaded resumes
+  useEffect(() => {
+    const loadUploadedResumes = async () => {
+      try {
+        setLoadingResumes(true);
+        const resumes = await getUserUploadedResumes();
+        // Sort by upload date (newest first)
+        const sortedResumes = resumes.sort(
+          (a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt)
+        );
+        setUploadedResumes(sortedResumes);
+      } catch (error) {
+        console.error("Error loading uploaded resumes:", error);
+        toast.error("Failed to load uploaded resumes");
+      } finally {
+        setLoadingResumes(false);
+      }
+    };
+
+    if (user) {
+      loadUploadedResumes();
+    }
+  }, [user]);
+
+  // Handle upload success
+  const handleUploadSuccess = (uploadedFile) => {
+    // Refresh uploaded resumes list
+    const loadUploadedResumes = async () => {
+      try {
+        const resumes = await getUserUploadedResumes();
+        const sortedResumes = resumes.sort(
+          (a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt)
+        );
+        setUploadedResumes(sortedResumes);
+      } catch (error) {
+        console.error("Error refreshing uploaded resumes:", error);
+      }
+    };
+    loadUploadedResumes();
+  };
+
+  // Handle delete resume - open confirmation modal
+  const handleDeleteResume = (resume) => {
+    setDeleteModal({ isOpen: true, resume });
+  };
+
+  // Confirm delete resume
+  const confirmDeleteResume = async () => {
+    if (!deleteModal.resume) return;
+
+    setIsDeleting(true);
+    try {
+      await deleteUploadedResume(deleteModal.resume.id);
+      setUploadedResumes((prev) =>
+        prev.filter((r) => r.id !== deleteModal.resume.id)
+      );
+      toast.success("Resume deleted successfully!");
+      setDeleteModal({ isOpen: false, resume: null });
+    } catch (error) {
+      console.error("Error deleting resume:", error);
+      toast.error("Failed to delete resume");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  // Close delete modal
+  const closeDeleteModal = () => {
+    if (!isDeleting) {
+      setDeleteModal({ isOpen: false, resume: null });
+    }
   };
 
   const handleSave = async () => {
@@ -269,11 +362,62 @@ const Profile = () => {
           </div>
         </motion.div>
 
+        {/* Uploaded Resumes Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="mt-6 sm:mt-8 bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-4 sm:p-6 shadow-lg"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-base sm:text-lg font-semibold text-slate-900 flex items-center gap-2">
+              <FaFileAlt className="text-blue-600" />
+              Uploaded Resumes
+            </h3>
+            <button
+              onClick={() => setIsUploadModalOpen(true)}
+              className="flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+            >
+              <FaUpload size={14} />
+              Upload New
+            </button>
+          </div>
+
+          {loadingResumes ? (
+            <div className="flex items-center justify-center py-8">
+              <FaClock className="animate-spin text-gray-400 mr-2" />
+              <span className="text-gray-500">Loading resumes...</span>
+            </div>
+          ) : uploadedResumes.length === 0 ? (
+            <div className="text-center py-8">
+              <FaFileAlt className="text-4xl text-gray-300 mx-auto mb-3" />
+              <p className="text-gray-500 mb-4">No resumes uploaded yet</p>
+              <button
+                onClick={() => setIsUploadModalOpen(true)}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Upload Your First Resume
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {uploadedResumes.map((resume, index) => (
+                <ProfileResumeItem
+                  key={resume.id}
+                  resume={resume}
+                  onDelete={handleDeleteResume}
+                  index={index}
+                />
+              ))}
+            </div>
+          )}
+        </motion.div>
+
         {/* Additional Info Card */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
           className="mt-6 sm:mt-8 bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-4 sm:p-6 shadow-lg"
         >
           <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-3 flex items-center gap-2">
@@ -290,7 +434,95 @@ const Profile = () => {
           </div>
         </motion.div>
       </div>
+
+      {/* Upload Modal */}
+      <ResumeUploadModal
+        isOpen={isUploadModalOpen}
+        onClose={() => setIsUploadModalOpen(false)}
+        onUploadSuccess={handleUploadSuccess}
+      />
+
+      {/* Delete Confirmation Modal */}
+      <DeleteConfirmModal
+        isOpen={deleteModal.isOpen}
+        onClose={closeDeleteModal}
+        onConfirm={confirmDeleteResume}
+        fileName={deleteModal.resume?.fileName}
+        isDeleting={isDeleting}
+      />
     </div>
+  );
+};
+
+// ProfileResumeItem Component
+const ProfileResumeItem = ({ resume, onDelete, index }) => {
+  const formatFileSize = (bytes) => {
+    if (bytes === 0) return "0 Bytes";
+    const k = 1024;
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay: index * 0.1 }}
+      className="flex items-center justify-between p-4 bg-gray-50/50 rounded-lg hover:bg-gray-100/50 transition-colors border border-gray-200/50"
+    >
+      <div className="flex items-center gap-4 flex-1">
+        <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+          <FaFileAlt className="text-blue-600 text-lg" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <h4 className="font-semibold text-gray-900 truncate text-sm sm:text-base">
+            {resume.fileName}
+          </h4>
+          <p className="text-xs sm:text-sm text-gray-500">
+            {formatFileSize(resume.fileSize)} • Uploaded{" "}
+            {formatDate(resume.uploadedAt)}
+          </p>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-2">
+        {/* View Button */}
+        <button
+          title="View Resume"
+          className="p-2 text-gray-400 hover:text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+        >
+          <FaEye size={16} />
+        </button>
+
+        {/* Download Button */}
+        <button
+          title="Download Resume"
+          className="p-2 text-gray-400 hover:text-green-600 rounded-lg hover:bg-green-50 transition-colors"
+        >
+          <FaDownload size={16} />
+        </button>
+
+        {/* Delete Button */}
+        <button
+          title="Delete Resume"
+          onClick={() => onDelete(resume)}
+          className="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors"
+        >
+          <FaTrash size={16} />
+        </button>
+      </div>
+    </motion.div>
   );
 };
 

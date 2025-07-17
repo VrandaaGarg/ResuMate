@@ -27,12 +27,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
       label: "Edit Resume",
       gradient: "from-green-500 to-emerald-400",
     },
-    {
-      path: "/upload-resume",
-      icon: FaUpload,
-      label: "Upload Resume",
-      gradient: "from-yellow-500 to-orange-400",
-    },
+
     {
       path: "/resume",
       icon: FaFileAlt,
