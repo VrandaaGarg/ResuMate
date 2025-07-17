@@ -47,7 +47,9 @@ router.post("/jd-match-file", async (req, res) => {
   const { fileUrl, jobDescription, style } = req.body;
 
   if (!fileUrl || !jobDescription) {
-    return res.status(400).json({ error: "File URL and Job Description are required" });
+    return res
+      .status(400)
+      .json({ error: "File URL and Job Description are required" });
   }
 
   try {
