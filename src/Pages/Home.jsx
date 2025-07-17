@@ -190,6 +190,15 @@ const Home = () => {
     }
   };
 
+  const handleUploadClick = () => {
+    const user = auth.currentUser;
+    if (user) {
+      navigate("/dashboard");
+    } else {
+      navigate("/login");
+    }
+  };
+
   const faqs = [
     {
       q: "Is ResuMate free to use?",
@@ -291,18 +300,18 @@ const Home = () => {
               <FaRocket className="group-hover:rotate-12 transition-transform duration-300" />
               Create Resume
             </motion.button>
-            {/* <motion.button
+            <motion.button
               whileHover={{
                 scale: 1.05,
                 boxShadow: "0 20px 40px rgba(0, 0, 0, 0.2)",
               }}
               whileTap={{ scale: 0.95 }}
-              onClick={handleCreateClick}
+              onClick={handleUploadClick}
               className="group flex items-center gap-3 bg-gradient-to-r from-gray-900 to-gray-700 text-white px-8 py-4 rounded-2xl hover:shadow-2xl transition-all duration-300 font-semibold text-lg border border-gray-600"
             >
               <FaUpload className="group-hover:translate-y-[-2px] transition-transform duration-300" />
               Upload Resume
-            </motion.button> */}
+            </motion.button>
           </motion.div>
         </motion.div>
       </section>
