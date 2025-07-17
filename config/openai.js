@@ -9,24 +9,32 @@ export async function enhanceBullet(text) {
   });
 
   const prompt = `
-Hey, I’m writing my resume and I’d love your help improving this line. 
-Can you rewrite it using stronger action verbs and ATS friendly language 
-and make it sound more professional and polished — but still concise?
+Transform this resume bullet point into a powerful, ATS-optimized statement that will impress both hiring managers and applicant tracking systems.
 
-Here’s what I wrote:
-"${text}"
+Original text: "${text}"
 
-Please return only the improved version — no explanations, no extras. Also if html tags are present, please return the text in that format.
+Requirements:
+✅ Use strong action verbs (achieved, implemented, optimized, developed, led, etc.)
+✅ Include quantifiable metrics when possible (percentages, numbers, timeframes)
+✅ Incorporate relevant industry keywords for ATS compatibility
+✅ Maintain professional, concise language (under 2 lines)
+✅ Focus on impact and results, not just responsibilities
+✅ Preserve any HTML formatting exactly as provided
+
+Return ONLY the enhanced version - no explanations, quotes, or additional text.
 `;
 
   const response = await openai.chat.completions.create({
     model: "gpt-4.1-mini-2025-04-14",
-    temperature: 0.5,
+    temperature: 0.4,
     messages: [
-      { role: "system", content: "You are a resume enhance assistant." },
+      { 
+        role: "system", 
+        content: "You are an expert resume writer specializing in ATS optimization and impactful professional statements. Focus on creating compelling, keyword-rich content that showcases achievements and measurable results." 
+      },
       { role: "user", content: prompt },
     ],
-    max_tokens: 100,
+    max_tokens: 120,
   });
 
   return response.choices[0]?.message?.content?.trim() || "";
@@ -73,9 +81,9 @@ export async function jobMatching(style, jobDescription, resume) {
       .filter(Boolean),
   };
 
-  // Final prompt
+  // Enhanced prompt with better structure and examples
   const prompt = `
-You are an expert resume evaluator.
+You are an expert resume evaluator and career advisor.
 
 Your task is to critically evaluate how well the given resume aligns with the provided job description. Return a match score and structured feedback to help the candidate optimize their resume and career alignment.
 
@@ -85,49 +93,50 @@ Your task is to critically evaluate how well the given resume aligns with the pr
 - DO NOT output anything outside the JSON block.
 - DO NOT use markdown, HTML, or any formatting.
 - Highlight if any point in resume lacks **quantifiable impact** or **measurable achievements** (e.g., % growth, revenue impact, user growth).
-- Include **examples** in each section (strengths, weaknesses, suggestions) to make your feedback practical and relatable.
--Add only the matched skills from the job description which genuinely are needed in the job not all skills in the resume.
--Also be straightforward about missing skills that are essential for the job.
--In the end give notes in a friendly manner to encourage user and tell him his strong points and what to focus on next
+- Include **concrete examples** in each section (strengths, weaknesses, suggestions) to make your feedback practical and actionable.
+- Add only the matched skills from the job description which are genuinely needed for the job, not all skills in the resume.
+- Be straightforward about missing skills that are essential for the job.
+- In the end, provide encouraging notes that highlight the user's strong points and what to focus on next.
 
 🎯 Your tone must be:
 ${
   sanitize(style) === "elaborative"
-    ? "Highly elaborative, well-reasoned, descriptive, and backed by examples for clarity."
-    : "Professional and descriptive. Avoid over-summarizing."
+    ? "Highly elaborative, well-reasoned, descriptive, and backed by specific examples for maximum clarity."
+    : "Professional, descriptive, and constructive. Avoid over-summarizing while being comprehensive."
 }
 
 📦 Return ONLY a valid raw JSON object with the following structure:
 {
   "score": 85,
   "strengths": [
-    "Strong React-based frontend project: 'SmartShelf' demonstrates modern UI skills.",
-    "Clear achievement: 'Improved API response time by 40% using caching'."
+    "Strong React-based frontend project: 'SmartShelf' demonstrates modern UI skills with specific technologies.",
+    "Clear quantifiable achievement: 'Improved API response time by 40% using Redis caching' shows measurable impact."
   ],
   "weaknesses": [
-    "Lacks quantifiable metrics in most achievements (e.g., % increase, revenue impact).",
-    "No mention of CI/CD or deployment tools which are expected in the job description."
+    "Most achievements lack quantifiable metrics (e.g., % increase, user count, revenue impact).",
+    "No mention of CI/CD or deployment tools which are specifically required in the job description."
   ],
   "suggestionsToAlignBetter": [
-    "Add concrete metrics in projects and experience (e.g., user count, performance gain).",
-    "Mention cloud tools or backend APIs if you’ve used them even slightly."
+    "Add concrete metrics to all projects and experience (e.g., 'Increased user engagement by 25%').",
+    "Mention cloud tools or backend APIs if you've used them, even in personal projects."
   ],
   "skillGapAnalysis": {
-    "matchedSkills": ["React", "Tailwind", "Git"],
+    "matchedSkills": ["React", "Tailwind CSS", "Git", "JavaScript"],
     "missingSkills": [
-      "Docker and Kubernetes",
-      "Unit testing frameworks like Jest or Mocha"
+      "Docker and Kubernetes for containerization",
+      "Unit testing frameworks like Jest or Mocha",
+      "AWS or cloud deployment experience"
     ],
     "recommendations": [
-      "Start with basic Docker usage in personal projects.",
-      "Take a short course on automated testing and integrate with one project.",
+      "Start with basic Docker usage in personal projects to gain containerization experience.",
+      "Take a short course on automated testing and integrate Jest with one existing project.",
       "Explore cloud deployment using Vercel, Netlify, or AWS for hands-on experience."
     ]
   },
-  "notes":[
-    "you have a solid foundation in React and frontend development.",
-    "Focus on enhancing backend and deployment skills to match the job requirements.",
-    "Consider contributing to open source to gain experience with CI/CD tools."
+  "notes": [
+    "You have a solid foundation in React and frontend development - this is a strong starting point.",
+    "Focus on enhancing backend and deployment skills to match the job requirements more closely.",
+    "Consider contributing to open source projects to gain experience with CI/CD tools and collaborative development."
   ]
 }
 
@@ -152,7 +161,7 @@ Achievements: ${cleanResume.achievements.join("; ")}
     model: "gpt-4.1-mini-2025-04-14",
     temperature: 0.7,
     messages: [
-      { role: "system", content: "You are an expert resume evaluator." },
+      { role: "system", content: "You are an expert resume evaluator and career advisor specializing in job-resume alignment analysis." },
       { role: "user", content: prompt },
     ],
     max_tokens: style === "elaborative" ? 1200 : 800,
@@ -177,9 +186,9 @@ export async function checkATSCompatibility(resume) {
   const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
   const prompt = `
-You are an expert in Applicant Tracking Systems (ATS).
+You are an expert in Applicant Tracking Systems (ATS) and resume optimization.
 
-Your job is to evaluate how well the given resume aligns with ATS best practices and return:
+Your job is to evaluate how well the given resume aligns with ATS best practices and return actionable feedback.
 
 ✅ JSON response in the EXACT structure:
 {
@@ -215,15 +224,15 @@ Your job is to evaluate how well the given resume aligns with ATS best practices
 - DO NOT fabricate content. Only work with the provided resume.
 - DO NOT mention or suggest removing HTML tags (they are for formatting).
 - DO NOT suggest adding new resume sections outside of: description, skills, experience, projects, achievements.
-- DO NOT include sections that are already complete (omit them from feedback).
+- DO NOT include sections that are already well-optimized (omit them from feedback).
 - DO NOT output anything outside the JSON block.
 - Your job is to boost **ATS compatibility**, not visual design.
-- In "description", focus on summarizing the user profile, not listing tech skills already present in "skills".
-- If any skill is already mentioned in "skills", do not repeat it in skills section feedback.
--Give user examples of how to improve each section, not just general advice.
+- In "description", focus on professional summary optimization, not listing tech skills already present in "skills".
+- If any skill is already well-represented in "skills", do not repeat it in skills section feedback.
+- Give user specific examples of how to improve each section, not just general advice.
 - Make all suggestions **actionable, realistic, and ATS-specific**.
-- If a field is good, **don’t include it in \`sectionWiseFeedback\`**.
--Skill section contain both domain and languages, so according to that give suggestions
+- If a field is well-optimized, **don't include it in \`sectionWiseFeedback\`**.
+- Skills section contains both domain and languages, so provide suggestions accordingly.
 - If a section is missing, include it in \`sectionWiseFeedback\` with suggestions to add it.
 
 Resume:
@@ -255,7 +264,7 @@ Achievements: ${(resume.achievements || [])
     model: "gpt-4.1-mini-2025-04-14",
     temperature: 0.5,
     messages: [
-      { role: "system", content: "You are an expert ATS resume evaluator." },
+      { role: "system", content: "You are an expert ATS resume evaluator and optimization specialist." },
       { role: "user", content: prompt },
     ],
     max_tokens: 1200,
@@ -282,6 +291,7 @@ export async function parseResumeFromFile(fileUrl) {
 
   try {
     // Step 1: Download the file from the URL
+    console.log("📥 Downloading file from URL:", fileUrl);
     const fileResponse = await fetch(fileUrl);
     if (!fileResponse.ok) {
       throw new Error(`Failed to fetch file: ${fileResponse.statusText}`);
@@ -310,33 +320,38 @@ export async function parseResumeFromFile(fileUrl) {
       }
     }
 
-    console.log("Processing file:", fileName, "Content-Type:", contentType);
+    console.log("📄 Processing file:", fileName, "Content-Type:", contentType);
 
     // Step 4: Create a File object from the buffer
     const file = new File([fileBuffer], fileName, {
       type: contentType,
     });
 
-    // Step 4: Upload file to OpenAI for user_data purpose
+    // Step 5: Upload file to OpenAI for assistants purpose
+    console.log("⬆️ Uploading file to OpenAI...");
     const uploadedFile = await openai.files.create({
       file: file,
-      purpose: "user_data",
+      purpose: "assistants",
     });
 
     console.log("✅ File uploaded to OpenAI:", uploadedFile.id);
-    console.log("📄 Processing file:", fileName);
     console.log("🤖 Starting AI resume parsing...");
 
-    // Step 5: Use the /v1/responses endpoint with input_file
-    const prompt = `You are an expert resume parser. Analyze the uploaded resume file and extract ONLY the actual information present in the document.
+    // Step 6: Enhanced prompt for better parsing
+    const prompt = `You are an expert resume parser and data extraction specialist. Analyze the uploaded resume file and extract ONLY the actual information present in the document.
 
-IMPORTANT: Do NOT provide sample or placeholder data. Only extract real information from the uploaded resume file.
+CRITICAL INSTRUCTIONS:
+- Do NOT provide sample or placeholder data
+- Only extract real information from the uploaded resume file
+- Pay special attention to EDUCATION section - extract ALL educational qualifications
+- Look for education in various formats: degrees, certifications, courses, schools, colleges, universities
+- Extract education details even if they appear in different sections or formats
 
 Extract and structure the information in this exact JSON format:
 
 {
   "name": "Full Name",
- "description": "Professional summary or objective statement",
+  "description": "Professional summary or objective statement",
   "contact": {
     "email": "email@gmail.com",
     "phone": "1234567890 any 10 digit number",
@@ -346,7 +361,7 @@ Extract and structure the information in this exact JSON format:
     "websiteURL": "https://portfolio.com or any with personal website domain"
   },
   "skills": [{
-    "domain": "Skill Category (e.g., Programming, Design,frontend,backend, etc.)",
+    "domain": "Skill Category (e.g., Programming, Design, Frontend, Backend, etc.)",
     "languages": ["Language 1", "Language 2" ...]
   }],
   "experience": [
@@ -356,109 +371,107 @@ Extract and structure the information in this exact JSON format:
       "technologies": "Technologies used",
       "years": "Duration of employment",
       "description": "Job description and responsibilities"
-      }
+    }
   ],
   "projects": [
     {
       "name": "Project Name",
       "description": "Project description with technologies used and achievements",
-     "github": "https://github.com/username/project",
+      "github": "https://github.com/username/project",
       "demo": "https://project-demo.com"
     }
   ],
-  "education": 
+  "education": [
     {
-  "college": "College Name",
+      "institution": "College/University Name",
       "degree": "Degree Name",
       "specialization": "Specialization Area if any",
       "location": "City, State/Country",
-      "startYear": "Start Year",
-      "endYear": "End Year",
-      "cgpa": "CGPA if mentioned",
-      "school": "School Name if different from college",
-      "tenth": "10th Percentage",
-      "twelfth": "12th Percentage",
- }
-  ,
+      "duration": "Start Year - End Year (e.g., 2020 - 2024)",
+      "gpa": "CGPA/GPA if mentioned",
+      "school": "School Name for secondary education",
+      "tenth": "10th grade percentage",
+      "twelfth": "12th grade percentage"
+    }
+  ],
   "achievements": [
     {
       "title": "Achievement Title",
-      "description": "Description of the achievement"
-    "year": "Year of Achievement",
+      "description": "Description of the achievement",
+      "year": "Year of Achievement",
       "month": "Month of Achievement"
-      }
-  ],
-  
+    }
+  ]
 }
+
+EDUCATION PARSING GUIDELINES:
+- Look for university/college names, degree titles, graduation years
+- Extract school names for secondary education (10th/12th grade)
+- Find GPA, CGPA, percentages, or grades
+- Look for specializations, majors, or concentrations
+- Check for education dates in various formats (2020-2024, 2020 to 2024, etc.)
+- Include ALL educational institutions mentioned, not just the highest degree
 
 Return ONLY the JSON object with actual data from the resume, no additional text or formatting. If information is not available in the resume, use empty strings "" or empty arrays [].`;
 
-    // Make request to /v1/responses endpoint
-    console.log("🔄 Sending request to OpenAI /v1/responses endpoint...");
-    console.log("📋 Request payload:", {
-      model: "gpt-4.1",
-      file_id: uploadedFile.id,
-      prompt_length: prompt.length,
+    // Step 7: Create an Assistant with file_search tool
+    console.log("🤖 Creating temporary assistant for resume parsing...");
+    const assistant = await openai.beta.assistants.create({
+      name: "Resume Parser",
+      instructions: `You are an expert resume parser. ${prompt}`,
+      model: "gpt-4.1-mini-2025-04-14",
+      tools: [{ type: "file_search" }],
     });
 
-    const response = await fetch("https://api.openai.com/v1/responses", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+    console.log("✅ Assistant created:", assistant.id);
+
+    // Step 8: Create a vector store and add the file
+    console.log("📚 Creating vector store...");
+    const vectorStore = await openai.vectorStores.create({
+      name: "Resume Analysis",
+      file_ids: [uploadedFile.id],
+    });
+
+    console.log("✅ Vector store created:", vectorStore.id);
+
+    // Step 9: Update assistant with vector store
+    await openai.beta.assistants.update(assistant.id, {
+      tool_resources: {
+        file_search: {
+          vector_store_ids: [vectorStore.id],
+        },
       },
-      body: JSON.stringify({
-        model: "gpt-4.1",
-        input: [
-          {
-            role: "user",
-            content: [
-              {
-                type: "input_file",
-                file_id: uploadedFile.id,
-              },
-              {
-                type: "input_text",
-                text: prompt,
-              },
-            ],
-          },
-        ],
-      }),
     });
 
-    console.log("📡 Response status:", response.status, response.statusText);
+    // Step 10: Create a thread and message
+    console.log("💬 Creating thread and message...");
+    const thread = await openai.beta.threads.create({
+      messages: [
+        {
+          role: "user",
+          content: "Please analyze the uploaded resume file and extract all information according to the JSON format specified in your instructions. Return only the JSON object with no additional text.",
+        },
+      ],
+    });
 
-    if (!response.ok) {
-      console.log("❌ OpenAI API Error - Status:", response.status);
-      const errorData = await response.json();
-      console.log("❌ Error details:", errorData);
-      throw new Error(
-        `OpenAI API Error: ${errorData.error?.message || response.statusText}`
-      );
+    console.log("✅ Thread created:", thread.id);
+
+    // Step 11: Run the assistant
+    console.log("🏃 Running assistant...");
+    const run = await openai.beta.threads.runs.createAndPoll(thread.id, {
+      assistant_id: assistant.id,
+    });
+
+    console.log("✅ Run completed with status:", run.status);
+
+    if (run.status !== "completed") {
+      throw new Error(`Assistant run failed with status: ${run.status}`);
     }
 
-    console.log("✅ Received response from OpenAI");
-    console.log("🔍 Parsing response data...");
-
-    const responseData = await response.json();
-    console.log(
-      "📊 Full response data:",
-      JSON.stringify(responseData, null, 2)
-    );
-    console.log("📊 Response structure:", {
-      hasOutput: !!responseData.output,
-      outputLength: responseData.output?.length || 0,
-      hasContent: !!responseData.output?.[0]?.content?.[0]?.text,
-      status: responseData.status,
-      responseStructure: responseData.output?.[0]
-        ? Object.keys(responseData.output[0])
-        : "no output",
-    });
-
-    // Extract text from the /v1/responses format
-    const responseText =
-      responseData.output?.[0]?.content?.[0]?.text?.trim() || "";
+    // Step 12: Get the response
+    const messages = await openai.beta.threads.messages.list(thread.id);
+    const responseMessage = messages.data[0];
+    const responseText = responseMessage.content[0]?.text?.value?.trim() || "";
 
     console.log("📝 Raw response length:", responseText.length);
     console.log("📄 Full raw response:", responseText);
@@ -468,7 +481,18 @@ Return ONLY the JSON object with actual data from the resume, no additional text
       throw new Error("Empty response from OpenAI API");
     }
 
-    // Clean up the response
+    // Step 13: Cleanup - Delete assistant and vector store
+    console.log("🧹 Cleaning up resources...");
+    try {
+      await openai.beta.assistants.delete(assistant.id);
+      await openai.vectorStores.delete(vectorStore.id);
+      await openai.files.delete(uploadedFile.id);
+      console.log("✅ Cleanup completed");
+    } catch (cleanupError) {
+      console.warn("⚠️ Cleanup warning:", cleanupError.message);
+    }
+
+    // Step 14: Clean up the response
     console.log("🧹 Cleaning response format...");
     let cleanedResponse = responseText;
     if (cleanedResponse.startsWith("```json")) {
@@ -492,10 +516,12 @@ Return ONLY the JSON object with actual data from the resume, no additional text
         projectsCount: parsedData.projects?.length || 0,
       });
 
-      // Cleanup: Delete the uploaded file
-      console.log("🧹 Cleaning up - deleting uploaded file:", uploadedFile.id);
-      await openai.files.del(uploadedFile.id);
-      console.log("✅ File deleted successfully");
+      // Detailed education logging
+      if (parsedData.education && parsedData.education.length > 0) {
+        console.log("🎓 Education details found:", parsedData.education);
+      } else {
+        console.log("⚠️ No education details found or education is empty");
+      }
 
       console.log("🎉 Resume parsing complete!");
       return parsedData;
@@ -567,8 +593,8 @@ export async function checkATSFromFile(fileUrl) {
       uploadedFile.id
     );
 
-    // Step 6: ATS analysis prompt
-    const atsPrompt = `You are an expert in Applicant Tracking Systems (ATS) analysis.
+    // Step 6: Enhanced ATS analysis prompt
+    const atsPrompt = `You are an expert in Applicant Tracking Systems (ATS) analysis and resume optimization.
 
 Analyze the uploaded resume file and evaluate how well it aligns with ATS best practices.
 
@@ -579,30 +605,34 @@ Return a JSON response in this EXACT structure:
   "sectionWiseFeedback": {
     "description": {
       "missing": ["Professional summary missing", "No quantifiable achievements"],
-      "suggestions": ["Add a compelling professional summary", "Include measurable results"]
+      "suggestions": ["Add a compelling professional summary with 2-3 key strengths", "Include measurable results like 'Increased efficiency by 25%'"]
     },
     "skills": {
-      "missing": ["Technical skills not clearly listed", "Missing industry keywords"],
-      "suggestions": ["Create a dedicated skills section", "Include relevant technical keywords"]
+      "missing": ["Technical skills not clearly categorized", "Missing industry keywords"],
+      "suggestions": ["Create clear skill categories (e.g., Programming, Tools, Frameworks)", "Include relevant technical keywords from your field"]
     },
     "experience": {
-      "missing": ["Job descriptions lack keywords", "No quantifiable achievements"],
-      "suggestions": ["Use action verbs and industry keywords", "Add metrics and results"]
+      "missing": ["Job descriptions lack action verbs", "No quantifiable achievements"],
+      "suggestions": ["Start each bullet with strong action verbs (achieved, implemented, led)", "Add metrics and results to show impact"]
     },
     "projects": {
       "missing": ["Projects not clearly described", "Missing technical details"],
-      "suggestions": ["Describe projects with technical details", "Include technologies used"]
+      "suggestions": ["Describe projects with specific technologies used", "Include project outcomes and impact"]
     },
     "achievements": {
       "missing": ["No quantifiable achievements", "Missing awards or recognition"],
-      "suggestions": ["Add measurable accomplishments", "Include relevant certifications"]
+      "suggestions": ["Add measurable accomplishments with numbers/percentages", "Include relevant certifications or awards"]
+    },
+    "education": {
+      "missing": ["Education details incomplete", "Missing graduation dates or GPA"],
+      "suggestions": ["Include complete education details (degree, institution, dates)", "Add GPA/CGPA if it's competitive (above 3.5/8.0)"]
     }
   },
   "generalTips": [
     "Use standard section headings like 'Experience', 'Education', 'Skills'",
-    "Include relevant keywords from job descriptions",
-    "Use bullet points for better readability",
-    "Ensure consistent formatting throughout"
+    "Include relevant keywords from job descriptions you're targeting",
+    "Use bullet points for better readability and ATS parsing",
+    "Ensure consistent formatting throughout the document"
   ]
 }
 
@@ -611,72 +641,90 @@ IMPORTANT:
 - Do NOT suggest adding sections that don't exist if they're not relevant
 - Focus on ATS optimization, not visual design
 - If a section is well-formatted, don't include it in sectionWiseFeedback
-- Provide actionable, specific suggestions
+- Provide actionable, specific suggestions with examples
 - Return ONLY the JSON object, no additional text`;
 
-    // Step 7: Make request to /v1/responses endpoint
-    console.log("🤖 Analyzing resume for ATS compatibility...");
-
-    const response = await fetch("https://api.openai.com/v1/responses", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-4.1",
-        input: [
-          {
-            role: "user",
-            content: [
-              {
-                type: "input_file",
-                file_id: uploadedFile.id,
-              },
-              {
-                type: "input_text",
-                text: atsPrompt,
-              },
-            ],
-          },
-        ],
-      }),
+    // Step 7: Create an Assistant with file_search tool for ATS analysis
+    console.log("🤖 Creating temporary assistant for ATS analysis...");
+    const assistant = await openai.beta.assistants.create({
+      name: "ATS Analyzer",
+      instructions: `You are an expert ATS analyzer. ${atsPrompt}`,
+      model: "gpt-4.1-mini-2025-04-14",
+      tools: [{ type: "file_search" }],
     });
 
-    console.log(
-      "📡 ATS Analysis response status:",
-      response.status,
-      response.statusText
-    );
+    console.log("✅ ATS Assistant created:", assistant.id);
 
-    if (!response.ok) {
-      console.log("❌ OpenAI API Error - Status:", response.status);
-      const errorData = await response.json();
-      console.log("❌ Error details:", errorData);
-      throw new Error(
-        `OpenAI API Error: ${errorData.error?.message || response.statusText}`
-      );
+    // Step 8: Create a vector store and add the file
+    console.log("📚 Creating vector store for ATS analysis...");
+    const vectorStore = await openai.vectorStores.create({
+      name: "ATS Analysis",
+      file_ids: [uploadedFile.id],
+    });
+
+    console.log("✅ ATS Vector store created:", vectorStore.id);
+
+    // Step 9: Update assistant with vector store
+    await openai.beta.assistants.update(assistant.id, {
+      tool_resources: {
+        file_search: {
+          vector_store_ids: [vectorStore.id],
+        },
+      },
+    });
+
+    // Step 10: Create a thread and message
+    console.log("💬 Creating thread and message for ATS analysis...");
+    const thread = await openai.beta.threads.create({
+      messages: [
+        {
+          role: "user",
+          content: "Please analyze the uploaded resume file for ATS compatibility and provide the analysis according to the JSON format specified in your instructions. Return only the JSON object with no additional text.",
+        },
+      ],
+    });
+
+    console.log("✅ ATS Thread created:", thread.id);
+
+    // Step 11: Run the assistant
+    console.log("🏃 Running ATS assistant...");
+    const run = await openai.beta.threads.runs.createAndPoll(thread.id, {
+      assistant_id: assistant.id,
+    });
+
+    console.log("✅ ATS Run completed with status:", run.status);
+
+    if (run.status !== "completed") {
+      throw new Error(`ATS Assistant run failed with status: ${run.status}`);
     }
 
-    console.log("✅ Received ATS analysis from OpenAI");
+    // Step 12: Get the response
+    const messages = await openai.beta.threads.messages.list(thread.id);
+    const responseMessage = messages.data[0];
+    const atsResponseText = responseMessage.content[0]?.text?.value?.trim() || "";
 
-    const responseData = await response.json();
+    console.log("📝 ATS Raw response length:", atsResponseText.length);
+    console.log("📄 ATS Full raw response:", atsResponseText);
 
-    // Extract text from the /v1/responses format
-    const responseText =
-      responseData.output?.[0]?.content?.[0]?.text?.trim() || "";
-
-    console.log("📝 ATS analysis response length:", responseText.length);
-    console.log("📄 ATS analysis response:", responseText);
-
-    if (!responseText || responseText.length === 0) {
-      console.log("❌ Empty ATS analysis response from OpenAI");
-      throw new Error("Empty ATS analysis response from OpenAI API");
+    if (!atsResponseText || atsResponseText.length === 0) {
+      console.log("❌ Empty response from OpenAI ATS analysis");
+      throw new Error("Empty response from OpenAI API");
     }
 
-    // Clean up the response
-    console.log("🧹 Cleaning ATS analysis response format...");
-    let cleanedResponse = responseText;
+    // Step 13: Cleanup - Delete assistant and vector store
+    console.log("🧹 Cleaning up ATS resources...");
+    try {
+      await openai.beta.assistants.delete(assistant.id);
+      await openai.vectorStores.delete(vectorStore.id);
+      await openai.files.delete(uploadedFile.id);
+      console.log("✅ ATS Cleanup completed");
+    } catch (cleanupError) {
+      console.warn("⚠️ ATS Cleanup warning:", cleanupError.message);
+    }
+
+    // Step 14: Clean up the ATS response
+    console.log("🧹 Cleaning ATS response format...");
+    let cleanedResponse = atsResponseText;
     if (cleanedResponse.startsWith("```json")) {
       console.log("🔍 Detected markdown code block, removing...");
       cleanedResponse = cleanedResponse

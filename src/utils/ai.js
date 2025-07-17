@@ -75,7 +75,7 @@ export async function parseResumeFromUpload(fileUrl) {
     }
 
     if (!data.success) {
-      throw new Error(data.error || "Failed to parse resume");
+      throw new Error(data.error || data.details || "Failed to parse resume");
     }
 
     return data.data;

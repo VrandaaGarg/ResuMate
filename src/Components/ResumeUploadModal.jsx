@@ -61,9 +61,9 @@ const transformParsedDataToResumeFormat = (parsedData) => {
         parsedData.education?.[0]?.duration?.split("-")?.[1]?.trim() || "",
       cgpa:
         parsedData.education?.[0]?.gpa || parsedData.education?.[0]?.cgpa || "",
-      school: "",
-      tenth: "",
-      twelfth: "",
+      school: parsedData.education?.[0]?.school || "",
+      tenth: parsedData.education?.[0]?.tenth || "",
+      twelfth: parsedData.education?.[0]?.twelfth || "",
     },
     achievements:
       parsedData.achievements?.map((ach) => ({
