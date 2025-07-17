@@ -172,12 +172,14 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
     }
   };
 
-  // Handle option selection
+  // Handle option selection - only allow one option at a time
   const handleOptionToggle = (option) => {
-    setSelectedOptions((prev) => ({
-      ...prev,
-      [option]: !prev[option],
-    }));
+    setSelectedOptions({
+      createResume: false,
+      checkATS: false,
+      jobMatching: false,
+      [option]: true, // Only the selected option will be true
+    });
   };
 
   // Process selected options
@@ -189,7 +191,7 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
 
     const selectedCount = Object.values(selectedOptions).filter(Boolean).length;
     if (selectedCount === 0) {
-      toast.error("Please select at least one option");
+      toast.error("Please select an option");
       return;
     }
 
@@ -205,25 +207,43 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
       if (selectedOptions.createResume) {
         setProcessingStep("Creating resume...");
         const parsedData = await parseResumeFromUpload(uploadedFile.fileUrl);
+        console.log("Parsed data from AI:", parsedData);
+
         const transformedData = transformParsedDataToResumeFormat(parsedData);
+        console.log("Transformed data:", transformedData);
+
+        // Ensure we have a name, use a fallback if needed
+        if (!transformedData.name || transformedData.name.trim() === "") {
+          transformedData.name = "User";
+        }
+
         await createResume(transformedData);
+
+        // Update the context with the new resume data
+        setResume(transformedData);
+
         toast.success("Resume created successfully!");
+
+        // Close modal and navigate to resume page
+        onClose();
+        navigate("/resume");
       }
 
       // Process ATS Check
-      if (selectedOptions.checkATS) {
+      else if (selectedOptions.checkATS) {
         setProcessingStep("Checking ATS compatibility...");
         const atsData = await checkATSFromUpload(uploadedFile.fileUrl);
         toast.success(`ATS Score: ${atsData.atsScore}/100`);
 
-        // Navigate to ATS checker with results
+        // Close modal and navigate to ATS checker with results
+        onClose();
         navigate("/ats-checker", {
           state: { atsResult: atsData, uploadedFile },
         });
       }
 
       // Process Job Matching
-      if (selectedOptions.jobMatching) {
+      else if (selectedOptions.jobMatching) {
         setProcessingStep("Analyzing job fit...");
         const jobFitResult = await matchJDFromFile(
           uploadedFile.fileUrl,
@@ -231,13 +251,13 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
           "concise"
         );
         toast.success("Job fit analysis complete!");
+
+        // Close modal and navigate to job fit analyzer
+        onClose();
         navigate("/job-fit-analyzer", {
           state: { aiResult: jobFitResult, uploadedFile },
         });
       }
-
-      // Close modal after processing
-      onClose();
     } catch (error) {
       console.error("Processing error:", error);
       toast.error("Failed to process resume. Please try again.");
