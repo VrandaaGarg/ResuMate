@@ -770,24 +770,26 @@ export async function jobMatchingFromFile(fileUrl, jobDescription, style) {
     );
 
     const sanitize = (s) =>
-    typeof s === "string"
-      ? s
-          .replace(/[\n\r]+/g, " ")
-          .replace(/\s+/g, " ")
-          .trim()
-      : "";
+      typeof s === "string"
+        ? s
+            .replace(/[\n\r]+/g, " ")
+            .replace(/\s+/g, " ")
+            .trim()
+        : "";
 
     // Step 6: Job matching prompt
     const jobFitPrompt = `You are an expert resume evaluator.\n\nYour task is to critically evaluate how well the given resume (from the attached file) aligns with the provided job description. Return a match score and structured feedback to help the candidate optimize their resume and career alignment.\n\n🧠 Response Expectations:\n- Be **highly specific** to the actual content in the resume and job description.\n- DO NOT fabricate skills or numbers not mentioned in the resume.\n- DO NOT output anything outside the JSON block.\n- DO NOT use markdown, HTML, or any formatting.\n- Highlight if any point in resume lacks **quantifiable impact** or **measurable achievements** (e.g., % growth, revenue impact, user growth).\n- Include **examples** in each section (strengths, weaknesses, suggestions) to make your feedback practical and relatable.\n-Add only the matched skills from the job description which genuinely are needed in the job not all skills in the resume.\n-Also be straightforward about missing skills that are essential for the job.\n-In the end give notes in a friendly manner to encourage user and tell him his strong points and what to focus on next\n\n🎯 Your tone must be:\n${
-  sanitize(style) === "elaborative"
-    ? "Highly elaborative, well-reasoned, descriptive, and backed by examples for clarity."
-    : "Professional and descriptive. Avoid over-summarizing."
-}\n\n📦 Return ONLY a valid raw JSON object with the following structure:\n{\n  "score": 85,\n  "strengths": [\n    "Strong React-based frontend project: 'SmartShelf' demonstrates modern UI skills.",\n    "Clear achievement: 'Improved API response time by 40% using caching'."\n  ],\n  "weaknesses": [\n    "Lacks quantifiable metrics in most achievements (e.g., % increase, revenue impact).",\n    "No mention of CI/CD or deployment tools which are expected in the job description."
+      sanitize(style) === "elaborative"
+        ? "Highly elaborative, well-reasoned, descriptive, and backed by examples for clarity."
+        : "Professional and descriptive. Avoid over-summarizing."
+    }\n\n📦 Return ONLY a valid raw JSON object with the following structure:\n{\n  "score": 85,\n  "strengths": [\n    "Strong React-based frontend project: 'SmartShelf' demonstrates modern UI skills.",\n    "Clear achievement: 'Improved API response time by 40% using caching'."\n  ],\n  "weaknesses": [\n    "Lacks quantifiable metrics in most achievements (e.g., % increase, revenue impact).",\n    "No mention of CI/CD or deployment tools which are expected in the job description."
   ],\n  "suggestionsToAlignBetter": [\n    "Add concrete metrics in projects and experience (e.g., user count, performance gain).",\n    "Mention cloud tools or backend APIs if you’ve used them even slightly."
   ],\n  "skillGapAnalysis": {\n    "matchedSkills": ["React", "Tailwind", "Git"],\n    "missingSkills": [\n      "Docker and Kubernetes",\n      "Unit testing frameworks like Jest or Mocha"
     ],\n    "recommendations": [\n      "Start with basic Docker usage in personal projects.",\n      "Take a short course on automated testing and integrate with one project.",\n      "Explore cloud deployment using Vercel, Netlify, or AWS for hands-on experience."
     ]\n  },\n  "notes":[\n    "you have a solid foundation in React and frontend development.",\n    "Focus on enhancing backend and deployment skills to match the job requirements.",\n    "Consider contributing to open source to gain experience with CI/CD tools."
-  ]\n}\n\n---\n\n📝 Job Description:\n${sanitize(jobDescription)}\n\n---\nThe user's resume is in the attached file. Analyze it and provide the job fit analysis.`;
+  ]\n}\n\n---\n\n📝 Job Description:\n${sanitize(
+    jobDescription
+  )}\n\n---\nThe user's resume is in the attached file. Analyze it and provide the job fit analysis.`;
 
     // Step 7: Make request to /v1/responses endpoint
     console.log("🤖 Analyzing resume for Job Fit...");
@@ -886,6 +888,8 @@ export async function jobMatchingFromFile(fileUrl, jobDescription, style) {
     }
   } catch (error) {
     console.error("❌ Job Fit analysis error:", error);
-    throw new Error(`Failed to analyze Job Fit compatibility: ${error.message}`);
+    throw new Error(
+      `Failed to analyze Job Fit compatibility: ${error.message}`
+    );
   }
 }
