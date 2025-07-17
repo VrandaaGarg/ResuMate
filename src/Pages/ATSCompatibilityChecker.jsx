@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useResumeData } from "../Contexts/ResumeDataContext";
+import { useLocation } from "react-router-dom";
 import { atsScore } from "../utils/ai";
 import {
   FaRobot,
@@ -108,25 +109,45 @@ const LoadingScreen = () => (
 
 export default function ATSCompatibilityChecker() {
   const { resume } = useResumeData();
+  const location = useLocation();
   const [currentStep, setCurrentStep] = useState("intro"); // "intro", "loading", "result"
   const [atsResult, setAtsResult] = useState(() => {
+    // Check if ATS result was passed from upload page
+    if (location.state?.atsResult) {
+      return location.state.atsResult;
+    }
+
+    // Otherwise check localStorage
     const saved = localStorage.getItem("atsResult");
     if (saved) {
-      // If there's a saved result, start at the result step
-      // This might need adjustment if we always want to start at intro
-      // For now, let's assume if 'saved' exists, we show results.
-      // setCurrentStep("result"); // This line causes issues with initial state setting.
       return JSON.parse(saved);
     }
     return null;
   });
+  const [uploadedFile, setUploadedFile] = useState(
+    location.state?.uploadedFile || null
+  );
 
   useEffect(() => {
-    if (atsResult) {
+    // If ATS result was passed from upload page, go directly to result
+    if (location.state?.atsResult) {
+      setCurrentStep("result");
+      localStorage.setItem(
+        "atsResult",
+        JSON.stringify(location.state.atsResult)
+      );
+    } else if (atsResult) {
       localStorage.setItem("atsResult", JSON.stringify(atsResult));
-      setCurrentStep("result"); // Transition to result step when atsResult is set
+      setCurrentStep("result");
     }
-  }, [atsResult]);
+  }, [atsResult, location.state]);
+
+  // Set initial step based on whether we have uploaded file data
+  useEffect(() => {
+    if (location.state?.atsResult && location.state?.uploadedFile) {
+      setCurrentStep("result");
+    }
+  }, [location.state]);
 
   // Ensure currentStep is 'result' if atsResult exists on mount
   useEffect(() => {
@@ -257,6 +278,22 @@ export default function ATSCompatibilityChecker() {
             transition={{ duration: 0.8 }}
             className="relative z-10 max-w-7xl mx-auto"
           >
+            {/* Header for uploaded file analysis */}
+            {uploadedFile && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-center mb-6"
+              >
+                <div className="inline-flex items-center gap-2 bg-blue-50/80 backdrop-blur-sm border border-blue-200/60 rounded-full px-4 py-2 mb-3 shadow-lg">
+                  <FaFileAlt className="text-blue-600" />
+                  <span className="text-blue-800 font-medium text-sm">
+                    Analysis from uploaded file: {uploadedFile.fileName}
+                  </span>
+                </div>
+              </motion.div>
+            )}
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}

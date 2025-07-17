@@ -4,6 +4,9 @@ import {
   getDoc,
   updateDoc,
   serverTimestamp,
+  collection,
+  getDocs,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
@@ -142,5 +145,43 @@ export const getStandardSettings = async () => {
 
   const ref = doc(db, "users", user.uid, "standardSettings", "data");
   const snapshot = await getDoc(ref);
+  return snapshot.exists() ? snapshot.data() : null;
+};
+
+// File upload management functions
+export const saveUploadedFile = async (fileData) => {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const fileRef = doc(db, "users", user.uid, "uploadedFiles", fileData.fileId);
+  await setDoc(fileRef, {
+    ...fileData,
+    createdOn: serverTimestamp(),
+  });
+};
+
+export const getUserUploadedFiles = async () => {
+  const user = auth.currentUser;
+  if (!user) return [];
+
+  const filesRef = collection(db, "users", user.uid, "uploadedFiles");
+  const snapshot = await getDocs(filesRef);
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+};
+
+export const deleteUploadedFile = async (fileId) => {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const fileRef = doc(db, "users", user.uid, "uploadedFiles", fileId);
+  await deleteDoc(fileRef);
+};
+
+export const getUploadedFile = async (fileId) => {
+  const user = auth.currentUser;
+  if (!user) return null;
+
+  const fileRef = doc(db, "users", user.uid, "uploadedFiles", fileId);
+  const snapshot = await getDoc(fileRef);
   return snapshot.exists() ? snapshot.data() : null;
 };

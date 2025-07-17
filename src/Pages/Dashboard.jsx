@@ -38,6 +38,14 @@ export default function Dashboard() {
       bgColor: "from-blue-50 to-cyan-50",
     },
     {
+      title: "Upload Existing Resume",
+      description: "Upload your existing resume and enhance it with AI",
+      icon: FaUpload,
+      link: "/upload-resume",
+      color: "from-yellow-500 to-orange-400",
+      bgColor: "from-yellow-50 to-orange-50",
+    },
+    {
       title: "ATS Compatibility Check",
       description: "Ensure your resume passes ATS filters",
       icon: FaRobot,
@@ -123,7 +131,7 @@ export default function Dashboard() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="grid md:grid-cols-3 gap-4 mb-8"
+          className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
         >
           {quickActions.map((action, index) => (
             <motion.div

@@ -3,6 +3,8 @@ import express from "express";
 import { enhanceBullet } from "../config/openai.js";
 import { jobMatching } from "../config/openai.js";
 import { checkATSCompatibility } from "../config/openai.js";
+import { parseResumeFromFile } from "../config/openai.js";
+import { checkATSFromFile } from "../config/openai.js";
 
 const router = express.Router();
 
@@ -53,6 +55,44 @@ router.post("/ats-score", async (req, res) => {
   } catch (err) {
     console.error("AI ATS Scoring Error:", err.message);
     return res.status(500).json({ error: "Failed to evaluate ATS score" });
+  }
+});
+
+router.post("/parse-resume", async (req, res) => {
+  const { fileUrl } = req.body;
+
+  if (!fileUrl) {
+    return res.status(400).json({ error: "File URL is required" });
+  }
+
+  try {
+    const parsedResume = await parseResumeFromFile(fileUrl);
+    return res.json({ success: true, data: parsedResume });
+  } catch (err) {
+    console.error("Resume Parsing Error:", err.message);
+    return res.status(500).json({
+      error: "Failed to parse resume",
+      details: err.message,
+    });
+  }
+});
+
+router.post("/ats-check-file", async (req, res) => {
+  const { fileUrl } = req.body;
+
+  if (!fileUrl) {
+    return res.status(400).json({ error: "File URL is required" });
+  }
+
+  try {
+    const atsResult = await checkATSFromFile(fileUrl);
+    return res.json({ success: true, data: atsResult });
+  } catch (err) {
+    console.error("ATS File Analysis Error:", err.message);
+    return res.status(500).json({
+      error: "Failed to analyze ATS compatibility",
+      details: err.message,
+    });
   }
 });
 

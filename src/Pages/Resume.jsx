@@ -5,8 +5,10 @@ import SidebarTemplate from "../Components/Templates/SidebarTemplate";
 import { useEditResume } from "../Contexts/EditResumeContext";
 import { useResumeData } from "../Contexts/ResumeDataContext";
 import { useClassicSetting } from "../Contexts/ClassicSettingContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
+import { parseResumeFromUpload } from "../utils/ai";
+import toast from "react-hot-toast";
 import {
   FaUserEdit,
   FaFileAlt,

@@ -5,6 +5,7 @@ import {
   FaCogs,
   FaChartLine,
   FaRobot,
+  FaUpload,
 } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import classNames from "classnames";
@@ -25,6 +26,12 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
       icon: FaFileAlt,
       label: "Edit Resume",
       gradient: "from-green-500 to-emerald-400",
+    },
+    {
+      path: "/upload-resume",
+      icon: FaUpload,
+      label: "Upload Resume",
+      gradient: "from-yellow-500 to-orange-400",
     },
     {
       path: "/resume",

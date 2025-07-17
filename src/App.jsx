@@ -16,6 +16,7 @@ import Templates from "./Pages/Templates";
 import ForgotPassword from "./Pages/ForgetPassword";
 import JobFitAnalyzer from "./Pages/JobFitAnalyzer";
 import ATSCompatibilityChecker from "./Pages/ATSCompatibilityChecker";
+import ResumeUpload from "./Pages/ResumeUpload";
 
 const App = () => {
   return (
@@ -43,6 +44,7 @@ const App = () => {
         <Route path="/resume" element={<Resume />} />
         <Route path="/job-fit-analyzer" element={<JobFitAnalyzer />} />
         <Route path="/ats-checker" element={<ATSCompatibilityChecker />} />
+        <Route path="/upload-resume" element={<ResumeUpload />} />
 
         <Route path="/templates" element={<Templates />} />
       </Route>
