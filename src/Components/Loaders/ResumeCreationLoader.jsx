@@ -40,14 +40,14 @@ const ResumeCreationLoader = ({ isVisible }) => {
       icon: FaGraduationCap,
       title: "Organizing Education",
       description: "Organizing educational background and achievements",
-      duration: 2000,
+      duration: 3000,
     },
     {
       id: 5,
       icon: FaCheckCircle,
       title: "Finalizing Resume",
       description: "Creating your professional resume format",
-      duration: 1500,
+      duration: 3500,
     },
   ];
 

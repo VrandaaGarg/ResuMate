@@ -4,7 +4,14 @@ import { useEditResume } from "../../Contexts/EditResumeContext";
 import { BsBorderWidth, BsBoundingBoxCircles } from "react-icons/bs";
 import { TbBorderCornerPill } from "react-icons/tb";
 import { BiShowAlt } from "react-icons/bi";
-import { FaEye, FaEyeSlash, FaFillDrip, FaFont, FaLink } from "react-icons/fa";
+import {
+  FaExpand,
+  FaEye,
+  FaEyeSlash,
+  FaFillDrip,
+  FaFont,
+  FaLink,
+} from "react-icons/fa";
 import { IoReorderThreeSharp } from "react-icons/io5";
 import DOMPurify from "dompurify";
 import { CgSpaceBetweenV } from "react-icons/cg";
@@ -1157,6 +1164,69 @@ const StandardTemplate = ({ resume }) => {
             )}
           </div>
 
+          {/* Padding Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() =>
+                setOpenDropdown((prev) =>
+                  prev === "padding" ? null : "padding"
+                )
+              }
+              title="Margin"
+              className={`md:p-2 rounded-md text-center align-middle hover:bg-gray-100 transition ${
+                openDropdown === "padding" ? "bg-gray-100" : ""
+              }`}
+            >
+              {/* Any padding or spacing icon, e.g., FaExpandArrowsAlt */}
+              <FaExpand className="text-gray-700 text-sm md:text-lg" />
+            </button>
+
+            {openDropdown === "padding" && (
+              <div className="absolute max-h-48 overflow-auto left-1/2 -translate-x-1/2 mt-2 z-50 w-56 bg-white border border-gray-200 rounded-lg shadow-lg p-3">
+                <p className="text-xs md:text-sm font-semibold text-gray-700 mb-1.5 md:mb-3 text-center">
+                  Select Padding
+                </p>
+
+                <ul className="flex flex-col gap-1 max-h-60 pr-1">
+                  {[
+                    { label: "None", value: "0px" },
+                    { label: "Extra Small", value: "2px" },
+                    { label: "Small", value: "4px" },
+                    { label: "Normal", value: "8px" },
+                    { label: "Medium", value: "12px" },
+                    { label: "Large", value: "16px" },
+                    { label: "Extra Large", value: "20px" },
+                    { label: "Huge", value: "24px" },
+                    { label: "Massive", value: "28px" },
+                    { label: "Giant", value: "32px" },
+                    { label: "Colossal", value: "36px" },
+                    { label: "Titanic", value: "40px" },
+                    { label: "Epic", value: "44px" },
+                  ].map((p) => (
+                    <li key={p.value}>
+                      <button
+                        onClick={() => {
+                          setStandardSettings((prev) => ({
+                            ...prev,
+                            padding: p.value,
+                          }));
+                          setOpenDropdown(false);
+                        }}
+                        className={`px-3 py-1.5 text-left w-full rounded cursor-pointer hover:bg-sky-50 transition ${
+                          standardSettings.padding === p.value
+                            ? "bg-sky-100 text-sky-700 font-semibold"
+                            : ""
+                        }`}
+                      >
+                        {p.label}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+
           {/* Top Border Width Dropdown */}
           <div className="relative">
             <button
@@ -1576,7 +1646,7 @@ const StandardTemplate = ({ resume }) => {
           style={{
             fontFamily: standardSettings.fontFamily || "Inter",
             backgroundColor: standardSettings.backgroundColor || "#ffffff",
-
+            padding: standardSettings.padding || "15px",
             flexDirection: "column",
           }}
         >
