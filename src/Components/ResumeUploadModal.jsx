@@ -20,6 +20,9 @@ import {
   matchJDFromFile,
 } from "../utils/ai";
 import { useResumeData } from "../Contexts/ResumeDataContext";
+import ResumeCreationLoader from "./Loaders/ResumeCreationLoader";
+import ATSCheckingLoader from "./Loaders/ATSCheckingLoader";
+import JobMatchingLoader from "./Loaders/JobMatchingLoader";
 
 // Transform OpenAI parsed data to match the expected resume structure
 const transformParsedDataToResumeFormat = (parsedData) => {
@@ -92,6 +95,9 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
   const [jobDescription, setJobDescription] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [processingStep, setProcessingStep] = useState("");
+  const [showResumeLoader, setShowResumeLoader] = useState(false);
+  const [showATSLoader, setShowATSLoader] = useState(false);
+  const [showJobMatchLoader, setShowJobMatchLoader] = useState(false);
 
   const navigate = useNavigate();
   const { setResume } = useResumeData();
@@ -205,7 +211,9 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
     try {
       // Process Create Resume
       if (selectedOptions.createResume) {
+        setShowResumeLoader(true);
         setProcessingStep("Creating resume...");
+
         const parsedData = await parseResumeFromUpload(uploadedFile.fileUrl);
         console.log("Parsed data from AI:", parsedData);
 
@@ -222,45 +230,68 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
         // Update the context with the new resume data
         setResume(transformedData);
 
-        toast.success("Resume created successfully!");
+        // Wait a bit for the loader to complete its animation
+        setTimeout(() => {
+          setShowResumeLoader(false);
+          toast.success("Resume created successfully!");
 
-        // Close modal and navigate to resume page
-        onClose();
-        navigate("/resume");
+          // Close modal and navigate to resume page
+          onClose();
+          navigate("/resume");
+        }, 1000);
       }
 
       // Process ATS Check
       else if (selectedOptions.checkATS) {
+        setShowATSLoader(true);
         setProcessingStep("Checking ATS compatibility...");
-        const atsData = await checkATSFromUpload(uploadedFile.fileUrl);
-        toast.success(`ATS Score: ${atsData.atsScore}/100`);
 
-        // Close modal and navigate to ATS checker with results
-        onClose();
-        navigate("/ats-checker", {
-          state: { atsResult: atsData, uploadedFile },
-        });
+        const atsData = await checkATSFromUpload(uploadedFile.fileUrl);
+
+        // Wait a bit for the loader to complete its animation
+        setTimeout(() => {
+          setShowATSLoader(false);
+          toast.success(`ATS Score: ${atsData.atsScore}/100`);
+
+          // Close modal and navigate to ATS checker with results
+          onClose();
+          navigate("/ats-checker", {
+            state: { atsResult: atsData, uploadedFile },
+          });
+        }, 1000);
       }
 
       // Process Job Matching
       else if (selectedOptions.jobMatching) {
+        setShowJobMatchLoader(true);
         setProcessingStep("Analyzing job fit...");
+
         const jobFitResult = await matchJDFromFile(
           uploadedFile.fileUrl,
           jobDescription,
           "concise"
         );
-        toast.success("Job fit analysis complete!");
 
-        // Close modal and navigate to job fit analyzer
-        onClose();
-        navigate("/job-fit-analyzer", {
-          state: { aiResult: jobFitResult, uploadedFile },
-        });
+        // Wait a bit for the loader to complete its animation
+        setTimeout(() => {
+          setShowJobMatchLoader(false);
+          toast.success("Job fit analysis complete!");
+
+          // Close modal and navigate to job fit analyzer
+          onClose();
+          navigate("/job-fit-analyzer", {
+            state: { aiResult: jobFitResult, uploadedFile },
+          });
+        }, 1000);
       }
     } catch (error) {
       console.error("Processing error:", error);
       toast.error("Failed to process resume. Please try again.");
+
+      // Hide all loaders on error
+      setShowResumeLoader(false);
+      setShowATSLoader(false);
+      setShowJobMatchLoader(false);
     } finally {
       setIsProcessing(false);
       setProcessingStep("");
@@ -278,6 +309,9 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
     setJobDescription("");
     setIsProcessing(false);
     setProcessingStep("");
+    setShowResumeLoader(false);
+    setShowATSLoader(false);
+    setShowJobMatchLoader(false);
     onClose();
   };
 
@@ -475,6 +509,15 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
           )}
         </motion.div>
       </motion.div>
+
+      {/* Loaders - Only render the active one */}
+      {showResumeLoader && (
+        <ResumeCreationLoader isVisible={showResumeLoader} />
+      )}
+      {showATSLoader && <ATSCheckingLoader isVisible={showATSLoader} />}
+      {showJobMatchLoader && (
+        <JobMatchingLoader isVisible={showJobMatchLoader} />
+      )}
     </AnimatePresence>
   );
 };
