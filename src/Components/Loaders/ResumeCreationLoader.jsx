@@ -215,7 +215,7 @@ const ResumeCreationLoader = ({ isVisible }) => {
           <div className="flex justify-center  mt-2 md:mt-6 space-x-1 relative z-10">
             {[0, 1, 2].map((i) => (
               <motion.div
-                key={i}
+                key={`resume-loader-dot-${i}`}
                 animate={{
                   scale: [1, 1.2, 1],
                   opacity: [0.5, 1, 0.5],

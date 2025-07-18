@@ -221,7 +221,7 @@ const ATSCheckingLoader = ({ isVisible }) => {
           <div className="flex justify-center mt-3 md:mt-6 space-x-1 relative z-10">
             {[0, 1, 2].map((i) => (
               <motion.div
-                key={i}
+                key={`ats-loader-dot-${i}`}
                 animate={{
                   scale: [1, 1.2, 1],
                   opacity: [0.5, 1, 0.5],

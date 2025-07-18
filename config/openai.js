@@ -28,9 +28,10 @@ Return ONLY the enhanced version - no explanations, quotes, or additional text.
     model: "gpt-4.1-mini-2025-04-14",
     temperature: 0.4,
     messages: [
-      { 
-        role: "system", 
-        content: "You are an expert resume writer specializing in ATS optimization and impactful professional statements. Focus on creating compelling, keyword-rich content that showcases achievements and measurable results." 
+      {
+        role: "system",
+        content:
+          "You are an expert resume writer specializing in ATS optimization and impactful professional statements. Focus on creating compelling, keyword-rich content that showcases achievements and measurable results.",
       },
       { role: "user", content: prompt },
     ],
@@ -161,7 +162,11 @@ Achievements: ${cleanResume.achievements.join("; ")}
     model: "gpt-4.1-mini-2025-04-14",
     temperature: 0.7,
     messages: [
-      { role: "system", content: "You are an expert resume evaluator and career advisor specializing in job-resume alignment analysis." },
+      {
+        role: "system",
+        content:
+          "You are an expert resume evaluator and career advisor specializing in job-resume alignment analysis.",
+      },
       { role: "user", content: prompt },
     ],
     max_tokens: style === "elaborative" ? 1200 : 800,
@@ -264,7 +269,11 @@ Achievements: ${(resume.achievements || [])
     model: "gpt-4.1-mini-2025-04-14",
     temperature: 0.5,
     messages: [
-      { role: "system", content: "You are an expert ATS resume evaluator and optimization specialist." },
+      {
+        role: "system",
+        content:
+          "You are an expert ATS resume evaluator and optimization specialist.",
+      },
       { role: "user", content: prompt },
     ],
     max_tokens: 1200,
@@ -449,7 +458,8 @@ Return ONLY the JSON object with actual data from the resume, no additional text
       messages: [
         {
           role: "user",
-          content: "Please analyze the uploaded resume file and extract all information according to the JSON format specified in your instructions. Return only the JSON object with no additional text.",
+          content:
+            "Please analyze the uploaded resume file and extract all information according to the JSON format specified in your instructions. Return only the JSON object with no additional text.",
         },
       ],
     });
@@ -679,7 +689,8 @@ IMPORTANT:
       messages: [
         {
           role: "user",
-          content: "Please analyze the uploaded resume file for ATS compatibility and provide the analysis according to the JSON format specified in your instructions. Return only the JSON object with no additional text.",
+          content:
+            "Please analyze the uploaded resume file for ATS compatibility and provide the analysis according to the JSON format specified in your instructions. Return only the JSON object with no additional text.",
         },
       ],
     });
@@ -701,7 +712,8 @@ IMPORTANT:
     // Step 12: Get the response
     const messages = await openai.beta.threads.messages.list(thread.id);
     const responseMessage = messages.data[0];
-    const atsResponseText = responseMessage.content[0]?.text?.value?.trim() || "";
+    const atsResponseText =
+      responseMessage.content[0]?.text?.value?.trim() || "";
 
     console.log("📝 ATS Raw response length:", atsResponseText.length);
     console.log("📄 ATS Full raw response:", atsResponseText);
@@ -806,10 +818,10 @@ export async function jobMatchingFromFile(fileUrl, jobDescription, style) {
       type: contentType,
     });
 
-    // Step 5: Upload file to OpenAI for user_data purpose
+    // Step 5: Upload file to OpenAI for assistants purpose
     const uploadedFile = await openai.files.create({
       file: file,
-      purpose: "user_data",
+      purpose: "assistants",
     });
 
     console.log(
@@ -839,74 +851,86 @@ export async function jobMatchingFromFile(fileUrl, jobDescription, style) {
     jobDescription
   )}\n\n---\nThe user's resume is in the attached file. Analyze it and provide the job fit analysis.`;
 
-    // Step 7: Make request to /v1/responses endpoint
-    console.log("🤖 Analyzing resume for Job Fit...");
-
-    const response = await fetch("https://api.openai.com/v1/responses", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-4.1",
-        input: [
-          {
-            role: "user",
-            content: [
-              {
-                type: "input_file",
-                file_id: uploadedFile.id,
-              },
-              {
-                type: "input_text",
-                text: jobFitPrompt,
-              },
-            ],
-          },
-        ],
-      }),
+    // Step 7: Create an Assistant with file_search tool for Job Fit analysis
+    console.log("🤖 Creating temporary assistant for Job Fit analysis...");
+    const assistant = await openai.beta.assistants.create({
+      name: "Job Fit Analyzer",
+      instructions: `You are an expert job fit analyst. ${jobFitPrompt}`,
+      model: "gpt-4o-mini",
+      tools: [{ type: "file_search" }],
     });
 
-    console.log(
-      "📡 Job Fit Analysis response status:",
-      response.status,
-      response.statusText
-    );
+    console.log("✅ Job Fit Assistant created:", assistant.id);
 
-    if (!response.ok) {
-      console.log("❌ OpenAI API Error - Status:", response.status);
-      const errorData = await response.json();
-      console.log("❌ Error details:", errorData);
+    // Step 8: Create a vector store and add the file
+    console.log("📚 Creating vector store for Job Fit analysis...");
+    const vectorStore = await openai.vectorStores.create({
+      name: "Job Fit Analysis",
+      file_ids: [uploadedFile.id],
+    });
+
+    console.log("✅ Job Fit Vector store created:", vectorStore.id);
+
+    // Step 9: Update assistant with vector store
+    await openai.beta.assistants.update(assistant.id, {
+      tool_resources: {
+        file_search: {
+          vector_store_ids: [vectorStore.id],
+        },
+      },
+    });
+
+    // Step 10: Create a thread and message
+    console.log("💬 Creating thread and message for Job Fit analysis...");
+    const thread = await openai.beta.threads.create({
+      messages: [
+        {
+          role: "user",
+          content:
+            "Please analyze the uploaded resume file against the job description provided in your instructions and provide the job fit analysis according to the JSON format specified. Return only the JSON object with no additional text.",
+        },
+      ],
+    });
+
+    console.log("✅ Job Fit Thread created:", thread.id);
+
+    // Step 11: Run the assistant
+    console.log("🏃 Running Job Fit assistant...");
+    const run = await openai.beta.threads.runs.createAndPoll(thread.id, {
+      assistant_id: assistant.id,
+    });
+
+    console.log("✅ Job Fit Run completed with status:", run.status);
+
+    if (run.status !== "completed") {
       throw new Error(
-        `OpenAI API Error: ${errorData.error?.message || response.statusText}`
+        `Job Fit Assistant run failed with status: ${run.status}`
       );
     }
 
-    console.log("✅ Received Job Fit analysis from OpenAI");
+    // Step 12: Get the response
+    const messages = await openai.beta.threads.messages.list(thread.id);
+    const responseMessage = messages.data[0];
+    const jobFitResponseText =
+      responseMessage.content[0]?.text?.value?.trim() || "";
 
-    const responseData = await response.json();
+    console.log("📝 Job Fit Raw response length:", jobFitResponseText.length);
+    console.log("📄 Job Fit Full raw response:", jobFitResponseText);
 
-    // Extract text from the /v1/responses format
-    const responseText =
-      responseData.output?.[0]?.content?.[0]?.text?.trim() || "";
-
-    console.log("📝 Job Fit analysis response length:", responseText.length);
-    console.log("📄 Job Fit analysis response:", responseText);
-
-    if (!responseText || responseText.length === 0) {
+    if (!jobFitResponseText || jobFitResponseText.length === 0) {
       console.log("❌ Empty Job Fit analysis response from OpenAI");
       throw new Error("Empty Job Fit analysis response from OpenAI API");
     }
 
     // Clean up the response
     console.log("🧹 Cleaning Job Fit analysis response format...");
-    let cleanedResponse = responseText;
+    let cleanedResponse = jobFitResponseText.trim();
     if (cleanedResponse.startsWith("```json")) {
       console.log("🔍 Detected markdown code block, removing...");
       cleanedResponse = cleanedResponse
         .replace(/```json\n?/, "")
-        .replace(/\n?```$/, "");
+        .replace(/\n?```$/, "")
+        .trim();
     }
 
     console.log("🔄 Parsing Job Fit analysis JSON response...");
@@ -916,10 +940,29 @@ export async function jobMatchingFromFile(fileUrl, jobDescription, style) {
       console.log("✅ Successfully parsed Job Fit analysis JSON response");
       console.log("📊 Job Fit Score:", jobFitData.score);
 
-      // Cleanup: Delete the uploaded file
-      console.log("🧹 Cleaning up - deleting uploaded file:", uploadedFile.id);
-      await openai.files.del(uploadedFile.id);
-      console.log("✅ File deleted successfully");
+      // Cleanup: Delete the assistant, vector store, and uploaded file
+      console.log("🧹 Cleaning up resources...");
+
+      try {
+        await openai.beta.assistants.del(assistant.id);
+        console.log("✅ Assistant deleted successfully");
+      } catch (cleanupError) {
+        console.log("⚠️ Failed to delete assistant:", cleanupError.message);
+      }
+
+      try {
+        await openai.vectorStores.del(vectorStore.id);
+        console.log("✅ Vector store deleted successfully");
+      } catch (cleanupError) {
+        console.log("⚠️ Failed to delete vector store:", cleanupError.message);
+      }
+
+      try {
+        await openai.files.del(uploadedFile.id);
+        console.log("✅ File deleted successfully");
+      } catch (cleanupError) {
+        console.log("⚠️ Failed to delete file:", cleanupError.message);
+      }
 
       console.log("🎉 Job Fit analysis complete!");
       return jobFitData;

@@ -361,10 +361,14 @@ const PdfActionsModal = ({ isOpen, onClose, selectedResume }) => {
         </motion.div>
       </motion.div>
 
-      {/* Loaders */}
-      <ResumeCreationLoader isVisible={showResumeLoader} />
-      <ATSCheckingLoader isVisible={showATSLoader} />
-      <JobMatchingLoader isVisible={showJobMatchLoader} />
+      {/* Loaders - Only render the active one */}
+      {showResumeLoader && (
+        <ResumeCreationLoader isVisible={showResumeLoader} />
+      )}
+      {showATSLoader && <ATSCheckingLoader isVisible={showATSLoader} />}
+      {showJobMatchLoader && (
+        <JobMatchingLoader isVisible={showJobMatchLoader} />
+      )}
     </AnimatePresence>
   );
 };
