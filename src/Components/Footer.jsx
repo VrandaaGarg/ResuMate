@@ -7,7 +7,8 @@ import {
   FaTwitter,
   FaLinkedin,
 } from "react-icons/fa";
-import { SiGoogleforms } from "react-icons/si";
+import { FaXTwitter } from "react-icons/fa6";
+import { SiGoogleforms, SiPeerlist } from "react-icons/si";
 import { Link } from "react-router-dom";
 
 export default function Footer() {
@@ -19,9 +20,15 @@ export default function Footer() {
       href: "https://github.com/VrandaaGarg/ResuMate",
       label: "GitHub",
     },
-    { icon: FaTwitter, href: "#", label: "Twitter" },
-    { icon: FaLinkedin, href: "#", label: "LinkedIn" },
-    { icon: FaEnvelope, href: "mailto:connect@vrandacodz.xyz", label: "Email" },
+    { icon: FaXTwitter, href: "https://x.com/vranda_garg_", label: "Twitter" },
+
+    { icon: FaEnvelope, href: "mailto:resumate@vrandagarg.in", label: "Email" },
+
+    {
+      icon: SiPeerlist,
+      href: "https://peerlist.io/vrandagarg",
+      label: "Peerlist",
+    },
   ];
 
   return (
@@ -49,7 +56,7 @@ export default function Footer() {
                 >
                   <SiGoogleforms className="text-sm md:text-xl text-white" />
                 </motion.div>
-                <span className="text-lg md:text-xl font-bold bg-gradient-to-r from-sky-600 to-blue-600 bg-clip-text text-transparent">
+                <span className="text-lg md:text-2xl font-bold bg-gradient-to-r from-sky-600 to-blue-600 bg-clip-text text-transparent">
                   ResuMate
                 </span>
               </div>
@@ -102,7 +109,7 @@ export default function Footer() {
                     className="p-2 bg-gray-100 hover:bg-sky-100 border border-gray-200 hover:border-sky-200 rounded-lg text-gray-600 hover:text-sky-600 transition-all duration-300"
                     title={social.label}
                   >
-                    <social.icon className="text-[10px] md:text-sm" />
+                    <social.icon className="text-[14px] md:text-xl" />
                   </motion.a>
                 ))}
               </div>
@@ -111,7 +118,12 @@ export default function Footer() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => alert("Report Bug")}
+                onClick={() =>
+                  window.open(
+                    "mailto:resumate@vrandagarg.in?subject=Bug%20Report&body=Please%20describe%20the%20issue%20you%20encountered.",
+                    "_blank"
+                  )
+                }
                 className="flex items-center gap-2 px-3 py-1.5 bg-red-50 hover:bg-red-100 border border-red-200 text-red-600 rounded-lg text-[14px] md:text-sm font-medium transition-all duration-300"
               >
                 <FaBug size={12} />
@@ -147,7 +159,7 @@ export default function Footer() {
                   Terms
                 </Link>
                 <Link
-                  to="#"
+                  to="mailto:resumate@vrandagarg.in"
                   className="hover:text-sky-600 transition-colors duration-200"
                 >
                   Contact

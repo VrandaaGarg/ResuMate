@@ -18,6 +18,9 @@ import {
   matchJDFromFile,
 } from "../utils/ai";
 import { useResumeData } from "../Contexts/ResumeDataContext";
+import ResumeCreationLoader from "./Loaders/ResumeCreationLoader";
+import ATSCheckingLoader from "./Loaders/ATSCheckingLoader";
+import JobMatchingLoader from "./Loaders/JobMatchingLoader";
 
 // Transform OpenAI parsed data to match the expected resume structure
 const transformParsedDataToResumeFormat = (parsedData) => {
@@ -83,6 +86,9 @@ const PdfActionsModal = ({ isOpen, onClose, selectedResume }) => {
   const [jobDescription, setJobDescription] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [processingStep, setProcessingStep] = useState("");
+  const [showResumeLoader, setShowResumeLoader] = useState(false);
+  const [showATSLoader, setShowATSLoader] = useState(false);
+  const [showJobMatchLoader, setShowJobMatchLoader] = useState(false);
 
   const navigate = useNavigate();
   const { setResume } = useResumeData();
@@ -114,62 +120,87 @@ const PdfActionsModal = ({ isOpen, onClose, selectedResume }) => {
     try {
       // Process Create Resume
       if (selectedOption === "createResume") {
+        setShowResumeLoader(true);
         setProcessingStep("Creating resume...");
+
         const parsedData = await parseResumeFromUpload(selectedResume.fileUrl);
         console.log("Parsed data from AI:", parsedData);
-        
+
         const transformedData = transformParsedDataToResumeFormat(parsedData);
         console.log("Transformed data:", transformedData);
-        
+
         // Ensure we have a name, use a fallback if needed
         if (!transformedData.name || transformedData.name.trim() === "") {
           transformedData.name = "User";
         }
-        
+
         await createResume(transformedData);
 
         // Update the context with the new resume data
         setResume(transformedData);
 
-        toast.success("Resume created successfully!");
+        // Wait a bit for the loader to complete its animation
+        setTimeout(() => {
+          setShowResumeLoader(false);
+          toast.success("Resume created successfully!");
 
-        // Close modal and navigate to resume page
-        onClose();
-        navigate("/resume");
+          // Close modal and navigate to resume page
+          onClose();
+          navigate("/resume");
+        }, 1000);
       }
 
       // Process ATS Check
       else if (selectedOption === "checkATS") {
+        setShowATSLoader(true);
         setProcessingStep("Checking ATS compatibility...");
-        const atsData = await checkATSFromUpload(selectedResume.fileUrl);
-        toast.success(`ATS Score: ${atsData.atsScore}/100`);
 
-        // Close modal and navigate to ATS checker with results
-        onClose();
-        navigate("/ats-checker", {
-          state: { atsResult: atsData, uploadedFile: selectedResume },
-        });
+        const atsData = await checkATSFromUpload(selectedResume.fileUrl);
+
+        // Wait a bit for the loader to complete its animation
+        setTimeout(() => {
+          setShowATSLoader(false);
+          toast.success(`ATS Score: ${atsData.atsScore}/100`);
+
+          // Close modal and navigate to ATS checker with results
+          onClose();
+          navigate("/ats-checker", {
+            state: { atsResult: atsData, uploadedFile: selectedResume },
+          });
+        }, 1000);
       }
 
       // Process Job Matching
       else if (selectedOption === "jobMatching") {
+        setShowJobMatchLoader(true);
         setProcessingStep("Analyzing job fit...");
+
         const jobFitResult = await matchJDFromFile(
           selectedResume.fileUrl,
           jobDescription,
           "concise"
         );
-        toast.success("Job fit analysis complete!");
-        
-        // Close modal and navigate to job fit analyzer
-        onClose();
-        navigate("/job-fit-analyzer", {
-          state: { aiResult: jobFitResult, uploadedFile: selectedResume },
-        });
+
+        // Wait a bit for the loader to complete its animation
+        setTimeout(() => {
+          setShowJobMatchLoader(false);
+          toast.success("Job fit analysis complete!");
+
+          // Close modal and navigate to job fit analyzer
+          onClose();
+          navigate("/job-fit-analyzer", {
+            state: { aiResult: jobFitResult, uploadedFile: selectedResume },
+          });
+        }, 1000);
       }
     } catch (error) {
       console.error("Processing error:", error);
       toast.error("Failed to process resume. Please try again.");
+
+      // Hide all loaders on error
+      setShowResumeLoader(false);
+      setShowATSLoader(false);
+      setShowJobMatchLoader(false);
     } finally {
       setIsProcessing(false);
       setProcessingStep("");
@@ -182,6 +213,9 @@ const PdfActionsModal = ({ isOpen, onClose, selectedResume }) => {
     setJobDescription("");
     setIsProcessing(false);
     setProcessingStep("");
+    setShowResumeLoader(false);
+    setShowATSLoader(false);
+    setShowJobMatchLoader(false);
     onClose();
   };
 
@@ -201,19 +235,19 @@ const PdfActionsModal = ({ isOpen, onClose, selectedResume }) => {
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.9, opacity: 0, y: 20 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
-          className="bg-white/90 backdrop-blur-md max-h-[90vh] overflow-y-auto rounded-2xl p-6 sm:p-8 max-w-md w-full mx-auto border border-white/20 shadow-2xl relative overflow-hidden"
+          className="bg-white/90 backdrop-blur-md max-h-[90vh] overflow-y-auto rounded-2xl p-4 sm:p-8 max-w-md w-full mx-auto border border-white/20 shadow-2xl relative overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Background gradient */}
           <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-white/50 to-purple-50/50 rounded-2xl" />
 
           {/* Header */}
-          <div className="relative z-10 flex items-center justify-between mb-6">
+          <div className="relative z-10 flex items-center justify-between mb-3 md:mb-6">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg">
-                <FaUpload className="text-white text-lg" />
+              <div className="w-7 h-7 md:w-10 md:h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg">
+                <FaUpload className="text-white text-sm md:text-lg" />
               </div>
-              <h2 className="text-lg md:text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <h2 className="text-md md:text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 Process Resume
               </h2>
             </div>
@@ -227,9 +261,13 @@ const PdfActionsModal = ({ isOpen, onClose, selectedResume }) => {
 
           {/* Selected Resume Info */}
           {selectedResume && (
-            <div className="relative z-10 mb-6 p-4 bg-blue-50/50 rounded-xl border border-blue-200/50">
-              <h3 className="font-semibold text-blue-800 mb-1">Selected Resume:</h3>
-              <p className="text-blue-700 text-sm">{selectedResume.fileName}</p>
+            <div className="relative z-10 mb-3 md:mb-6 p-2 md:p-4 bg-blue-50/50 rounded-lg md:rounded-xl border border-blue-200/50">
+              <h3 className="font-semibold text-sm md:text-base text-blue-800 mb-1">
+                Selected Resume:
+              </h3>
+              <p className="text-blue-700 text-xs md:text-sm">
+                {selectedResume.fileName}
+              </p>
             </div>
           )}
 
@@ -238,12 +276,12 @@ const PdfActionsModal = ({ isOpen, onClose, selectedResume }) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.1 }}
-            className="relative z-10 space-y-3 mb-6"
+            className="relative z-10 space-y-3 mb-3 md:mb-6"
           >
-            <div className="text-sm font-medium text-gray-700 mb-3">
+            <div className="text-xs md:text-sm font-medium text-gray-700 mb-3">
               What would you like to do with this resume?
             </div>
-            
+
             <OptionRadio
               icon={<FaUpload />}
               label="Create Resume"
@@ -252,7 +290,7 @@ const PdfActionsModal = ({ isOpen, onClose, selectedResume }) => {
               checked={selectedOption === "createResume"}
               onChange={() => handleOptionSelect("createResume")}
             />
-            
+
             <OptionRadio
               icon={<FaRobot />}
               label="Check ATS Score"
@@ -261,7 +299,7 @@ const PdfActionsModal = ({ isOpen, onClose, selectedResume }) => {
               checked={selectedOption === "checkATS"}
               onChange={() => handleOptionSelect("checkATS")}
             />
-            
+
             <OptionRadio
               icon={<FaBriefcase />}
               label="Job Matching"
@@ -322,17 +360,22 @@ const PdfActionsModal = ({ isOpen, onClose, selectedResume }) => {
           )}
         </motion.div>
       </motion.div>
+
+      {/* Loaders */}
+      <ResumeCreationLoader isVisible={showResumeLoader} />
+      <ATSCheckingLoader isVisible={showATSLoader} />
+      <JobMatchingLoader isVisible={showJobMatchLoader} />
     </AnimatePresence>
   );
 };
 
 // Option Radio Component
-const OptionRadio = ({ icon, label, description, value, checked, onChange }) => (
+const OptionRadio = ({ icon, label, description, checked, onChange }) => (
   <motion.div
     whileHover={{ scale: 1.02 }}
     whileTap={{ scale: 0.98 }}
     onClick={onChange}
-    className={`relative flex items-center gap-4 p-4 rounded-xl cursor-pointer transition-all duration-300 border-2 ${
+    className={`relative flex items-center gap-2.5 md:gap-4 p-3 md:p-4 rounded-xl cursor-pointer transition-all duration-300 border-2 ${
       checked
         ? "border-blue-300 bg-blue-50/50 shadow-md"
         : "border-gray-200 bg-white/50 hover:border-blue-200 hover:bg-blue-50/30"
@@ -340,7 +383,7 @@ const OptionRadio = ({ icon, label, description, value, checked, onChange }) => 
   >
     {/* Radio */}
     <div
-      className={`w-5 h-5 border-2 rounded-full flex items-center justify-center transition-all duration-200 ${
+      className={`md:w-5 w-4 h-4 md:h-5 border-2 rounded-full flex items-center justify-center transition-all duration-200 ${
         checked
           ? "bg-gradient-to-r from-blue-500 to-purple-500 border-transparent"
           : "border-gray-300 bg-white"
@@ -357,7 +400,7 @@ const OptionRadio = ({ icon, label, description, value, checked, onChange }) => 
 
     {/* Icon */}
     <div
-      className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-200 ${
+      className={`md:w-10 w-8 h-8 md:h-10 rounded-lg flex items-center justify-center transition-all duration-200 ${
         checked
           ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg"
           : "bg-gray-100 text-gray-600"
@@ -375,7 +418,7 @@ const OptionRadio = ({ icon, label, description, value, checked, onChange }) => 
       >
         {label}
       </div>
-      <div className="text-sm text-gray-600 mt-0.5">
+      <div className="text-xs md:text-sm text-gray-600 mt-0.5">
         {description}
       </div>
     </div>

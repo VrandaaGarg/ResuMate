@@ -578,14 +578,14 @@ const ResumeItem = ({
         onClick={() => onPdfActions(resume)}
         title="Click to process this resume"
       >
-        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+        <div className="md:w-10 w-7 h-7 md:h-10 bg-blue-100 rounded-lg flex items-center justify-center">
           <FaFileAlt className="text-blue-600" />
         </div>
         <div className="flex-1 min-w-0">
-          <h4 className="font-medium text-gray-900 break-all text-sm">
+          <h4 className="font-medium text-gray-900 break-all text-[16px] md:text-sm">
             {resume.fileName}
           </h4>
-          <p className="text-sm text-gray-500">
+          <p className="text-[12px] md:text-sm text-gray-500">
             {formatFileSize(resume.fileSize)} • {formatDate(resume.uploadedAt)}
           </p>
         </div>
@@ -599,7 +599,7 @@ const ResumeItem = ({
             e.stopPropagation();
             onView(resume);
           }}
-          className="p-2 text-gray-400 hover:text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+          className="p-1 md:p-2 text-gray-400 hover:text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
         >
           <FaEye size={16} />
         </button>
@@ -611,7 +611,7 @@ const ResumeItem = ({
             e.stopPropagation();
             onDownload(resume);
           }}
-          className="p-2 text-gray-400 hover:text-green-600 rounded-lg hover:bg-green-50 transition-colors"
+          className="p-1 md:p-2 text-gray-400 hover:text-green-600 rounded-lg hover:bg-green-50 transition-colors"
         >
           <FaDownload size={16} />
         </button>
@@ -623,7 +623,7 @@ const ResumeItem = ({
             e.stopPropagation();
             onDelete(resume);
           }}
-          className="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors"
+          className="p-1 md:p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors"
         >
           <FaTrash size={16} />
         </button>

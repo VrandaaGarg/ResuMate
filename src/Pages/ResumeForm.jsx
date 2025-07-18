@@ -977,7 +977,7 @@ const ResumeForm = () => {
               {formData.achievements.map((achieve, index) => (
                 <div
                   key={index}
-                  className="relative border border-gray-200 bg-white p-5 rounded-xl shadow-sm"
+                  className="relative border border-gray-200 bg-white p-3 md:p-5 rounded-xl shadow-sm"
                 >
                   {/* Remove Achievement */}
                   <button
@@ -1095,7 +1095,7 @@ const ResumeForm = () => {
                       <label className="block mb-1 text-sm font-medium text-gray-700">
                         Month
                       </label>
-                      <FiCalendar className="absolute top-9 left-3 text-gray-500" />
+                      <FiCalendar className="absolute top-8.5 md:top-9 left-1.5 md:left-3 text-gray-500" />
                       <input
                         type="text"
                         placeholder="e.g., March"
@@ -1108,7 +1108,7 @@ const ResumeForm = () => {
                             e.target.value
                           )
                         }
-                        className="pl-10 w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-black/50"
+                        className="pl-7 md:pl-10 w-full px-0 md:px-3 py-2 border rounded-md text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-black/50"
                       />
                     </div>
 
@@ -1116,7 +1116,7 @@ const ResumeForm = () => {
                       <label className="block mb-1 text-sm font-medium text-gray-700">
                         Year
                       </label>
-                      <FiCalendar className="absolute top-9 left-3 text-gray-500" />
+                      <FiCalendar className="absolute top-8.5 md:top-9 left-1.5 md:left-3 text-gray-500" />
                       <input
                         type="text"
                         placeholder="e.g., 2024"
@@ -1129,7 +1129,7 @@ const ResumeForm = () => {
                             e.target.value
                           )
                         }
-                        className="pl-10 w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-black/50"
+                        className="pl-7 md:pl-10 w-full px-0 md:px-3 py-2 border rounded-md text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-black/50"
                       />
                     </div>
                   </div>
@@ -1287,7 +1287,7 @@ const ResumeForm = () => {
   };
 
   return (
-    <div className="min-h-screen relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 px-6 md:px-20 py-7 md:py-16 overflow-hidden">
+    <div className="min-h-screen relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 px-2 md:px-20 py-7 md:py-16 overflow-hidden">
       {/* Background Elements */}
       <div className="absolute -top-20 -left-20 w-80 h-80 bg-gradient-to-r from-blue-300 to-cyan-200 opacity-15 blur-3xl rounded-full z-0" />
       <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-gradient-to-r from-purple-300 to-pink-200 opacity-10 blur-3xl rounded-full z-0" />
@@ -1300,14 +1300,14 @@ const ResumeForm = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-8"
         >
-          <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 mb-3 shadow-lg">
+          <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-white/20 rounded-full px-3 py-1.5 mb-3 shadow-lg">
             <FaWandMagicSparkles className="text-purple-500" />
             <span className="text-xs font-medium text-gray-700">
               Resume Builder
             </span>
           </div>
 
-          <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent mb-2 [font-family:'Lilita_One',cursive]">
+          <h1 className="text-xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent mb-2 [font-family:'Lilita_One',cursive]">
             {steps[step]}
           </h1>
 
@@ -1328,7 +1328,7 @@ const ResumeForm = () => {
             {steps.map((stepName, index) => (
               <div
                 key={index}
-                className={`flex items-center gap-2 text-xs font-medium ${
+                className={`flex items-center gap-1 md:gap-2 text-xs font-medium ${
                   index <= step ? "text-blue-600" : "text-gray-400"
                 }`}
               >
@@ -1368,7 +1368,7 @@ const ResumeForm = () => {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -30 }}
           transition={{ duration: 0.4 }}
-          className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-2xl p-6 md:p-8 shadow-xl"
+          className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-2xl p-3 md:p-8 shadow-xl"
         >
           {renderStep()}
         </motion.div>

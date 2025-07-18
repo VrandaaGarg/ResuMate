@@ -613,7 +613,7 @@ We are looking for a skilled React Developer to join our team. The ideal candida
                 >
                   <div className="inline-flex items-center gap-2 bg-blue-50/80 backdrop-blur-sm border border-blue-200/60 rounded-full px-4 py-2 mb-3 shadow-lg">
                     <FaFileAlt className="text-blue-600" />
-                    <span className="text-blue-800 font-medium text-sm">
+                    <span className="text-blue-800 font-medium text-xs md:text-sm">
                       Analysis from uploaded file: {uploadedFile.fileName}
                     </span>
                   </div>
