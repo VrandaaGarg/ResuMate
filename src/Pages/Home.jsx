@@ -38,6 +38,18 @@ const features = [
     bgGradient: "from-blue-50 to-cyan-50",
   },
   {
+    title: "Resume Upload & creation",
+    desc: "Upload your existing resume, and you can create, edit, and optimize it further.",
+    gradient: "from-yellow-500 to-amber-400",
+    bgGradient: "from-yellow-50 to-amber-50",
+  },
+  {
+    title: "Upload and check ATS compatibility and job matching",
+    desc: "Check ATS compatibility and job matching for your uploaded resume instantly after uploading.",
+    gradient: "from-orange-500 to-red-400",
+    bgGradient: "from-orange-50 to-red-50",
+  },
+  {
     title: "Live Preview & Editor",
     desc: "Edit your resume in real-time with formatting options like fonts, colors, bold/italic, and hyperlink support.",
     gradient: "from-purple-500 to-pink-400",

@@ -1158,7 +1158,7 @@ const ClassicTemplate = ({ resume }) => {
             </button>
 
             {openDropdown === "padding" && (
-              <div className="absolute max-h-48 overflow-auto left-1/2 -translate-x-1/2 mt-2 z-50 w-28 md:w-56 bg-white border border-gray-200 rounded-lg shadow-lg p-1.5 md:p-3">
+              <div className="absolute max-h-48 md:max-h-64 overflow-auto left-1/2 -translate-x-1/2 mt-2 z-50 w-28 md:w-56 bg-white border border-gray-200 rounded-lg shadow-lg p-1.5 md:p-3">
                 <p className="text-xs md:text-sm font-semibold text-gray-700 mb-1.5 md:mb-3 text-center">
                   Select Padding
                 </p>

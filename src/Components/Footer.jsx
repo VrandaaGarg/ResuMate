@@ -124,7 +124,7 @@ export default function Footer() {
                     "_blank"
                   )
                 }
-                className="flex items-center gap-2 px-3 py-1.5 bg-red-50 hover:bg-red-100 border border-red-200 text-red-600 rounded-lg text-[14px] md:text-sm font-medium transition-all duration-300"
+                className="flex items-center cursor-pointer gap-2 px-3 py-1.5 bg-red-50 hover:bg-red-100 border border-red-200 text-red-600 rounded-lg text-[14px] md:text-sm font-medium transition-all duration-300"
               >
                 <FaBug size={12} />
                 <span>Report Bug</span>
