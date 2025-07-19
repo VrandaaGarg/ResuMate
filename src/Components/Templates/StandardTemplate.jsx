@@ -562,9 +562,9 @@ const StandardTemplate = ({ resume }) => {
         >
           PROJECTS
         </h2>
-        <div className="w-2/3">
+        <div className="w-2/3 ">
           {resume.projects.map((proj, i) => (
-            <div key={i} className="md:mb-3">
+            <div key={i} className="mb-2">
               <div
                 style={{
                   "--resume-h4-user": `${getFontPxValue(
@@ -860,7 +860,7 @@ const StandardTemplate = ({ resume }) => {
 
       {/* Toolbar */}
       {isEditable && (
-        <div className="w-full bg-white justify-center border border-gray-200 shadow-sm rounded-md px-2.5 md:px-6 py-2.5 md:py-3 mb-2.5 md:mb-6 flex flex-wrap items-center gap-3">
+        <div className="w-full bg-white justify-center border border-gray-200  px-2.5 md:px-6 py-2.5 md:py-3 mb-2.5 md:mb-6 flex flex-wrap items-center gap-3">
           {/* Resume Background Color */}
           <div className="relative">
             {/* Color Icon Button */}
@@ -1183,7 +1183,7 @@ const StandardTemplate = ({ resume }) => {
 
             {openDropdown === "padding" && (
               <div className="absolute max-h-48 overflow-auto left-1/2 -translate-x-1/2 mt-2 z-50 w-56 bg-white border border-gray-200 rounded-lg shadow-lg p-3">
-                <p className="text-xs md:text-sm font-semibold text-gray-700 mb-1.5 md:mb-3 text-center">
+                <p className="text-xs md:text-sm font-semibold text-gray-700 mb-1.5 md:mb-3 md:text-center">
                   Select Padding
                 </p>
 
@@ -1212,7 +1212,7 @@ const StandardTemplate = ({ resume }) => {
                           }));
                           setOpenDropdown(false);
                         }}
-                        className={`px-3 py-1.5 text-left w-full rounded cursor-pointer hover:bg-sky-50 transition ${
+                        className={`px-1.5 text-[12px] md:text-base md:px-3 py-1.5 text-left w-full rounded cursor-pointer hover:bg-sky-50 transition ${
                           standardSettings.padding === p.value
                             ? "bg-sky-100 text-sky-700 font-semibold"
                             : ""
@@ -1639,21 +1639,22 @@ const StandardTemplate = ({ resume }) => {
       )}
 
       {/* Resume Preview */}
-      <div className="aspect-[7/10.4]  md:flex">
+      <div className="m-3 md:flex p-2.5 md:p-[25px] border border-gray-200 mx-2.5 mb-2.5 bg-white/60 backdrop-blur-md  shadow-xl">
         <div
           ref={contentRef}
-          className="w-full overflow-hidden mx-auto print-a4  text-sm leading-relaxed"
+          className="w-full overflow-hidden mx-auto print-a4 text-sm leading-relaxed"
           style={{
             fontFamily: standardSettings.fontFamily || "Inter",
             backgroundColor: standardSettings.backgroundColor || "#ffffff",
-            padding: standardSettings.padding || "15px",
+
             flexDirection: "column",
           }}
         >
           {/* Inner Resume Container */}
           <div
-            className={`p-4 flex overflow-hidden flex-col `}
+            className={` flex overflow-hidden flex-col `}
             style={{
+              padding: standardSettings.padding || "0px",
               border:
                 standardSettings.borderWidth &&
                 standardSettings.borderWidth !== "0px"

@@ -69,7 +69,15 @@
 /* src/index.css or in your pageStyle string for react-to-print */
 
 @media print {
+  @page {
+    padding: 25px;
+  }
   .print-a4 {
+    min-height: 297mm !important;
+    page-break-after: always !important;
+  }
+
+  .print-a4-sidebar {
     width: 210mm !important;
     height: 297mm !important;
     min-height: 297mm !important;
@@ -80,6 +88,7 @@
     page-break-inside: avoid !important;
   }
 }
+
 @media print {
   .resume-h1 {
     font-size: clamp(20px, var(--resume-h1-user, 30px), 96px) !important;
