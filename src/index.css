@@ -66,6 +66,11 @@
   background-color: #64748b; /* slate-500 */
 }
 
+/*no scrollbar*/
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /* src/index.css or in your pageStyle string for react-to-print */
 
 @media print {

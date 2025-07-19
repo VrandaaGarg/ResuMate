@@ -331,17 +331,17 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.9, opacity: 0, y: 20 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
-          className="bg-white/90 backdrop-blur-md max-h-[90vh] overflow-y-auto rounded-2xl p-6 sm:p-8 max-w-md w-full mx-auto border border-white/20 shadow-2xl relative overflow-hidden"
+          className="bg-white/90 backdrop-blur-md max-h-[95vh] no-scrollbar overflow-y-auto rounded-2xl p-5 max-w-md w-full mx-auto border border-white/20 shadow-2xl relative overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Background gradient */}
           <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-white/50 to-purple-50/50 rounded-2xl" />
 
           {/* Header */}
-          <div className="relative z-10 flex items-center justify-between mb-6">
+          <div className="relative z-10 flex items-center justify-between mb-3">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg">
-                <FaUpload className="text-white text-lg" />
+              <div className="w-6 h-6 md:w-7 md:h-7 shrink-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center shadow-lg">
+                <FaUpload className="text-white text-sm" />
               </div>
               <h2 className="text-lg md:text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 Upload Resume
@@ -357,7 +357,7 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
 
           {/* Upload Area */}
           <div
-            className={`relative border-2 border-dashed rounded-xl p-4 md:p-8 text-center transition-all duration-300 mb-6 bg-white/40 backdrop-blur-sm ${
+            className={`relative border-2 border-dashed rounded-xl p-4 md:p-5 text-center transition-all duration-300 mb-6 bg-white/40 backdrop-blur-sm ${
               dragActive
                 ? "border-blue-400 bg-blue-50/50 shadow-lg scale-[1.02]"
                 : "border-gray-300 hover:border-blue-300 hover:bg-blue-50/30"
@@ -390,8 +390,8 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
               </div>
             ) : uploadedFile ? (
               <div className="flex flex-col items-center">
-                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mb-4 shadow-lg">
-                  <FaCheckCircle className="text-white text-xl" />
+                <div className="w-6 h-6 md:w-14 md:h-14 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mb-2 shadow-lg">
+                  <FaCheckCircle className="text-white text-sm md:text-xl" />
                 </div>
                 <p className="text-gray-800 font-semibold text-sm md:text-lg mb-1">
                   {uploadedFile.fileName}
@@ -428,7 +428,7 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: 0.1 }}
-              className="space-y-2 md:space-y-3 mb-6"
+              className="space-y-2 md:space-y-3 mb-4"
             >
               <div className="text-xs md:text-sm font-medium text-gray-700 mb-3">
                 What would you like to do with your resume?
@@ -463,15 +463,15 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="mb-6"
+              className="mb-3"
             >
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Paste Job Description
               </label>
               <textarea
                 value={jobDescription}
                 onChange={(e) => setJobDescription(e.target.value)}
-                rows={4}
+                rows={3}
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-300 bg-white/80 backdrop-blur-sm text-gray-800 transition-all duration-300 resize-none placeholder-gray-400 text-sm"
                 placeholder="Paste the job description here..."
               />
@@ -553,7 +553,7 @@ const OptionCheckbox = ({ icon, label, description, checked, onChange }) => (
 
     {/* Icon */}
     <div
-      className={`w-8 h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center transition-all duration-200 ${
+      className={`w-8 h-8 hidden md:w-10 md:h-10 rounded-lg md:flex items-center justify-center transition-all duration-200 ${
         checked
           ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg"
           : "bg-gray-100 text-gray-600"
