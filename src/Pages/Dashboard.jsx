@@ -376,14 +376,14 @@ export default function Dashboard() {
                 <div className="flex flex-row gap-3 mt-4">
                   <Link
                     to="/resume-form"
-                    className="flex-1 inline-flex items-center justify-center gap-2 px-2 md:px-5 py-2 md:py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-lg hover:from-blue-700 hover:to-cyan-600 hover:shadow-lg transition-all duration-300 font-medium text-[16px] md:text-sm"
+                    className="flex w-full items-center justify-center gap-2 px-2 md:px-5 py-2 md:py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-lg hover:from-blue-700 hover:to-cyan-600 hover:shadow-lg transition-all duration-300 font-medium text-[16px] md:text-sm"
                   >
                     <FaPen />
-                    Edit Resume
+                    Edit <span className="hidden md:inline">Resume</span>
                   </Link>
                   <Link
                     to="/resume"
-                    className="flex-1 inline-flex items-center justify-center gap-2 px-2 md:px-5 py-2 md:py-3 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 hover:shadow-md transition-all duration-300 font-medium text-[16px] md:text-sm"
+                    className="flex w-full items-center justify-center gap-2 px-2 md:px-5 py-2 md:py-3 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 hover:shadow-md transition-all duration-300 font-medium text-[16px] md:text-sm"
                   >
                     <FaEye />
                     Preview
