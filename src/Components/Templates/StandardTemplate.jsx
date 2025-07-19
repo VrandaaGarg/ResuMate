@@ -1642,7 +1642,7 @@ const StandardTemplate = ({ resume }) => {
       <div className="m-3 md:flex p-2.5 md:p-[25px] border border-gray-200 mx-2.5 mb-2.5 bg-white/60 backdrop-blur-md  shadow-xl">
         <div
           ref={contentRef}
-          className="w-full overflow-hidden mx-auto print-a4 text-sm leading-relaxed"
+          className="w-full md:min-h-[1050px] overflow-hidden mx-auto print-a4 text-sm leading-relaxed"
           style={{
             fontFamily: standardSettings.fontFamily || "Inter",
             backgroundColor: standardSettings.backgroundColor || "#ffffff",

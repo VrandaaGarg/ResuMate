@@ -1609,7 +1609,7 @@ const ClassicTemplate = ({ resume }) => {
       <div className="m-2.5 md:flex p-2.5 md:p-[25px] border border-gray-200 mx-2.5 mb-2.5 bg-white/60 backdrop-blur-md  shadow-xl">
         <div
           ref={contentRef}
-          className="w-full  flexs mx-auto  text-sm leading-relaxed  "
+          className="w-full md:min-h-[1050px] flexs mx-auto  text-sm leading-relaxed  "
           style={{
             fontFamily: classicSettings.fontFamily || "Inter",
             backgroundColor: classicSettings.backgroundColor || "#ffffff",

@@ -78,13 +78,13 @@
     padding: 25px;
   }
   .print-a4 {
-    min-height: 297mm !important;
+    min-height: 1050px !important;
     page-break-after: always !important;
   }
 
   .print-a4-sidebar {
     width: 210mm !important;
-    height: 297mm !important;
+    height: 1050px !important;
     min-height: 297mm !important;
     max-height: 297mm !important;
     overflow: hidden !important;
