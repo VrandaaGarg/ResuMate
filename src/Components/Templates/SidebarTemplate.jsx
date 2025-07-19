@@ -1856,7 +1856,7 @@ const SidebarTemplate = ({ resume }) => {
       <div className="overflow-hidden m-2.5 md:flex p-2 md:p-4  border border-gray-200 mx-2.5 mb-2.5 bg-white/60 backdrop-blur-md  shadow-xl">
         <div
           ref={contentRef}
-          className=" print-a4-sidebar  flex"
+          className=" print-a4-sidebar md:min-h-[1050px] flex"
           style={{
             backgroundColor: sidebarSettings.bgColor || "#ffffff",
             fontFamily: sidebarSettings.fontFamily || "Inter",
