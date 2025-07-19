@@ -4,6 +4,8 @@ Tired of sending your resume into the black hole of job applications? Feeling li
 
 ResuMate is an intelligent, AI-powered platform that helps you build, optimize, and perfect your resume to stand out in today’s competitive job market. Think of it as your personal career coach, but without the hourly fee and with more GIFs. 😉
 
+**Check it out live at [https://resumate.vrandagarg.in](https://resumate.vrandagarg.in)!**
+
 ![ResuMate](/public/home.png)
 
 With a live editor and customizable formatting, you can create professional, ATS-friendly resumes while receiving real-time feedback and suggestions. Whether you're crafting your very first resume or polishing a seasoned one, ResuMate empowers you to create a document that truly showcases your skills and maximizes your career opportunities.
