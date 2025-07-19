@@ -14,6 +14,9 @@ import {
   FaTrash,
   FaEye,
   FaDownload,
+  FaCheck,
+  FaCloudDownloadAlt,
+  FaChevronCircleRight,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useResumeData } from "../Contexts/ResumeDataContext";
@@ -39,6 +42,16 @@ export default function Dashboard() {
   });
   const [isDeleting, setIsDeleting] = useState(false);
   const [loadingResumes, setLoadingResumes] = useState(true);
+  const [selectedTemplate, setSelectedTemplate] = useState("Classic");
+
+  useEffect(() => {
+    const storedTemplate = localStorage.getItem("selectedTemplate");
+    if (storedTemplate) {
+      setSelectedTemplate(
+        storedTemplate.charAt(0).toUpperCase() + storedTemplate.slice(1)
+      );
+    }
+  }, []);
   // Format the creation date
   const memberSince = user.metadata?.creationTime
     ? new Date(user.metadata.creationTime).toLocaleDateString("en-IN", {
@@ -305,62 +318,6 @@ export default function Dashboard() {
           ))}
         </motion.div>
 
-        {/* Uploaded Resumes Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="mb-8"
-        >
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-gray-800">
-              Recent Uploads
-            </h2>
-            {uploadedResumes.length > 5 && (
-              <Link
-                to="/profile"
-                className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-              >
-                View All
-              </Link>
-            )}
-          </div>
-
-          <div className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-xl p-4 shadow-lg">
-            {loadingResumes ? (
-              <div className="flex items-center justify-center py-8">
-                <FaClock className="animate-spin text-gray-400 mr-2" />
-                <span className="text-gray-500">Loading resumes...</span>
-              </div>
-            ) : uploadedResumes.length === 0 ? (
-              <div className="text-center py-8">
-                <FaFileAlt className="text-4xl text-gray-300 mx-auto mb-3" />
-                <p className="text-gray-500 mb-4">No resumes uploaded yet</p>
-                <button
-                  onClick={() => setIsUploadModalOpen(true)}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-xl hover:shadow-lg transition-all duration-300 font-medium"
-                >
-                  Upload Resume
-                </button>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {uploadedResumes.map((resume, index) => (
-                  <ResumeItem
-                    key={resume.id}
-                    resume={resume}
-                    onDelete={handleDeleteResume}
-                    onPdfActions={handlePdfActions}
-                    onView={handleViewPdf}
-                    onDownload={handleDownloadPdf}
-                    index={index}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
-        </motion.div>
-
         {/* Current Resume Status & Recent Activity */}
         <div className="grid md:grid-cols-2 gap-6 md:gap-6">
           {/* Current Resume Status */}
@@ -372,39 +329,64 @@ export default function Dashboard() {
           >
             <div className="flex items-center gap-3 mb-1.5 md:mb-4">
               <div className="p-1 md:p-2 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg text-white shadow-lg">
-                <FaFileAlt className="text-xs md:text-xl " />
+                <FaFileAlt className="text-xs md:text-sm " />
               </div>
-              <h2 className="text-sm md:text-xl font-bold text-gray-900">
+              <h2 className="text-md md:text-xl font-bold text-gray-900">
                 Resume Status
               </h2>
             </div>
 
             {resume?.name ? (
-              <div className="space-y-3">
-                <div className="p-3 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg">
-                  <h3 className="font-semibold text-green-800 mb-1 text-[16px] md:text-sm">
-                    ✅ Resume Ready
-                  </h3>
-                  <p className="text-[12px] md:text-xs text-green-700">
-                    Your resume "{resume.name}" is ready to go! You can continue
-                    editing or download it.
-                  </p>
+              <div className="space-y-4">
+                <div className="p-4 bg-gradient-to-r from-green-100 via-emerald-50 to-teal-50 border border-green-200 rounded-lg shadow-sm">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-white rounded-full shadow-md">
+                      <FaCheck className="text-green-500 text-sm md:text-lg" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-green-800 text-sm md:text-lg">
+                        Your Resume is Ready!
+                      </h3>
+                      <p className="text-xs md:text-sm text-gray-600">
+                        "{resume.name}" is polished and ready for opportunities.
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="flex gap-2 text-[12px] md:text-sm">
+                <div className="text-sm text-gray-600 space-y-2">
+                  <div className="flex justify-between items-center p-2 bg-gray-50 rounded-md">
+                    <span className="font-semibold text-gray-700">
+                      Template:
+                    </span>
+                    <span className="font-medium text-purple-700 bg-purple-100 px-2 py-0.5 rounded-full">
+                      {resume.template || selectedTemplate}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center p-2 bg-gray-50 rounded-md">
+                    <span className="font-semibold text-gray-700">
+                      Last Updated:
+                    </span>
+                    <span className="font-mono text-xs">
+                      {formatDate(resume.updatedOn || resume.createdOn)}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex flex-row gap-3 mt-4">
                   <Link
                     to="/resume-form"
-                    className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors  font-medium"
+                    className="flex w-full items-center justify-center gap-2 px-2 md:px-5 py-2 md:py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-lg hover:from-blue-700 hover:to-cyan-600 hover:shadow-lg transition-all duration-300 font-medium text-[16px] md:text-sm"
                   >
-                    <FaPen size={12} />
-                    Edit Resume
+                    <FaPen />
+                    Edit <span className="hidden md:inline">Resume</span>
                   </Link>
                   <Link
                     to="/resume"
-                    className="flex items-center gap-1 px-3 py-1.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors  font-medium"
+                    className="flex w-full items-center justify-center gap-2 px-2 md:px-5 py-2 md:py-3 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 hover:shadow-md transition-all duration-300 font-medium text-[16px] md:text-sm"
                   >
-                    <FaFileAlt size={12} />
-                    View Resume
+                    <FaEye />
+                    Preview
                   </Link>
                 </div>
               </div>
@@ -463,11 +445,11 @@ export default function Dashboard() {
                   >
                     <activity.icon size={14} />
                   </div>
-                  <div className="flex-1">
+                  <div className="flex justify-between w-full">
                     <p className="font-medium text-gray-900 text-[16px] md:text-sm">
                       {activity.action}
                     </p>
-                    <p className="text-[12px] md:text-xs text-gray-500">
+                    <p className="text-[12px] text-right md:text-xs text-gray-500">
                       {activity.time}
                     </p>
                   </div>
@@ -485,6 +467,73 @@ export default function Dashboard() {
             </div>
           </motion.div>
         </div>
+
+        {/* Uploaded Resumes Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="mt-8"
+        >
+          <div className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-xl p-4 shadow-lg">
+            <div className="flex items-center justify-between mb-4 px-2 pt-2">
+              <h2 className="text-xl font-semibold text-gray-800">
+                Recent Uploads
+              </h2>
+
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setIsUploadModalOpen(true)}
+                  title="Upload Resume"
+                  className="inline-flex items-center gap-2 px-1.5 md:px-3 py-1.5 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-lg hover:from-blue-700 hover:to-cyan-600 hover:shadow-lg transition-all duration-300 font-medium text-sm"
+                >
+                  <FaCloudDownloadAlt className="text-white text-sm" />
+                  <span className="hidden md:inline">Upload</span>
+                </button>
+                {uploadedResumes.length > 0 && (
+                  <Link
+                    to="/profile"
+                    className="inline-flex items-center gap-2 px-1.5 md:px-3 py-1.5 bg-gradient-to-r from-gray-600 to-zinc-500 text-white rounded-lg hover:from-gray-800 hover:to-zinc-700 hover:shadow-lg transition-all duration-300 font-medium text-sm"
+                  >
+                    <span className="hidden md:inline">View All</span>
+                    <FaChevronCircleRight className="text-xs" />
+                  </Link>
+                )}
+              </div>
+            </div>
+            {loadingResumes ? (
+              <div className="flex items-center justify-center py-8">
+                <FaClock className="animate-spin text-gray-400 mr-2" />
+                <span className="text-gray-500">Loading resumes...</span>
+              </div>
+            ) : uploadedResumes.length === 0 ? (
+              <div className="text-center py-8">
+                <FaFileAlt className="text-4xl text-gray-300 mx-auto mb-3" />
+                <p className="text-gray-500 mb-4">No resumes uploaded yet</p>
+                <button
+                  onClick={() => setIsUploadModalOpen(true)}
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-xl hover:shadow-lg transition-all duration-300 font-medium"
+                >
+                  Upload Resume
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {uploadedResumes.map((resume, index) => (
+                  <ResumeItem
+                    key={resume.id}
+                    resume={resume}
+                    onDelete={handleDeleteResume}
+                    onPdfActions={handlePdfActions}
+                    onView={handleViewPdf}
+                    onDownload={handleDownloadPdf}
+                    index={index}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        </motion.div>
       </div>
 
       {/* Upload Modal */}
@@ -571,7 +620,7 @@ const ResumeItem = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: index * 0.1 }}
-      className="flex items-center justify-between p-1 md:p-3 bg-gray-50/50 rounded-lg hover:bg-gray-100/50 transition-colors"
+      className="flex items-center justify-between p-1 md:p-3 bg-gray-50/50 rounded-lg hover:bg-gray-200/55  transition-colors"
     >
       <div
         className="flex items-center gap-3 flex-1 cursor-pointer"

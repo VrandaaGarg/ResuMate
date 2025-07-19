@@ -161,13 +161,21 @@ export default function JobFitAnalyzer() {
   const { resume } = useResumeData();
   const location = useLocation();
   const [step, setStep] = useState("intro");
-  const [jobDesc, setJobDesc] = useState("");
+  const [jobDesc, setJobDesc] = useState(() => {
+    return localStorage.getItem("jobDesc") || "";
+  });
   const [style, setStyle] = useState("concise");
   const [loading, setLoading] = useState(false);
   const [currentLoadingStep, setCurrentLoadingStep] = useState(0);
   const [showFullReport, setShowFullReport] = useState(false);
-  const [aiResult, setAiResult] = useState(null);
-  const [uploadedFile, setUploadedFile] = useState(null);
+  const [aiResult, setAiResult] = useState(() => {
+    const saved = localStorage.getItem("aiResult");
+    return saved ? JSON.parse(saved) : null;
+  });
+  const [uploadedFile, setUploadedFile] = useState(() => {
+    const saved = localStorage.getItem("uploadedFile");
+    return saved ? JSON.parse(saved) : null;
+  });
 
   useEffect(() => {
     if (location.state?.aiResult) {
@@ -178,6 +186,33 @@ export default function JobFitAnalyzer() {
       setUploadedFile(location.state.uploadedFile);
     }
   }, [location.state]);
+
+  useEffect(() => {
+    localStorage.setItem("jobDesc", jobDesc);
+  }, [jobDesc]);
+
+  useEffect(() => {
+    if (aiResult) {
+      localStorage.setItem("aiResult", JSON.stringify(aiResult));
+    } else {
+      localStorage.removeItem("aiResult");
+    }
+  }, [aiResult]);
+
+  useEffect(() => {
+    if (uploadedFile) {
+      localStorage.setItem("uploadedFile", JSON.stringify(uploadedFile));
+    } else {
+      localStorage.removeItem("uploadedFile");
+    }
+  }, [uploadedFile]);
+
+  useEffect(() => {
+    if (aiResult) {
+      setStep("result");
+    }
+  }, [aiResult]);
+  ("");
 
   const handleAskAI = async () => {
     if (!jobDesc) {

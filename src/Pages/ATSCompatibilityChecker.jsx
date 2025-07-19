@@ -129,32 +129,12 @@ export default function ATSCompatibilityChecker() {
   );
 
   useEffect(() => {
-    // If ATS result was passed from upload page, go directly to result
-    if (location.state?.atsResult) {
+    // If ATS result exists, go to result view and save to localStorage
+    if (atsResult) {
       setCurrentStep("result");
-      localStorage.setItem(
-        "atsResult",
-        JSON.stringify(location.state.atsResult)
-      );
-    } else if (atsResult) {
       localStorage.setItem("atsResult", JSON.stringify(atsResult));
-      setCurrentStep("result");
     }
-  }, [atsResult, location.state]);
-
-  // Set initial step based on whether we have uploaded file data
-  useEffect(() => {
-    if (location.state?.atsResult && location.state?.uploadedFile) {
-      setCurrentStep("result");
-    }
-  }, [location.state]);
-
-  // Ensure currentStep is 'result' if atsResult exists on mount
-  useEffect(() => {
-    if (localStorage.getItem("atsResult")) {
-      setCurrentStep("result");
-    }
-  }, []);
+  }, [atsResult]);
 
   const handleCheckATS = async () => {
     if (!resume || !resume.name) {
@@ -177,6 +157,7 @@ export default function ATSCompatibilityChecker() {
 
   const handleReset = () => {
     setAtsResult(null);
+    setUploadedFile(null);
     localStorage.removeItem("atsResult");
     setCurrentStep("intro");
   };

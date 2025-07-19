@@ -776,7 +776,7 @@ const ClassicTemplate = ({ resume }) => {
       </div>
 
       {isEditable && (
-        <div className="w-full bg-white justify-center border border-gray-200 shadow-sm rounded-md px-2.5 md:px-6 py-2.5 md:py-3 mb-2.5 md:mb-6 flex flex-wrap items-center gap-3">
+        <div className="w-full bg-white justify-center border border-gray-200  px-2.5 md:px-6 py-2.5 md:py-3 mb-2.5 md:mb-6 flex flex-wrap items-center gap-3">
           {/* Resume Background Color */}
           <div className="relative">
             {/* Color Icon Button */}
@@ -1031,8 +1031,8 @@ const ClassicTemplate = ({ resume }) => {
             </button>
 
             {openDropdown === "gap" && (
-              <div className="absolute max-h-48 overflow-auto left-0 mt-2 z-50 w-32 md:w-56 bg-white border border-gray-200 rounded-lg shadow-lg p-3">
-                <h3 className="text-[16px] md:text-sm font-semibold text-gray-800 mb-2 flex items-center gap-2">
+              <div className="absolute max-h-48 overflow-auto left-1/2 -translate-x-1/2 mt-2 z-50 w-28 md:w-56 bg-white border border-gray-200 rounded-lg shadow-lg p-1.5 md:p-3">
+                <h3 className="text-[12px] md:text-sm font-semibold text-gray-800 mb-2 flex items-center gap-2">
                   <CgSpaceBetweenV className="text-sky-700" />
                   Section Spacing
                 </h3>
@@ -1061,7 +1061,7 @@ const ClassicTemplate = ({ resume }) => {
                           sectionGap: option.value,
                         }))
                       }
-                      className={`px-1 md:px-3 py-0.5 md:py-1.5 rounded cursor-pointer hover:bg-sky-50 transition ${
+                      className={`px-1 md:px-3 text-[12px] md:text-base py-0.5 md:py-1.5 rounded cursor-pointer hover:bg-sky-50 transition ${
                         classicSettings.sectionGap === option.value
                           ? "bg-sky-100 text-sky-700 font-semibold"
                           : ""
@@ -1075,7 +1075,7 @@ const ClassicTemplate = ({ resume }) => {
             )}
           </div>
           {/* Border Width Dropdown */}
-          <div className="relative">
+          {/* <div className="relative">
             <button
               onClick={() =>
                 setOpenDropdown((prev) =>
@@ -1138,7 +1138,7 @@ const ClassicTemplate = ({ resume }) => {
                 </ul>
               </div>
             )}
-          </div>
+          </div> */}
 
           {/* Padding Dropdown */}
           <div className="relative">
@@ -1158,7 +1158,7 @@ const ClassicTemplate = ({ resume }) => {
             </button>
 
             {openDropdown === "padding" && (
-              <div className="absolute max-h-48 overflow-auto left-1/2 -translate-x-1/2 mt-2 z-50 w-56 bg-white border border-gray-200 rounded-lg shadow-lg p-3">
+              <div className="absolute max-h-48 md:max-h-64 overflow-auto left-1/2 -translate-x-1/2 mt-2 z-50 w-28 md:w-56 bg-white border border-gray-200 rounded-lg shadow-lg p-1.5 md:p-3">
                 <p className="text-xs md:text-sm font-semibold text-gray-700 mb-1.5 md:mb-3 text-center">
                   Select Padding
                 </p>
@@ -1188,7 +1188,7 @@ const ClassicTemplate = ({ resume }) => {
                           }));
                           setOpenDropdown(false);
                         }}
-                        className={`px-3 py-1.5 text-left w-full rounded cursor-pointer hover:bg-sky-50 transition ${
+                        className={`px-1.5 md:px-3 py-1.5 text-xs md:text-base text-left w-full rounded cursor-pointer hover:bg-sky-50 transition ${
                           classicSettings.padding === p.value
                             ? "bg-sky-100 text-sky-700 font-semibold"
                             : ""
@@ -1204,7 +1204,7 @@ const ClassicTemplate = ({ resume }) => {
           </div>
 
           {/*border style and color*/}
-          <div className="relative">
+          {/* <div className="relative">
             <button
               onClick={() =>
                 setOpenDropdown((prev) =>
@@ -1225,7 +1225,6 @@ const ClassicTemplate = ({ resume }) => {
                   Border Settings
                 </p>
 
-                {/* Border Style */}
                 <div className="mb-2 md:mb-4">
                   <label className="block text-xs text-gray-500 mb-1">
                     Style
@@ -1251,7 +1250,6 @@ const ClassicTemplate = ({ resume }) => {
                   </select>
                 </div>
 
-                {/* Border Color */}
                 <div>
                   <label className="block text-xs text-gray-500 mb-1">
                     Color
@@ -1270,9 +1268,10 @@ const ClassicTemplate = ({ resume }) => {
                 </div>
               </div>
             )}
-          </div>
-          {/* Border Radius Button */}
-          <div className="relative">
+          </div> */}
+
+          {/* Border Radius */}
+          {/* <div className="relative">
             <button
               onClick={() =>
                 setOpenDropdown((prev) =>
@@ -1333,7 +1332,7 @@ const ClassicTemplate = ({ resume }) => {
                 </ul>
               </div>
             )}
-          </div>
+          </div> */}
           {/* Text Color Button */}
           <div className="relative group">
             <button
@@ -1607,10 +1606,10 @@ const ClassicTemplate = ({ resume }) => {
       )}
 
       {/* Resume Preview */}
-      <div className="">
+      <div className="m-2.5 md:flex p-2.5 md:p-[25px] border border-gray-200 mx-2.5 mb-2.5 bg-white/60 backdrop-blur-md  shadow-xl">
         <div
           ref={contentRef}
-          className="w-full  flexs mx-auto p-2.5 md:p-5 text-sm leading-relaxed  "
+          className="w-full  flexs mx-auto  text-sm leading-relaxed  "
           style={{
             fontFamily: classicSettings.fontFamily || "Inter",
             backgroundColor: classicSettings.backgroundColor || "#ffffff",
@@ -1620,7 +1619,7 @@ const ClassicTemplate = ({ resume }) => {
         >
           {/* Inner Resume Container */}
           <div
-            className="h-full md:aspect-[7/9.89] flex flex-col"
+            className="h-full  flex flex-col"
             style={{
               border:
                 classicSettings.borderWidth &&
@@ -1635,7 +1634,7 @@ const ClassicTemplate = ({ resume }) => {
             <div
               className="flex flex-col flex-1  overflow-hidden"
               style={{
-                padding: classicSettings.padding || "40px",
+                padding: classicSettings.padding || "0px",
 
                 rowGap: `${classicSettings.sectionGap ?? 16}px`,
               }}

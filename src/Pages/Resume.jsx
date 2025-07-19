@@ -153,7 +153,7 @@ export default function Resume() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50/80 via-white to-slate-100/60 px-4 md:px-12 py-10 overflow-hidden relative">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50/80 via-white to-slate-100/60 px-2 md:px-12 py-6 overflow-hidden relative">
       {/* Background Elements */}
       <div className="absolute -top-40 -left-40 w-96 h-96 bg-gradient-to-r from-blue-100/20 to-cyan-100/20 blur-3xl rounded-full z-0" />
       <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] bg-gradient-to-r from-purple-100/20 to-pink-100/20 blur-3xl rounded-full z-0" />
@@ -209,7 +209,7 @@ export default function Resume() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => setSelectedTemplate(template.value)}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-all duration-300 ${
+                    className={`flex items-center gap-2 px-1.5 md:px-3 py-2 rounded-lg border transition-all duration-300 ${
                       selectedTemplate === template.value
                         ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white border-blue-300 shadow-md"
                         : "bg-white/80 text-slate-700 border-slate-200 hover:bg-white hover:shadow-sm"
@@ -223,7 +223,7 @@ export default function Resume() {
                         {template.label}
                       </div>
                       <div
-                        className={`md:text-xs text-[14px] ${
+                        className={`md:text-xs hidden md:block text-[12px] ${
                           selectedTemplate === template.value
                             ? "text-white/80"
                             : "text-slate-500"
@@ -284,10 +284,10 @@ export default function Resume() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="bg-white/60 backdrop-blur-md max-w-2xl border border-white/40 shadow-xl rounded-xl "
+          className="bg-white/60 backdrop-blur-md max-w-2xl  rounded-xl "
         >
           {/* Template Content */}
-          <div className="p-4 md:p-6">
+          <div className="">
             <motion.div
               key={selectedTemplate}
               initial={{ opacity: 0, scale: 0.95 }}
@@ -409,6 +409,15 @@ export default function Resume() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={() => navigate("/resume-form")}
+                className="px-3 md:px-3.5 py-1.5 md:w-full md:py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg text-xs md:text-lg font-medium shadow-md hover:shadow-lg transition-all duration-300"
+              >
+                Edit Details
+              </motion.button>
+
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={() => navigate("/job-fit-analyzer")}
                 className="px-3 md:px-3.5 md:w-full py-1.5 md:py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg text-xs md:text-lg font-medium shadow-md hover:shadow-lg transition-all duration-300"
               >
@@ -422,15 +431,6 @@ export default function Resume() {
                 className="px-3 md:px-3.5 py-1.5 md:w-full md:py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-lg text-xs md:text-lg font-medium shadow-md hover:shadow-lg transition-all duration-300"
               >
                 Check ATS Score
-              </motion.button>
-
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => navigate("/resume-form")}
-                className="px-3 md:px-3.5 py-1.5 md:w-full md:py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg text-xs md:text-lg font-medium shadow-md hover:shadow-lg transition-all duration-300"
-              >
-                Edit Details
               </motion.button>
             </div>
           </motion.div>

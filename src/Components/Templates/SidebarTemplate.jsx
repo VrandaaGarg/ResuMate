@@ -452,10 +452,10 @@ const SidebarTemplate = ({ resume }) => {
         </div>
 
         <p
-          className={`font-semibold resume-h2 ${getCustomFontClass(
+          className={`font-semibold resume-h2  ${getCustomFontClass(
             "text-[16px]",
             sidebarSettings.fontScaleLevel
-          )} uppercase tracking-wide my-1 md:my-3`}
+          )} uppercase tracking-wide my-3`}
           style={{
             color: sidebarSettings.textColors?.["h2"] || "text-blue-300",
             "--resume-h2-user": `${getFontPxValue(
@@ -520,16 +520,17 @@ const SidebarTemplate = ({ resume }) => {
             return (
               <div
                 key={i}
-                className="flex break-all justify-between items-center gap-0.5 md:gap-2"
+                className="flex justify-between items-center gap-0.5 md:gap-2"
               >
                 <span
-                  className="w-2 h-2  md:w-3 md:h-3 rounded-sm"
+                  className="w-2 h-2 shrink-0 md:w-3 md:h-3 rounded-sm"
                   style={{ backgroundColor: color }}
                 ></span>
                 <span
                   style={{
                     color: sidebarSettings.textColors?.["h3"] || "#d9d9d9",
                   }}
+                  className="break-words"
                 >
                   {skill.domain}
                 </span>
@@ -1000,7 +1001,7 @@ const SidebarTemplate = ({ resume }) => {
       </div>
       {/* Toolbar */}
       {isEditable && (
-        <div className="w-full bg-white justify-center border border-gray-200 shadow-sm rounded-md px-2.5 md:px-6 py-2.5 md:py-3 mb-2.5 md:mb-6 flex flex-wrap items-center gap-3">
+        <div className="w-full bg-white justify-center border border-gray-200 px-2.5 md:px-6 py-2.5 md:py-3 mb-2.5 md:mb-6 flex flex-wrap items-center gap-3">
           {/* Background Color Picker */}
           <div className="relative">
             {/* Icon trigger */}
@@ -1358,7 +1359,7 @@ const SidebarTemplate = ({ resume }) => {
 
               {/* Popover Panel */}
               {openDropdown === "skillColor" && (
-                <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-xl shadow-xl p-2 md:p-4 w-max right-1/2 transform translate-x-1/2">
+                <div className="absolute z-50 mt-2 bg-white border border-gray-200 rounded-xl shadow-xl p-2 md:p-4 w-32 md:w-64 right-1/2 transform translate-x-1/2">
                   <p className="text-sm font-semibold text-gray-700 mb-3">
                     Skill Bar Colors
                   </p>
@@ -1367,12 +1368,12 @@ const SidebarTemplate = ({ resume }) => {
                     {resume.skills.map((skill, i) => (
                       <div
                         key={i}
-                        className="flex items-center gap-2 text-xs bg-white border border-gray-200 rounded-xs px-3 py-1 shadow-sm"
+                        className="flex items-center justify-between gap-2 text-xs bg-white border border-gray-200 rounded-xs px-1.5 md:px-3 py-1 shadow-sm"
                       >
-                        <span className="text-gray-700 font-medium">
+                        <span className="text-gray-700 break-all font-medium">
                           {skill.domain}
                         </span>
-                        <label className="relative w-3 h-3 md:w-5 md:h-5 cursor-pointer">
+                        <label className="relative shrink-0 w-3 h-3 md:w-5 md:h-5 cursor-pointer">
                           <input
                             type="color"
                             value={
@@ -1631,7 +1632,7 @@ const SidebarTemplate = ({ resume }) => {
             </button>
 
             {openDropdown === "gap" && (
-              <div className="absolute max-h-48 overflow-auto left-1/2 -translate-x-1/2 mt-2 z-50 w-32 md:w-56 bg-white border border-gray-200 rounded-lg shadow-lg p-1.5 md:p-3">
+              <div className="absolute max-h-48 md:max-h-64 overflow-auto left-1/2 -translate-x-1/2 mt-2 z-50 w-32 md:w-56 bg-white border border-gray-200 rounded-lg shadow-lg p-1.5 md:p-3">
                 <h3 className="text-xs md:text-sm font-semibold text-gray-800 mb-2 flex items-center gap-2">
                   <CgSpaceBetweenV className="text-sky-700" />
                   Section Spacing
@@ -1852,10 +1853,10 @@ const SidebarTemplate = ({ resume }) => {
         </div>
       )}
       {/* Resume Preview */}
-      <div className="overflow-hidden md:aspect-[7/10.4] md:flex">
+      <div className="overflow-hidden m-2.5 md:flex p-2 md:p-4  border border-gray-200 mx-2.5 mb-2.5 bg-white/60 backdrop-blur-md  shadow-xl">
         <div
           ref={contentRef}
-          className="border print-a4 border-gray-400 p-2 md:p-4 flex"
+          className=" print-a4-sidebar  flex"
           style={{
             backgroundColor: sidebarSettings.bgColor || "#ffffff",
             fontFamily: sidebarSettings.fontFamily || "Inter",

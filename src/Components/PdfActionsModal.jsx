@@ -235,7 +235,7 @@ const PdfActionsModal = ({ isOpen, onClose, selectedResume }) => {
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.9, opacity: 0, y: 20 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
-          className="bg-white/90 backdrop-blur-md max-h-[90vh] overflow-y-auto rounded-2xl p-4 sm:p-8 max-w-md w-full mx-auto border border-white/20 shadow-2xl relative overflow-hidden"
+          className="bg-white/90 backdrop-blur-md max-h-[95vh] overflow-y-auto rounded-2xl p-4 sm:p-8 max-w-md w-full mx-auto border border-white/20 shadow-2xl relative overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Background gradient */}
