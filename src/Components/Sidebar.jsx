@@ -114,12 +114,11 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
                   >
                     <Link
                       to={item.path}
-                      onClick={closeSidebar} // auto-close on click
                       className={classNames(
                         "group relative flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300 overflow-hidden",
                         isActive
                           ? "bg-white/80 backdrop-blur-sm shadow-lg border border-white/40"
-                          : "hover:bg-white/60 backdrop-blur-sm hover:shadow-md"
+                          : "hover:bg-white/60 backdrop-blur-sm hover:shadow-md border-white/20"
                       )}
                     >
                       {isActive && (
