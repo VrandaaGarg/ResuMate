@@ -1639,7 +1639,7 @@ const StandardTemplate = ({ resume }) => {
       )}
 
       {/* Resume Preview */}
-      <div className="m-3 md:flex p-2.5 md:p-[25px] border border-gray-200 mx-2.5 mb-2.5 bg-white/60 backdrop-blur-md  shadow-xl">
+      <div className="m-3 border border-gray-200 mx-2.5 mb-2.5 bg-white/60 backdrop-blur-md  shadow-xl">
         <div
           ref={contentRef}
           className="w-full md:min-h-[1050px] overflow-hidden mx-auto print-a4 text-sm leading-relaxed"
@@ -1652,9 +1652,9 @@ const StandardTemplate = ({ resume }) => {
         >
           {/* Inner Resume Container */}
           <div
-            className={` flex overflow-hidden flex-col `}
+            className={` flex overflow-hidden min-h-[1120px] flex-col `}
             style={{
-              padding: standardSettings.padding || "0px",
+              padding: standardSettings.padding || "25px",
               border:
                 standardSettings.borderWidth &&
                 standardSettings.borderWidth !== "0px"
