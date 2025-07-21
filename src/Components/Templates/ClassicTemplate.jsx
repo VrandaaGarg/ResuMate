@@ -1606,20 +1606,24 @@ const ClassicTemplate = ({ resume }) => {
       )}
 
       {/* Resume Preview */}
-      <div className="m-2.5 md:flex p-2.5 md:p-[25px] border border-gray-200 mx-2.5 mb-2.5 bg-white/60 backdrop-blur-md  shadow-xl">
+      <div
+        className="m-2.5 md:flex  border border-gray-200 mx-2.5 mb-2.5 bg-white/60 backdrop-blur-md  shadow-xl"
+        style={{
+          backgroundColor: classicSettings.backgroundColor || "#ffffff",
+        }}
+      >
         <div
           ref={contentRef}
-          className="w-full md:min-h-[1050px] flexs mx-auto  text-sm leading-relaxed  "
+          className="w-full md:min-h-[1050px] flexs mx-auto p-2.5  text-sm leading-relaxed  "
           style={{
             fontFamily: classicSettings.fontFamily || "Inter",
             backgroundColor: classicSettings.backgroundColor || "#ffffff",
-
             flexDirection: "column",
           }}
         >
           {/* Inner Resume Container */}
           <div
-            className="h-full  flex flex-col"
+            className="h-full  flex flex-col min-h-[1097px]"
             style={{
               border:
                 classicSettings.borderWidth &&

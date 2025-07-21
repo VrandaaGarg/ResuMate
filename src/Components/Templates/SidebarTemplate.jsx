@@ -1853,7 +1853,7 @@ const SidebarTemplate = ({ resume }) => {
         </div>
       )}
       {/* Resume Preview */}
-      <div className="overflow-hidden m-2.5 md:flex p-2 md:p-4  border border-gray-200 mx-2.5 mb-2.5 bg-white/60 backdrop-blur-md  shadow-xl">
+      <div className="overflow-hidden m-2.5 md:flex   border border-gray-200 mx-2.5 mb-2.5 bg-white/60 backdrop-blur-md  shadow-xl">
         <div
           ref={contentRef}
           className=" print-a4-sidebar md:min-h-[1050px] flex"
@@ -1866,7 +1866,7 @@ const SidebarTemplate = ({ resume }) => {
         >
           {/* Sidebar */}
           <aside
-            className=" w-1/3 print:w-[32%] text-white overflow-hidden p-3 md:p-6 flex flex-col"
+            className=" w-1/3 print:w-[32%] min-h-[1120px] text-white overflow-hidden p-4 py-4 flex flex-col"
             style={{
               backgroundColor: sidebarSettings.sidebarColor || "#212121",
               rowGap: `${sidebarSettings.sectionGap ?? 16}px`,
@@ -1885,7 +1885,7 @@ const SidebarTemplate = ({ resume }) => {
 
           {/* Mainbar */}
           <main
-            className=" w-2/3 print:w-[68%] p-2 md:p-6 flex flex-col"
+            className=" w-2/3 print:w-[68%] min-h-[1120px] p-4 py-5 flex flex-col"
             style={{
               rowGap: `${sidebarSettings.sectionGap ?? 16}px`,
             }}

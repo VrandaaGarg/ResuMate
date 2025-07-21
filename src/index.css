@@ -75,7 +75,7 @@
 
 @media print {
   @page {
-    padding: 25px;
+    min-height: 1050px;
   }
   .print-a4 {
     min-height: 1050px !important;

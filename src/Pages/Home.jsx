@@ -559,7 +559,7 @@ const Home = () => {
               >
                 <iframe
                   className="absolute inset-0 w-full h-full"
-                  src="https://www.youtube.com/embed/x-eAjeuu5yw?si=Av5tGn6p5ibqLPYd"
+                  src="https://www.youtube.com/embed/W-VnbrM6jG8?si=mWpFPfrLuIxbPZyK"
                   title="ResuMate Demo Video"
                   allowFullScreen
                   loading="lazy"
