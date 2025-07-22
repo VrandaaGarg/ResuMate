@@ -514,7 +514,7 @@ const ClassicTemplate = ({ resume }) => {
         {resume.projects.map((proj, i) => (
           <div key={i} className="md:mb-3">
             <div
-              className={`resume-h2 flex gap-2 md:gap-6 w-full ${getCustomFontClass(
+              className={`resume-h3 flex gap-2 md:gap-6 w-full ${getCustomFontClass(
                 "text-[14px]",
                 classicSettings.fontScaleLevel
               )} ${
@@ -586,7 +586,13 @@ const ClassicTemplate = ({ resume }) => {
                 "text-[14px]",
                 classicSettings.fontScaleLevel
               )}`}
-              style={{ color: classicSettings.TextColors?.["h4"] || "#64748b" }}
+              style={{
+                color: classicSettings.TextColors?.["h4"] || "#64748b",
+                "--resume-h3-user": `${getFontPxValue(
+                  "14",
+                  classicSettings.fontScaleLevel
+                )}px`,
+              }}
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(proj.description),
               }}
