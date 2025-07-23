@@ -8,7 +8,7 @@ const steps = [
     description:
       "Begin by uploading your current resume in PDF or DOCX format. If you don't have one, our intuitive builder will guide you through creating a new resume from scratch, ensuring you cover all essential sections.",
     videoUrl:
-      "https://res.cloudinary.com/dyetf2h9n/video/upload/fl_progressive/v1753257462/step1_wpszpo.mp4",
+      "https://res.cloudinary.com/dyetf2h9n/video/upload/fl_progressive,q_auto,f_auto/v1753257462/step1_wpszpo.mp4",
   },
   {
     id: 2,
@@ -17,7 +17,7 @@ const steps = [
     description:
       "Our real-time editor allows you to perfect every detail. Update your contact information, professional summary, work experience, and skills. Use our formatting tools to ensure your resume is clean and readable.",
     videoUrl:
-      "https://res.cloudinary.com/dyetf2h9n/video/upload/fl_progressive/v1753257466/step2_ylozmt.mp4",
+      "https://res.cloudinary.com/dyetf2h9n/video/upload/fl_progressive,q_auto,f_auto/v1753257466/step2_ylozmt.mp4",
   },
   {
     id: 3,
@@ -26,7 +26,7 @@ const steps = [
     description:
       "Make a lasting impression by selecting from our library of professionally designed templates. Whether you prefer a modern, classic, or standard layout, we have a style that fits your career goals.",
     videoUrl:
-      "https://res.cloudinary.com/dyetf2h9n/video/upload/fl_progressive/v1753257466/step3_jjgx49.mp4",
+      "https://res.cloudinary.com/dyetf2h9n/video/upload/fl_progressive,q_auto,f_auto/v1753257466/step3_jjgx49.mp4",
   },
   {
     id: 4,
@@ -35,7 +35,7 @@ const steps = [
     description:
       "Tailor your resume to the job you're applying for. Drag and drop sections to reorder them, customize colors and fonts, and ensure the most important information is front and center.",
     videoUrl:
-      "https://res.cloudinary.com/dyetf2h9n/video/upload/fl_progressive/v1753257462/step4_rbvyin.mp4",
+      "https://res.cloudinary.com/dyetf2h9n/video/upload/fl_progressive,q_auto,f_auto/v1753257462/step4_rbvyin.mp4",
   },
   {
     id: 5,
@@ -44,7 +44,7 @@ const steps = [
     description:
       "With one click, download your resume as a high-quality, ATS-friendly PDF. Your resume is now ready to be sent to recruiters and uploaded to job application portals.",
     videoUrl:
-      "https://res.cloudinary.com/dyetf2h9n/video/upload/fl_progressive/v1753257467/step5_swnkij.mp4",
+      "https://res.cloudinary.com/dyetf2h9n/video/upload/fl_progressive,q_auto,f_auto/v1753257467/step5_swnkij.mp4",
   },
 ];
 
@@ -85,6 +85,7 @@ const Steps = () => {
                   <video
                     src={step.videoUrl}
                     autoPlay
+                    controls
                     preload="auto"
                     loop
                     muted
