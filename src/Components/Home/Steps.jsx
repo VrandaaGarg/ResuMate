@@ -85,7 +85,6 @@ const Steps = () => {
                   <video
                     src={step.videoUrl}
                     autoPlay
-                    controls
                     preload="auto"
                     loop
                     muted
