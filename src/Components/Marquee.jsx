@@ -17,7 +17,7 @@ const companies = [
 const Companies = () => {
   return (
     <section className="py-10 px-6 md:px-20 bg-sky-800/10">
-      <h2 className="text-xl md:text-3xl text-center mb-9 md:mb-20 [font-family:'Lilita_One',cursive]">
+      <h2 className="text-xl md:text-3xl text-center mb-9 md:mb-20 [font-family:'Poppins',sans-serif]">
         Our Resumes Got Users Into
       </h2>
 

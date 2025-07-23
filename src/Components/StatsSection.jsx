@@ -40,7 +40,7 @@ const StatsSection = () => {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="relative z-10"
       >
-        <h2 className="text-lg md:text-2xl mb-6 text-[#0f172a] [font-family:'Lilita_One',cursive]">
+        <h2 className="text-lg md:text-2xl mb-6 text-[#0f172a] [font-family:'Poppins',sans-serif]">
           Helping Careers Take Off 🚀
         </h2>
         <p className="text-base md:text-xl font-medium text-gray-800">

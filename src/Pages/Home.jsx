@@ -10,7 +10,6 @@ import {
   FiFileText,
   FiLayers,
   FiStar,
-  FiTrendingUp,
 } from "react-icons/fi";
 import {
   FaChevronDown,
@@ -29,6 +28,7 @@ import { FaRocket, FaUpload } from "react-icons/fa";
 import StatsSection from "../Components/StatsSection";
 import { useState } from "react";
 import { getAuth } from "firebase/auth";
+import Steps from "../Components/Home/Steps";
 
 const features = [
   {
@@ -92,44 +92,6 @@ const icons = [
   FiBarChart2,
   FiCheckCircle,
   FiShield,
-];
-
-const steps = [
-  {
-    id: 1,
-    heading: "Create Account",
-    text: "Create an account or log in to your existing account.",
-    icon: FaUserAlt,
-    color: "from-blue-500 to-cyan-400",
-  },
-  {
-    id: 2,
-    heading: "Choose Template",
-    text: "Pick a professional template and start entering your details.",
-    icon: FaPaintBrush,
-    color: "from-purple-500 to-pink-400",
-  },
-  {
-    id: 3,
-    heading: "Enhance with AI",
-    text: "Use the AI-powered suggestions to make your resume shine.",
-    icon: FaStar,
-    color: "from-green-500 to-emerald-400",
-  },
-  {
-    id: 4,
-    heading: "Preview & Edit",
-    text: "Check your resume in real time and make any adjustments.",
-    icon: FiEdit,
-    color: "from-orange-500 to-red-400",
-  },
-  {
-    id: 5,
-    heading: "Download & Share",
-    text: "Download as a polished PDF or share it online instantly.",
-    icon: FaRocket,
-    color: "from-indigo-500 to-blue-400",
-  },
 ];
 
 const Template = [
@@ -276,10 +238,10 @@ const Home = () => {
             <FaGem className="text-purple-500" />
           </motion.div>
 
-          <h1 className="text-4xl md:text-7xl mb-6 [font-family:'Lilita_One',cursive] leading-tight">
+          <h1 className="text-4xl md:text-6xl mb-6 [font-family:'Poppins',sans-serif] leading-tight">
             Craft a Winning Resume with <br />
-            <span className="text-5xl md:text-8xl bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent font-extrabold">
-              Resu<span className="text-sky-700">Mate</span>
+            <span className="text-5xl md:text-8xl [font-family:'Lilita_One',cursive] bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent font-extrabold">
+              ResuMate
             </span>
           </h1>
 
@@ -347,7 +309,7 @@ const Home = () => {
               Premium Features
             </span>
           </div>
-          <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4 [font-family:'Lilita_One',cursive]">
+          <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4 [font-family:'Poppins',sans-serif]">
             Why Use ResuMate?
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
@@ -406,72 +368,7 @@ const Home = () => {
       <StatsSection />
 
       {/* Steps Section */}
-      <section className="py-20 md:py-32 px-6 md:px-20 bg-gradient-to-br from-white to-blue-50">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <div className="inline-flex items-center gap-2 bg-blue-100 backdrop-blur-sm border border-blue-200 rounded-full px-6 py-2 mb-4">
-            <FiTrendingUp className="text-blue-600" />
-            <span className="text-sm font-medium text-blue-800">
-              Step-by-step journey
-            </span>
-          </div>
-          <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4 [font-family:'Lilita_One',cursive]">
-            How It Works
-          </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Transform your career in just 5 simple steps
-          </p>
-        </motion.div>
-
-        <div className="grid md:grid-cols-5 gap-6 relative">
-          {/* Connection Lines */}
-          <div className="hidden md:block absolute top-16 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-200 via-purple-200 to-cyan-200 z-0" />
-
-          {steps.map((step, index) => {
-            const IconComponent = step.icon;
-            return (
-              <motion.div
-                key={step.id}
-                whileHover={{ scale: 1.05, y: -10 }}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="relative group"
-              >
-                {/* Step Number */}
-                <motion.div
-                  whileHover={{ scale: 1.1 }}
-                  className={`relative z-10 w-16 h-16 bg-gradient-to-r ${step.color} text-white text-xl font-bold rounded-full flex items-center justify-center shadow-xl mx-auto mb-6 group-hover:shadow-2xl transition-all duration-300`}
-                >
-                  {step.id}
-                  <div className="absolute -inset-2 bg-gradient-to-r from-white/20 to-white/5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </motion.div>
-
-                {/* Card */}
-                <div className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 group-hover:bg-white">
-                  <div className="flex items-center justify-center mb-3">
-                    <IconComponent
-                      className={`text-2xl bg-gradient-to-r ${step.color} bg-clip-text text-transparent`}
-                    />
-                  </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2 text-center">
-                    {step.heading}
-                  </h3>
-                  <p className="text-sm text-gray-600 text-center leading-relaxed">
-                    {step.text}
-                  </p>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
-      </section>
+      <Steps />
 
       {/* Templates Section */}
       <section className="py-20 md:py-32 px-6 md:px-20 bg-gradient-to-br from-slate-50 to-blue-50">
@@ -482,10 +379,10 @@ const Home = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4 [font-family:'Lilita_One',cursive]">
+          <h2 className="text-2xl md:text-5xl font-bold text-gray-900 mb-4 [font-family:'Poppins',sans-serif]">
             Popular Templates
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-sm md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
             Choose from beautifully crafted templates designed for maximum
             impact. Each template is fully customizable with modern design
             principles.
@@ -573,10 +470,10 @@ const Home = () => {
                 <FaStar className="text-yellow-300" />
                 <span className="text-sm ">Watch Demo</span>
               </div>
-              <h2 className="text-3xl md:text-5xl font-bold mb-6 [font-family:'Lilita_One',cursive]">
+              <h2 className="text-2xl md:text-4xl font-bold mb-6 [font-family:'Poppins',sans-serif]">
                 Watch How It Works
               </h2>
-              <p className="text-black/90 text-lg leading-relaxed">
+              <p className="text-black/90 text-sm md:text-xl leading-relaxed">
                 See how ResuMate helps you create, edit, and optimize your
                 resume step-by-step with our intuitive editor and AI-powered
                 enhancements.
@@ -600,10 +497,10 @@ const Home = () => {
           viewport={{ once: true }}
           className="text-center mb-16 relative z-10"
         >
-          <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4 [font-family:'Lilita_One',cursive]">
+          <h2 className="text-2xl md:text-5xl font-bold text-gray-900 mb-4 [font-family:'Poppins',sans-serif]">
             What Users Say
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-sm md:text-xl text-gray-600 max-w-2xl mx-auto">
             Join thousands of professionals who've transformed their careers
           </p>
         </motion.div>
@@ -633,7 +530,7 @@ const Home = () => {
                 ))}
               </div>
 
-              <p className="text-gray-700 italic mb-6 leading-relaxed text-lg relative z-10">
+              <p className="text-gray-700 italic mb-6 leading-relaxed text-xs md:text-lg relative z-10">
                 "{user.feedback}"
               </p>
 
@@ -642,16 +539,20 @@ const Home = () => {
                   <img
                     src={user.image}
                     alt={user.name}
-                    className="w-14 h-14 rounded-full object-cover border-2 border-white shadow-lg"
+                    className="md:w-14 md:h-14 w-10 h-10 rounded-full object-cover border-2 border-white shadow-lg"
                   />
                   <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-400 rounded-full border-2 border-white" />
                 </div>
                 <div>
-                  <p className="font-bold text-gray-900 text-lg">{user.name}</p>
-                  <p className="text-sm text-blue-600 font-medium">
+                  <p className="font-bold text-gray-900 text-xs md:text-lg">
+                    {user.name}
+                  </p>
+                  <p className="text-[14px] md:text-sm text-blue-600 font-medium">
                     {user.role}
                   </p>
-                  <p className="text-xs text-gray-500">{user.company}</p>
+                  <p className="text-[12px] md:text-xs text-gray-500">
+                    {user.company}
+                  </p>
                 </div>
               </div>
 
@@ -671,10 +572,10 @@ const Home = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4 [font-family:'Lilita_One',cursive]">
+          <h2 className="text-2xl md:text-5xl font-bold text-gray-900 mb-4 [font-family:'Poppins',sans-serif]">
             Frequently Asked Questions
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-md text-gray-600 max-w-2xl mx-auto">
             Everything you need to know about ResuMate
           </p>
         </motion.div>
@@ -687,25 +588,25 @@ const Home = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
               viewport={{ once: true }}
-              className="bg-white border border-gray-200 overflow-hidden rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
+              className="bg-white border border-gray-200 overflow-hidden rounded-lg md:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
             >
               <button
                 onClick={() => toggleFAQ(i)}
-                className={`w-full px-8 py-6 flex justify-between items-center text-left transition-all duration-300 ${
+                className={`w-full md:px-8 md:py-6 px-3 py-2 flex justify-between items-center text-left transition-all duration-300 ${
                   openIndex === i
                     ? "bg-gradient-to-r from-blue-50 to-indigo-50"
                     : "hover:bg-gray-50"
                 }`}
               >
-                <span className="text-lg font-semibold text-gray-900">
+                <span className="text-sm md:text-lg font-semibold text-gray-900">
                   {faq.q}
                 </span>
                 <motion.div
                   animate={{ rotate: openIndex === i ? 180 : 0 }}
                   transition={{ duration: 0.3 }}
-                  className="p-2 rounded-full bg-blue-100"
+                  className="p-1 md:p-2 rounded-full bg-blue-100"
                 >
-                  <FaChevronDown className="text-blue-600" />
+                  <FaChevronDown className="text-blue-600 text-sm md:text-base" />
                 </motion.div>
               </button>
 
@@ -718,8 +619,8 @@ const Home = () => {
                 transition={{ duration: 0.3, ease: "easeInOut" }}
                 className="overflow-hidden bg-gradient-to-r from-blue-50 to-indigo-50"
               >
-                <div className="px-8 py-6">
-                  <p className="text-gray-700 leading-relaxed text-lg">
+                <div className="md:px-8 md:py-6 px-3 py-2">
+                  <p className="text-gray-700 leading-relaxed text-xs md:text-lg">
                     {faq.a}
                   </p>
                 </div>
@@ -742,10 +643,10 @@ const Home = () => {
           viewport={{ once: true }}
           className="text-center mb-16 relative z-10"
         >
-          <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4 [font-family:'Lilita_One',cursive]">
+          <h2 className="text-2xl md:text-5xl font-bold text-gray-900 mb-4 [font-family:'Poppins',sans-serif]">
             Get in Touch
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-sm md:text-xl text-gray-600 max-w-2xl mx-auto">
             Have questions? We'd love to hear from you.
           </p>
         </motion.div>
@@ -757,7 +658,7 @@ const Home = () => {
           viewport={{ once: true }}
           action="https://formspree.io/f/movdekvl"
           method="POST"
-          className="max-w-2xl mx-auto bg-white/80 backdrop-blur-sm p-8 md:p-12 rounded-3xl shadow-2xl border border-white/20 space-y-8 relative z-10"
+          className="max-w-2xl mx-auto bg-white/80 backdrop-blur-sm p-5 md:p-12 rounded-3xl shadow-2xl border border-white/20 space-y-8 relative z-10"
         >
           <div className="grid md:grid-cols-2 gap-6">
             <div className="relative group">
