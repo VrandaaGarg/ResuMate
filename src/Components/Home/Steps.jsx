@@ -44,7 +44,7 @@ const steps = [
     description:
       "With one click, download your resume as a high-quality, ATS-friendly PDF. Your resume is now ready to be sent to recruiters and uploaded to job application portals.",
     videoUrl:
-      "https://res.cloudinary.com/dyetf2h9n/video/upload/fl_progressive,q_auto,f_auto/v1753257467/step5_swnkij.mp4",
+      "https://res.cloudinary.com/dyetf2h9n/video/upload/fl_progressive,q_auto,f_auto/v1753268547/step5_swnkij.mp4",
   },
 ];
 
