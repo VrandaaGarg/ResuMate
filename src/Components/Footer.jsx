@@ -139,30 +139,9 @@ export default function Footer() {
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
-              className="flex flex-col md:flex-row justify-between items-center gap-3 text-[14px] md:text-sm text-gray-500"
+              className="flex justify-center items-center gap-3 text-[14px] md:text-sm text-gray-500"
             >
               <p>© {currentYear} ResuMate. All rights reserved.</p>
-
-              <div className="flex items-center gap-4">
-                <Link
-                  to="#"
-                  className="hover:text-sky-600 transition-colors duration-200"
-                >
-                  Privacy
-                </Link>
-                <Link
-                  to="#"
-                  className="hover:text-sky-600 transition-colors duration-200"
-                >
-                  Terms
-                </Link>
-                <Link
-                  to="mailto:resumate@vrandagarg.in"
-                  className="hover:text-sky-600 transition-colors duration-200"
-                >
-                  Contact
-                </Link>
-              </div>
             </motion.div>
           </div>
         </div>

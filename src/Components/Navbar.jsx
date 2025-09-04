@@ -1,14 +1,7 @@
-import {
-  FaBars,
-  FaUserCircle,
-  FaSignOutAlt,
-  FaUser,
-  FaTachometerAlt,
-} from "react-icons/fa";
-import { useState, useEffect } from "react";
+import { FaBars, FaSignOutAlt, FaUser, FaTachometerAlt } from "react-icons/fa";
+import { useState, useEffect, useCallback, memo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { SiGoogleforms } from "react-icons/si";
 import { RxCross2 } from "react-icons/rx";
 import { useAuth } from "../Contexts/AuthContext";
 import { useLocation } from "react-router-dom";
@@ -27,22 +20,21 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
 
   const navigate = useNavigate();
 
-  // Handle scroll effect
-  useEffect(() => {
-    const handleScroll = () => {
-      const offset = window.scrollY;
-      setScrolled(offset > 50);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+  const handleScroll = useCallback(() => {
+    const offset = window.scrollY;
+    setScrolled(offset > 50);
   }, []);
 
-  const handleLogout = () => {
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
+
+  const handleLogout = useCallback(() => {
     logout();
     showSuccessToast("Logged out successfully!");
     navigate("/");
-  };
+  }, [logout, navigate]);
 
   return (
     <motion.nav
@@ -55,7 +47,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
           : "bg-white/20 backdrop-blur-sm border-b border-gray-100"
       }`}
     >
-      <div className="px-4 md:px-6 lg:px-8 xl:px-12 py-3 md:py-3 flex items-center justify-between w-full">
+      <div className="px-4 max-w-7xl mx-auto md:px-4 lg:px-6 xl:px-6 py-3 md:py-3 flex items-center justify-between w-full">
         {/* Left: Logo + Sidebar Toggle */}
         <div className="flex items-center gap-3 md:gap-4">
           {!isHomePage &&
@@ -236,4 +228,4 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
   );
 };
 
-export default Navbar;
+export default memo(Navbar);

@@ -118,7 +118,7 @@ const Home = () => {
   return (
     <div className="bg-gradient-to-br from-white via-sky-50 to-sky-50 overflow-x-hidden min-h-screen">
       {/* Hero Section */}
-      <section className="relative px-6 md:px-12 lg:px-20 pt-24 flex items-center overflow-hidden">
+      <section className=" relative px-6 md:px-12 lg:px-20 pt-24 flex items-center max-w-7xl mx-auto">
         {/* Background Elements */}
         <div className="absolute -top-20 -right-20 w-72 h-72 bg-sky-200/30 rounded-full blur-3xl z-0" />
         <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-sky-200/20 rounded-full blur-3xl z-0" />
@@ -213,7 +213,7 @@ const Home = () => {
               transition={{ duration: 0.8, delay: 0.3 }}
               className="text-4xl md:text-5xl font-bold text-gray-900 mb-3 leading-tight"
             >
-              Craft Your Perfect Resume with{" "}
+              Crafte Your Perfect Resume with{" "}
               <span className="text-sky-600">ResuMate</span>
             </motion.h1>
 
@@ -271,7 +271,7 @@ const Home = () => {
                 transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
                 src="/homepage.png"
                 alt="ResuMate Dashboard"
-                className="h-full w-max object-contain drop-shadow-2xl"
+                className="h-full w-max object-contain"
               />
               <div className="absolute -inset-6 bg-gradient-to-r from-sky-200/20 to-sky-200/20 rounded-3xl blur-3xl -z-10" />
             </div>

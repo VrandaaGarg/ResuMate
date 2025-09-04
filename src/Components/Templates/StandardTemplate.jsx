@@ -43,7 +43,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
-import { useStandardSetting } from "../../Contexts/StandardSettingContext";
+import { useStandardSetting } from "../../Contexts/CombinedTemplateContext";
 import { useReactToPrint } from "react-to-print";
 import { useRef } from "react";
 
@@ -67,6 +67,35 @@ const StandardTemplate = ({ resume }) => {
   );
 
   const [openDropdown, setOpenDropdown] = useState(null); // values: "toggle", "font", "reorder", etc.
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // Check if the click is outside any dropdown container
+      const dropdownContainers = document.querySelectorAll(
+        ".dropdown-container"
+      );
+      let isClickOutside = true;
+
+      dropdownContainers.forEach((container) => {
+        if (container.contains(event.target)) {
+          isClickOutside = false;
+        }
+      });
+
+      if (isClickOutside && openDropdown) {
+        setOpenDropdown(null);
+      }
+    };
+
+    if (openDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }
+  }, [openDropdown]);
+
   if (!resume) return null;
 
   const pixelSizes = [
@@ -862,7 +891,7 @@ const StandardTemplate = ({ resume }) => {
       {isEditable && (
         <div className="w-full bg-white justify-center border border-gray-200  px-2.5 md:px-6 py-2.5 md:py-3 mb-2.5 md:mb-6 flex flex-wrap items-center gap-3">
           {/* Resume Background Color */}
-          <div className="relative">
+          <div className="relative dropdown-container">
             {/* Color Icon Button */}
             <button
               className={`md:p-2 rounded-md hover:bg-gray-200 transition relative group ${
@@ -1001,7 +1030,7 @@ const StandardTemplate = ({ resume }) => {
           </div>
 
           {/* Font Selector */}
-          <div className="relative">
+          <div className="relative dropdown-container">
             {/* Trigger Button */}
             <button
               onClick={() =>
@@ -1106,7 +1135,7 @@ const StandardTemplate = ({ resume }) => {
           </div>
 
           {/* Section Spacing */}
-          <div className="relative ">
+          <div className="relative dropdown-container">
             <button
               onClick={() =>
                 setOpenDropdown((prev) => (prev === "gap" ? null : "gap"))
@@ -1165,7 +1194,7 @@ const StandardTemplate = ({ resume }) => {
           </div>
 
           {/* Padding Dropdown */}
-          <div className="relative">
+          <div className="relative dropdown-container">
             <button
               onClick={() =>
                 setOpenDropdown((prev) =>
@@ -1228,7 +1257,7 @@ const StandardTemplate = ({ resume }) => {
           </div>
 
           {/* Top Border Width Dropdown */}
-          <div className="relative">
+          <div className="relative dropdown-container">
             <button
               onClick={() =>
                 setOpenDropdown((prev) =>
@@ -1294,7 +1323,7 @@ const StandardTemplate = ({ resume }) => {
           </div>
 
           {/*border style and color*/}
-          <div className="relative">
+          <div className="relative dropdown-container">
             <button
               onClick={() =>
                 setOpenDropdown((prev) =>
@@ -1363,7 +1392,7 @@ const StandardTemplate = ({ resume }) => {
           </div>
 
           {/* Text Color Button */}
-          <div className="relative group">
+          <div className="relative group dropdown-container">
             <button
               className={`md:p-2 align-middle text-center rounded-md hover:bg-gray-100 transition ${
                 openDropdown === "TextColor" ? "bg-gray-100" : ""
@@ -1420,7 +1449,7 @@ const StandardTemplate = ({ resume }) => {
 
           {/* Link Color Button */}
           {hasAnyProjectLink && (
-            <div className="relative">
+            <div className="relative dropdown-container">
               {/* Trigger Button */}
               <button
                 onClick={() =>
@@ -1506,7 +1535,7 @@ const StandardTemplate = ({ resume }) => {
           )}
 
           {/* Toggle Visibility Dropdown */}
-          <div className="relative">
+          <div className="relative dropdown-container">
             <button
               className={`md:p-2 rounded-md align-middle hover:bg-gray-100 transition ${
                 openDropdown === "toggle" ? "bg-gray-100" : ""
@@ -1572,7 +1601,7 @@ const StandardTemplate = ({ resume }) => {
           </div>
 
           {/* Reorder Sections Dropdown */}
-          <div className="relative">
+          <div className="relative dropdown-container">
             <button
               className={`md:p-2 align-middle rounded-md hover:bg-gray-100 transition ${
                 openDropdown === "reorder" ? "bg-gray-100" : ""

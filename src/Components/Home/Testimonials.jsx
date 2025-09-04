@@ -23,11 +23,20 @@ const testimonials = [
   },
   {
     name: "Rahul Sharma",
-    image: "user3.jpeg",
+    image: "user3.png",
     feedback:
       "It's the best resume builder I've used — simple, elegant, and very effective with job matching tools. The AI-powered suggestions helped me tailor my resume perfectly.",
     role: "Data Analyst",
     company: "Analytics Inc",
+    rating: 5,
+  },
+  {
+    name: "Priya Patel",
+    image: "user4.png",
+    feedback:
+      "The job fit analyzer feature is a game-changer! It helped me understand exactly what skills to highlight for different positions. My interview rate increased significantly after using ResuMate.",
+    role: "Product Manager",
+    company: "Innovation Labs",
     rating: 5,
   },
 ];
@@ -55,14 +64,15 @@ function Testimonials() {
       </motion.div>
 
       {/* Testimonials Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full max-w-6xl">
-        {/* Large testimonial - First one */}
+      <div className="grid grid-cols-1 md:grid-cols-7 gap-4 w-full max-w-6xl mx-auto">
+        {/* First Row */}
+        {/* First testimonial - takes 2 columns */}
         <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0 }}
           viewport={{ once: true }}
-          className="bg-sky-50/50 p-4 md:p-8 rounded-xl flex flex-col justify-between border border-sky-100 backdrop-blur-sm shadow-sm hover:shadow-md transition-all duration-300"
+          className=" md:col-span-4 bg-sky-50/50 p-4 md:p-8 rounded-xl flex flex-col justify-between border border-sky-100 backdrop-blur-sm shadow-sm hover:shadow-md transition-all duration-300 "
         >
           <div className="mb-8">
             {/* Rating Stars */}
@@ -74,7 +84,7 @@ function Testimonials() {
                 />
               ))}
             </div>
-            <p className="text-base sm:text-lg lg:text-xl text-gray-800 leading-relaxed md:mb-8">
+            <p className="text-base sm:text-lg lg:text-md text-gray-800 leading-relaxed">
               "{testimonials[0].feedback}"
             </p>
           </div>
@@ -96,88 +106,126 @@ function Testimonials() {
           </div>
         </motion.div>
 
-        {/* Right column with two testimonials */}
-        <div className="flex flex-col gap-4">
-          {/* Second testimonial */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.3, delay: 0.1 }}
-            viewport={{ once: true }}
-            className="bg-sky-50/50 p-4 md:p-8 rounded-xl flex flex-col justify-between border border-sky-100 backdrop-blur-sm shadow-sm hover:shadow-md transition-all duration-300"
-          >
-            <div className="mb-4 md:mb-6">
-              {/* Rating Stars */}
-              <div className="flex items-center mb-4">
-                {[...Array(testimonials[1].rating)].map((_, index) => (
-                  <FiStar
-                    key={index}
-                    className="w-4 h-4 text-yellow-400 fill-current mr-1"
-                  />
-                ))}
-              </div>
-              <p className="text-base sm:text-lg lg:text-xl text-gray-800 leading-relaxed mb-6">
-                "{testimonials[1].feedback}"
+        {/* Second testimonial - takes 1 column */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          viewport={{ once: true }}
+          className="md:col-span-3 bg-sky-50/50 p-4 md:p-8 rounded-xl flex flex-col justify-between border border-sky-100 backdrop-blur-sm shadow-sm hover:shadow-md transition-all duration-300 "
+        >
+          <div className="mb-6">
+            {/* Rating Stars */}
+            <div className="flex items-center mb-4">
+              {[...Array(testimonials[1].rating)].map((_, index) => (
+                <FiStar
+                  key={index}
+                  className="w-5 h-5 text-yellow-400 fill-current mr-1"
+                />
+              ))}
+            </div>
+            <p className="text-base sm:text-lg lg:text-md text-gray-800 leading-relaxed md:mb-4">
+              "{testimonials[1].feedback}"
+            </p>
+          </div>
+          <div className="flex items-center md:mt-auto">
+            <img
+              src={testimonials[1].image}
+              alt={testimonials[1].name}
+              className="w-12 h-12 rounded-full object-cover mr-4 border-2 border-white shadow-sm"
+            />
+            <div>
+              <p className="font-semibold text-gray-900 ">
+                {testimonials[1].name}
+              </p>
+              <p className="text-sm text-gray-600">{testimonials[1].role}</p>
+              <p className="text-sm text-sky-600 font-medium">
+                {testimonials[1].company}
               </p>
             </div>
-            <div className="flex items-center">
-              <img
-                src={testimonials[1].image}
-                alt={testimonials[1].name}
-                className="w-12 h-12 rounded-full object-cover mr-4 border-2 border-white shadow-sm"
-              />
-              <div>
-                <p className="font-semibold text-gray-900">
-                  {testimonials[1].name}
-                </p>
-                <p className="text-sm text-gray-600">{testimonials[1].role}</p>
-                <p className="text-sm text-sky-600 font-medium">
-                  {testimonials[1].company}
-                </p>
-              </div>
-            </div>
-          </motion.div>
+          </div>
+        </motion.div>
 
-          {/* Third testimonial in a smaller card */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.3, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="bg-sky-50/50 p-4 md:p-6 rounded-xl flex flex-col justify-between border border-sky-100 backdrop-blur-sm shadow-sm hover:shadow-md transition-all duration-300"
-          >
-            <div className="mb-4 md:mb-6">
-              {/* Rating Stars */}
-              <div className="flex items-center mb-4">
-                {[...Array(testimonials[2].rating)].map((_, index) => (
-                  <FiStar
-                    key={index}
-                    className="w-4 h-4 text-yellow-400 fill-current mr-1"
-                  />
-                ))}
-              </div>
-              <p className="text-sm sm:text-base text-gray-800 leading-relaxed mb-6">
-                "{testimonials[2].feedback}"
+        {/* Second Row */}
+        {/* Third testimonial - takes 1 column */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          viewport={{ once: true }}
+          className="md:col-span-3 bg-sky-50/50 p-4 md:p-8 rounded-xl flex flex-col justify-between border border-sky-100 backdrop-blur-sm shadow-sm hover:shadow-md transition-all duration-300 "
+        >
+          <div className="mb-6">
+            {/* Rating Stars */}
+            <div className="flex items-center mb-4">
+              {[...Array(testimonials[2].rating)].map((_, index) => (
+                <FiStar
+                  key={index}
+                  className="w-5 h-5 text-yellow-400 fill-current mr-1"
+                />
+              ))}
+            </div>
+            <p className="text-base sm:text-lg lg:text-md text-gray-800 leading-relaxed mb-4">
+              "{testimonials[2].feedback}"
+            </p>
+          </div>
+          <div className="flex items-center mt-auto">
+            <img
+              src={testimonials[2].image}
+              alt={testimonials[2].name}
+              className="w-12 h-12 rounded-full object-cover mr-4 border-2 border-white shadow-sm"
+            />
+            <div>
+              <p className="font-semibold text-gray-900 ">
+                {testimonials[2].name}
+              </p>
+              <p className="text-sm text-gray-600">{testimonials[2].role}</p>
+              <p className="text-sm text-sky-600 font-medium">
+                {testimonials[2].company}
               </p>
             </div>
-            <div className="flex items-center">
-              <img
-                src={testimonials[2].image}
-                alt={testimonials[2].name}
-                className="w-10 h-10 rounded-full object-cover mr-3 border-2 border-white shadow-sm"
-              />
-              <div>
-                <p className="font-semibold text-gray-900">
-                  {testimonials[2].name}
-                </p>
-                <p className="text-sm text-gray-600">{testimonials[2].role}</p>
-                <p className="text-sm text-sky-600 font-medium">
-                  {testimonials[2].company}
-                </p>
-              </div>
+          </div>
+        </motion.div>
+
+        {/* Fourth testimonial - takes 1 column */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          viewport={{ once: true }}
+          className="md:col-span-4 bg-sky-50/50 p-4 md:p-8 rounded-xl flex flex-col justify-between border border-sky-100 backdrop-blur-sm shadow-sm hover:shadow-md transition-all duration-300 "
+        >
+          <div className="mb-6">
+            {/* Rating Stars */}
+            <div className="flex items-center mb-4">
+              {[...Array(testimonials[3].rating)].map((_, index) => (
+                <FiStar
+                  key={index}
+                  className="w-5 h-5 text-yellow-400 fill-current mr-1"
+                />
+              ))}
             </div>
-          </motion.div>
-        </div>
+            <p className="text-base sm:text-lg lg:text-md text-gray-800 leading-relaxed mb-4">
+              "{testimonials[3].feedback}"
+            </p>
+          </div>
+          <div className="flex items-center mt-auto">
+            <img
+              src={testimonials[3].image}
+              alt={testimonials[3].name}
+              className="w-12 h-12 rounded-full object-cover mr-4 border-2 border-white shadow-sm"
+            />
+            <div>
+              <p className="font-semibold text-gray-900 ">
+                {testimonials[3].name}
+              </p>
+              <p className="text-sm text-gray-600">{testimonials[3].role}</p>
+              <p className="text-sm text-sky-600 font-medium">
+                {testimonials[3].company}
+              </p>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </div>
   );

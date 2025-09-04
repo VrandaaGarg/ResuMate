@@ -8,7 +8,7 @@ import { FaEye, FaEyeSlash, FaFillDrip, FaFont, FaLink } from "react-icons/fa";
 import { IoReorderThreeSharp } from "react-icons/io5";
 import DOMPurify from "dompurify";
 import { CgSpaceBetweenV } from "react-icons/cg";
-import { useClassicSetting } from "../../Contexts/ClassicSettingContext";
+import { useClassicSetting } from "../../Contexts/CombinedTemplateContext";
 import { motion } from "framer-motion";
 import { FaFileAlt, FaDownload, FaShare, FaCog } from "react-icons/fa";
 import {
@@ -68,6 +68,35 @@ const ClassicTemplate = ({ resume }) => {
   };
 
   const [openDropdown, setOpenDropdown] = useState(null); // values: "toggle", "font", "reorder", etc.
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // Check if the click is outside any dropdown container
+      const dropdownContainers = document.querySelectorAll(
+        ".dropdown-container"
+      );
+      let isClickOutside = true;
+
+      dropdownContainers.forEach((container) => {
+        if (container.contains(event.target)) {
+          isClickOutside = false;
+        }
+      });
+
+      if (isClickOutside && openDropdown) {
+        setOpenDropdown(null);
+      }
+    };
+
+    if (openDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }
+  }, [openDropdown]);
+
   if (!resume) return null;
 
   const pixelSizes = [
@@ -784,7 +813,7 @@ const ClassicTemplate = ({ resume }) => {
       {isEditable && (
         <div className="w-full bg-white justify-center border border-gray-200  px-2.5 md:px-6 py-2.5 md:py-3 mb-2.5 md:mb-6 flex flex-wrap items-center gap-3">
           {/* Resume Background Color */}
-          <div className="relative">
+          <div className="relative dropdown-container">
             {/* Color Icon Button */}
             <button
               className={`md:p-2 rounded-md hover:bg-gray-200 transition relative group ${
@@ -920,7 +949,7 @@ const ClassicTemplate = ({ resume }) => {
             </div>
           </div>
           {/* Font Selector */}
-          <div className="relative">
+          <div className="relative dropdown-container">
             {/* Trigger Button */}
             <button
               onClick={() =>
@@ -1023,7 +1052,7 @@ const ClassicTemplate = ({ resume }) => {
             </button>
           </div>
           {/* Section Spacing */}
-          <div className="relative">
+          <div className="relative dropdown-container">
             <button
               onClick={() =>
                 setOpenDropdown((prev) => (prev === "gap" ? null : "gap"))
@@ -1147,7 +1176,7 @@ const ClassicTemplate = ({ resume }) => {
           </div> */}
 
           {/* Padding Dropdown */}
-          <div className="relative">
+          <div className="relative dropdown-container">
             <button
               onClick={() =>
                 setOpenDropdown((prev) =>
@@ -1340,7 +1369,7 @@ const ClassicTemplate = ({ resume }) => {
             )}
           </div> */}
           {/* Text Color Button */}
-          <div className="relative group">
+          <div className="relative group dropdown-container">
             <button
               className={`md:p-2 align-middle text-center rounded-md hover:bg-gray-100 transition ${
                 openDropdown === "TextColor" ? "bg-gray-100" : ""
@@ -1397,7 +1426,7 @@ const ClassicTemplate = ({ resume }) => {
 
           {/* Link Color Button */}
           {hasAnyProjectLink && (
-            <div className="relative">
+            <div className="relative dropdown-container">
               {/* Trigger Button */}
               <button
                 onClick={() =>
@@ -1482,7 +1511,7 @@ const ClassicTemplate = ({ resume }) => {
             </div>
           )}
           {/* Toggle Visibility Dropdown */}
-          <div className="relative">
+          <div className="relative dropdown-container">
             <button
               className={`md:p-2 rounded-md align-middle hover:bg-gray-100 transition ${
                 openDropdown === "toggle" ? "bg-gray-100" : ""
@@ -1545,7 +1574,7 @@ const ClassicTemplate = ({ resume }) => {
             )}
           </div>
           {/* Reorder Sections Dropdown */}
-          <div className="relative">
+          <div className="relative dropdown-container">
             <button
               className={`md:p-2 align-middle rounded-md hover:bg-gray-100 transition ${
                 openDropdown === "reorder" ? "bg-gray-100" : ""

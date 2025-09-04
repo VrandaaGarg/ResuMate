@@ -1,8 +1,8 @@
-import React from "react";
+import React, { memo } from "react";
 import { motion } from "framer-motion";
 
 const CompanyLogos = {
-  Google: (props) => (
+  Google: () => (
     <svg
       width="256"
       height="262"
@@ -29,7 +29,7 @@ const CompanyLogos = {
     </svg>
   ),
 
-  Amazon: (props) => (
+  Amazon: () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       xml:space="preserve"
@@ -52,7 +52,7 @@ const CompanyLogos = {
     </svg>
   ),
 
-  Microsoft: (props) => (
+  Microsoft: () => (
     <svg
       viewBox="0 0 256 256"
       xmlns="http://www.w3.org/2000/svg"
@@ -67,7 +67,7 @@ const CompanyLogos = {
     </svg>
   ),
 
-  Vercel: (props) => (
+  Vercel: () => (
     <svg
       viewBox="0 0 256 222"
       width="256"
@@ -79,7 +79,7 @@ const CompanyLogos = {
     </svg>
   ),
 
-  Netflix: (props) => (
+  Netflix: () => (
     <svg
       viewBox="0 0 256 256"
       width="256"
@@ -133,7 +133,7 @@ const CompanyLogos = {
     </svg>
   ),
 
-  Meta: (props) => (
+  Meta: () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="256"
@@ -180,7 +180,7 @@ const CompanyLogos = {
     </svg>
   ),
 
-  IBM: (props) => (
+  IBM: () => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 400">
       <path
         fill="#1f70c1"
@@ -189,7 +189,7 @@ const CompanyLogos = {
     </svg>
   ),
 
-  Salesforce: (props) => (
+  Salesforce: () => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox=".5 .5 999 699.242">
       <path
         fill="#00A1E0"
@@ -205,7 +205,7 @@ const CompanyLogos = {
       />
     </svg>
   ),
-  LinkedIn: (props) => (
+  LinkedIn: () => (
     <svg
       width="256"
       height="256"
@@ -232,6 +232,23 @@ const companies = [
   { name: "Salesforce", color: "#00A1E0", Logo: CompanyLogos.Salesforce },
   { name: "LinkedIn", color: "#0077B5", Logo: CompanyLogos.LinkedIn },
 ];
+
+const CompanyItem = memo(({ company, index }) => (
+  <motion.div
+    key={index}
+    className="flex flex-col items-center justify-center min-w-[140px] group"
+  >
+    <div className="w-20 h-20 md:w-24 md:h-24 bg-white rounded-xl shadow-sm border border-gray-100 flex items-center justify-center p-4 group-hover:shadow-md group-hover:border-sky-200 transition-all duration-300">
+      <company.Logo
+        className="max-w-full max-h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
+        aria-label={`${company.name} logo`}
+      />
+    </div>
+    <p className="text-xs md:text-sm font-medium text-gray-600 mt-3 group-hover:text-gray-900 transition-colors duration-300">
+      {company.name}
+    </p>
+  </motion.div>
+));
 
 const Companies = () => {
   return (
@@ -263,7 +280,7 @@ const Companies = () => {
         </p>
       </motion.div>
 
-      <div className="relative w-full overflow-hidden z-10">
+      <div className="relative w-full max-w-7xl mx-auto overflow-hidden z-10">
         {/* Gradient overlays for smooth fade effect */}
         <div className="absolute left-0 top-0 w-40 h-full bg-gradient-to-r from-sky-50 to-transparent z-10 pointer-events-none"></div>
         <div className="absolute right-0 top-0 w-40 h-full bg-gradient-to-l from-sky-50 to-transparent z-10 pointer-events-none"></div>
@@ -281,20 +298,7 @@ const Companies = () => {
           }}
         >
           {[...companies, ...companies, ...companies].map((company, i) => (
-            <motion.div
-              key={i}
-              className="flex flex-col items-center justify-center min-w-[140px] group"
-            >
-              <div className="w-20 h-20 md:w-24 md:h-24 bg-white rounded-xl shadow-sm border border-gray-100 flex items-center justify-center p-4 group-hover:shadow-md group-hover:border-sky-200 transition-all duration-300">
-                <company.Logo
-                  className="max-w-full max-h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
-                  aria-label={`${company.name} logo`}
-                />
-              </div>
-              <p className="text-xs md:text-sm font-medium text-gray-600 mt-3 group-hover:text-gray-900 transition-colors duration-300">
-                {company.name}
-              </p>
-            </motion.div>
+            <CompanyItem key={i} company={company} index={i} />
           ))}
         </motion.div>
       </div>
@@ -327,4 +331,4 @@ const Companies = () => {
   );
 };
 
-export default Companies;
+export default memo(Companies);

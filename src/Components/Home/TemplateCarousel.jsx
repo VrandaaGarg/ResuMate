@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef, memo } from "react";
 import { motion } from "framer-motion";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
@@ -85,28 +85,44 @@ const TemplateCarousel = () => {
     }
   };
 
-  const nextSlide = () => {
+  const animationTimeoutRef = useRef(null);
+
+  const nextSlide = useCallback(() => {
     if (isAnimating) return;
     setIsAnimating(true);
     setCurrentIndex((prev) => (prev + 1) % templates.length);
-    setTimeout(() => setIsAnimating(false), 500);
-  };
+    if (animationTimeoutRef.current) {
+      clearTimeout(animationTimeoutRef.current);
+    }
+    animationTimeoutRef.current = setTimeout(() => setIsAnimating(false), 500);
+  }, [isAnimating]);
 
-  const prevSlide = () => {
+  const prevSlide = useCallback(() => {
     if (isAnimating) return;
     setIsAnimating(true);
     setCurrentIndex((prev) => (prev - 1 + templates.length) % templates.length);
-    setTimeout(() => setIsAnimating(false), 500);
-  };
+    if (animationTimeoutRef.current) {
+      clearTimeout(animationTimeoutRef.current);
+    }
+    animationTimeoutRef.current = setTimeout(() => setIsAnimating(false), 500);
+  }, [isAnimating]);
 
-  const getTemplatePosition = (index) => {
+  useEffect(() => {
+    return () => {
+      if (animationTimeoutRef.current) {
+        clearTimeout(animationTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const getTemplatePosition = useCallback((index) => {
     const diff = (index - currentIndex + templates.length) % templates.length;
     if (diff === 0) return "center";
     if (diff === 1 || diff === -(templates.length - 1)) return "right";
     return "left";
-  };
+  }, [currentIndex]);
 
-  const getTemplateStyle = (position, isMobile = false, isTablet = false) => {
+  const getTemplateStyle = useCallback((position, isMobile = false, isTablet = false) => {
     const baseScale = isMobile ? 0.7 : isTablet ? 0.85 : 1;
     const sideScale = isMobile ? 0.5 : isTablet ? 0.7 : 0.85;
     const xOffset = isMobile ? 120 : isTablet ? 160 : 200;
@@ -141,7 +157,7 @@ const TemplateCarousel = () => {
           opacity: 0,
         };
     }
-  };
+  }, []);
 
   return (
     <div className="relative w-full flex justify-center mx-auto px-4 md:px-0">
@@ -271,4 +287,4 @@ const TemplateCarousel = () => {
   );
 };
 
-export default TemplateCarousel;
+export default memo(TemplateCarousel);

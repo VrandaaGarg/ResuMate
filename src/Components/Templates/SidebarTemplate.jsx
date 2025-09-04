@@ -45,7 +45,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import DOMPurify from "dompurify";
-import { useSidebarSetting } from "../../Contexts/SidebarSettingContext";
+import { useSidebarSetting } from "../../Contexts/CombinedTemplateContext";
 import { useReactToPrint } from "react-to-print";
 import { motion } from "framer-motion";
 import { FaFileAlt, FaDownload, FaGlobe } from "react-icons/fa";
@@ -67,6 +67,35 @@ const SidebarTemplate = ({ resume }) => {
   );
 
   const [openDropdown, setOpenDropdown] = useState(null); // values: "toggle", "font", "reorder", etc.
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // Check if the click is outside any dropdown container
+      const dropdownContainers = document.querySelectorAll(
+        ".dropdown-container"
+      );
+      let isClickOutside = true;
+
+      dropdownContainers.forEach((container) => {
+        if (container.contains(event.target)) {
+          isClickOutside = false;
+        }
+      });
+
+      if (isClickOutside && openDropdown) {
+        setOpenDropdown(null);
+      }
+    };
+
+    if (openDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }
+  }, [openDropdown]);
+
   const sidebarSections = ["name", "details", "description", "skills"];
   const mainSections = ["experience", "projects", "education", "achievements"];
 
@@ -1003,7 +1032,7 @@ const SidebarTemplate = ({ resume }) => {
       {isEditable && (
         <div className="w-full bg-white justify-center border border-gray-200 px-2.5 md:px-6 py-2.5 md:py-3 mb-2.5 md:mb-6 flex flex-wrap items-center gap-3">
           {/* Background Color Picker */}
-          <div className="relative">
+          <div className="relative dropdown-container">
             {/* Icon trigger */}
             <button
               className={`md:p-2 rounded-md hover:bg-gray-200 transition relative group ${
@@ -1094,7 +1123,7 @@ const SidebarTemplate = ({ resume }) => {
           </div>
 
           {/* Sidebar section color */}
-          <div className="relative">
+          <div className="relative dropdown-container">
             {/* Color Icon Button */}
             <button
               className={`md:p-2 rounded-md hover:bg-gray-200 transition relative group ${
@@ -1234,7 +1263,7 @@ const SidebarTemplate = ({ resume }) => {
           </div>
 
           {/* Font Selector */}
-          <div className="relative">
+          <div className="relative dropdown-container">
             {/* Trigger Button */}
             <button
               onClick={() =>
@@ -1340,7 +1369,7 @@ const SidebarTemplate = ({ resume }) => {
 
           {/* Skill Color Picker */}
           {resume.skills && resume.skills.length > 0 && (
-            <div className="relative">
+            <div className="relative dropdown-container">
               <button
                 onClick={() =>
                   setOpenDropdown((prev) =>
@@ -1411,7 +1440,7 @@ const SidebarTemplate = ({ resume }) => {
 
           {/* Link Color Button */}
           {hasAnyProjectLink && (
-            <div className="relative">
+            <div className="relative dropdown-container">
               {/* Trigger Button */}
               <button
                 onClick={() =>
@@ -1497,7 +1526,7 @@ const SidebarTemplate = ({ resume }) => {
           )}
 
           {/* Text Color Picker Button for sidebar */}
-          <div className="relative group">
+          <div className="relative group dropdown-container">
             <button
               className={`md:p-2 align-middle text-center rounded-md hover:bg-gray-100 transition ${
                 openDropdown === "textSidebar" ? "bg-gray-100" : ""
@@ -1618,7 +1647,7 @@ const SidebarTemplate = ({ resume }) => {
           </div>
 
           {/* Section Spacing */}
-          <div className="relative">
+          <div className="relative dropdown-container">
             <button
               onClick={() =>
                 setOpenDropdown((prev) => (prev === "gap" ? null : "gap"))
@@ -1677,7 +1706,7 @@ const SidebarTemplate = ({ resume }) => {
           </div>
 
           {/* Show/Hide Sections Button */}
-          <div className="relative">
+          <div className="relative dropdown-container">
             <button
               className={`md:p-2 rounded-md align-middle hover:bg-gray-100 transition ${
                 openDropdown === "toggleSection" ? "bg-gray-100" : ""
@@ -1743,7 +1772,7 @@ const SidebarTemplate = ({ resume }) => {
           </div>
 
           {/* Reorder Sections Button */}
-          <div className="relative">
+          <div className="relative dropdown-container">
             <button
               className={`md:p-2 align-middle rounded-md hover:bg-gray-100 transition ${
                 openDropdown === "reorder" ? "bg-gray-100" : ""

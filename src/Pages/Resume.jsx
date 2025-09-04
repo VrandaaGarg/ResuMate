@@ -4,8 +4,8 @@ import ClassicTemplate from "../Components/Templates/ClassicTemplate";
 import SidebarTemplate from "../Components/Templates/SidebarTemplate";
 import { useEditResume } from "../Contexts/EditResumeContext";
 import { useResumeData } from "../Contexts/ResumeDataContext";
-import { useClassicSetting } from "../Contexts/ClassicSettingContext";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useClassicSetting, useSidebarSetting, useStandardSetting, useModernSetting } from "../Contexts/CombinedTemplateContext";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { parseResumeFromUpload } from "../utils/ai";
 import toast from "react-hot-toast";
@@ -20,10 +20,7 @@ import {
   FaDownload,
   FaShare,
 } from "react-icons/fa";
-import { useSidebarSetting } from "../Contexts/SidebarSettingContext";
 import StandardTemplate from "../Components/Templates/StandardTemplate";
-import { useStandardSetting } from "../Contexts/StandardSettingContext";
-import { useModernSetting } from "../Contexts/ModernSettingContext";
 import {
   editClassicSettings,
   editSidebarSettings,

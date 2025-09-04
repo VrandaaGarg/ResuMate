@@ -1,21 +1,22 @@
 // src/Contexts/EditResumeContext.jsx
-import React, { createContext, useContext, useState } from "react";
-import showSuccessToast from "../Components/showSuccessToast";
+import React, { createContext, useContext, useState, useMemo, useCallback } from "react";
 
 const EditResumeContext = createContext();
 
 export const EditResumeProvider = ({ children }) => {
   const [isEditable, setIsEditable] = useState(false);
 
-  const toggleEditing = () => {
-    setIsEditable((prev) => {
-      const newState = !prev;
-      return newState;
-    });
-  };
+  const toggleEditing = useCallback(() => {
+    setIsEditable((prev) => !prev);
+  }, []);
+
+  const contextValue = useMemo(() => ({
+    isEditable,
+    toggleEditing,
+  }), [isEditable, toggleEditing]);
 
   return (
-    <EditResumeContext.Provider value={{ isEditable, toggleEditing }}>
+    <EditResumeContext.Provider value={contextValue}>
       {children}
     </EditResumeContext.Provider>
   );
