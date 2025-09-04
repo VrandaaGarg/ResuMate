@@ -20,7 +20,7 @@ export default function Footer() {
       href: "https://github.com/VrandaaGarg/ResuMate",
       label: "GitHub",
     },
-    { icon: FaXTwitter, href: "https://x.com/vranda_garg_", label: "Twitter" },
+    { icon: FaXTwitter, href: "https://x.com/vrandaagarg", label: "Twitter" },
 
     { icon: FaEnvelope, href: "mailto:resumate@vrandagarg.in", label: "Email" },
 
@@ -34,7 +34,7 @@ export default function Footer() {
   return (
     <footer className="bg-white border-t border-gray-100 text-gray-700 relative">
       {/* Subtle Background */}
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-50/30 to-purple-50/30" />
+      <div className="absolute inset-0 bg-gradient-to-r from-sky-50/30 to-blue-50/30" />
 
       <div className="relative z-10">
         {/* Main Footer Content */}
@@ -49,14 +49,12 @@ export default function Footer() {
               className="flex flex-col items-center md:items-start"
             >
               <div className="flex items-center gap-3 mb-1 md:mb-3">
-                <motion.div
-                  whileHover={{ rotate: 360, scale: 1.1 }}
-                  transition={{ duration: 0.6 }}
-                  className="p-1 md:p-2 bg-gradient-to-r from-sky-500 to-blue-600 rounded md:rounded-lg shadow-md"
-                >
-                  <SiGoogleforms className="text-sm md:text-xl text-white" />
-                </motion.div>
-                <span className="text-lg md:text-2xl font-bold bg-gradient-to-r from-sky-600 to-blue-600 bg-clip-text text-transparent">
+                <img
+                  src="/logo.png"
+                  alt="ResuMate Logo"
+                  className="w-10 h-10 md:w-10 md:h-10"
+                />
+                <span className="text-lg md:text-2xl font-bold bg-gradient-to-r from-sky-600 to-sky-600 bg-clip-text text-transparent">
                   ResuMate
                 </span>
               </div>
@@ -141,30 +139,9 @@ export default function Footer() {
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
-              className="flex flex-col md:flex-row justify-between items-center gap-3 text-[14px] md:text-sm text-gray-500"
+              className="flex justify-center items-center gap-3 text-[14px] md:text-sm text-gray-500"
             >
               <p>© {currentYear} ResuMate. All rights reserved.</p>
-
-              <div className="flex items-center gap-4">
-                <Link
-                  to="#"
-                  className="hover:text-sky-600 transition-colors duration-200"
-                >
-                  Privacy
-                </Link>
-                <Link
-                  to="#"
-                  className="hover:text-sky-600 transition-colors duration-200"
-                >
-                  Terms
-                </Link>
-                <Link
-                  to="mailto:resumate@vrandagarg.in"
-                  className="hover:text-sky-600 transition-colors duration-200"
-                >
-                  Contact
-                </Link>
-              </div>
             </motion.div>
           </div>
         </div>

@@ -16,7 +16,7 @@ const DashboardLayout = () => {
         isSidebarOpen={isSidebarOpen}
       />
 
-      <div className="flex flex-1 pt-16">
+      <div className="flex flex-1 ">
         {/* Sidebar */}
         <Sidebar
           isOpen={isSidebarOpen}

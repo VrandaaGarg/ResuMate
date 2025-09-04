@@ -67,7 +67,7 @@ const ScoreCriteria = ({ label, score, delay = 0 }) => (
     <div className="flex items-center gap-2">
       <div className="w-16 h-1.5 bg-slate-200/60 rounded-full overflow-hidden">
         <motion.div
-          className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"
+          className="h-full bg-gradient-to-r from-sky-500 to-cyan-500 rounded-full"
           initial={{ width: 0 }}
           animate={{ width: `${score}%` }}
           transition={{ duration: 1.2, delay: delay + 0.3, ease: "easeOut" }}
@@ -93,7 +93,7 @@ const LoadingStep = ({ step, isActive, isComplete }) => (
     transition={{ duration: 0.5 }}
     className={`flex items-center gap-3 p-3 rounded-lg transition-all duration-500 border ${
       isActive
-        ? "bg-blue-50/80 border-blue-200/60 shadow-sm"
+        ? "bg-sky-50/80 border-sky-200/60 shadow-sm"
         : isComplete
         ? "bg-green-50/80 border-green-200/60 shadow-sm"
         : "bg-white/40 border-slate-200/50"
@@ -106,7 +106,7 @@ const LoadingStep = ({ step, isActive, isComplete }) => (
       }
       className={`p-1.5 rounded-full transition-colors ${
         isActive
-          ? "bg-blue-500 text-white"
+          ? "bg-sky-500 text-white"
           : isComplete
           ? "bg-green-500 text-white"
           : "bg-slate-300 text-slate-500"
@@ -118,7 +118,7 @@ const LoadingStep = ({ step, isActive, isComplete }) => (
       <p
         className={`text-sm font-medium transition-colors ${
           isActive
-            ? "text-blue-700"
+            ? "text-sky-700"
             : isComplete
             ? "text-green-700"
             : "text-slate-500"
@@ -130,7 +130,7 @@ const LoadingStep = ({ step, isActive, isComplete }) => (
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-xs text-blue-600"
+          className="text-xs text-sky-600"
         >
           Processing...
         </motion.p>
@@ -322,10 +322,10 @@ export default function JobFitAnalyzer() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50/80 via-white to-slate-100/60 px-4 md:px-12 py-10 overflow-hidden relative">
+    <div className=" pt-24 bg-gradient-to-br from-white via-sky-50 to-sky-50 px-4 md:px-12 py-10 overflow-hidden relative">
       {/* Subtle Background Elements */}
-      <div className="absolute -top-40 -left-40 w-96 h-96 bg-gradient-to-r from-blue-100/20 to-cyan-100/20 blur-3xl rounded-full z-0" />
-      <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] bg-gradient-to-r from-purple-100/20 to-pink-100/20 blur-3xl rounded-full z-0" />
+      <div className="absolute -top-40 -left-40 w-96 h-96 bg-gradient-to-r from-sky-100/20 to-cyan-100/20 blur-3xl rounded-full z-0" />
+      <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] bg-gradient-to-r from-blue-100/20 to-pink-100/20 blur-3xl rounded-full z-0" />
       <div className="absolute top-1/2 left-1/4 w-80 h-80 bg-gradient-to-r from-green-100/15 to-emerald-100/15 blur-3xl rounded-full z-0" />
 
       {/* Grid Pattern */}
@@ -383,7 +383,7 @@ export default function JobFitAnalyzer() {
                     className="space-y-3"
                   >
                     <h3 className="text-base font-semibold text-slate-900 flex items-center gap-2">
-                      <FaWandMagicSparkles className="text-blue-600" />
+                      <FaWandMagicSparkles className="text-sky-600" />
                       What You'll Get
                     </h3>
                     <ul className="space-y-2 text-slate-700 text-sm">
@@ -411,7 +411,7 @@ export default function JobFitAnalyzer() {
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="bg-gradient-to-br from-blue-50/80 to-purple-50/80 p-4 rounded-xl border border-blue-100/50"
+                    className="bg-gradient-to-br from-sky-50/80 to-blue-50/80 p-4 rounded-xl border border-sky-100/50"
                   >
                     <div className="flex items-center gap-2 mb-3">
                       <FaTrophy className="text-lg text-yellow-500" />
@@ -424,7 +424,7 @@ export default function JobFitAnalyzer() {
                       resume with these insights!"
                     </p>
                     <div className="flex items-center gap-2 mt-2">
-                      <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                      <div className="w-6 h-6 bg-gradient-to-r from-sky-500 to-blue-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
                         P
                       </div>
                       <span className="text-xs font-medium text-slate-600">
@@ -488,7 +488,7 @@ export default function JobFitAnalyzer() {
                   transition={{ delay: 0.2 }}
                 >
                   <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
-                    <FaFileAlt className="text-blue-600 text-xs" />
+                    <FaFileAlt className="text-sky-600 text-xs" />
                     Job Description
                   </label>
                   <div className="relative">
@@ -496,7 +496,7 @@ export default function JobFitAnalyzer() {
                       value={jobDesc}
                       onChange={(e) => setJobDesc(e.target.value)}
                       rows={8}
-                      className="w-full p-4 border border-slate-200/60 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-300 bg-white/80 backdrop-blur-sm text-slate-800 transition-all duration-300 resize-none placeholder-slate-400 text-xs"
+                      className="w-full p-4 border border-slate-200/60 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-300 bg-white/80 backdrop-blur-sm text-slate-800 transition-all duration-300 resize-none placeholder-slate-400 text-xs"
                       placeholder="Paste the complete job description here...
 
 Example:
@@ -519,13 +519,13 @@ We are looking for a skilled React Developer to join our team. The ideal candida
                 >
                   <div>
                     <label className="text-sm font-semibold text-slate-700 mb-2 flex items-center gap-1.5">
-                      <FaWandMagicSparkles className="text-purple-600 text-xs" />
+                      <FaWandMagicSparkles className="text-blue-600 text-xs" />
                       Analysis Style
                     </label>
                     <select
                       value={style}
                       onChange={(e) => setStyle(e.target.value)}
-                      className="w-full p-3 border border-slate-200/60 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-300 bg-white/80 backdrop-blur-sm text-slate-800 transition-all duration-300 text-xs"
+                      className="w-full p-3 border border-slate-200/60 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-300 bg-white/80 backdrop-blur-sm text-slate-800 transition-all duration-300 text-xs"
                     >
                       <option value="concise">🎯 Concise & Focused</option>
                       <option value="elaborative">
@@ -562,7 +562,7 @@ We are looking for a skilled React Developer to join our team. The ideal candida
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4 }}
-                  className="bg-gradient-to-r from-blue-50/80 to-purple-50/80 p-4 rounded-xl border border-blue-100/50"
+                  className="bg-gradient-to-r from-sky-50/80 to-blue-50/80 p-4 rounded-xl border border-sky-100/50"
                 >
                   <h3 className="font-semibold text-slate-900 mb-2 flex items-center gap-1.5">
                     <FaLightbulb className="text-yellow-500 text-xs" />
@@ -601,7 +601,7 @@ We are looking for a skilled React Developer to join our team. The ideal candida
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-              className="w-14 h-14 mx-auto mb-5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center shadow-lg"
+              className="w-14 h-14 mx-auto mb-5 bg-gradient-to-r from-sky-500 to-blue-500 rounded-full flex items-center justify-center shadow-lg"
             >
               <FaRobot className="text-2xl text-white" />
             </motion.div>
@@ -646,9 +646,9 @@ We are looking for a skilled React Developer to join our team. The ideal candida
                   animate={{ opacity: 1, y: 0 }}
                   className="text-center mb-2"
                 >
-                  <div className="inline-flex items-center gap-2 bg-blue-50/80 backdrop-blur-sm border border-blue-200/60 rounded-full px-4 py-2 mb-3 shadow-lg">
-                    <FaFileAlt className="text-blue-600" />
-                    <span className="text-blue-800 font-medium text-xs md:text-sm">
+                  <div className="inline-flex items-center gap-2 bg-sky-50/80 backdrop-blur-sm border border-sky-200/60 rounded-full px-4 py-2 mb-3 shadow-lg">
+                    <FaFileAlt className="text-sky-600" />
+                    <span className="text-sky-800 font-medium text-xs md:text-sm">
                       Analysis from uploaded file: {uploadedFile.fileName}
                     </span>
                   </div>
@@ -826,7 +826,7 @@ We are looking for a skilled React Developer to join our team. The ideal candida
                         onClick={() => setShowFullReport(true)}
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        className="w-full mt-4 px-4 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-1.5 text-sm"
+                        className="w-full mt-4 px-4 py-2 rounded-lg bg-gradient-to-r from-sky-600 to-blue-600 text-white font-semibold shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-1.5 text-sm"
                       >
                         <FaEye size={12} /> Show Full Report
                       </motion.button>
@@ -911,9 +911,9 @@ We are looking for a skilled React Developer to join our team. The ideal candida
                         transition={{ delay: 0.3 }}
                         className="bg-white/90 backdrop-blur-md border border-white/30 rounded-xl p-0 shadow-md hover:shadow-lg transition-all duration-300"
                       >
-                        <div className="p-4 bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-200 rounded-xl">
-                          <h3 className="text-lg font-semibold text-blue-700 mb-3 flex items-center gap-2">
-                            <div className="p-1.5 bg-blue-500 rounded-full">
+                        <div className="p-4 bg-gradient-to-r from-sky-50 to-cyan-50 border border-sky-200 rounded-xl">
+                          <h3 className="text-lg font-semibold text-sky-700 mb-3 flex items-center gap-2">
+                            <div className="p-1.5 bg-sky-500 rounded-full">
                               <FaLightbulb className="text-white text-xs" />
                             </div>
                             AI Recommendations
@@ -928,7 +928,7 @@ We are looking for a skilled React Developer to join our team. The ideal candida
                                   transition={{ delay: 0.3 + i * 0.05 }}
                                   className="flex items-start gap-2 text-gray-700 leading-relaxed text-xs"
                                 >
-                                  <FaWandMagicSparkles className="text-blue-600 mt-0.5 flex-shrink-0 text-xs" />
+                                  <FaWandMagicSparkles className="text-sky-600 mt-0.5 flex-shrink-0 text-xs" />
                                   {suggestion}
                                 </motion.li>
                               )
@@ -945,9 +945,9 @@ We are looking for a skilled React Developer to join our team. The ideal candida
                           transition={{ delay: 0.4 }}
                           className="bg-white/90 backdrop-blur-md border border-white/30 rounded-xl p-0 shadow-md hover:shadow-lg transition-all duration-300"
                         >
-                          <div className="p-4 bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-200 rounded-xl">
-                            <h3 className="text-lg font-semibold text-purple-700 mb-4 flex items-center gap-2">
-                              <div className="p-1.5 bg-purple-500 rounded-full">
+                          <div className="p-4 bg-gradient-to-r from-blue-50 to-sky-50 border border-blue-200 rounded-xl">
+                            <h3 className="text-lg font-semibold text-blue-700 mb-4 flex items-center gap-2">
+                              <div className="p-1.5 bg-blue-500 rounded-full">
                                 <FaBullseye className="text-white text-xs" />
                               </div>
                               Skill Gap Analysis
@@ -1013,8 +1013,8 @@ We are looking for a skilled React Developer to join our team. The ideal candida
 
                             {aiResult.skillGapAnalysis.recommendations?.length >
                               0 && (
-                              <div className="border-t border-purple-200 pt-4">
-                                <h4 className="font-semibold text-indigo-600 mb-2 flex items-center gap-2 text-sm">
+                              <div className="border-t border-blue-200 pt-4">
+                                <h4 className="font-semibold text-sky-600 mb-2 flex items-center gap-2 text-sm">
                                   <FaRocket size={14} /> Priority Actions
                                 </h4>
                                 <ul className="space-y-2">
@@ -1027,7 +1027,7 @@ We are looking for a skilled React Developer to join our team. The ideal candida
                                         transition={{ delay: 0.4 + idx * 0.05 }}
                                         className="flex items-start gap-2 text-gray-700 leading-relaxed text-xs"
                                       >
-                                        <FaCheckCircle className="text-indigo-600 mt-0.5 flex-shrink-0 text-xs" />
+                                        <FaCheckCircle className="text-sky-600 mt-0.5 flex-shrink-0 text-xs" />
                                         {rec}
                                       </motion.li>
                                     )
@@ -1091,7 +1091,7 @@ We are looking for a skilled React Developer to join our team. The ideal candida
                       boxShadow: "0 6px 15px rgba(59, 130, 246, 0.2)",
                     }}
                     whileTap={{ scale: 0.95 }}
-                    className="px-6 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-1.5 text-sm mx-auto"
+                    className="px-6 py-2 rounded-lg bg-gradient-to-r from-sky-600 to-cyan-500 text-white font-semibold shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-1.5 text-sm mx-auto"
                   >
                     <FaSyncAlt size={12} /> Analyze Another Job
                   </motion.button>

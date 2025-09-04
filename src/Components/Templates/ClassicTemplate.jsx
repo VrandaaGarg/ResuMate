@@ -8,7 +8,7 @@ import { FaEye, FaEyeSlash, FaFillDrip, FaFont, FaLink } from "react-icons/fa";
 import { IoReorderThreeSharp } from "react-icons/io5";
 import DOMPurify from "dompurify";
 import { CgSpaceBetweenV } from "react-icons/cg";
-import { useClassicSetting } from "../../Contexts/ClassicSettingContext";
+import { useClassicSetting } from "../../Contexts/CombinedTemplateContext";
 import { motion } from "framer-motion";
 import { FaFileAlt, FaDownload, FaShare, FaCog } from "react-icons/fa";
 import {
@@ -68,6 +68,35 @@ const ClassicTemplate = ({ resume }) => {
   };
 
   const [openDropdown, setOpenDropdown] = useState(null); // values: "toggle", "font", "reorder", etc.
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // Check if the click is outside any dropdown container
+      const dropdownContainers = document.querySelectorAll(
+        ".dropdown-container"
+      );
+      let isClickOutside = true;
+
+      dropdownContainers.forEach((container) => {
+        if (container.contains(event.target)) {
+          isClickOutside = false;
+        }
+      });
+
+      if (isClickOutside && openDropdown) {
+        setOpenDropdown(null);
+      }
+    };
+
+    if (openDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }
+  }, [openDropdown]);
+
   if (!resume) return null;
 
   const pixelSizes = [
@@ -751,11 +780,11 @@ const ClassicTemplate = ({ resume }) => {
   return (
     <div className="">
       {/* Preview Header - more compact */}
-      <div className="bg-gradient-to-r from-slate-100/80 to-blue-50/80 p-4 border-b border-white/20">
+      <div className="bg-gradient-to-r from-slate-100/80 to-sky-50/80 p-4 border-b border-white/20">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="p-1.5 bg-white/80 rounded-lg shadow-sm">
-              <FaFileAlt className="text-blue-600 text-xs" />
+              <FaFileAlt className="text-sky-600 text-xs" />
             </div>
             <div>
               <h3 className="text-[14px] md:text-sm font-semibold text-slate-900">
@@ -772,7 +801,7 @@ const ClassicTemplate = ({ resume }) => {
               onClick={reactToPrintFn}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="p-1.5 bg-white/80 flex hover:bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 text-slate-600 hover:text-blue-600"
+              className="p-1.5 bg-white/80 flex hover:bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 text-slate-600 hover:text-sky-600"
               title="Download PDF"
             >
               <FaDownload size={12} />
@@ -784,7 +813,7 @@ const ClassicTemplate = ({ resume }) => {
       {isEditable && (
         <div className="w-full bg-white justify-center border border-gray-200  px-2.5 md:px-6 py-2.5 md:py-3 mb-2.5 md:mb-6 flex flex-wrap items-center gap-3">
           {/* Resume Background Color */}
-          <div className="relative">
+          <div className="relative dropdown-container">
             {/* Color Icon Button */}
             <button
               className={`md:p-2 rounded-md hover:bg-gray-200 transition relative group ${
@@ -920,7 +949,7 @@ const ClassicTemplate = ({ resume }) => {
             </div>
           </div>
           {/* Font Selector */}
-          <div className="relative">
+          <div className="relative dropdown-container">
             {/* Trigger Button */}
             <button
               onClick={() =>
@@ -1023,7 +1052,7 @@ const ClassicTemplate = ({ resume }) => {
             </button>
           </div>
           {/* Section Spacing */}
-          <div className="relative">
+          <div className="relative dropdown-container">
             <button
               onClick={() =>
                 setOpenDropdown((prev) => (prev === "gap" ? null : "gap"))
@@ -1147,7 +1176,7 @@ const ClassicTemplate = ({ resume }) => {
           </div> */}
 
           {/* Padding Dropdown */}
-          <div className="relative">
+          <div className="relative dropdown-container">
             <button
               onClick={() =>
                 setOpenDropdown((prev) =>
@@ -1340,7 +1369,7 @@ const ClassicTemplate = ({ resume }) => {
             )}
           </div> */}
           {/* Text Color Button */}
-          <div className="relative group">
+          <div className="relative group dropdown-container">
             <button
               className={`md:p-2 align-middle text-center rounded-md hover:bg-gray-100 transition ${
                 openDropdown === "TextColor" ? "bg-gray-100" : ""
@@ -1397,7 +1426,7 @@ const ClassicTemplate = ({ resume }) => {
 
           {/* Link Color Button */}
           {hasAnyProjectLink && (
-            <div className="relative">
+            <div className="relative dropdown-container">
               {/* Trigger Button */}
               <button
                 onClick={() =>
@@ -1424,8 +1453,8 @@ const ClassicTemplate = ({ resume }) => {
                     {/* Preset Swatches */}
                     <div className="flex gap-1 md:gap-2">
                       {[
-                        "#2563eb", // blue
-                        "#7c3aed", // purple
+                        "#2563eb", // sky
+                        "#7c3aed", // blue
                         "#16a34a", // green
                         "#f59e0b", // amber
                         "#dc2626", // red
@@ -1482,7 +1511,7 @@ const ClassicTemplate = ({ resume }) => {
             </div>
           )}
           {/* Toggle Visibility Dropdown */}
-          <div className="relative">
+          <div className="relative dropdown-container">
             <button
               className={`md:p-2 rounded-md align-middle hover:bg-gray-100 transition ${
                 openDropdown === "toggle" ? "bg-gray-100" : ""
@@ -1524,7 +1553,7 @@ const ClassicTemplate = ({ resume }) => {
                           }
                           className={`flex items-center justify-between px-1.5 md:px-3 py-1.5 rounded-md border text-[10px] md:text-xs transition-all ${
                             isVisible
-                              ? "bg-blue-50 text-sky-700 border-sky-300 hover:bg-sky-100"
+                              ? "bg-sky-50 text-sky-700 border-sky-300 hover:bg-sky-100"
                               : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
                           }`}
                         >
@@ -1532,7 +1561,7 @@ const ClassicTemplate = ({ resume }) => {
                             {label}
                           </span>
                           {isVisible ? (
-                            <FaEye className="text-blue-500 text-sm shrink-0" />
+                            <FaEye className="text-sky-500 text-sm shrink-0" />
                           ) : (
                             <FaEyeSlash className="text-gray-400 text-sm shrink-0" />
                           )}
@@ -1545,7 +1574,7 @@ const ClassicTemplate = ({ resume }) => {
             )}
           </div>
           {/* Reorder Sections Dropdown */}
-          <div className="relative">
+          <div className="relative dropdown-container">
             <button
               className={`md:p-2 align-middle rounded-md hover:bg-gray-100 transition ${
                 openDropdown === "reorder" ? "bg-gray-100" : ""

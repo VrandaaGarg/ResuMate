@@ -335,15 +335,15 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
           onClick={(e) => e.stopPropagation()}
         >
           {/* Background gradient */}
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-white/50 to-purple-50/50 rounded-2xl" />
+          <div className="absolute inset-0 bg-gradient-to-br from-sky-50/50 via-white/50 to-blue-50/50 rounded-2xl" />
 
           {/* Header */}
           <div className="relative z-10 flex items-center justify-between mb-3">
             <div className="flex items-center gap-3">
-              <div className="w-6 h-6 md:w-7 md:h-7 shrink-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center shadow-lg">
+              <div className="w-6 h-6 md:w-7 md:h-7 shrink-0 bg-gradient-to-r from-sky-500 to-blue-500 rounded-lg flex items-center justify-center shadow-lg">
                 <FaUpload className="text-white text-sm" />
               </div>
-              <h2 className="text-lg md:text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <h2 className="text-lg md:text-xl font-bold bg-gradient-to-r from-sky-600 to-blue-600 bg-clip-text text-transparent">
                 Upload Resume
               </h2>
             </div>
@@ -359,8 +359,8 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
           <div
             className={`relative border-2 border-dashed rounded-xl p-4 md:p-5 text-center transition-all duration-300 mb-6 bg-white/40 backdrop-blur-sm ${
               dragActive
-                ? "border-blue-400 bg-blue-50/50 shadow-lg scale-[1.02]"
-                : "border-gray-300 hover:border-blue-300 hover:bg-blue-50/30"
+                ? "border-sky-400 bg-sky-50/50 shadow-lg scale-[1.02]"
+                : "border-gray-300 hover:border-sky-300 hover:bg-sky-50/30"
             } ${
               isUploading ? "pointer-events-none opacity-60" : "hover:shadow-lg"
             }`}
@@ -380,7 +380,7 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
 
             {isUploading ? (
               <div className="flex flex-col items-center">
-                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mb-4 shadow-lg">
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-r from-sky-500 to-blue-500 rounded-full flex items-center justify-center mb-4 shadow-lg">
                   <FaSpinner className="animate-spin text-white text-xl" />
                 </div>
                 <p className="text-gray-700 font-medium">
@@ -402,7 +402,7 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
               </div>
             ) : (
               <div className="flex flex-col items-center">
-                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mb-4 shadow-lg">
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-r from-sky-500 to-blue-500 rounded-full flex items-center justify-center mb-4 shadow-lg">
                   <FaUpload className="text-white text-xl" />
                 </div>
                 <p className="text-gray-800 font-semibold text-sm md:text-lg mb-2">
@@ -472,7 +472,7 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
                 value={jobDescription}
                 onChange={(e) => setJobDescription(e.target.value)}
                 rows={3}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-300 bg-white/80 backdrop-blur-sm text-gray-800 transition-all duration-300 resize-none placeholder-gray-400 text-sm"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-300 bg-white/80 backdrop-blur-sm text-gray-800 transition-all duration-300 resize-none placeholder-gray-400 text-sm"
                 placeholder="Paste the job description here..."
               />
             </motion.div>
@@ -488,10 +488,10 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
               disabled={
                 isProcessing || Object.values(selectedOptions).every((v) => !v)
               }
-              className="relative w-full py-2 md:py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg hover:shadow-xl disabled:hover:shadow-lg overflow-hidden group"
+              className="relative w-full py-2 md:py-4 bg-gradient-to-r from-sky-600 to-blue-600 text-white rounded-xl font-semibold hover:from-sky-700 hover:to-blue-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg hover:shadow-xl disabled:hover:shadow-lg overflow-hidden group"
             >
               {/* Button background effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-purple-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-r from-sky-700 to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
               <div className="relative z-10 flex items-center gap-1 md:gap-2">
                 {isProcessing ? (
@@ -530,15 +530,15 @@ const OptionCheckbox = ({ icon, label, description, checked, onChange }) => (
     onClick={onChange}
     className={`relative flex items-center gap-2 md:gap-4 p-2 md:p-4 rounded-xl cursor-pointer transition-all duration-300 border-2 ${
       checked
-        ? "border-blue-300 bg-blue-50/50 shadow-md"
-        : "border-gray-200 bg-white/50 hover:border-blue-200 hover:bg-blue-50/30"
+        ? "border-sky-300 bg-sky-50/50 shadow-md"
+        : "border-gray-200 bg-white/50 hover:border-sky-200 hover:bg-sky-50/30"
     }`}
   >
     {/* Checkbox */}
     <div
       className={`w-4 h-4 md:w-5 md:h-5 border-2 rounded-md flex items-center justify-center transition-all duration-200 ${
         checked
-          ? "bg-gradient-to-r from-blue-500 to-purple-500 border-transparent"
+          ? "bg-gradient-to-r from-sky-500 to-blue-500 border-transparent"
           : "border-gray-300 bg-white"
       }`}
     >
@@ -555,7 +555,7 @@ const OptionCheckbox = ({ icon, label, description, checked, onChange }) => (
     <div
       className={`w-8 h-8 hidden md:w-10 md:h-10 rounded-lg md:flex items-center justify-center transition-all duration-200 ${
         checked
-          ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg"
+          ? "bg-gradient-to-r from-sky-500 to-blue-500 text-white shadow-lg"
           : "bg-gray-100 text-gray-600"
       }`}
     >
@@ -566,7 +566,7 @@ const OptionCheckbox = ({ icon, label, description, checked, onChange }) => (
     <div className="flex-1">
       <div
         className={`font-semibold text-xs md:text-sm transition-colors ${
-          checked ? "text-blue-700" : "text-gray-800"
+          checked ? "text-sky-700" : "text-gray-800"
         }`}
       >
         {label}
@@ -581,7 +581,7 @@ const OptionCheckbox = ({ icon, label, description, checked, onChange }) => (
       <motion.div
         initial={{ scale: 0, rotate: -180 }}
         animate={{ scale: 1, rotate: 0 }}
-        className="w-4 h-4 md:w-6 md:h-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center"
+        className="w-4 h-4 md:w-6 md:h-6 bg-gradient-to-r from-sky-500 to-blue-500 rounded-full flex items-center justify-center"
       >
         <FaCheckCircle className="text-white text-xs md:text-sm" />
       </motion.div>

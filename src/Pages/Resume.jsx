@@ -4,8 +4,8 @@ import ClassicTemplate from "../Components/Templates/ClassicTemplate";
 import SidebarTemplate from "../Components/Templates/SidebarTemplate";
 import { useEditResume } from "../Contexts/EditResumeContext";
 import { useResumeData } from "../Contexts/ResumeDataContext";
-import { useClassicSetting } from "../Contexts/ClassicSettingContext";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useClassicSetting, useSidebarSetting, useStandardSetting, useModernSetting } from "../Contexts/CombinedTemplateContext";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { parseResumeFromUpload } from "../utils/ai";
 import toast from "react-hot-toast";
@@ -20,10 +20,7 @@ import {
   FaDownload,
   FaShare,
 } from "react-icons/fa";
-import { useSidebarSetting } from "../Contexts/SidebarSettingContext";
 import StandardTemplate from "../Components/Templates/StandardTemplate";
-import { useStandardSetting } from "../Contexts/StandardSettingContext";
-import { useModernSetting } from "../Contexts/ModernSettingContext";
 import {
   editClassicSettings,
   editSidebarSettings,
@@ -108,10 +105,10 @@ export default function Resume() {
 
   if (!resume?.name || resume.name.trim() === "") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50/80 via-white to-slate-100/60 px-4 md:px-12 py-10 overflow-hidden relative">
+      <div className="min-h-screen  bg-gradient-to-br from-white via-sky-50 to-sky-50 px-4 md:px-12 py-10 overflow-hidden relative">
         {/* Background Elements */}
-        <div className="absolute -top-40 -left-40 w-96 h-96 bg-gradient-to-r from-blue-100/20 to-cyan-100/20 blur-3xl rounded-full z-0" />
-        <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] bg-gradient-to-r from-purple-100/20 to-pink-100/20 blur-3xl rounded-full z-0" />
+        <div className="absolute -top-40 -left-40 w-96 h-96 bg-gradient-to-r from-sky-100/20 to-cyan-100/20 blur-3xl rounded-full z-0" />
+        <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] bg-gradient-to-r from-blue-100/20 to-pink-100/20 blur-3xl rounded-full z-0" />
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -124,7 +121,7 @@ export default function Resume() {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-xl"
+              className="w-16 h-16 bg-gradient-to-r from-sky-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-xl"
             >
               <FaUserEdit className="text-2xl text-white" />
             </motion.div>
@@ -141,7 +138,7 @@ export default function Resume() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate("/resume-form")}
-              className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold text-sm shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 mx-auto"
+              className="px-6 py-3 bg-gradient-to-r from-sky-600 to-blue-600 text-white rounded-lg font-semibold text-sm shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 mx-auto"
             >
               <FaWandMagicSparkles />
               Create Resume
@@ -153,10 +150,10 @@ export default function Resume() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50/80 via-white to-slate-100/60 px-2 md:px-12 py-6 overflow-hidden relative">
+    <div className="min-h-screen pt-24 bg-gradient-to-br from-white via-sky-50 to-sky-50 px-2 md:px-12 py-6 overflow-hidden relative">
       {/* Background Elements */}
-      <div className="absolute -top-40 -left-40 w-96 h-96 bg-gradient-to-r from-blue-100/20 to-cyan-100/20 blur-3xl rounded-full z-0" />
-      <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] bg-gradient-to-r from-purple-100/20 to-pink-100/20 blur-3xl rounded-full z-0" />
+      <div className="absolute -top-40 -left-40 w-96 h-96 bg-gradient-to-r from-sky-100/20 to-cyan-100/20 blur-3xl rounded-full z-0" />
+      <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] bg-gradient-to-r from-blue-100/20 to-pink-100/20 blur-3xl rounded-full z-0" />
 
       {/* Grid Pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-30" />
@@ -196,7 +193,7 @@ export default function Resume() {
             {/* Template Selection */}
             <div className="flex flex-col items-start  gap-3 flex-1">
               <div className="flex gap-1.5">
-                <FaPalette className="text-purple-600 text-sm" />
+                <FaPalette className="text-blue-600 text-sm" />
                 <label className="text-sm text-left font-semibold text-slate-700">
                   Template:
                 </label>
@@ -211,7 +208,7 @@ export default function Resume() {
                     onClick={() => setSelectedTemplate(template.value)}
                     className={`flex items-center gap-2 px-1.5 md:px-3 py-2 rounded-lg border transition-all duration-300 ${
                       selectedTemplate === template.value
-                        ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white border-blue-300 shadow-md"
+                        ? "bg-gradient-to-r from-sky-500 to-blue-500 text-white border-sky-300 shadow-md"
                         : "bg-white/80 text-slate-700 border-slate-200 hover:bg-white hover:shadow-sm"
                     }`}
                   >
@@ -242,7 +239,7 @@ export default function Resume() {
               <div className="flex  items-center gap-1.5 px-3 py-1.5 bg-slate-100/80 rounded-lg">
                 <FaEye
                   className={`text-xs md:text-sm ${
-                    isEditable ? "text-blue-600" : "text-slate-500"
+                    isEditable ? "text-sky-600" : "text-slate-500"
                   }`}
                 />
                 <span className="text-xs md:text-sm font-medium text-slate-700">
@@ -260,7 +257,7 @@ export default function Resume() {
                 className={`px-4 py-2 rounded-lg font-semibold shadow-md transition-all duration-300 flex items-center gap-1.5 text-[14px] md:text-sm ${
                   isEditable
                     ? "bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white"
-                    : "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+                    : "bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-700 hover:to-blue-700 text-white"
                 }`}
               >
                 {isEditable ? (
@@ -410,7 +407,7 @@ export default function Resume() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => navigate("/resume-form")}
-                className="px-3 md:px-3.5 py-1.5 md:w-full md:py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg text-xs md:text-lg font-medium shadow-md hover:shadow-lg transition-all duration-300"
+                className="px-3 md:px-3.5 py-1.5 md:w-full md:py-2 bg-gradient-to-r from-blue-500 to-pink-500 text-white rounded-lg text-xs md:text-lg font-medium shadow-md hover:shadow-lg transition-all duration-300"
               >
                 Edit Details
               </motion.button>
@@ -428,7 +425,7 @@ export default function Resume() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => navigate("/ats-checker")}
-                className="px-3 md:px-3.5 py-1.5 md:w-full md:py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-lg text-xs md:text-lg font-medium shadow-md hover:shadow-lg transition-all duration-300"
+                className="px-3 md:px-3.5 py-1.5 md:w-full md:py-2 bg-gradient-to-r from-sky-500 to-cyan-500 text-white rounded-lg text-xs md:text-lg font-medium shadow-md hover:shadow-lg transition-all duration-300"
               >
                 Check ATS Score
               </motion.button>
