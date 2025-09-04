@@ -51,11 +51,11 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className={`fixed top-0 z-50 w-full transition-all duration-300 ${
         scrolled
-          ? "bg-white/90 backdrop-blur-md border-b border-white/20 shadow-lg"
-          : "bg-white/95 backdrop-blur-sm border-b border-gray-100"
+          ? "bg-white/10 backdrop-blur-md border-b border-sky-100/50 shadow-lg"
+          : "bg-white/20 backdrop-blur-sm border-b border-gray-100"
       }`}
     >
-      <div className="px-4 md:px-6 lg:px-8 xl:px-12 py-2 md:py-2 flex items-center justify-between w-full">
+      <div className="px-4 md:px-6 lg:px-8 xl:px-12 py-3 md:py-3 flex items-center justify-between w-full">
         {/* Left: Logo + Sidebar Toggle */}
         <div className="flex items-center gap-3 md:gap-4">
           {!isHomePage &&
@@ -65,7 +65,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="p-2 text-gray-700 hover:text-sky-700 hover:bg-sky-50 rounded-lg transition-all duration-200"
+                className="p-2.5 text-gray-700 hover:text-sky-700 hover:bg-sky-50 rounded-xl transition-all duration-200 border border-transparent hover:border-sky-200 shadow-sm hover:shadow-md"
                 onClick={toggleSidebar} // ← use the prop here directly
               >
                 {isSidebarOpen ? <RxCross2 size={22} /> : <FaBars size={20} />}
@@ -76,15 +76,13 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
             to={user ? "/dashboard" : "/"}
             className="flex items-center gap-2 md:gap-3 group"
           >
-            <motion.div
-              whileHover={{ rotate: 5, scale: 1.1 }}
-              transition={{ duration: 0.6 }}
-              className="p-2 bg-gradient-to-r from-sky-500 to-blue-600 rounded-xl shadow-lg"
-            >
-              <SiGoogleforms className="text-xl md:text-2xl text-white" />
-            </motion.div>
+            <img
+              src="/logo.png"
+              alt="ResuMate Logo"
+              className="w-10 h-10 md:w-10 md:h-10"
+            />
             <motion.span
-              className="text-xl md:text-2xl font-bold bg-gradient-to-r from-sky-700 to-blue-600 bg-clip-text text-transparent tracking-wide"
+              className="text-xl md:text-2xl font-bold bg-gradient-to-r from-sky-700 to-sky-600 bg-clip-text text-transparent tracking-wide"
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.2 }}
             >
@@ -103,7 +101,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
               >
                 <Link
                   to="/login"
-                  className="px-2 md:px-6 py-2 md:py-2.5 bg-white/80 backdrop-blur-sm border border-sky-200 text-sky-700 rounded-xl font-medium hover:bg-sky-50 hover:border-sky-300 transition-all duration-300 shadow-sm hover:shadow-md"
+                  className="px-4 md:px-6 py-2 md:py-2.5 bg-white border border-sky-200 text-sky-700 rounded-xl font-medium hover:bg-sky-50 hover:border-sky-300 transition-all duration-300 shadow-sm hover:shadow-md"
                 >
                   Login
                 </Link>
@@ -114,7 +112,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
               >
                 <Link
                   to="/signup"
-                  className="px-2 md:px-6 py-2 md:py-2.5 bg-gradient-to-r from-sky-600 to-blue-600 text-white rounded-xl font-medium hover:from-sky-700 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+                  className="px-4 md:px-6 py-2 md:py-2.5 bg-gradient-to-r from-sky-600 to-sky-600 text-white rounded-xl font-medium hover:from-sky-700 hover:to-sky-700 transition-all duration-300 shadow-lg hover:shadow-xl"
                 >
                   Sign Up
                 </Link>
@@ -125,10 +123,10 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-2 md:gap-3 bg-gradient-to-r from-sky-50 to-blue-50 text-sky-700 px-3 md:px-4 py-2 md:py-2.5 rounded-xl border border-sky-100 hover:shadow-lg hover:border-sky-200 transition-all duration-300 backdrop-blur-sm"
+                className="flex items-center gap-2 md:gap-3 bg-white border border-sky-200 text-sky-700 px-3 md:px-4 py-2 md:py-2.5 rounded-xl hover:shadow-lg hover:border-sky-300 hover:bg-sky-50 transition-all duration-300"
                 onClick={() => setDropdownOpen((prev) => !prev)}
               >
-                <div className="w-8 h-8 md:w8 md:h-8 rounded-full bg-gradient-to-r from-sky-600 to-blue-600 text-white flex items-center justify-center font-bold text-sm md:text-base uppercase shadow-lg">
+                <div className="w-8 h-8 md:w-8 md:h-8 rounded-full bg-gradient-to-r from-sky-600 to-sky-600 text-white flex items-center justify-center font-bold text-sm md:text-base uppercase shadow-lg">
                   {user?.displayName?.charAt(0).toUpperCase() ||
                     user?.email?.charAt(0).toUpperCase() ||
                     "U"}
@@ -160,12 +158,12 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: -20, scale: 0.95 }}
                       transition={{ duration: 0.2, ease: "easeOut" }}
-                      className="absolute right-0 top-16 w-72 bg-white/95 backdrop-blur-md text-gray-700 border border-white/20 rounded-2xl shadow-2xl z-50 overflow-hidden"
+                      className="absolute right-0 top-16 w-72 bg-white border border-sky-100 rounded-2xl shadow-2xl z-50 overflow-hidden"
                     >
                       {/* Header */}
-                      <div className="px-6 py-4 bg-gradient-to-r from-sky-50 to-blue-50 border-b border-gray-100">
+                      <div className="px-6 py-4 bg-gradient-to-r from-sky-50 to-sky-50 border-b border-sky-100">
                         <div className="flex items-center gap-3">
-                          <div className="w-12 h-12 rounded-full bg-gradient-to-r from-sky-600 to-blue-600 text-white flex items-center justify-center font-bold uppercase shadow-lg">
+                          <div className="w-12 h-12 rounded-full bg-gradient-to-r from-sky-600 to-sky-600 text-white flex items-center justify-center font-bold uppercase shadow-lg">
                             {user?.displayName?.charAt(0).toUpperCase() ||
                               user?.email?.charAt(0).toUpperCase() ||
                               "U"}
@@ -213,7 +211,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
                           </Link>
                         </motion.div>
 
-                        <div className="border-t border-gray-100 mt-2 pt-2">
+                        <div className="border-t border-sky-100 mt-2 pt-2">
                           <motion.button
                             whileHover={{
                               backgroundColor: "rgba(239, 68, 68, 0.05)",

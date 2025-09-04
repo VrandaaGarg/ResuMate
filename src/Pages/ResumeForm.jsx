@@ -237,7 +237,7 @@ const ResumeForm = () => {
             {/* Full Name */}
             <div className="relative group">
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                <FiUser className="text-blue-600" />
+                <FiUser className="text-sky-600" />
                 Full Name *
               </label>
               <div className="relative">
@@ -246,9 +246,9 @@ const ResumeForm = () => {
                   placeholder="Enter your full name"
                   value={formData.name}
                   onChange={(e) => handleChange(e, "name")}
-                  className="w-full px-4 py-4 pl-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white/80 backdrop-blur-sm text-gray-800 font-medium transition-all duration-300 group-hover:border-gray-300"
+                  className="w-full px-4 py-4 pl-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white/80 backdrop-blur-sm text-gray-800 font-medium transition-all duration-300 group-hover:border-gray-300"
                 />
-                <FiUser className="absolute left-4 top-4 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
+                <FiUser className="absolute left-4 top-4 text-gray-400 group-focus-within:text-sky-500 transition-colors" />
               </div>
             </div>
 
@@ -290,11 +290,11 @@ const ResumeForm = () => {
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-4 p-4 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-xl relative"
+                  className="mt-4 p-4 bg-gradient-to-r from-sky-50 to-blue-50 border border-sky-200 rounded-xl relative"
                 >
                   <div className="flex items-center gap-2 mb-2">
-                    <FaWandMagicSparkles className="text-blue-600" />
-                    <span className="text-sm font-semibold text-blue-800">
+                    <FaWandMagicSparkles className="text-sky-600" />
+                    <span className="text-sm font-semibold text-sky-800">
                       AI Enhancement
                     </span>
                   </div>
@@ -307,7 +307,7 @@ const ResumeForm = () => {
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="absolute top-3 right-3 p-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
+                    className="absolute top-3 right-3 p-2 bg-sky-500 hover:bg-sky-600 text-white rounded-lg transition-colors"
                     title="Apply Enhancement"
                     onClick={() => {
                       handleChange(
@@ -1287,12 +1287,12 @@ const ResumeForm = () => {
   };
 
   return (
-    <div className="min-h-screen relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 px-2 md:px-20 py-7 md:py-16 overflow-hidden">
+    <div className="relative bg-gradient-to-br from-white via-sky-50 to-sky-50 px-2 md:px-20 py-7 md:py-16 overflow-hidden">
       {/* Background Elements */}
-      <div className="absolute -top-20 -left-20 w-80 h-80 bg-gradient-to-r from-blue-300 to-cyan-200 opacity-15 blur-3xl rounded-full z-0" />
-      <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-gradient-to-r from-purple-300 to-pink-200 opacity-10 blur-3xl rounded-full z-0" />
+      <div className="absolute -top-20 -left-20 w-80 h-80 bg-gradient-to-r from-sky-300 to-cyan-200 opacity-15 blur-3xl rounded-full z-0" />
+      <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-gradient-to-r from-blue-300 to-pink-200 opacity-10 blur-3xl rounded-full z-0" />
 
-      <div className="relative z-10 max-w-3xl mx-auto">
+      <div className="relative z-10 py-12 max-w-3xl mx-auto">
         {/* Header Section */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -1301,13 +1301,13 @@ const ResumeForm = () => {
           className="text-center mb-8"
         >
           <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-white/20 rounded-full px-3 py-1.5 mb-3 shadow-lg">
-            <FaWandMagicSparkles className="text-purple-500" />
+            <FaWandMagicSparkles className="text-blue-500" />
             <span className="text-xs font-medium text-gray-700">
               Resume Builder
             </span>
           </div>
 
-          <h1 className="text-xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent mb-2 [font-family:'Lilita_One',cursive]">
+          <h1 className="text-xl md:text-3xl font-bold bg-gradient-to-r from-sky-600 via-blue-600 to-cyan-600 bg-clip-text text-transparent mb-2 ">
             {steps[step]}
           </h1>
 
@@ -1329,7 +1329,7 @@ const ResumeForm = () => {
               <div
                 key={index}
                 className={`flex items-center gap-1 md:gap-2 text-xs font-medium ${
-                  index <= step ? "text-blue-600" : "text-gray-400"
+                  index <= step ? "text-sky-600" : "text-gray-400"
                 }`}
               >
                 <motion.div
@@ -1340,7 +1340,7 @@ const ResumeForm = () => {
                     index < step
                       ? "bg-green-500 text-white"
                       : index === step
-                      ? "bg-blue-500 text-white"
+                      ? "bg-sky-500 text-white"
                       : "bg-gray-200 text-gray-500"
                   }`}
                 >
@@ -1353,7 +1353,7 @@ const ResumeForm = () => {
 
           <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
             <motion.div
-              className="bg-gradient-to-r from-blue-500 to-purple-500 h-full rounded-full"
+              className="bg-gradient-to-r from-sky-500 to-blue-500 h-full rounded-full"
               initial={{ width: 0 }}
               animate={{ width: `${((step + 1) / steps.length) * 100}%` }}
               transition={{ duration: 0.5 }}
@@ -1427,7 +1427,7 @@ const ResumeForm = () => {
               }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold rounded-lg shadow-md hover:shadow-xl transition-all duration-300 text-xs"
+              className="inline-flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-sky-500 to-blue-500 hover:from-sky-600 hover:to-blue-600 text-white font-semibold rounded-lg shadow-md hover:shadow-xl transition-all duration-300 text-xs"
             >
               Next
               <FaArrowRight />

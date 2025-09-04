@@ -19,44 +19,44 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
       path: "/dashboard",
       icon: FaHome,
       label: "Dashboard",
-      gradient: "from-blue-500 to-cyan-400",
+      gradient: "from-sky-500 to-sky-500",
     },
     {
       path: "/resume-form",
       icon: FaFileAlt,
       label: "Edit Resume",
-      gradient: "from-green-500 to-emerald-400",
+      gradient: "from-sky-500 to-sky-500",
     },
 
     {
       path: "/resume",
       icon: FaFileAlt,
       label: "My Resume",
-      gradient: "from-purple-500 to-pink-400",
+      gradient: "from-sky-500 to-blue-500",
     },
     {
       path: "/job-fit-analyzer",
       icon: FaChartLine,
       label: "Job Fit Analyzer",
-      gradient: "from-orange-500 to-red-400",
+      gradient: "from-sky-600 to-sky-600",
     },
     {
       path: "/ats-checker",
       icon: FaRobot,
       label: "ATS Compatibility",
-      gradient: "from-indigo-500 to-blue-400",
+      gradient: "from-sky-600 to-sky-600",
     },
     {
       path: "/templates",
       icon: FaCogs,
       label: "Templates",
-      gradient: "from-teal-500 to-green-400",
+      gradient: "from-sky-500 to-sky-500",
     },
     {
       path: "/profile",
       icon: FaUser,
       label: "Profile",
-      gradient: "from-pink-500 to-rose-400",
+      gradient: "from-sky-500 to-sky-500",
     },
   ];
 
@@ -82,8 +82,8 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
             className="fixed top-16 left-0 z-40 w-72 h-[calc(100vh-4rem)] pt-8 md:pt-12 pb-5 px-4 bg-white/95 backdrop-blur-md border-r border-white/20 shadow-xl overflow-y-auto overflow-x-hidden"
           >
             {/* Background Gradient Blobs */}
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/30 pointer-events-none" />
-            <div className="absolute -top-10 -left-10 w-32 h-32 bg-gradient-to-r from-blue-200/20 to-cyan-200/20 rounded-full blur-2xl" />
+            <div className="absolute inset-0 bg-gradient-to-br from-sky-50/50 to-sky-50/30 pointer-events-none" />
+            <div className="absolute -top-10 -left-10 w-32 h-32 bg-sky-200/20 rounded-full blur-2xl" />
 
             {/* Header */}
             <motion.div
@@ -92,7 +92,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="hidden md:block relative z-10 mb-8 text-center"
             >
-              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent font-bold text-lg mb-2">
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-sky-600 to-sky-600 bg-clip-text text-transparent font-bold text-lg mb-2">
                 <span>🚀</span>
                 <span>Navigation</span>
               </div>
@@ -117,7 +117,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
                       className={classNames(
                         "group relative flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300 overflow-hidden",
                         isActive
-                          ? "bg-white/80 backdrop-blur-sm shadow-lg border border-white/40"
+                          ? "bg-white/80.  backdrop-blur-sm shadow-lg border border-white/40"
                           : "hover:bg-white/60 backdrop-blur-sm hover:shadow-md border-white/20"
                       )}
                     >
@@ -146,7 +146,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
                         className={classNames(
                           "relative z-10 font-semibold transition-colors duration-300",
                           isActive
-                            ? "text-gray-900"
+                            ? " text-white"
                             : "text-gray-700 group-hover:text-gray-900"
                         )}
                       >
@@ -157,7 +157,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
                         <motion.div
                           initial={{ scale: 0 }}
                           animate={{ scale: 1 }}
-                          className="absolute right-4 w-2 h-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full"
+                          className="absolute right-4 w-2 h-2 bg-gradient-to-r from-sky-200 to-blue-300 rounded-full"
                         />
                       )}
                       <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
@@ -174,7 +174,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
               transition={{ duration: 0.6, delay: 0.8 }}
               className="relative z-10 mt-8 pt-6 border-t border-gray-200/50 text-center"
             >
-              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-100 to-purple-100 px-4 py-2 rounded-xl">
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-sky-100 to-blue-100 px-4 py-2 rounded-xl">
                 <span className="text-sm text-gray-600">Made with</span>
                 <motion.span
                   animate={{ scale: [1, 1.2, 1] }}

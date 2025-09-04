@@ -92,7 +92,7 @@ const ATSCheckingLoader = ({ isVisible }) => {
           className="bg-white/95 backdrop-blur-md max-h-[90vh] overflow-y-auto rounded-2xl p-4 md:p-6 max-w-md w-full mx-auto border border-white/30 shadow-2xl relative overflow-hidden"
         >
           {/* Background gradient */}
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-50/80 via-white/50 to-blue-50/80 rounded-2xl" />
+          <div className="absolute inset-0 bg-gradient-to-br from-sky-50/80 via-white/50 to-sky-50/80 rounded-2xl" />
           {/* Header */}
           <div className="text-center mb-2 md:mb-4 relative z-10">
             <motion.div
@@ -104,9 +104,9 @@ const ATSCheckingLoader = ({ isVisible }) => {
                 rotate: { duration: 3, repeat: Infinity, ease: "linear" },
                 scale: { duration: 2, repeat: Infinity },
               }}
-              className="md:w-14 md:h-14 w-10 h-10 border-4 border-blue-200/50 border-t-blue-400 border-r-indigo-400 rounded-full mx-auto mb-4 shadow-lg"
+              className="md:w-14 md:h-14 w-10 h-10 border-4 border-sky-200/50 border-t-sky-400 border-r-sky-400 rounded-full mx-auto mb-4 shadow-lg"
             />
-            <h2 className="text-sm md:text-xl font-bold bg-gradient-to-r from-blue-500 to-indigo-400 bg-clip-text text-transparent mb-2">
+            <h2 className="text-sm md:text-xl font-bold bg-gradient-to-r from-sky-500 to-sky-400 bg-clip-text text-transparent mb-2">
               ATS Compatibility Check
             </h2>
             <p className="text-slate-600 text-xs md:text-sm">
@@ -130,7 +130,7 @@ const ATSCheckingLoader = ({ isVisible }) => {
                     isCompleted
                       ? "bg-green-50/80 border border-green-200/60 shadow-md"
                       : isCurrent
-                      ? "bg-blue-50/80 border border-blue-200/60 shadow-md"
+                      ? "bg-sky-50/80 border border-sky-200/60 shadow-md"
                       : "bg-white/40 border border-slate-200/40"
                   }`}
                 >
@@ -140,7 +140,7 @@ const ATSCheckingLoader = ({ isVisible }) => {
                       isCompleted
                         ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white"
                         : isCurrent
-                        ? "bg-gradient-to-r from-blue-500 to-indigo-500 text-white"
+                        ? "bg-gradient-to-r from-sky-500 to-sky-500 text-white"
                         : "bg-slate-100 text-slate-400"
                     }`}
                   >
@@ -158,7 +158,7 @@ const ATSCheckingLoader = ({ isVisible }) => {
                         isCompleted
                           ? "text-green-600"
                           : isCurrent
-                          ? "text-blue-600"
+                          ? "text-sky-600"
                           : "text-slate-500"
                       }`}
                     >
@@ -188,7 +188,7 @@ const ATSCheckingLoader = ({ isVisible }) => {
                           repeat: Infinity,
                           ease: "linear",
                         }}
-                        className="md:w-6 md:h-6 w-3 h-3 border-2 border-blue-500 border-t-transparent rounded-full"
+                        className="md:w-6 md:h-6 w-3 h-3 border-2 border-sky-500 border-t-transparent rounded-full"
                       />
                     )}
                   </div>
@@ -212,7 +212,7 @@ const ATSCheckingLoader = ({ isVisible }) => {
                   width: `${(completedSteps.length / steps.length) * 100}%`,
                 }}
                 transition={{ duration: 0.5 }}
-                className="bg-gradient-to-r from-blue-500 to-indigo-500 h-1 md:h-2 rounded-full shadow-sm"
+                className="bg-gradient-to-r from-sky-500 to-sky-500 h-1 md:h-2 rounded-full shadow-sm"
               />
             </div>
           </div>
@@ -231,7 +231,7 @@ const ATSCheckingLoader = ({ isVisible }) => {
                   repeat: Infinity,
                   delay: i * 0.2,
                 }}
-                className="md:w-2 md:h-2 w-1 h-1 bg-blue-500 rounded-full shadow-sm"
+                className="md:w-2 md:h-2 w-1 h-1 bg-sky-500 rounded-full shadow-sm"
               />
             ))}
           </div>

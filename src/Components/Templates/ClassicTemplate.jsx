@@ -751,11 +751,11 @@ const ClassicTemplate = ({ resume }) => {
   return (
     <div className="">
       {/* Preview Header - more compact */}
-      <div className="bg-gradient-to-r from-slate-100/80 to-blue-50/80 p-4 border-b border-white/20">
+      <div className="bg-gradient-to-r from-slate-100/80 to-sky-50/80 p-4 border-b border-white/20">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="p-1.5 bg-white/80 rounded-lg shadow-sm">
-              <FaFileAlt className="text-blue-600 text-xs" />
+              <FaFileAlt className="text-sky-600 text-xs" />
             </div>
             <div>
               <h3 className="text-[14px] md:text-sm font-semibold text-slate-900">
@@ -772,7 +772,7 @@ const ClassicTemplate = ({ resume }) => {
               onClick={reactToPrintFn}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="p-1.5 bg-white/80 flex hover:bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 text-slate-600 hover:text-blue-600"
+              className="p-1.5 bg-white/80 flex hover:bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 text-slate-600 hover:text-sky-600"
               title="Download PDF"
             >
               <FaDownload size={12} />
@@ -1424,8 +1424,8 @@ const ClassicTemplate = ({ resume }) => {
                     {/* Preset Swatches */}
                     <div className="flex gap-1 md:gap-2">
                       {[
-                        "#2563eb", // blue
-                        "#7c3aed", // purple
+                        "#2563eb", // sky
+                        "#7c3aed", // blue
                         "#16a34a", // green
                         "#f59e0b", // amber
                         "#dc2626", // red
@@ -1524,7 +1524,7 @@ const ClassicTemplate = ({ resume }) => {
                           }
                           className={`flex items-center justify-between px-1.5 md:px-3 py-1.5 rounded-md border text-[10px] md:text-xs transition-all ${
                             isVisible
-                              ? "bg-blue-50 text-sky-700 border-sky-300 hover:bg-sky-100"
+                              ? "bg-sky-50 text-sky-700 border-sky-300 hover:bg-sky-100"
                               : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
                           }`}
                         >
@@ -1532,7 +1532,7 @@ const ClassicTemplate = ({ resume }) => {
                             {label}
                           </span>
                           {isVisible ? (
-                            <FaEye className="text-blue-500 text-sm shrink-0" />
+                            <FaEye className="text-sky-500 text-sm shrink-0" />
                           ) : (
                             <FaEyeSlash className="text-gray-400 text-sm shrink-0" />
                           )}

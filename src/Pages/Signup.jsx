@@ -86,15 +86,14 @@ const Signup = () => {
 
   return (
     <motion.div
-      className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 px-2 sm:px-4 py-10 overflow-hidden"
+      className="relative pt-24 flex items-center justify-center bg-gradient-to-br from-white via-sky-50 to-sky-50 px-6 sm:px-4 py-10 overflow-hidden"
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
     >
       {/* Decorative Background Blobs */}
-      <div className="absolute -top-24 -left-24 w-60 h-60 sm:w-96 sm:h-96 bg-gradient-to-r from-blue-100/30 to-cyan-100/30 blur-3xl rounded-full z-0" />
-      <div className="absolute -bottom-24 -right-24 w-72 h-72 sm:w-[420px] sm:h-[420px] bg-gradient-to-r from-purple-100/30 to-pink-100/30 blur-3xl rounded-full z-0" />
-      <div className="absolute top-1/2 left-1/4 w-40 h-40 sm:w-72 sm:h-72 bg-gradient-to-r from-green-100/20 to-emerald-100/20 blur-3xl rounded-full z-0" />
+      <div className="absolute -top-24 -left-24 w-60 h-60 sm:w-96 sm:h-96 bg-sky-200/20 blur-3xl rounded-full z-0" />
+      <div className="absolute -bottom-24 -right-24 w-72 h-72 sm:w-[420px] sm:h-[420px] bg-sky-200/15 blur-3xl rounded-full z-0" />
       {/* Grid Pattern Overlay */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-[size:2rem_2rem] sm:bg-[size:4rem_4rem] opacity-20 z-0" />
 
@@ -104,7 +103,7 @@ const Signup = () => {
         transition={{ duration: 0.8, delay: 0.2 }}
         className="relative z-10 w-full max-w-xl bg-white/70 backdrop-blur-md border border-white/40 rounded-3xl shadow-2xl p-6 sm:p-8"
       >
-        <h1 className="text-3xl sm:text-4xl font-bold text-center bg-gradient-to-r from-sky-700 to-blue-600 bg-clip-text text-transparent mb-2">
+        <h1 className="text-3xl sm:text-4xl font-bold text-center bg-gradient-to-r from-sky-700 to-sky-600 bg-clip-text text-transparent mb-2">
           Join ResuMate
         </h1>
         <p className="text-sm sm:text-base text-center text-slate-600 mb-6">
@@ -117,7 +116,7 @@ const Signup = () => {
               htmlFor="name"
               className="text-xs sm:text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2"
             >
-              <FiUser className="text-blue-600" />
+              <FiUser className="text-sky-600" />
               Full Name
             </label>
             <div className="relative">
@@ -129,9 +128,9 @@ const Signup = () => {
                 value={form.name}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 pl-10 border-2 border-slate-200/70 rounded-xl focus:outline-none focus:border-blue-400 bg-white/80 backdrop-blur-sm text-slate-800 font-medium transition-all text-sm sm:text-base"
+                className="w-full px-4 py-3 pl-10 border-2 border-slate-200/70 rounded-xl focus:outline-none focus:border-sky-400 bg-white/80 backdrop-blur-sm text-slate-800 font-medium transition-all text-sm sm:text-base"
               />
-              <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors text-lg pointer-events-none" />
+              <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-sky-500 transition-colors text-lg pointer-events-none" />
             </div>
           </div>
           {/* Email */}
@@ -140,7 +139,7 @@ const Signup = () => {
               htmlFor="email"
               className="text-xs sm:text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2"
             >
-              <FiMail className="text-blue-600" />
+              <FiMail className="text-sky-600" />
               Email Address
             </label>
             <div className="relative">
@@ -152,9 +151,9 @@ const Signup = () => {
                 value={form.email}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 pl-10 border-2 border-slate-200/70 rounded-xl focus:outline-none focus:border-blue-400 bg-white/80 backdrop-blur-sm text-slate-800 font-medium transition-all text-sm sm:text-base"
+                className="w-full px-4 py-3 pl-10 border-2 border-slate-200/70 rounded-xl focus:outline-none focus:border-sky-400 bg-white/80 backdrop-blur-sm text-slate-800 font-medium transition-all text-sm sm:text-base"
               />
-              <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors text-lg pointer-events-none" />
+              <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-sky-500 transition-colors text-lg pointer-events-none" />
             </div>
           </div>
           {/* Password */}
@@ -163,7 +162,7 @@ const Signup = () => {
               htmlFor="password"
               className="text-xs sm:text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2"
             >
-              <FiLock className="text-blue-600" />
+              <FiLock className="text-sky-600" />
               Password
             </label>
             <div className="relative">
@@ -175,12 +174,12 @@ const Signup = () => {
                 value={form.password}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 pl-10 pr-10 border-2 border-slate-200/70 rounded-xl focus:outline-none focus:border-blue-400 bg-white/80 backdrop-blur-sm text-slate-800 font-medium transition-all text-sm sm:text-base"
+                className="w-full px-4 py-3 pl-10 pr-10 border-2 border-slate-200/70 rounded-xl focus:outline-none focus:border-sky-400 bg-white/80 backdrop-blur-sm text-slate-800 font-medium transition-all text-sm sm:text-base"
               />
-              <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors text-lg pointer-events-none" />
+              <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-sky-500 transition-colors text-lg pointer-events-none" />
               <button
                 type="button"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-500 transition-colors text-lg"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-sky-500 transition-colors text-lg"
                 onClick={() => setShowPassword(!showPassword)}
                 tabIndex={-1}
                 aria-label={showPassword ? "Hide password" : "Show password"}
@@ -195,7 +194,7 @@ const Signup = () => {
               htmlFor="confirmPassword"
               className="text-xs sm:text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2"
             >
-              <FiLock className="text-blue-600" />
+              <FiLock className="text-sky-600" />
               Confirm Password
             </label>
             <div className="relative">
@@ -207,12 +206,12 @@ const Signup = () => {
                 value={form.confirmPassword}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 pl-10 pr-10 border-2 border-slate-200/70 rounded-xl focus:outline-none focus:border-blue-400 bg-white/80 backdrop-blur-sm text-slate-800 font-medium transition-all text-sm sm:text-base"
+                className="w-full px-4 py-3 pl-10 pr-10 border-2 border-slate-200/70 rounded-xl focus:outline-none focus:border-sky-400 bg-white/80 backdrop-blur-sm text-slate-800 font-medium transition-all text-sm sm:text-base"
               />
-              <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors text-lg pointer-events-none" />
+              <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-sky-500 transition-colors text-lg pointer-events-none" />
               <button
                 type="button"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-500 transition-colors text-lg"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-sky-500 transition-colors text-lg"
                 onClick={() => setShowConfirm(!showConfirm)}
                 tabIndex={-1}
                 aria-label={showConfirm ? "Hide password" : "Show password"}
@@ -286,7 +285,7 @@ const Signup = () => {
             type="submit"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className={`w-full flex items-center justify-center gap-2 py-3 sm:py-4 bg-gradient-to-r from-sky-500 to-blue-700 hover:from-sky-700 hover:to-blue-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 text-base sm:text-lg ${
+            className={`w-full flex items-center justify-center gap-2 py-3 sm:py-4 bg-gradient-to-r from-sky-500 to-sky-700 hover:from-sky-700 hover:to-sky-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 text-base sm:text-lg ${
               loading ? "opacity-80 cursor-not-allowed" : ""
             }`}
             disabled={loading}

@@ -77,25 +77,25 @@ const LoadingScreen = () => (
     animate={{ opacity: 1, y: 0 }}
     exit={{ opacity: 0, y: -30 }}
     transition={{ duration: 0.5 }}
-    className="relative z-10 max-w-xl mx-auto bg-white/60 backdrop-blur-md border border-white/40 shadow-xl p-10 md:p-12 rounded-3xl text-center"
+    className="relative z-10 max-w-xl mx-auto bg-white border border-gray-100 shadow-lg p-10 md:p-12 rounded-3xl text-center"
   >
     <motion.div
       animate={{ rotate: 360 }}
       transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-      className="w-20 h-20 mx-auto mb-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center shadow-lg"
+      className="w-20 h-20 mx-auto mb-8 bg-gradient-to-r from-sky-500 to-sky-600 rounded-full flex items-center justify-center shadow-lg"
     >
       <FaRobot className="text-4xl text-white" />
     </motion.div>
-    <h2 className="text-2xl md:text-3xl font-semibold text-slate-800 mb-4">
+    <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-4">
       Checking ATS Compatibility...
     </h2>
-    <p className="text-slate-600 mb-6">
+    <p className="text-gray-600 mb-6">
       Our AI is analyzing your resume's ATS readiness. This might take a few
       moments.
     </p>
-    <div className="w-full bg-slate-200/60 rounded-full h-2.5 overflow-hidden">
+    <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
       <motion.div
-        className="bg-gradient-to-r from-blue-500 to-purple-500 h-2.5 rounded-full"
+        className="bg-gradient-to-r from-sky-500 to-sky-600 h-2.5 rounded-full"
         initial={{ width: "0%" }}
         animate={{ width: "100%" }}
         transition={{ duration: 4, ease: "linear" }}
@@ -175,10 +175,10 @@ export default function ATSCompatibilityChecker() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50/80 via-white to-slate-100/60 px-6 md:px-20 py-8 md:py-16 overflow-hidden relative">
+    <div className=" bg-gradient-to-br from-white via-sky-50 to-sky-50 px-6 md:px-20 py-8 md:py-16 overflow-hidden relative">
       {/* Subtle Background Elements */}
-      <div className="absolute -top-40 -left-40 w-96 h-96 bg-gradient-to-r from-blue-100/20 to-cyan-100/20 blur-3xl rounded-full z-0" />
-      <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] bg-gradient-to-r from-purple-100/20 to-pink-100/20 blur-3xl rounded-full z-0" />
+      <div className="absolute -top-40 -left-40 w-96 h-96 bg-gradient-to-r from-sky-100/20 to-cyan-100/20 blur-3xl rounded-full z-0" />
+      <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] bg-gradient-to-r from-blue-100/20 to-pink-100/20 blur-3xl rounded-full z-0" />
       <div className="absolute top-1/2 left-1/4 w-80 h-80 bg-gradient-to-r from-green-100/15 to-emerald-100/15 blur-3xl rounded-full z-0" />
 
       {/* Grid Pattern */}
@@ -192,7 +192,7 @@ export default function ATSCompatibilityChecker() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -30 }}
             transition={{ duration: 0.6 }}
-            className="relative z-10 max-w-2xl mx-auto"
+            className="relative pt-24 z-10 max-w-2xl mx-auto"
           >
             <div className="bg-white/60 backdrop-blur-md border border-white/40 shadow-xl rounded-2xl overflow-hidden">
               <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 p-6 text-center text-white relative">
@@ -257,7 +257,7 @@ export default function ATSCompatibilityChecker() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -30 }}
             transition={{ duration: 0.8 }}
-            className="relative z-10 max-w-7xl mx-auto"
+            className="relative pt-24 z-10 max-w-7xl mx-auto"
           >
             {/* Header for uploaded file analysis */}
             {uploadedFile && (
@@ -266,9 +266,9 @@ export default function ATSCompatibilityChecker() {
                 animate={{ opacity: 1, y: 0 }}
                 className="text-center mb-2"
               >
-                <div className="inline-flex items-center gap-2 bg-blue-50/80 backdrop-blur-sm border border-blue-200/60 rounded-full px-4 py-2 mb-3 shadow-lg">
-                  <FaFileAlt className="text-blue-600" />
-                  <span className="text-blue-800 font-medium text-xs md:text-sm">
+                <div className="inline-flex items-center gap-2 bg-sky-50/80 backdrop-blur-sm border border-sky-200/60 rounded-full px-4 py-2 mb-3 shadow-lg">
+                  <FaFileAlt className="text-sky-600" />
+                  <span className="text-sky-800 font-medium text-xs md:text-sm">
                     Analysis from uploaded file: {uploadedFile.fileName}
                   </span>
                 </div>
@@ -407,9 +407,9 @@ export default function ATSCompatibilityChecker() {
                       transition={{ delay: 0.5 }}
                       className="bg-white/60 backdrop-blur-md border border-white/40 rounded-xl md:p-6 shadow-lg hover:shadow-xl transition-all duration-300"
                     >
-                      <div className="bg-gradient-to-r from-blue-50/80 to-cyan-50/80 border border-blue-200/60 rounded-xl p-4">
-                        <h3 className="text-base md:text-lg font-semibold text-blue-700 mb-1.5 md:mb-4 flex items-center gap-2">
-                          <div className="p-1.5 bg-blue-500 rounded-full">
+                      <div className="bg-gradient-to-r from-sky-50/80 to-cyan-50/80 border border-sky-200/60 rounded-xl p-4">
+                        <h3 className="text-base md:text-lg font-semibold text-sky-700 mb-1.5 md:mb-4 flex items-center gap-2">
+                          <div className="p-1.5 bg-sky-500 rounded-full">
                             <FaListAlt className="text-white" />
                           </div>
                           Section-wise Breakdown
@@ -419,7 +419,7 @@ export default function ATSCompatibilityChecker() {
                             ([section, feedback], index) => (
                               <motion.div
                                 key={section}
-                                className="p-3 bg-white/80 border border-blue-100/60 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300"
+                                className="p-3 bg-white/80 border border-sky-100/60 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300"
                                 initial={{ opacity: 0, y: 15 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{
@@ -427,7 +427,7 @@ export default function ATSCompatibilityChecker() {
                                   delay: 0.1 * index,
                                 }}
                               >
-                                <h4 className="font-bold text-blue-800 capitalize mb-2 text-sm md:text-base">
+                                <h4 className="font-bold text-sky-800 capitalize mb-2 text-sm md:text-base">
                                   {section.replace(/([A-Z])/g, " $1").trim()}
                                 </h4>
                                 <FeedbackItem

@@ -103,9 +103,9 @@ const ModernTemplate = ({ resume, settings, onSettingsChange }) => {
       case "h1":
         return "white";
       case "h2":
-        return "text-blue-300";
+        return "text-sky-300";
       case "h3":
-        return "text-blue-200";
+        return "text-sky-200";
       case "h4":
         return "text-gray-300";
       default:
@@ -230,7 +230,7 @@ const ModernTemplate = ({ resume, settings, onSettingsChange }) => {
             settings.fontScaleLevel
           )}`}
           style={{
-            color: settings.textColors?.["h2"] || "text-blue-300",
+            color: settings.textColors?.["h2"] || "text-sky-300",
             textAlign: settings.descriptionAlign || "left",
           }}
         >
@@ -242,7 +242,7 @@ const ModernTemplate = ({ resume, settings, onSettingsChange }) => {
             settings.fontScaleLevel
           )}`}
           style={{
-            color: settings.textColors?.["h3"] || "text-blue-200",
+            color: settings.textColors?.["h3"] || "text-sky-200",
             textAlign: settings.descriptionAlign || "left",
           }}
         >
@@ -319,7 +319,7 @@ const ModernTemplate = ({ resume, settings, onSettingsChange }) => {
                 settings.fontScaleLevel
               )}`}
               style={{
-                color: settings.textColors?.["h2"] || "text-blue-300",
+                color: settings.textColors?.["h2"] || "text-sky-300",
                 textAlign: settings.descriptionAlign || "left",
               }}
             >
@@ -333,7 +333,7 @@ const ModernTemplate = ({ resume, settings, onSettingsChange }) => {
               )} outline-none w-full whitespace-pre-line`}
               style={{
                 textAlign: settings.descriptionAlign || "left",
-                color: settings.textColors?.["h3"] || "text-blue-200",
+                color: settings.textColors?.["h3"] || "text-sky-200",
               }}
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(resume.description),
@@ -352,7 +352,7 @@ const ModernTemplate = ({ resume, settings, onSettingsChange }) => {
             settings.fontScaleLevel
           )}`}
           style={{
-            color: settings.textColors?.["h2"] || "text-blue-300",
+            color: settings.textColors?.["h2"] || "text-sky-300",
             textAlign: settings.descriptionAlign || "left",
           }}
         >
@@ -377,7 +377,7 @@ const ModernTemplate = ({ resume, settings, onSettingsChange }) => {
                       settings.fontScaleLevel
                     )} font-medium`}
                     style={{
-                      color: settings.textColors?.["h3"] || "text-blue-200",
+                      color: settings.textColors?.["h3"] || "text-sky-200",
                       textAlign: settings.descriptionAlign || "left",
                     }}
                   >
@@ -391,7 +391,7 @@ const ModernTemplate = ({ resume, settings, onSettingsChange }) => {
                     settings.fontScaleLevel
                   )}`}
                   style={{
-                    color: settings.textColors?.["h4"] || "text-blue-200",
+                    color: settings.textColors?.["h4"] || "text-sky-200",
                   }}
                 >
                   {skill.languages.join(", ")}
@@ -406,7 +406,7 @@ const ModernTemplate = ({ resume, settings, onSettingsChange }) => {
             "text-[20px]",
             settings.fontScaleLevel
           )} uppercase tracking-wide my-1 md:my-3`}
-          style={{ color: settings.textColors?.["h2"] || "text-blue-300" }}
+          style={{ color: settings.textColors?.["h2"] || "text-sky-300" }}
         >
           Skills Distribution
         </p>
@@ -464,7 +464,7 @@ const ModernTemplate = ({ resume, settings, onSettingsChange }) => {
                 ></span>
                 <span
                   style={{
-                    color: settings.textColors?.["h3"] || "text-blue-200",
+                    color: settings.textColors?.["h3"] || "text-sky-200",
                   }}
                 >
                   {skill.domain}
@@ -1219,8 +1219,8 @@ const ModernTemplate = ({ resume, settings, onSettingsChange }) => {
                     {/* Preset Swatches */}
                     <div className="flex gap-1 md:gap-2">
                       {[
-                        "#2563eb", // blue
-                        "#7c3aed", // purple
+                        "#2563eb", // sky
+                        "#7c3aed", // blue
                         "#16a34a", // green
                         "#f59e0b", // amber
                         "#dc2626", // red
@@ -1483,7 +1483,7 @@ const ModernTemplate = ({ resume, settings, onSettingsChange }) => {
                           }
                           className={`flex items-center justify-between px-1.5 md:px-3 py-1.5 rounded-md border transition-all text-[10px] md:text-xs ${
                             isVisible
-                              ? "bg-blue-50 text-sky-700 border-sky-300 hover:bg-sky-100"
+                              ? "bg-sky-50 text-sky-700 border-sky-300 hover:bg-sky-100"
                               : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
                           }`}
                         >
@@ -1491,7 +1491,7 @@ const ModernTemplate = ({ resume, settings, onSettingsChange }) => {
                             {label}
                           </span>
                           {isVisible ? (
-                            <FaEye className="text-blue-500 text-[10px] md:text-sm shrink-0" />
+                            <FaEye className="text-sky-500 text-[10px] md:text-sm shrink-0" />
                           ) : (
                             <FaEyeSlash className="text-gray-400 text-[10px] md:text-sm shrink-0" />
                           )}

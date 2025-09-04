@@ -239,15 +239,15 @@ const PdfActionsModal = ({ isOpen, onClose, selectedResume }) => {
           onClick={(e) => e.stopPropagation()}
         >
           {/* Background gradient */}
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-white/50 to-purple-50/50 rounded-2xl" />
+          <div className="absolute inset-0 bg-gradient-to-br from-sky-50/50 via-white/50 to-blue-50/50 rounded-2xl" />
 
           {/* Header */}
           <div className="relative z-10 flex items-center justify-between mb-3 md:mb-6">
             <div className="flex items-center gap-3">
-              <div className="w-7 h-7 md:w-10 md:h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg">
+              <div className="w-7 h-7 md:w-10 md:h-10 bg-gradient-to-r from-sky-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
                 <FaUpload className="text-white text-sm md:text-lg" />
               </div>
-              <h2 className="text-md md:text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <h2 className="text-md md:text-xl font-bold bg-gradient-to-r from-sky-600 to-blue-600 bg-clip-text text-transparent">
                 Process Resume
               </h2>
             </div>
@@ -261,11 +261,11 @@ const PdfActionsModal = ({ isOpen, onClose, selectedResume }) => {
 
           {/* Selected Resume Info */}
           {selectedResume && (
-            <div className="relative z-10 mb-3 md:mb-6 p-2 md:p-4 bg-blue-50/50 rounded-lg md:rounded-xl border border-blue-200/50">
-              <h3 className="font-semibold text-sm md:text-base text-blue-800 mb-1">
+            <div className="relative z-10 mb-3 md:mb-6 p-2 md:p-4 bg-sky-50/50 rounded-lg md:rounded-xl border border-sky-200/50">
+              <h3 className="font-semibold text-sm md:text-base text-sky-800 mb-1">
                 Selected Resume:
               </h3>
-              <p className="text-blue-700 text-xs md:text-sm">
+              <p className="text-sky-700 text-xs md:text-sm">
                 {selectedResume.fileName}
               </p>
             </div>
@@ -325,7 +325,7 @@ const PdfActionsModal = ({ isOpen, onClose, selectedResume }) => {
                 value={jobDescription}
                 onChange={(e) => setJobDescription(e.target.value)}
                 rows={4}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-300 bg-white/80 backdrop-blur-sm text-gray-800 transition-all duration-300 resize-none placeholder-gray-400 text-sm"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-300 bg-white/80 backdrop-blur-sm text-gray-800 transition-all duration-300 resize-none placeholder-gray-400 text-sm"
                 placeholder="Paste the job description here..."
               />
             </motion.div>
@@ -339,10 +339,10 @@ const PdfActionsModal = ({ isOpen, onClose, selectedResume }) => {
               transition={{ duration: 0.3, delay: 0.2 }}
               onClick={handleProcess}
               disabled={isProcessing}
-              className="relative w-full py-3 md:py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg hover:shadow-xl disabled:hover:shadow-lg overflow-hidden group"
+              className="relative w-full py-3 md:py-4 bg-gradient-to-r from-sky-600 to-blue-600 text-white rounded-xl font-semibold hover:from-sky-700 hover:to-blue-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg hover:shadow-xl disabled:hover:shadow-lg overflow-hidden group"
             >
               {/* Button background effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-purple-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-r from-sky-700 to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
               <div className="relative z-10 flex items-center gap-2">
                 {isProcessing ? (
@@ -381,15 +381,15 @@ const OptionRadio = ({ icon, label, description, checked, onChange }) => (
     onClick={onChange}
     className={`relative flex items-center gap-2.5 md:gap-4 p-3 md:p-4 rounded-xl cursor-pointer transition-all duration-300 border-2 ${
       checked
-        ? "border-blue-300 bg-blue-50/50 shadow-md"
-        : "border-gray-200 bg-white/50 hover:border-blue-200 hover:bg-blue-50/30"
+        ? "border-sky-300 bg-sky-50/50 shadow-md"
+        : "border-gray-200 bg-white/50 hover:border-sky-200 hover:bg-sky-50/30"
     }`}
   >
     {/* Radio */}
     <div
       className={`md:w-5 w-4 h-4 md:h-5 border-2 rounded-full flex items-center justify-center transition-all duration-200 ${
         checked
-          ? "bg-gradient-to-r from-blue-500 to-purple-500 border-transparent"
+          ? "bg-gradient-to-r from-sky-500 to-blue-500 border-transparent"
           : "border-gray-300 bg-white"
       }`}
     >
@@ -406,7 +406,7 @@ const OptionRadio = ({ icon, label, description, checked, onChange }) => (
     <div
       className={`md:w-10 w-8 h-8 md:h-10 rounded-lg flex items-center justify-center transition-all duration-200 ${
         checked
-          ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg"
+          ? "bg-gradient-to-r from-sky-500 to-blue-500 text-white shadow-lg"
           : "bg-gray-100 text-gray-600"
       }`}
     >
@@ -417,7 +417,7 @@ const OptionRadio = ({ icon, label, description, checked, onChange }) => (
     <div className="flex-1">
       <div
         className={`font-semibold text-sm transition-colors ${
-          checked ? "text-blue-700" : "text-gray-800"
+          checked ? "text-sky-700" : "text-gray-800"
         }`}
       >
         {label}

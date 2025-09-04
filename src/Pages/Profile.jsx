@@ -138,16 +138,15 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50/80 via-white to-slate-100/60 px-4 sm:px-6 md:px-20 py-8 sm:py-12 md:py-16 overflow-hidden relative">
+    <div className="min-h-screen bg-gradient-to-br from-white via-sky-50 to-sky-50 px-4 sm:px-6 md:px-20 py-8 sm:py-12 md:py-16 overflow-hidden relative">
       {/* Subtle Background Elements */}
-      <div className="absolute -top-20 sm:-top-40 -left-20 sm:-left-40 w-48 sm:w-96 h-48 sm:h-96 bg-gradient-to-r from-blue-100/20 to-cyan-100/20 blur-3xl rounded-full z-0" />
-      <div className="absolute -bottom-20 sm:-bottom-40 -right-20 sm:-right-40 w-64 sm:w-[500px] h-64 sm:h-[500px] bg-gradient-to-r from-purple-100/20 to-pink-100/20 blur-3xl rounded-full z-0" />
-      <div className="absolute top-1/2 left-1/4 w-40 sm:w-80 h-40 sm:h-80 bg-gradient-to-r from-green-100/15 to-emerald-100/15 blur-3xl rounded-full z-0" />
+      <div className="absolute -top-20 sm:-top-40 -left-20 sm:-left-40 w-48 sm:w-96 h-48 sm:h-96 bg-sky-200/20 blur-3xl rounded-full z-0" />
+      <div className="absolute -bottom-20 sm:-bottom-40 -right-20 sm:-right-40 w-64 sm:w-[500px] h-64 sm:h-[500px] bg-sky-200/15 blur-3xl rounded-full z-0" />
 
       {/* Grid Pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-[size:2rem_2rem] sm:bg-[size:4rem_4rem] opacity-30" />
 
-      <div className="relative z-10 max-w-2xl mx-auto">
+      <div className="relative pt-10 z-10 max-w-2xl mx-auto">
         {/* Header Section */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -155,18 +154,18 @@ const Profile = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-8 sm:mb-12"
         >
-          <div className="inline-flex items-center gap-2 bg-white/60 backdrop-blur-sm border border-white/40 rounded-full px-4 sm:px-6 py-2 mb-4 shadow-lg">
-            <FiUser className="text-blue-500" />
-            <span className="text-xs sm:text-sm font-medium text-slate-700">
+          <div className="inline-flex items-center gap-2 bg-sky-50 border border-sky-200 rounded-full px-4 sm:px-6 py-2 mb-4 shadow-sm">
+            <FiUser className="text-sky-600" />
+            <span className="text-xs sm:text-sm font-medium text-gray-800">
               User Profile
             </span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
             Profile Settings
           </h1>
 
-          <p className="text-base sm:text-lg md:text-xl text-slate-600 px-4 sm:px-0">
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 px-4 sm:px-0">
             Manage your account information and preferences
           </p>
         </motion.div>
@@ -176,10 +175,10 @@ const Profile = () => {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="bg-white/60 backdrop-blur-md border border-white/40 rounded-3xl shadow-2xl overflow-hidden"
+          className="bg-white border border-gray-100 rounded-3xl shadow-lg overflow-hidden"
         >
           {/* Card Header */}
-          <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 p-4 sm:p-6 md:p-8 text-center text-white relative overflow-hidden">
+          <div className="bg-gradient-to-r from-sky-600 to-sky-700 p-4 sm:p-6 md:p-8 text-center text-white relative overflow-hidden">
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
@@ -195,7 +194,7 @@ const Profile = () => {
               {/* Avatar */}
               <motion.div
                 whileHover={{ scale: 1.1 }}
-                className="w-16 sm:w-20 md:w-24 h-16 sm:h-20 md:h-24 mx-auto mb-3 sm:mb-4 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 text-white flex items-center justify-center text-2xl sm:text-3xl md:text-4xl font-bold uppercase shadow-2xl border-4 border-white/20"
+                className="w-16 sm:w-20 md:w-24 h-16 sm:h-20 md:h-24 mx-auto mb-3 sm:mb-4 rounded-full bg-gradient-to-r from-sky-500 to-blue-500 text-white flex items-center justify-center text-2xl sm:text-3xl md:text-4xl font-bold uppercase shadow-2xl border-4 border-white/20"
               >
                 {user?.displayName?.charAt(0) || user?.email?.charAt(0) || "U"}
               </motion.div>
@@ -224,7 +223,7 @@ const Profile = () => {
                   {/* Full Name Input */}
                   <div className="relative group">
                     <label className="text-xs sm:text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
-                      <FiUser className="text-blue-600" />
+                      <FiUser className="text-sky-600" />
                       Full Name
                     </label>
                     <div className="relative">
@@ -232,17 +231,17 @@ const Profile = () => {
                         name="name"
                         value={form.name}
                         onChange={handleChange}
-                        className="w-full px-3 sm:px-4 py-3 sm:py-4 pl-8 sm:pl-12 border-2 border-slate-200/60 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-300 bg-white/80 backdrop-blur-sm text-slate-800 font-medium transition-all duration-300 group-hover:border-slate-300 text-sm sm:text-base"
+                        className="w-full px-3 sm:px-4 py-3 sm:py-4 pl-8 sm:pl-12 border-2 border-slate-200/60 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-300 bg-white/80 backdrop-blur-sm text-slate-800 font-medium transition-all duration-300 group-hover:border-slate-300 text-sm sm:text-base"
                         placeholder="Enter your full name"
                       />
-                      <FiUser className="absolute left-2 sm:left-4 top-3 sm:top-4 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
+                      <FiUser className="absolute left-2 sm:left-4 top-3 sm:top-4 text-slate-400 group-focus-within:text-sky-500 transition-colors" />
                     </div>
                   </div>
 
                   {/* Email Input */}
                   <div className="relative group">
                     <label className="text-xs sm:text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
-                      <FiMail className="text-blue-600" />
+                      <FiMail className="text-sky-600" />
                       Email Address
                     </label>
                     <div className="relative">
@@ -315,12 +314,12 @@ const Profile = () => {
 
                   {/* Account Stats */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                    <div className="p-3 sm:p-4 bg-gradient-to-r from-blue-50/80 to-cyan-50/80 border border-blue-200/60 rounded-xl text-center">
-                      <FiStar className="text-xl sm:text-2xl text-blue-600 mx-auto mb-2" />
-                      <p className="text-xs sm:text-sm font-medium text-blue-800">
+                    <div className="p-3 sm:p-4 bg-gradient-to-r from-sky-50/80 to-cyan-50/80 border border-sky-200/60 rounded-xl text-center">
+                      <FiStar className="text-xl sm:text-2xl text-sky-600 mx-auto mb-2" />
+                      <p className="text-xs sm:text-sm font-medium text-sky-800">
                         Account Status
                       </p>
-                      <p className="text-base sm:text-lg font-bold text-blue-700">
+                      <p className="text-base sm:text-lg font-bold text-sky-700">
                         Active
                       </p>
                     </div>
@@ -371,7 +370,7 @@ const Profile = () => {
         >
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-base sm:text-lg font-semibold text-slate-900 flex items-center gap-2">
-              <FaFileAlt className="text-blue-600" />
+              <FaFileAlt className="text-sky-600" />
               Uploaded Resumes
             </h3>
           </div>
@@ -408,7 +407,7 @@ const Profile = () => {
           className="mt-6 sm:mt-8 bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-4 sm:p-6 shadow-lg"
         >
           <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-3 flex items-center gap-2">
-            <FiSettings className="text-blue-600" />
+            <FiSettings className="text-sky-600" />
             Account Information
           </h3>
           <div className="text-xs sm:text-sm text-slate-600 space-y-2">
@@ -470,8 +469,8 @@ const ProfileResumeItem = ({ resume, onDelete, index }) => {
     >
       <div className="flex items-center justify-between w-full">
         <div className="flex items-center gap-2 md:gap-4 flex-1">
-          <div className="w-10 h-10 md:w-12 md:h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-            <FaFileAlt className="text-blue-600 text-lg" />
+          <div className="w-10 h-10 md:w-12 md:h-12 bg-sky-100 rounded-lg flex items-center justify-center">
+            <FaFileAlt className="text-sky-600 text-lg" />
           </div>
           <div className="flex-1 min-w-0">
             <h4 className="font-semibold text-gray-900 break-all text-sm sm:text-base">
@@ -484,7 +483,7 @@ const ProfileResumeItem = ({ resume, onDelete, index }) => {
           {/* View Button */}
           <button
             title="View Resume"
-            className="p-2 text-gray-400 hover:text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+            className="p-2 text-gray-400 hover:text-sky-600 rounded-lg hover:bg-sky-50 transition-colors"
           >
             <FaEye size={16} />
           </button>

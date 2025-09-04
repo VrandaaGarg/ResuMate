@@ -14,7 +14,7 @@ export default function Templates() {
       image: "/sidebar.jpg",
       description: "A clean and modern template for a professional look.",
       badge: "Popular",
-      badgeColor: "bg-gradient-to-r from-blue-500 to-cyan-400",
+      badgeColor: "bg-gradient-to-r from-sky-500 to-cyan-400",
     },
     {
       id: 2,
@@ -30,7 +30,7 @@ export default function Templates() {
       image: "/standard.jpg",
       description: "A Standard layout that stands out from the crowd.",
       badge: "Standard",
-      badgeColor: "bg-gradient-to-r from-purple-500 to-pink-400",
+      badgeColor: "bg-gradient-to-r from-blue-500 to-pink-400",
     },
   ];
 
@@ -38,7 +38,7 @@ export default function Templates() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="flex flex-col py-5 pb-14 md:py-10 md:pb-32 items-center justify-center min-h-[60vh] text-center p-6 bg-gradient-to-br from-white via-sky-50 to-white "
+      className="flex flex-col pt-10 py-5 pb-14 md:py-10 md:pb-32 items-center justify-center min-h-[60vh] text-center p-6 bg-gradient-to-br from-white via-sky-50 to-white "
     >
       <div className="py-7">
         <div className="inline-flex items-center gap-2 bg-white/60 backdrop-blur-sm border border-white/40 rounded-full px-4 py-1.5 mb-3 shadow-lg">
@@ -57,12 +57,12 @@ export default function Templates() {
         {Template.map((temp, index) => (
           <motion.div
             key={temp.id}
-            whileHover={{ scale: 1.03, y: -10 }}
             initial={{ opacity: 0, y: 40 }}
+            whileHover={{ scale: 1.03 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: index * 0.1 }}
+            transition={{ duration: 0.2 }}
             viewport={{ once: true }}
-            className="group relative bg-white/80 backdrop-blur-sm border border-white/20 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
+            className="group relative bg-white/80 rounded-md backdrop-blur-sm border border-white/20  shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
           >
             {/* Badge */}
             <div
@@ -72,7 +72,7 @@ export default function Templates() {
             </div>
 
             {/* Template Image */}
-            <div className="relative overflow-hidden rounded-xl mb-4 group-hover:transform group-hover:scale-105 transition-transform duration-500">
+            <div className="relative overflow-hidden rounded-md mb-4 group-hover:transform transition-transform duration-500">
               {" "}
               <img
                 src={temp.image}
@@ -84,9 +84,8 @@ export default function Templates() {
                 type="button"
                 aria-label={`Try the ${temp.name} template`}
                 onClick={() => navigate("/resume")}
-                whileHover={{ scale: 1.07, y: -2 }}
                 whileTap={{ scale: 0.98 }}
-                className="absolute top-1/2 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 px-2 md:px-5 py-2 md:py-2.5 rounded-full bg-gradient-to-r from-blue-500 to-sky-700 shadow-lg hover:shadow-xl text-white font-semibold text-base transition-all duration-300 cursor-pointer"
+                className="absolute top-1/2 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 px-2 md:px-3 py-2 md:py-2.5 rounded-full bg-gradient-to-r from-sky-500 to-sky-700 shadow-lg hover:shadow-xl text-white font-semibold text-base transition-all duration-300 cursor-pointer"
               >
                 <WiStars className="text-sm md:text-xl" />
                 <span className="text-sm md:text-base">Try This</span>
@@ -94,8 +93,8 @@ export default function Templates() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />{" "}
             </div>
 
-            <div className="space-y-2">
-              <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+            <div className="space-y-2 p-4">
+              <h3 className="text-xl font-bold text-gray-900 group-hover:text-sky-600 transition-colors">
                 {temp.name}
               </h3>
               <p className="text-sm text-gray-600 leading-relaxed">
@@ -104,7 +103,6 @@ export default function Templates() {
             </div>
 
             {/* Decorative Elements */}
-            <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
           </motion.div>
         ))}
       </div>

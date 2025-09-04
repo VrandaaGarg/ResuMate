@@ -179,32 +179,32 @@ export default function Dashboard() {
       description: "Start building your professional resume from scratch",
       icon: FaPlus,
       link: "/resume-form",
-      color: "from-blue-500 to-cyan-400",
-      bgColor: "from-blue-50 to-cyan-50",
+      color: "from-sky-500 to-sky-500",
+      bgColor: "from-sky-50 to-sky-50",
     },
     {
       title: "Upload Existing Resume",
       description: "Upload your existing resume and enhance it with AI",
       icon: FaUpload,
       action: () => setIsUploadModalOpen(true),
-      color: "from-yellow-500 to-orange-400",
-      bgColor: "from-yellow-50 to-orange-50",
+      color: "from-sky-500 to-sky-500",
+      bgColor: "from-sky-50 to-sky-50",
     },
     {
       title: "ATS Compatibility Check",
       description: "Ensure your resume passes ATS filters",
       icon: FaRobot,
       link: "/ats-checker",
-      color: "from-purple-500 to-pink-400",
-      bgColor: "from-purple-50 to-pink-50",
+      color: "from-sky-500 to-blue-500",
+      bgColor: "from-sky-50 to-blue-50",
     },
     {
       title: "Job Fit Analyzer",
       description: "Check how well your resume matches job descriptions",
       icon: FaChartLine,
       link: "/job-fit-analyzer",
-      color: "from-green-500 to-emerald-400",
-      bgColor: "from-green-50 to-emerald-50",
+      color: "from-sky-600 to-sky-600",
+      bgColor: "from-sky-50 to-sky-50",
     },
   ];
 
@@ -229,7 +229,7 @@ export default function Dashboard() {
         ? formatDate(resume.createdOn)
         : "No resume created",
       icon: FaFileAlt,
-      color: "text-blue-600",
+      color: "text-sky-600",
       date: resume?.createdOn
         ? new Date(resume.createdOn.seconds * 1000)
         : new Date(0),
@@ -255,10 +255,10 @@ export default function Dashboard() {
     .slice(0, 4);
 
   return (
-    <div className="min-h-screen relative overflow-x-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 px-4 md:px-12 py-10 overflow-hidden">
+    <div className="min-h-screen pt-24 relative overflow-x-hidden bg-gradient-to-br from-white via-sky-50 to-sky-50 px-4 md:px-12 py-10 overflow-hidden">
       {/* Background Elements */}
-      <div className="absolute -top-20 -left-20 w-80 h-80 bg-gradient-to-r from-blue-300 to-cyan-200 opacity-15 blur-3xl rounded-full z-0" />
-      <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-gradient-to-r from-purple-300 to-pink-200 opacity-10 blur-3xl rounded-full z-0" />
+      <div className="absolute -top-20 -left-20 w-80 h-80 bg-sky-200/20 blur-3xl rounded-full z-0" />
+      <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-sky-200/15 blur-3xl rounded-full z-0" />
 
       <div className="relative z-10 max-w-6xl mx-auto">
         {/* Header Section */}
@@ -268,14 +268,14 @@ export default function Dashboard() {
           transition={{ duration: 0.6 }}
           className="text-center mb-8"
         >
-          <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 mb-3 shadow-lg">
-            <FaRocket className="text-blue-500 text-xs" />
-            <span className="text-[10px] md:text-xs md:font-medium text-gray-700">
+          <div className="inline-flex items-center gap-2 bg-sky-50 border border-sky-200 rounded-full px-4 py-1.5 mb-3 shadow-sm">
+            <FaRocket className="text-sky-600 text-xs" />
+            <span className="text-[10px] md:text-xs md:font-medium text-gray-800">
               Welcome to your Dashboard
             </span>
           </div>
 
-          <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent mb-2 [font-family:'Lilita_One',cursive]">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
             Welcome Back! 👋
           </h1>
 
@@ -325,10 +325,10 @@ export default function Dashboard() {
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-xl p-3 md:p-6 shadow-lg"
+            className="bg-white border border-gray-100 rounded-xl p-3 md:p-6 shadow-sm"
           >
             <div className="flex items-center gap-3 mb-1.5 md:mb-4">
-              <div className="p-1 md:p-2 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg text-white shadow-lg">
+              <div className="p-1 md:p-2 bg-sky-600 rounded-lg text-white shadow-sm">
                 <FaFileAlt className="text-xs md:text-sm " />
               </div>
               <h2 className="text-md md:text-xl font-bold text-gray-900">
@@ -359,7 +359,7 @@ export default function Dashboard() {
                     <span className="font-semibold text-gray-700">
                       Template:
                     </span>
-                    <span className="font-medium text-purple-700 bg-purple-100 px-2 py-0.5 rounded-full">
+                    <span className="font-medium text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full">
                       {resume.template || selectedTemplate}
                     </span>
                   </div>
@@ -376,7 +376,7 @@ export default function Dashboard() {
                 <div className="flex flex-row gap-3 mt-4">
                   <Link
                     to="/resume-form"
-                    className="flex w-full items-center justify-center gap-2 px-2 md:px-5 py-2 md:py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-lg hover:from-blue-700 hover:to-cyan-600 hover:shadow-lg transition-all duration-300 font-medium text-[16px] md:text-sm"
+                    className="flex w-full items-center justify-center gap-2 px-2 md:px-5 py-2 md:py-3 bg-sky-600 hover:bg-sky-700 text-white rounded-lg hover:shadow-md transition-all duration-300 font-medium text-[16px] md:text-sm"
                   >
                     <FaPen />
                     Edit <span className="hidden md:inline">Resume</span>
@@ -405,7 +405,7 @@ export default function Dashboard() {
                 <div className="flex flex-wrap gap-3 justify-center">
                   <Link
                     to="/resume-form"
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-xl hover:shadow-lg transition-all duration-300 font-medium"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-sky-600 hover:bg-sky-700 text-white rounded-xl hover:shadow-md transition-all duration-300 font-medium"
                   >
                     <FaPlus size={16} />
                     Create Resume
@@ -420,10 +420,10 @@ export default function Dashboard() {
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-xl p-3 md:p-6 shadow-lg"
+            className="bg-white border border-gray-100 rounded-xl p-3 md:p-6 shadow-sm"
           >
             <div className="flex items-center gap-3 mb-2 md:mb-4">
-              <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-400 rounded-lg text-white shadow-lg">
+              <div className="p-2 bg-sky-600 rounded-lg text-white shadow-sm">
                 <FaClock className="text-[12px] text-xl" />
               </div>
               <h2 className="text-sm md:text-xl font-bold text-gray-900">
@@ -475,7 +475,7 @@ export default function Dashboard() {
           transition={{ duration: 0.8, delay: 0.4 }}
           className="mt-8"
         >
-          <div className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-xl p-4 shadow-lg">
+          <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
             <div className="flex items-center justify-between mb-4 px-2 pt-2">
               <h2 className="text-xl font-semibold text-gray-800">
                 Recent Uploads
@@ -485,7 +485,7 @@ export default function Dashboard() {
                 <button
                   onClick={() => setIsUploadModalOpen(true)}
                   title="Upload Resume"
-                  className="inline-flex items-center gap-2 px-1.5 md:px-3 py-1.5 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-lg hover:from-blue-700 hover:to-cyan-600 hover:shadow-lg transition-all duration-300 font-medium text-sm"
+                  className="inline-flex items-center gap-2 px-1.5 md:px-3 py-1.5 bg-sky-600 hover:bg-sky-700 text-white rounded-lg hover:shadow-md transition-all duration-300 font-medium text-sm"
                 >
                   <FaCloudDownloadAlt className="text-white text-sm" />
                   <span className="hidden md:inline">Upload</span>
@@ -493,7 +493,7 @@ export default function Dashboard() {
                 {uploadedResumes.length > 0 && (
                   <Link
                     to="/profile"
-                    className="inline-flex items-center gap-2 px-1.5 md:px-3 py-1.5 bg-gradient-to-r from-gray-600 to-zinc-500 text-white rounded-lg hover:from-gray-800 hover:to-zinc-700 hover:shadow-lg transition-all duration-300 font-medium text-sm"
+                    className="inline-flex items-center gap-2 px-1.5 md:px-3 py-1.5 bg-gray-600 hover:bg-gray-700 text-white rounded-lg hover:shadow-md transition-all duration-300 font-medium text-sm"
                   >
                     <span className="hidden md:inline">View All</span>
                     <FaChevronCircleRight className="text-xs" />
@@ -512,7 +512,7 @@ export default function Dashboard() {
                 <p className="text-gray-500 mb-4">No resumes uploaded yet</p>
                 <button
                   onClick={() => setIsUploadModalOpen(true)}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-xl hover:shadow-lg transition-all duration-300 font-medium"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-sky-600 hover:bg-sky-700 text-white rounded-xl hover:shadow-md transition-all duration-300 font-medium"
                 >
                   Upload Resume
                 </button>
@@ -564,26 +564,19 @@ export default function Dashboard() {
 
 // ActionCard Component
 const ActionCard = ({ action }) => (
-  <div className="relative bg-white/80 backdrop-blur-sm border border-white/20 rounded-xl p-2.5 md:p-5 shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden">
-    {/* Gradient Background */}
-    <div
-      className={`absolute inset-0 bg-gradient-to-br ${action.bgColor} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl`}
-    />
-
+  <div className="relative bg-white border border-gray-100 rounded-xl p-2.5 md:p-5 shadow-sm hover:shadow-md transition-all duration-300 group">
     {/* Icon */}
-    <motion.div
-      whileHover={{ rotate: 12, scale: 1.1 }}
-      transition={{ duration: 0.3 }}
-      className={`relative z-10 md:w-12 md:h-12 w-7 h-7 bg-gradient-to-r ${action.color} rounded md:rounded-xl text-white flex items-center justify-center mb-1.5 md:mb-4 shadow-lg group-hover:shadow-xl transition-shadow duration-300`}
+    <div
+      className={`md:w-12 md:h-12 w-7 h-7 bg-gradient-to-r ${action.color} rounded md:rounded-xl text-white flex items-center justify-center mb-1.5 md:mb-4 shadow-sm group-hover:shadow-md transition-shadow duration-300`}
     >
       <action.icon size={20} />
-    </motion.div>
+    </div>
 
-    <div className="relative z-10">
-      <h3 className="text-sm md:text-lg font-bold text-gray-900 mb-2 group-hover:text-gray-800 transition-colors">
+    <div>
+      <h3 className="text-sm md:text-lg font-semibold text-gray-900 mb-2 group-hover:text-sky-700 transition-colors">
         {action.title}
       </h3>
-      <p className="text-xs md:text-sm text-gray-600 group-hover:text-gray-700 transition-colors leading-relaxed">
+      <p className="text-xs md:text-sm text-gray-600 leading-relaxed">
         {action.description}
       </p>
     </div>
@@ -627,8 +620,8 @@ const ResumeItem = ({
         onClick={() => onPdfActions(resume)}
         title="Click to process this resume"
       >
-        <div className="md:w-10 w-7 h-7 md:h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-          <FaFileAlt className="text-blue-600" />
+        <div className="md:w-10 w-7 h-7 md:h-10 bg-sky-100 rounded-lg flex items-center justify-center">
+          <FaFileAlt className="text-sky-600" />
         </div>
         <div className="flex-1 min-w-0">
           <h4 className="font-medium text-gray-900 break-all text-[16px] md:text-sm">
@@ -648,7 +641,7 @@ const ResumeItem = ({
             e.stopPropagation();
             onView(resume);
           }}
-          className="p-1 md:p-2 text-gray-400 hover:text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+          className="p-1 md:p-2 text-gray-400 hover:text-sky-600 rounded-lg hover:bg-sky-50 transition-colors"
         >
           <FaEye size={16} />
         </button>
