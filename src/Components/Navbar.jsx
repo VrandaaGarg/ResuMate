@@ -51,7 +51,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className={`fixed top-0 z-50 w-full transition-all duration-300 ${
         scrolled
-          ? "bg-white/10 backdrop-blur-md border-b border-sky-100/50 shadow-lg"
+          ? "bg-white/50 backdrop-blur-md border-b border-sky-100/50 shadow-lg shadow-zinc-200/60"
           : "bg-white/20 backdrop-blur-sm border-b border-gray-100"
       }`}
     >

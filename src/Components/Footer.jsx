@@ -20,7 +20,7 @@ export default function Footer() {
       href: "https://github.com/VrandaaGarg/ResuMate",
       label: "GitHub",
     },
-    { icon: FaXTwitter, href: "https://x.com/vranda_garg_", label: "Twitter" },
+    { icon: FaXTwitter, href: "https://x.com/vrandaagarg", label: "Twitter" },
 
     { icon: FaEnvelope, href: "mailto:resumate@vrandagarg.in", label: "Email" },
 
