@@ -213,7 +213,7 @@ const Home = () => {
               transition={{ duration: 0.8, delay: 0.3 }}
               className="text-4xl md:text-5xl font-bold text-gray-900 mb-3 leading-tight"
             >
-              Crafte Your Perfect Resume with{" "}
+              Craft Your Perfect Resume with{" "}
               <span className="text-sky-600">ResuMate</span>
             </motion.h1>
 
