@@ -23,6 +23,8 @@ import {
   FiLinkedin,
   FiMapPin,
   FiGlobe,
+  FiCamera,
+  FiUpload,
 } from "react-icons/fi";
 import {
   FaCheckCircle,
@@ -36,9 +38,10 @@ import {
 } from "react-icons/fa";
 import { TbWorld } from "react-icons/tb";
 import showSuccessToast from "../Components/showSuccessToast";
-import { createResume } from "../db/database"; // 🔥 Firestore function
+import { createResume, updateUserProfileImage } from "../db/database"; // 🔥 Firestore function
 import { enhance } from "../utils/ai";
 import { FaWandMagicSparkles } from "react-icons/fa6"; // AI icon
+import { uploadProfileImage } from "../services/fileStorage";
 
 const steps = [
   "Personal Info",
@@ -57,6 +60,8 @@ const ResumeForm = () => {
 
   const [aiLoadingField, setAiLoadingField] = useState(null);
   const [aiSuggestions, setAiSuggestions] = useState({});
+  const [imageUploading, setImageUploading] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null);
 
   const getNestedValue = (obj, path) => {
     return path
@@ -76,11 +81,43 @@ const ResumeForm = () => {
     setAiLoadingField(null);
   };
 
+  const handleImageUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    try {
+      setImageUploading(true);
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => setImagePreview(e.target.result);
+      reader.readAsDataURL(file);
+
+      // Upload to Appwrite
+      const uploadResult = await uploadProfileImage(file);
+
+      // Update form data with image URL
+      setFormData((prev) => ({ ...prev, imgUrl: uploadResult.fileUrl }));
+
+      // Save to Firebase user profile
+      await updateUserProfileImage(uploadResult.fileUrl);
+
+      toast.success("Profile image uploaded successfully!");
+    } catch (error) {
+      console.error("Image upload error:", error);
+      toast.error(error.message || "Failed to upload image");
+      setImagePreview(null);
+    } finally {
+      setImageUploading(false);
+    }
+  };
+
   const [step, setStep] = useState(0);
 
   const defaultResumeData = {
     name: "",
     description: "",
+    imgUrl: "",
     education: {
       college: "",
       degree: "",
@@ -118,6 +155,13 @@ const ResumeForm = () => {
   const { resume, setResume } = useResumeData();
 
   const [formData, setFormData] = useState(() => resume || defaultResumeData);
+
+  // Initialize image preview with existing image URL
+  useEffect(() => {
+    if (formData.imgUrl && !imagePreview) {
+      setImagePreview(formData.imgUrl);
+    }
+  }, [formData.imgUrl, imagePreview]);
 
   const handleChange = (e, path) => {
     const keys = path.split(".");
@@ -324,6 +368,66 @@ const ResumeForm = () => {
                   </motion.button>
                 </motion.div>
               )}
+            </div>
+
+            {/* Profile Photo Upload */}
+            <div className="relative group">
+              <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
+                <FiCamera className="text-sky-600" />
+                Profile Photo
+              </label>
+
+              <div className="flex items-center gap-4">
+                {/* Photo Preview */}
+                <div className="w-20 h-20 rounded-full border-2 border-gray-200 overflow-hidden bg-gray-50 flex items-center justify-center">
+                  {imagePreview || formData.imgUrl ? (
+                    <img
+                      src={imagePreview || formData.imgUrl}
+                      alt="Profile preview"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <FiUser className="text-gray-400 text-2xl" />
+                  )}
+                </div>
+
+                {/* Upload Button */}
+                <div className="flex-1">
+                  <input
+                    type="file"
+                    id="profile-photo"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                    disabled={imageUploading}
+                  />
+                  <label
+                    htmlFor="profile-photo"
+                    className={`inline-flex items-center gap-2 px-4 py-3 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-sky-400 hover:bg-sky-50 transition-all duration-300 ${
+                      imageUploading ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
+                  >
+                    {imageUploading ? (
+                      <>
+                        <BsArrowClockwise className="text-sky-600 animate-spin" />
+                        <span className="text-sm text-gray-600">
+                          Uploading...
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <FiUpload className="text-sky-600" />
+                        <span className="text-sm text-gray-600">
+                          {formData.imgUrl ? "Change Photo" : "Upload Photo"}
+                        </span>
+                      </>
+                    )}
+                  </label>
+                  <p className="text-xs text-gray-500 mt-1">
+                    JPEG, PNG, WebP or GIF (max 5MB)
+                  </p>
+                </div>
+              </div>
             </div>
           </motion.div>
         );

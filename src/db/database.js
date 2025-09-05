@@ -240,3 +240,50 @@ export const deleteUploadedResume = async (resumeId) => {
     throw error;
   }
 };
+
+// User profile image management functions
+export const updateUserProfileImage = async (imgUrl) => {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  try {
+    const userRef = doc(db, "users", user.uid);
+
+    // Check if user document exists, if not create it
+    const userDoc = await getDoc(userRef);
+    if (!userDoc.exists()) {
+      await setDoc(userRef, {
+        imgUrl,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
+    } else {
+      await updateDoc(userRef, {
+        imgUrl,
+        updatedAt: serverTimestamp(),
+      });
+    }
+  } catch (error) {
+    console.error("Error updating user profile image:", error);
+    throw error;
+  }
+};
+
+// Get user profile data including image URL
+export const getUserProfile = async () => {
+  const user = auth.currentUser;
+  if (!user) return null;
+
+  try {
+    const userRef = doc(db, "users", user.uid);
+    const userDoc = await getDoc(userRef);
+
+    if (userDoc.exists()) {
+      return userDoc.data();
+    }
+    return null;
+  } catch (error) {
+    console.error("Error getting user profile:", error);
+    return null;
+  }
+};

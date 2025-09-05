@@ -21,7 +21,11 @@ import {
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import showSuccessToast from "../Components/showSuccessToast";
-import { getUserUploadedResumes, deleteUploadedResume } from "../db/database";
+import {
+  getUserUploadedResumes,
+  deleteUploadedResume,
+  getUserProfile,
+} from "../db/database";
 import ResumeUploadModal from "../Components/ResumeUploadModal";
 import DeleteConfirmModal from "../Components/DeleteConfirmModal";
 import toast from "react-hot-toast";
@@ -42,33 +46,39 @@ const Profile = () => {
     resume: null,
   });
   const [isDeleting, setIsDeleting] = useState(false);
+  const [userProfile, setUserProfile] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Load uploaded resumes
+  // Load uploaded resumes and user profile
   useEffect(() => {
-    const loadUploadedResumes = async () => {
+    const loadData = async () => {
       try {
         setLoadingResumes(true);
+
+        // Load uploaded resumes
         const resumes = await getUserUploadedResumes();
-        // Sort by upload date (newest first)
         const sortedResumes = resumes.sort(
           (a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt)
         );
         setUploadedResumes(sortedResumes);
+
+        // Load user profile data
+        const profile = await getUserProfile();
+        setUserProfile(profile);
       } catch (error) {
-        console.error("Error loading uploaded resumes:", error);
-        toast.error("Failed to load uploaded resumes");
+        console.error("Error loading data:", error);
+        toast.error("Failed to load profile data");
       } finally {
         setLoadingResumes(false);
       }
     };
 
     if (user) {
-      loadUploadedResumes();
+      loadData();
     }
   }, [user]);
 
@@ -194,9 +204,21 @@ const Profile = () => {
               {/* Avatar */}
               <motion.div
                 whileHover={{ scale: 1.1 }}
-                className="w-16 sm:w-20 md:w-24 h-16 sm:h-20 md:h-24 mx-auto mb-3 sm:mb-4 rounded-full bg-gradient-to-r from-sky-500 to-blue-500 text-white flex items-center justify-center text-2xl sm:text-3xl md:text-4xl font-bold uppercase shadow-2xl border-4 border-white/20"
+                className="w-16 sm:w-20 md:w-24 h-16 sm:h-20 md:h-24 mx-auto mb-3 sm:mb-4 rounded-full overflow-hidden shadow-2xl border-4 border-white/20"
               >
-                {user?.displayName?.charAt(0) || user?.email?.charAt(0) || "U"}
+                {userProfile?.imgUrl ? (
+                  <img
+                    src={userProfile.imgUrl}
+                    alt="Profile"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-r from-sky-500 to-blue-500 text-white flex items-center justify-center text-2xl sm:text-3xl md:text-4xl font-bold uppercase">
+                    {user?.displayName?.charAt(0) ||
+                      user?.email?.charAt(0) ||
+                      "U"}
+                  </div>
+                )}
               </motion.div>
 
               <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-1">
