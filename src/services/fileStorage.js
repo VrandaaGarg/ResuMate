@@ -1,6 +1,6 @@
 // src/services/fileStorage.js
-import { storage, ID } from '../appwrite.js';
-import { auth } from '../firebase.js';
+import { storage, ID } from "../appwrite.js";
+import { auth } from "../firebase.js";
 
 const BUCKET_ID = import.meta.env.VITE_APPWRITE_BUCKET_ID;
 
@@ -14,18 +14,18 @@ export const uploadFile = async (file, fileName = null) => {
   try {
     const user = auth.currentUser;
     if (!user) {
-      throw new Error('User not authenticated');
+      throw new Error("User not authenticated");
     }
 
     // Generate unique filename with user ID prefix
     const fileId = fileName || `${user.uid}_${Date.now()}_${file.name}`;
-    
+
     // Upload file to Appwrite bucket
     const result = await storage.createFile(BUCKET_ID, ID.unique(), file);
-    
+
     // Get file URL
     const fileUrl = getFileUrl(result.$id);
-    
+
     return {
       fileId: result.$id,
       fileName: file.name,
@@ -33,10 +33,10 @@ export const uploadFile = async (file, fileName = null) => {
       fileSize: file.size,
       fileType: file.type,
       uploadedAt: new Date().toISOString(),
-      userId: user.uid
+      userId: user.uid,
     };
   } catch (error) {
-    console.error('File upload error:', error);
+    console.error("File upload error:", error);
     throw new Error(`Failed to upload file: ${error.message}`);
   }
 };
@@ -50,7 +50,7 @@ export const getFileUrl = (fileId) => {
   try {
     return storage.getFileView(BUCKET_ID, fileId);
   } catch (error) {
-    console.error('Get file URL error:', error);
+    console.error("Get file URL error:", error);
     throw new Error(`Failed to get file URL: ${error.message}`);
   }
 };
@@ -64,7 +64,7 @@ export const deleteFile = async (fileId) => {
   try {
     await storage.deleteFile(BUCKET_ID, fileId);
   } catch (error) {
-    console.error('File deletion error:', error);
+    console.error("File deletion error:", error);
     throw new Error(`Failed to delete file: ${error.message}`);
   }
 };
@@ -78,7 +78,7 @@ export const getFileMetadata = async (fileId) => {
   try {
     return await storage.getFile(BUCKET_ID, fileId);
   } catch (error) {
-    console.error('Get file metadata error:', error);
+    console.error("Get file metadata error:", error);
     throw new Error(`Failed to get file metadata: ${error.message}`);
   }
 };
@@ -90,26 +90,101 @@ export const getFileMetadata = async (fileId) => {
  */
 export const validateResumeFile = (file) => {
   const allowedTypes = [
-    'application/pdf',
-    'application/msword',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    'text/plain'
+    "application/pdf",
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "text/plain",
   ];
-  
+
   const maxSize = 10 * 1024 * 1024; // 10MB
-  
+
   const errors = [];
-  
+
   if (!allowedTypes.includes(file.type)) {
-    errors.push('File type not supported. Please upload PDF, DOC, DOCX, or TXT files.');
+    errors.push(
+      "File type not supported. Please upload PDF, DOC, DOCX, or TXT files."
+    );
   }
-  
+
   if (file.size > maxSize) {
-    errors.push('File size too large. Please upload files smaller than 10MB.');
+    errors.push("File size too large. Please upload files smaller than 10MB.");
   }
-  
+
   return {
     isValid: errors.length === 0,
-    errors
+    errors,
+  };
+};
+
+/**
+ * Upload an image file to Appwrite storage for user profile
+ * @param {File} file - The image file to upload
+ * @returns {Promise<Object>} Upload result with file ID and URL
+ */
+export const uploadProfileImage = async (file) => {
+  try {
+    const user = auth.currentUser;
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
+
+    // Validate image file
+    const validation = validateImageFile(file);
+    if (!validation.isValid) {
+      throw new Error(validation.errors.join(", "));
+    }
+
+    // Upload file to Appwrite bucket (Appwrite generates unique ID automatically)
+    const result = await storage.createFile(BUCKET_ID, ID.unique(), file);
+
+    // Get file URL
+    const fileUrl = getFileUrl(result.$id);
+
+    return {
+      fileId: result.$id,
+      fileName: file.name,
+      fileUrl,
+      fileSize: file.size,
+      fileType: file.type,
+      uploadedAt: new Date().toISOString(),
+      userId: user.uid,
+    };
+  } catch (error) {
+    console.error("Profile image upload error:", error);
+    throw new Error(`Failed to upload profile image: ${error.message}`);
+  }
+};
+
+/**
+ * Validate file type and size for image uploads
+ * @param {File} file - The file to validate
+ * @returns {Object} Validation result
+ */
+export const validateImageFile = (file) => {
+  const allowedTypes = [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/webp",
+    "image/gif",
+  ];
+
+  const maxSize = 5 * 1024 * 1024; // 5MB
+
+  const errors = [];
+
+  if (!allowedTypes.includes(file.type)) {
+    errors.push(
+      "File type not supported. Please upload JPEG, PNG, WebP, or GIF images."
+    );
+  }
+
+  if (file.size > maxSize) {
+    errors.push("File size too large. Please upload images smaller than 5MB.");
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors,
   };
 };

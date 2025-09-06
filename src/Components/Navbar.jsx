@@ -69,7 +69,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
             className="flex items-center gap-2 md:gap-3 group"
           >
             <img
-              src="/logo.png"
+              src="https://res.cloudinary.com/dyetf2h9n/image/upload/v1757157818/logo_zskfw0.png"
               alt="ResuMate Logo"
               className="w-10 h-10 md:w-10 md:h-10"
             />

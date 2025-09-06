@@ -269,7 +269,7 @@ const Home = () => {
                 initial={{ scale: 0.9 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-                src="/homepage.png"
+                src="https://res.cloudinary.com/dyetf2h9n/image/upload/v1757157781/homepage_ykv6zv.png"
                 alt="ResuMate Dashboard"
                 className="h-full w-max object-contain"
               />

@@ -6,7 +6,8 @@ const templates = [
   {
     id: 1,
     name: "Sidebar Template",
-    image: "/sidebar.jpg",
+    image:
+      "https://res.cloudinary.com/dyetf2h9n/image/upload/v1757157828/sidebar_hduvee.jpg",
     description: "A clean and modern template for a professional look.",
     badge: "Popular",
     badgeColor: "bg-gradient-to-r from-sky-500 to-cyan-400",
@@ -15,7 +16,8 @@ const templates = [
   {
     id: 2,
     name: "Classic Template",
-    image: "/classic.jpg",
+    image:
+      "https://res.cloudinary.com/dyetf2h9n/image/upload/v1757157768/classic_fjq31b.jpg",
     description: "A classic design that is timeless and effective.",
     badge: "Timeless",
     badgeColor: "bg-gradient-to-r from-green-500 to-emerald-400",
@@ -24,7 +26,8 @@ const templates = [
   {
     id: 3,
     name: "Standard Template",
-    image: "/standard.jpg",
+    image:
+      "https://res.cloudinary.com/dyetf2h9n/image/upload/v1757157832/standard_vjm4w9.jpg",
     description: "A Standard layout that stands out from the crowd.",
     badge: "Standard",
     badgeColor: "bg-gradient-to-r from-blue-500 to-pink-400",
@@ -115,49 +118,55 @@ const TemplateCarousel = () => {
     };
   }, []);
 
-  const getTemplatePosition = useCallback((index) => {
-    const diff = (index - currentIndex + templates.length) % templates.length;
-    if (diff === 0) return "center";
-    if (diff === 1 || diff === -(templates.length - 1)) return "right";
-    return "left";
-  }, [currentIndex]);
+  const getTemplatePosition = useCallback(
+    (index) => {
+      const diff = (index - currentIndex + templates.length) % templates.length;
+      if (diff === 0) return "center";
+      if (diff === 1 || diff === -(templates.length - 1)) return "right";
+      return "left";
+    },
+    [currentIndex]
+  );
 
-  const getTemplateStyle = useCallback((position, isMobile = false, isTablet = false) => {
-    const baseScale = isMobile ? 0.7 : isTablet ? 0.85 : 1;
-    const sideScale = isMobile ? 0.5 : isTablet ? 0.7 : 0.85;
-    const xOffset = isMobile ? 120 : isTablet ? 160 : 200;
+  const getTemplateStyle = useCallback(
+    (position, isMobile = false, isTablet = false) => {
+      const baseScale = isMobile ? 0.7 : isTablet ? 0.85 : 1;
+      const sideScale = isMobile ? 0.5 : isTablet ? 0.7 : 0.85;
+      const xOffset = isMobile ? 120 : isTablet ? 160 : 200;
 
-    switch (position) {
-      case "center":
-        return {
-          scale: baseScale,
-          x: 0,
-          zIndex: 3,
-          opacity: 1,
-        };
-      case "left":
-        return {
-          scale: sideScale,
-          x: -xOffset,
-          zIndex: 1,
-          opacity: isMobile ? 0.7 : 0.8,
-        };
-      case "right":
-        return {
-          scale: sideScale,
-          x: xOffset,
-          zIndex: 1,
-          opacity: isMobile ? 0.7 : 0.8,
-        };
-      default:
-        return {
-          scale: 0.6,
-          x: 0,
-          zIndex: 0,
-          opacity: 0,
-        };
-    }
-  }, []);
+      switch (position) {
+        case "center":
+          return {
+            scale: baseScale,
+            x: 0,
+            zIndex: 3,
+            opacity: 1,
+          };
+        case "left":
+          return {
+            scale: sideScale,
+            x: -xOffset,
+            zIndex: 1,
+            opacity: isMobile ? 0.7 : 0.8,
+          };
+        case "right":
+          return {
+            scale: sideScale,
+            x: xOffset,
+            zIndex: 1,
+            opacity: isMobile ? 0.7 : 0.8,
+          };
+        default:
+          return {
+            scale: 0.6,
+            x: 0,
+            zIndex: 0,
+            opacity: 0,
+          };
+      }
+    },
+    []
+  );
 
   return (
     <div className="relative w-full flex justify-center mx-auto px-4 md:px-0">

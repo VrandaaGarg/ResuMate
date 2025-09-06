@@ -50,7 +50,7 @@ export default function Footer() {
             >
               <div className="flex items-center gap-3 mb-1 md:mb-3">
                 <img
-                  src="/logo.png"
+                  src="https://res.cloudinary.com/dyetf2h9n/image/upload/v1757157818/logo_zskfw0.png"
                   alt="ResuMate Logo"
                   className="w-10 h-10 md:w-10 md:h-10"
                 />
