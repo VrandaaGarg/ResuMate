@@ -6,7 +6,7 @@ ResuMate is an intelligent, AI-powered platform that helps you build, optimize, 
 
 **Check it out live at [https://resumate.vrandagarg.in](https://resumate.vrandagarg.in)!**
 
-![ResuMate](https://resumate.vrandagarg.in/banner.png)
+![ResuMate](https://res.cloudinary.com/dyetf2h9n/image/upload/v1757157758/banner_nfih9z.png)
 
 With a live editor and customizable formatting, you can create professional, ATS-friendly resumes while receiving real-time feedback and suggestions. Whether you're crafting your very first resume or polishing a seasoned one, ResuMate empowers you to create a document that truly showcases your skills and maximizes your career opportunities.
 

@@ -5,7 +5,8 @@ import { FiStar } from "react-icons/fi";
 const testimonials = [
   {
     name: "Aarav Mehta",
-    image: "user1.jpeg",
+    image:
+      "https://res.cloudinary.com/dyetf2h9n/image/upload/v1757157839/user1_asnexm.jpg",
     feedback:
       "ResuMate helped me land my first internship. The AI suggestions were incredibly smart and on-point! The templates are professional and the ATS compatibility checker gave me confidence that my resume would pass through applicant tracking systems.",
     role: "Software Developer",
@@ -14,7 +15,8 @@ const testimonials = [
   },
   {
     name: "Simran Kaur",
-    image: "user2.jpeg",
+    image:
+      "https://res.cloudinary.com/dyetf2h9n/image/upload/v1757157854/user2_t0qesa.jpg",
     feedback:
       "Building my resume felt effortless and modern. Loved the templates and the ATS scoring feature! The real-time editor made it so easy to customize everything perfectly.",
     role: "Marketing Manager",
@@ -23,7 +25,8 @@ const testimonials = [
   },
   {
     name: "Rahul Sharma",
-    image: "user3.png",
+    image:
+      "https://res.cloudinary.com/dyetf2h9n/image/upload/v1757157861/user3_bm0ybv.png",
     feedback:
       "It's the best resume builder I've used — simple, elegant, and very effective with job matching tools. The AI-powered suggestions helped me tailor my resume perfectly.",
     role: "Data Analyst",
@@ -32,7 +35,8 @@ const testimonials = [
   },
   {
     name: "Priya Patel",
-    image: "user4.png",
+    image:
+      "https://res.cloudinary.com/dyetf2h9n/image/upload/v1757157867/user4_oj1svf.png",
     feedback:
       "The job fit analyzer feature is a game-changer! It helped me understand exactly what skills to highlight for different positions. My interview rate increased significantly after using ResuMate.",
     role: "Product Manager",
