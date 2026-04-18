@@ -1,4 +1,4 @@
-# ResuMate – Your AI-Powered Resume Sidekick 🚀
+# ResuMate – Your AI-Powered Resume Generator
 
 Tired of sending your resume into the black hole of job applications? Feeling like your resume has less personality than a rock? **ResuMate is here to save the day!**
 
